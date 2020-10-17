@@ -15,6 +15,9 @@ const restApiInstance = HOST => axios.create({
   validateStatus: function (status) {
     return (status >= 200 && status < 300)
   },
+  transformResponse: function (data) {
+    return { ok: true, results: JSON.parse(data) }
+  },
 })
 
 export default {
