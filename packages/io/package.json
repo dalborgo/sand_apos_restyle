@@ -1,0 +1,15 @@
+{
+  "name": "@adapter/io",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha test/test"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "couchbase": "^3.0.6",
+    "get-stream": "^6.0.0",
+    "http-message-parser": "^0.0.34",
+    "swagger-client": "^3.11.1"
+  }
+}
