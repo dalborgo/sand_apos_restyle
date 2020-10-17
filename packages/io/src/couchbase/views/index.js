@@ -1,7 +1,8 @@
 import { cFunctions } from '@adapter/common'
 import axios from 'axios'
+import log from '@adapter/common/src/winston'
+
 async function execViewService (params, connection = {}, returnProm = false) {
-  console.log('connection:', connection)
   const { HOST, PASSWORD, BUCKET_NAME } = connection
   const { ddoc, view, stale = false, descending = false, startkey, endkey } = params
   const auth = cFunctions.getAuth(BUCKET_NAME, PASSWORD)
@@ -16,6 +17,7 @@ async function execViewService (params, connection = {}, returnProm = false) {
     const { data: { rows } } = await axios(params)
     return { ok: true, results: rows }
   } catch (err) {
+    log.error(err)
     return { ok: false, err, message: err.message }
   }
 }

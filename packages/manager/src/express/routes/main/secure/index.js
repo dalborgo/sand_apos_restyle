@@ -21,7 +21,6 @@ async function addRouters (router) {
     const { session: { userId }, sessionID } = req
     const expires_ = get(req.session, 'cookie._expires')
     const expires = cDate.mom(expires_, null, 'YYYY-MM-DD HH:mm')
-    console.log('req.session:', req.session)
     if (userId) {
       res.send({ ok: true, results: { userId, sessionID, expires } })
     } else {
