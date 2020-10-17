@@ -10,7 +10,7 @@ const isProd = () => process.env.NODE_ENV === 'production'
 const generator = require('generate-password')
 
 const getUUID = (length = 21, alphabet = urlAlphabet) => customAlphabet(alphabet, length)
-const getAuth = (user, password) => `Basic ${new Buffer(`${user}:${password}`).toString('base64')}`
+const getAuth = (user, password) => `Basic ${new Buffer.from(`${user}:${password}`).toString('base64')}`
 const toBase64 = str => Buffer.from(str).toString('base64')
 const fromBase64 = b64Encoded => Buffer.from(b64Encoded, 'base64').toString()
 const camelDeburr = val => camelCase(deburr(val))

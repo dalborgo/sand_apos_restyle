@@ -9,8 +9,8 @@ const { connections } = require(__helpers)
 router.use(async function (req, res, next) {
   const { key } = req.query
   const connections_ = await connections.getDatabase(key)
-  req.connections = connections_
-  req.connObj = connections_.connObj
+  req.connClass = connections_
+  req.connJSON = connections_.connJSON
   next()
 })
 

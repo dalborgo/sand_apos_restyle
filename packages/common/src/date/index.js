@@ -3,6 +3,7 @@ import { extendMoment } from 'moment-range'
 import compose from 'lodash/fp/compose'
 import { validation } from '../index'
 
+Moment.locale('it')
 const moment = extendMoment(Moment)
 
 const inRange = (start, end, date) => {
@@ -23,8 +24,7 @@ const roundNearestMinutes = (val, minutes = 30, format = 'YYYY-MM-DD HH:mm') => 
   if (!val) {return null}
   const start = moment(val, format)
   const remainder = minutes - (start.minute() % minutes)
-  const resultDate = moment(start).add(remainder === minutes ? 0 : remainder, 'minutes')
-  return resultDate
+  return moment(start).add(remainder === minutes ? 0 : remainder, 'minutes')
 }
 
 const roundTextTime = value => {

@@ -4,7 +4,7 @@
   "author": "MDB",
   "main": "src/index.js",
   "scripts": {
-    "start dev": "set DEBUG=couchnode&&set Q_DEBUG=1&&nodemon -r esm src",
+    "start dev": "set DEBUG=couchnode&&set Q_DEBUG=1&&nodemon --watch . --watch ../common --watch ../io -r esm src",
     "start prod": "set NODE_ENV=production&&node -r esm src",
     "test": "mocha test/test",
     "plop": "plop -- --project manager",

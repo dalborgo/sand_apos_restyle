@@ -42,7 +42,7 @@ export default class Couchbase {
     return this._backendHost
   }
   
-  get connObj () {
+  get connJSON () {
     return {
       HOST: this.host,
       BACKEND_HOST: this.backendHost,

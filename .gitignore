@@ -1,5 +1,8 @@
 # Project exclude paths
+/.idea/
 /node_modules/
 /packages/common/node_modules/
 /packages/io/node_modules/
 /packages/manager/node_modules/
+/packages/manager/config/
+yarn.lock

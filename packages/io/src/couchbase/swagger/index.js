@@ -2,7 +2,6 @@ import Bluebird from 'bluebird'
 import Swagger from 'swagger-client'
 import httpMessageParser from 'http-message-parser'
 import spec from './json/sgadmin20'
-import { normConnection } from '../helpers'
 
 Bluebird.config({ cancellation: true })
 const SWAGGER_TIMEOUT = 120000
@@ -84,7 +83,7 @@ async function executeMultiPart (operationId, parameters, arrayFirstIfError = []
 }
 
 const postDbBulkDocs = async (docs, connection = {}) => {
-  const { HOST, BUCKET_NAME } = normConnection(connection)
+  const { HOST, BUCKET_NAME } = connection
   return execute('post__db___bulk_docs', {
     db: BUCKET_NAME,
     BulkDocsBody: { docs },
@@ -92,7 +91,7 @@ const postDbBulkDocs = async (docs, connection = {}) => {
 }
 
 const postDbBulkGet = async (docs, arrayFirstIfError, objectGroup, connection = {}) => {
-  const { HOST, BUCKET_NAME } = normConnection(connection)
+  const { HOST, BUCKET_NAME } = connection
   return executeMultiPart('post__db___bulk_get', {
     db: BUCKET_NAME,
     BulkGetBody: { docs },
@@ -100,7 +99,7 @@ const postDbBulkGet = async (docs, arrayFirstIfError, objectGroup, connection = 
 }
 
 const getDbDoc = async (doc, connection = {}) => {
-  const { HOST, BUCKET_NAME } = normConnection(connection)
+  const { HOST, BUCKET_NAME } = connection
   const res = await execute('get__db___doc_', {
     db: BUCKET_NAME,
     doc,
@@ -110,7 +109,7 @@ const getDbDoc = async (doc, connection = {}) => {
 }
 
 const postDbDesignDdoc = async (views, connection = {}) => {
-  const { HOST, BUCKET_NAME } = normConnection(connection)
+  const { HOST, BUCKET_NAME } = connection
   return execute('put__db___design__ddoc_', {
     db: BUCKET_NAME,
     ddoc: BUCKET_NAME,
