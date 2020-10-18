@@ -5,10 +5,7 @@ const { axios } = require(__helpers)
 async function addRouters (router) {
   router.get('/info/sync_gateway', async function (req, res) {
     const { connClass = {} } = req
-    const connection = {
-      HOST: connClass.host,
-      PORT: 4985,
-    }
+    const connection = { HOST: connClass.host, PORT: 4985 }
     const { data } = await axios.restApiInstance(connection)('/')
     res.send(data)
   })

@@ -11,29 +11,6 @@ export default class Couchbase {
     this._backendHost = backendHost || ''
   }
   
-  connHost () {
-    const base = get(this._astenpos, '_cluster._connStr', HOST_DEFAULT) //suppose the same form archive
-    return base.replace('couchbase://', '')
-  }
-  
-  astenposBucketName () {
-    return this._astenpos.name
-  }
-  
-  archiveBucketName () {
-    return this._archive.name
-  }
-  
-  astenposBucketPassword () {
-    const base = get(this._astenpos, '_cluster._auth')
-    return base.password
-  }
-  
-  archiveBucketPassword () {
-    const base = get(this._archive, '_cluster._auth')
-    return base.password
-  }
-  
   get host () {
     return this.connHost()
   }
@@ -88,8 +65,32 @@ export default class Couchbase {
     }
   }
   
+  connHost () {
+    const base = get(this._astenpos, '_cluster._connStr', HOST_DEFAULT) //suppose the same form archive
+    return base.replace('couchbase://', '')
+  }
+  
+  astenposBucketName () {
+    return this._astenpos.name
+  }
+  
+  archiveBucketName () {
+    return this._archive.name
+  }
+  
+  astenposBucketPassword () {
+    const base = get(this._astenpos, '_cluster._auth')
+    return base.password
+  }
+  
+  archiveBucketPassword () {
+    const base = get(this._archive, '_cluster._auth')
+    return base.password
+  }
+  
   toString () {
     return '[@ASTENPOS_CONNECTION_OBJECT]'
   }
+  
 }
 
