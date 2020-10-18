@@ -10,8 +10,8 @@ const localInstance = axios.create({
   },
 })
 
-const restApiInstance = HOST => axios.create({
-  baseURL: `http://${HOST}:4985`,
+const restApiInstance = ({ PROTOCOL = 'http', HOST, PORT }) => axios.create({
+  baseURL: `${PROTOCOL}://${HOST}:${PORT}`,
   validateStatus: function (status) {
     return (status >= 200 && status < 300)
   },

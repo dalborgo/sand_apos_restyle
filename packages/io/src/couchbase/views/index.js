@@ -23,5 +23,5 @@ async function execViewService (params, connection = {}, returnProm = false) {
 }
 
 export default {
-  execViewService
+  execViewService,
 }
