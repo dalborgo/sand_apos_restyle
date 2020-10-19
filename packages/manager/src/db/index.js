@@ -12,7 +12,7 @@ void (async () => {
   try {
     let [key] = Object.keys(connections)
     const connection = connections[key]
-    
+  
     const optionsAstenpos = {
       username: connection._bucket,
       password: connection._password_bucket,
@@ -23,14 +23,15 @@ void (async () => {
       password: connection._password_archivio,
       logFunc: connections_.logFunc,
     }
-    const astenpos_ = new couchbase.Cluster(`couchbase://${connection.server}`, optionsAstenpos)
-    const archive_ = new couchbase.Cluster(`couchbase://${connection.server}`, optionsArchive)
+    const connStr = `couchbase://${connection.server}?config_total_timeout=25` //timeout for idea debug
+    const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
+    const archive_ = new couchbase.Cluster(connStr, optionsArchive)
     const astenpos = astenpos_.bucket(connection._bucket)
     const archive = archive_.bucket(connection._archivio)
-    __BUCKETS[key] = new Couchbase(astenpos, archive)
+    __buckets[key] = new Couchbase(astenpos_, astenpos, archive) //first parameter for cluster
     //region SESSION CONFIGURATION
     if (key === 'astenposServer') {
-      const conn = __BUCKETS[key]
+      const conn = __buckets[key]
       dbSession = conn.archiveBucketCollection
     } else {
       const options = { username: utility.user, password: utility.password, logFunc: connections_.logFunc }

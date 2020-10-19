@@ -1,0 +1,7 @@
+{
+	"secure": {
+		"login": {
+			"user_not_found_error": "Utente \"<%= userId %>\" non trovato!"
+		}
+	}
+}

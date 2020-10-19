@@ -7,7 +7,8 @@
   "globals": {
     "__db": "readonly",
     "__helpers": "readonly",
-    "__BUCKETS": "writable"
+    "__translations": "readonly",
+    "__buckets": "writable"
   },
   "parserOptions": {
     "ecmaVersion": 2020,

@@ -9,7 +9,7 @@ let dbSession
   try {
     let [key] = Object.keys(connections)
     if (key === 'astenposServer') {
-      const conn = __BUCKETS[key]
+      const conn = __buckets[key]
       dbSession = conn.archiveBucketCollection
     } else {
       const options = { username: utility.user, password: utility.password, logFunc: connections_.logFunc }

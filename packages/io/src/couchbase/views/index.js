@@ -2,7 +2,7 @@ import { cFunctions } from '@adapter/common'
 import axios from 'axios'
 import log from '@adapter/common/src/winston'
 
-async function execViewService (params, connection = {}, returnProm = false) {
+async function execViewService (params, connection = {}) {
   const { HOST, PASSWORD, BUCKET_NAME } = connection
   const { ddoc, view, stale = false, descending = false, startkey, endkey } = params
   const auth = cFunctions.getAuth(BUCKET_NAME, PASSWORD)
@@ -13,7 +13,6 @@ async function execViewService (params, connection = {}, returnProm = false) {
       headers: { Authorization: auth },
       url: `http://${HOST}:8092/${BUCKET_NAME}/_design/${ddoc || BUCKET_NAME}/_view/${view}?stale=${stale}&descending=${descending}${start}${end}`,
     }
-    if (returnProm) {return axios(params)}
     const { data: { rows } } = await axios(params)
     return { ok: true, results: rows }
   } catch (err) {

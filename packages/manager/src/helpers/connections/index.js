@@ -11,8 +11,10 @@ const { utility } = config.get('couchbase')
 
 async function getDatabase (key) {
   try {
-    if (__BUCKETS[key]) {return __BUCKETS[key]}
-    if (!key) {return __BUCKETS['astenposServer'] ? __BUCKETS['astenposServer'] : null}
+    !key && log.silly('Query param "_key" not defined!')
+    if (__buckets[key]) {return __buckets[key]}
+    if (!key) {return __buckets['astenposServer'] ? __buckets['astenposServer'] : {}}
+    log.debug('Astenpos Express key', key)
     const { data = {} } = await axios.get(`http://${utility.manager}:4000/cloud/request_credential`, { params: { key } })
     const { ok, results, message } = data
     if (!ok) { return log.error(message)}
@@ -26,14 +28,16 @@ async function getDatabase (key) {
       password: results.key,
       logFunc,
     }
-    const astenpos_ = new couchbase.Cluster(`couchbase://${results.couchbaseUrl}`, optionsAstenpos)
-    const archive_ = new couchbase.Cluster(`couchbase://${results.couchbaseUrl}`, optionsArchive)
+    const connStr = `couchbase://${results.couchbaseUrl}?config_total_timeout=25` //timeout for idea debug
+    const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
+    const archive_ = new couchbase.Cluster(connStr, optionsArchive)
     const astenpos = astenpos_.bucket(results.key)
     const archive = archive_.bucket(results.key)
-    __BUCKETS[key] = new Couchbase(astenpos, archive, results.backendUrl)
-    return __BUCKETS[key]
+    __buckets[key] = new Couchbase(astenpos_, astenpos, archive, results.backendUrl) //first parameter for cluster
+    return __buckets[key]
   } catch (err) {
     log.error(err)
+    return {}
   }
 }
 

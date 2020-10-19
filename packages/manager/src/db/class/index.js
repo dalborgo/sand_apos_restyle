@@ -5,10 +5,15 @@ const { connections } = config.get('couchbase')
 const { server: HOST_DEFAULT, backend: BACKEND_HOST_DEFAULT, _bucket: AST_DEFAULT, _archivio: ARC_DEFAULT } = connections['astenposServer']
 
 export default class Couchbase {
-  constructor (astenpos, archive, backendHost = BACKEND_HOST_DEFAULT) {
+  constructor (cluster, astenpos, archive, backendHost = BACKEND_HOST_DEFAULT) {
+    this._cluster = cluster
     this._astenpos = astenpos
     this._archive = archive
     this._backendHost = backendHost || ''
+  }
+  
+  get cluster () {
+    return this._cluster
   }
   
   get host () {
@@ -36,18 +41,20 @@ export default class Couchbase {
   
   get astConnection () {
     return {
-      HOST: this.host,
       BUCKET_NAME: this.astenposBucketName() || AST_DEFAULT,
+      CLUSTER: this.cluster,
       COLLECTION: this.astenposBucketCollection,
+      HOST: this.host,
       PASSWORD: this.astenposBucketPassword(),
     }
   }
   
   get arcConnection () {
     return {
-      HOST: this.host,
       BUCKET_NAME: this.archiveBucketName() || ARC_DEFAULT,
+      CLUSTER: this.cluster,
       COLLECTION: this.archiveBucketCollection,
+      HOST: this.host,
       PASSWORD: this.archiveBucketPassword(),
     }
   }
@@ -61,6 +68,7 @@ export default class Couchbase {
       archivio: this.astenposBucketCollection,
       backend: this.backendHost,
       bucket: this.astenposBucketCollection,
+      cluster: this.cluster,
       server: this.host,
     }
   }
