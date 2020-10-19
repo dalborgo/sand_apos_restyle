@@ -18,8 +18,8 @@ async function exec (query, cluster, options_ = {}) {
     log.debug('executionTime', `${meta.metrics.executionTime} ms`)
     return { ok: true, results: rows }
   } catch (err) {
-    log.error(err)
-    return { ok: false, err, message: err.message }
+    log.error('Query error', err)
+    return { ok: false, message: err.message, err }
   }
 }
 

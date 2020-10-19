@@ -6,16 +6,20 @@ const text = require(__translations)
 
 function addRouters (router) {
   router.get('/secure/login', async function (req, res) {
-    const { userId } = req.query
+    const { userId = '', password = '' } = req.query
     if (req.session.userId === userId) {return res.send({ ok: false, message: `User "${userId}" already logged in!` })}
     const { connClass } = req
     const { ok, results, message } = await couchQueries.exec(
-      'Select RAW a.`user` from astenpos a WHERE type = "USER" AND `user` = $1',
+      'Select a.`user`, a.`password` from astenpos a WHERE type = "USER" AND `user` = $1',
       connClass.cluster,
       { parameters: [userId] }
     )
     if (!ok) {return res.send({ ok, message })}
     if (results.length) {
+      const [user] = results
+      if (user.password !== password) {
+        return res.send({ ok: false, message: translations.format(text.secure.login['wrong_password_error']) })
+      }
       req.session.userId = userId
       const expires_ = get(req.session, 'cookie._expires')
       const expires = cDate.mom(expires_, null, 'YYYY-MM-DD HH:mm')
