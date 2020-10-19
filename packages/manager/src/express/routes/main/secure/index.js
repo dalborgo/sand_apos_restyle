@@ -5,12 +5,12 @@ import { couchQueries } from '@adapter/io'
 const text = require(__translations)
 
 function addRouters (router) {
-  router.get('/secure/login', async function (req, res) {
-    const { userId = '', password = '' } = req.query
+  router.post('/secure/login', async function (req, res) {
+    const { userId = '', password = '' } = req.body
     if (req.session.userId === userId) {return res.send({ ok: false, message: `User "${userId}" already logged in!` })}
     const { connClass } = req
     const { ok, results, message } = await couchQueries.exec(
-      'Select a.`user`, a.`password` from astenpos a WHERE type = "USER" AND `user` = $1',
+      'SELECT a.`user`, a.`password` FROM astenpos a WHERE type = "USER" AND `user` = $1',
       connClass.cluster,
       { parameters: [userId] }
     )
@@ -18,14 +18,22 @@ function addRouters (router) {
     if (results.length) {
       const [user] = results
       if (user.password !== password) {
-        return res.send({ ok: false, message: translations.format(text.secure.login['wrong_password_error']) })
+        return res.send({
+          ok: false,
+          message: translations.format(text.secure.login['wrong_password_error']),
+          messageCode: 'LOGIN_WRONG_PASSWORD'
+        })
       }
       req.session.userId = userId
       const expires_ = get(req.session, 'cookie._expires')
       const expires = cDate.mom(expires_, null, 'YYYY-MM-DD HH:mm')
       res.send({ ok: true, results: { userId, sessionID: req.session.id, expires } })
     } else {
-      res.send({ ok: false, message: translations.format(text.secure.login['user_not_found_error'], { userId }) })
+      res.send({
+        ok: false,
+        message: translations.format(text.secure.login['user_not_found_error'], { userId }),
+        messageCode: 'LOGIN_USER_NOT_FOUND'
+      })
     }
   })
   router.get('/secure/logout', async function (req, res) {
