@@ -21,7 +21,7 @@ function addRouters (router) {
         return res.send({
           ok: false,
           message: translations.format(text.secure.login['wrong_password_error']),
-          messageCode: 'LOGIN_WRONG_PASSWORD'
+          messageCode: 'LOGIN_WRONG_PASSWORD',
         })
       }
       req.session.userId = userId
@@ -32,7 +32,7 @@ function addRouters (router) {
       res.send({
         ok: false,
         message: translations.format(text.secure.login['user_not_found_error'], { userId }),
-        messageCode: 'LOGIN_USER_NOT_FOUND'
+        messageCode: 'LOGIN_USER_NOT_FOUND',
       })
     }
   })
