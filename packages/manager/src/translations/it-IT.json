@@ -1,8 +1,0 @@
-{
-	"secure": {
-		"login": {
-			"user_not_found_error": "Utente \"<%= userId %>\" non trovato!",
-			"wrong_password_error": "Password errata!"
-		}
-	}
-}

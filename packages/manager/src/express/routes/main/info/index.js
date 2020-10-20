@@ -1,4 +1,4 @@
-import { couchQueries, couchServer, couchViews } from '@adapter/io'
+import { couchServer, couchViews } from '@adapter/io'
 
 const { axios } = require(__helpers)
 
@@ -18,11 +18,6 @@ function addRouters (router) {
     const { connClass } = req
     const params = { view: 'list_docs_all2' }
     const data = await couchViews.execViewService(params, connClass.astConnection)
-    res.send(data)
-  })
-  router.get('/info/query', async function (req, res) {
-    const { connClass } = req
-    const data = await couchQueries.exec('Select raw a from astenpos a where type = "USER" LIMIT 1', connClass.cluster)
     res.send(data)
   })
 }

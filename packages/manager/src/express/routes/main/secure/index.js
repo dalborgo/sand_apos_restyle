@@ -1,8 +1,6 @@
-import { cDate, translations } from '@adapter/common'
+import { cDate } from '@adapter/common'
 import get from 'lodash/get'
 import { couchQueries } from '@adapter/io'
-
-const text = require(__translations)
 
 function addRouters (router) {
   router.post('/secure/login', async function (req, res) {
@@ -20,7 +18,7 @@ function addRouters (router) {
       if (user.password !== password) {
         return res.send({
           ok: false,
-          message: translations.format(text.secure.login['wrong_password_error']),
+          message: 'Wrong password!',
           messageCode: 'LOGIN_WRONG_PASSWORD',
         })
       }
@@ -31,7 +29,7 @@ function addRouters (router) {
     } else {
       res.send({
         ok: false,
-        message: translations.format(text.secure.login['user_not_found_error'], { userId }),
+        message: `User "${userId}" not found!`,
         messageCode: 'LOGIN_USER_NOT_FOUND',
       })
     }
