@@ -4,16 +4,20 @@ import log from '@adapter/common/src/winston'
 
 async function execViewService (params, connection = {}) {
   const { HOST, PASSWORD, BUCKET_NAME } = connection
-  const { ddoc, view, stale = false, descending = false, startkey, endkey } = params
+  const { ddoc, view, ...rest } = params
+  const params_ = { stale: false, ...rest }
   const auth = cFunctions.getAuth(BUCKET_NAME, PASSWORD)
   try {
-    const start = startkey ? `&startkey=${startkey}` : ''
-    const end = endkey ? `&endkey=${endkey}` : ''
+    const queryString = cFunctions.objToQueryString(params_)
+    log.verbose('start view')
+    const url = `http://${HOST}:8092/${BUCKET_NAME}/_design/${ddoc || BUCKET_NAME}/_view/${view}?${queryString}`
+    log.debug('url view', url)
     const params = {
       headers: { Authorization: auth },
-      url: `http://${HOST}:8092/${BUCKET_NAME}/_design/${ddoc || BUCKET_NAME}/_view/${view}?stale=${stale}&descending=${descending}${start}${end}`,
+      url,
     }
     const { data: { rows } } = await axios(params)
+    log.verbose('end view')
     return { ok: true, results: rows }
   } catch (err) {
     log.error(err)

@@ -14,7 +14,17 @@
     "sourceType": "module"
   },
   "rules": {
-    "no-console": "warn",
+    "no-console": [
+      "warn",
+      {
+        "allow": [
+          "dir",
+          "group",
+          "groupCollapsed",
+          "table"
+        ]
+      }
+    ],
     "sort-keys": [
       1,
       "asc",
@@ -31,6 +41,7 @@
       {
         "exceptions": [
           "_",
+          "j",
           "i",
           "Q"
         ]
@@ -47,7 +58,12 @@
       }
     ],
     "curly": 2,
-    "no-unused-vars": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        "varsIgnorePattern": "^_+$"
+      }
+    ],
     "camelcase": [
       1,
       {

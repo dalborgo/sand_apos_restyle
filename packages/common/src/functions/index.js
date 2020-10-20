@@ -3,7 +3,7 @@ import { customAlphabet, urlAlphabet } from 'nanoid'
 import * as paginator from './paginator'
 import camelCase from 'lodash/camelCase'
 import deburr from 'lodash/deburr'
-import { chain } from 'lodash'
+import isNil from 'lodash/isNil'
 import log from '../log'
 
 const isProd = () => process.env.NODE_ENV === 'production'
@@ -49,6 +49,7 @@ function sleep (ms) {
 }
 
 function checkDuplicate (values, comparator) {
+  const { chain } = require('lodash')
   const res = []
   if (!isFunc(comparator)) {
     log.warn('Invalid comparator!')
@@ -59,6 +60,13 @@ function checkDuplicate (values, comparator) {
     isDup && res.push(index)
   }
   return res
+}
+
+function objToQueryString (obj) {
+  return Object.keys(obj).reduce((arr, key) => {
+    !isNil(obj[key]) && arr.push(`${key}=${obj[key]}`)
+    return arr
+  }, []).join('&')
 }
 
 export default {
@@ -76,6 +84,7 @@ export default {
   isObj,
   isProd,
   isString,
+  objToQueryString,
   sleep,
   toBase64,
 }

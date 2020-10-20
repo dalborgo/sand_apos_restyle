@@ -15,8 +15,8 @@ function addRouters (router) {
     res.send(data)
   })
   router.get('/info/browser', async function (req, res) {
-    const { connClass } = req
-    const params = { view: 'list_docs_all2' }
+    const { connClass, query } = req
+    const params = { view: 'list_docs_all2', ...query }
     const data = await couchViews.execViewService(params, connClass.astConnection)
     res.send(data)
   })

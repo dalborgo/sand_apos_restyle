@@ -74,8 +74,12 @@ export default class Couchbase {
   }
   
   connHost () {
+  
     const base = get(this._astenpos, '_cluster._connStr', HOST_DEFAULT) //suppose the same form archive
-    return base.replace('couchbase://', '')
+    const regex = /couchbase:\/\/(.*)\?/
+    const match = regex.exec(base)
+    const [_, group] = match
+    return group
   }
   
   astenposBucketName () {

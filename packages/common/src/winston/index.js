@@ -118,7 +118,4 @@ if (IS_PROD) {
   }))
 }
 
-logger.table = IS_PROD ? console.dir : console.table // eslint-disable-line no-console
-logger.dir = console.dir // eslint-disable-line no-console
-
 export default logger
