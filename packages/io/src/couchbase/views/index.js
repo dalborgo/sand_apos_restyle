@@ -16,9 +16,9 @@ async function execViewService (params, connection = {}) {
       headers: { Authorization: auth },
       url,
     }
-    const { data: { rows } } = await axios(params)
+    const { data: results } = await axios(params)
     log.verbose('end view')
-    return { ok: true, results: rows }
+    return { ok: true, results }
   } catch (err) {
     log.error(err)
     return { ok: false, err, message: err.message }

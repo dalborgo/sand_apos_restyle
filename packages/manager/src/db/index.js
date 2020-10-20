@@ -4,7 +4,7 @@ import log from '@adapter/common/src/winston'
 import Couchbase from './class'
 
 const { connections: connections_ } = require(__helpers)
-const { connections, utility } = config.get('couchbase')
+const { connections, utility, CONFIG_TOTAL_TIMEOUT } = config.get('couchbase')
 
 let dbSession
 
@@ -23,7 +23,7 @@ void (async () => {
       password: connection._password_archivio,
       logFunc: connections_.logFunc,
     }
-    const connStr = `couchbase://${connection.server}?config_total_timeout=25` //timeout for idea debug
+    const connStr = `couchbase://${connection.server}?config_total_timeout=${CONFIG_TOTAL_TIMEOUT}` //timeout for idea debug
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const archive_ = new couchbase.Cluster(connStr, optionsArchive)
     const astenpos = astenpos_.bucket(connection._bucket)

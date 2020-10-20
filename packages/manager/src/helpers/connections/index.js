@@ -7,7 +7,7 @@ const Couchbase = require(`${__db}/class`)
 const DEBUG = process.env.DEBUG
 const fullLog = DEBUG === 'couchnode*'
 const logFunc = !fullLog ? log_ => (log_.subsys === 'cccp' && log_.severity > 3) && log.warn('warn', JSON.stringify(log_, ['severity', 'message'], 2)) : undefined
-const { utility } = config.get('couchbase')
+const { utility, CONFIG_TOTAL_TIMEOUT } = config.get('couchbase')
 
 async function getDatabase (key) {
   try {
@@ -28,7 +28,7 @@ async function getDatabase (key) {
       password: results.key,
       logFunc,
     }
-    const connStr = `couchbase://${results.couchbaseUrl}?config_total_timeout=25` //timeout for idea debug
+    const connStr = `couchbase://${results.couchbaseUrl}?config_total_timeout=${CONFIG_TOTAL_TIMEOUT}` //timeout for idea debug
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const archive_ = new couchbase.Cluster(connStr, optionsArchive)
     const astenpos = astenpos_.bucket(results.key)
