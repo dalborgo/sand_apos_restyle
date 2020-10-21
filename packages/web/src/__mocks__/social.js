@@ -14,7 +14,7 @@ mock.onGet('/api/social/profile').reply(() => {
       title: 'Product Designer'
     },
     email: 'katarina.smith@devias.io',
-    name: 'Katarina Smith',
+    name: 'Marco Dal Borgo',
     originCity: 'Rm. Valcea',
     previousJob: {
       company: 'Focus Aesthetic Dyanmics',
@@ -69,7 +69,7 @@ mock.onGet('/api/social/posts').reply(() => {
       author: {
         id: '5e86809283e28b96d2d38537',
         avatar: '/static/images/avatars/avatar_6.png',
-        name: 'Katarina Smith'
+        name: 'Marco Dal Borgo'
       },
       comments: [
         {
@@ -113,7 +113,7 @@ mock.onGet('/api/social/posts').reply(() => {
       author: {
         id: '5e86809283e28b96d2d38537',
         avatar: '/static/images/avatars/avatar_6.png',
-        name: 'Katarina Smith'
+        name: 'Marco Dal Borgo'
       },
       comments: [
         {
@@ -237,7 +237,7 @@ mock.onGet('/api/social/feed').reply(() => {
       author: {
         id: '5e86809283e28b96d2d38537',
         avatar: '/static/images/avatars/avatar_6.png',
-        name: 'Katarina Smith'
+        name: 'Marco Dal Borgo'
       },
       comments: [
         {

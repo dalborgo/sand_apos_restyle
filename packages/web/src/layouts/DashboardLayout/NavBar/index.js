@@ -14,7 +14,7 @@ import {
   List,
   ListSubheader,
   makeStyles,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import ReceiptIcon from '@material-ui/icons/ReceiptOutlined'
 import {
@@ -27,6 +27,7 @@ import {
   Folder as FolderIcon,
   Layout as LayoutIcon,
   Lock as LockIcon,
+  List as ListIcon,
   Mail as MailIcon,
   MessageCircle as MessageCircleIcon,
   PieChart as PieChartIcon,
@@ -35,7 +36,7 @@ import {
   Trello as TrelloIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
-  Users as UsersIcon
+  Users as UsersIcon,
 } from 'react-feather'
 import Logo from 'src/components/Logo'
 import useAuth from 'src/hooks/useAuth'
@@ -46,16 +47,21 @@ const sections = [
     subheader: 'Reports',
     items: [
       {
+        title: 'Browser',
+        icon: ListIcon,
+        href: '/app/reports/browser',
+      },
+      {
         title: 'Dashboard',
         icon: PieChartIcon,
-        href: '/app/reports/dashboard'
+        href: '/app/reports/dashboard',
       },
       {
         title: 'Dashboard Alternative',
         icon: BarChartIcon,
-        href: '/app/reports/dashboard-alternative'
-      }
-    ]
+        href: '/app/reports/dashboard-alternative',
+      },
+    ],
   },
   {
     subheader: 'Management',
@@ -67,17 +73,17 @@ const sections = [
         items: [
           {
             title: 'List Customers',
-            href: '/app/management/customers'
+            href: '/app/management/customers',
           },
           {
             title: 'View Customer',
-            href: '/app/management/customers/1'
+            href: '/app/management/customers/1',
           },
           {
             title: 'Edit Customer',
-            href: '/app/management/customers/1/edit'
-          }
-        ]
+            href: '/app/management/customers/1/edit',
+          },
+        ],
       },
       {
         title: 'Products',
@@ -86,13 +92,13 @@ const sections = [
         items: [
           {
             title: 'List Products',
-            href: '/app/management/products'
+            href: '/app/management/products',
           },
           {
             title: 'Create Product',
-            href: '/app/management/products/create'
-          }
-        ]
+            href: '/app/management/products/create',
+          },
+        ],
       },
       {
         title: 'Orders',
@@ -101,13 +107,13 @@ const sections = [
         items: [
           {
             title: 'List Orders',
-            href: '/app/management/orders'
+            href: '/app/management/orders',
           },
           {
             title: 'View Order',
-            href: '/app/management/orders/1'
-          }
-        ]
+            href: '/app/management/orders/1',
+          },
+        ],
       },
       {
         title: 'Invoices',
@@ -116,15 +122,15 @@ const sections = [
         items: [
           {
             title: 'List Invoices',
-            href: '/app/management/invoices'
+            href: '/app/management/invoices',
           },
           {
             title: 'View Invoice',
-            href: '/app/management/invoices/1'
-          }
-        ]
-      }
-    ]
+            href: '/app/management/invoices/1',
+          },
+        ],
+      },
+    ],
   },
   {
     subheader: 'Applications',
@@ -136,21 +142,21 @@ const sections = [
         items: [
           {
             title: 'Overview',
-            href: '/app/projects/overview'
+            href: '/app/projects/overview',
           },
           {
             title: 'Browse Projects',
-            href: '/app/projects/browse'
+            href: '/app/projects/browse',
           },
           {
             title: 'Create Project',
-            href: '/app/projects/create'
+            href: '/app/projects/create',
           },
           {
             title: 'View Project',
-            href: '/app/projects/1'
-          }
-        ]
+            href: '/app/projects/1',
+          },
+        ],
       },
       {
         title: 'Social Platform',
@@ -159,23 +165,23 @@ const sections = [
         items: [
           {
             title: 'Profile',
-            href: '/app/social/profile'
+            href: '/app/social/profile',
           },
           {
             title: 'Feed',
-            href: '/app/social/feed'
-          }
-        ]
+            href: '/app/social/feed',
+          },
+        ],
       },
       {
         title: 'Kanban',
         href: '/app/kanban',
-        icon: TrelloIcon
+        icon: TrelloIcon,
       },
       {
         title: 'Mail',
         href: '/app/mail',
-        icon: MailIcon
+        icon: MailIcon,
       },
       {
         title: 'Chat',
@@ -184,10 +190,10 @@ const sections = [
         info: () => (
           <Chip
             color="secondary"
-            size="small"
             label="Updated"
+            size="small"
           />
-        )
+        ),
       },
       {
         title: 'Calendar',
@@ -196,12 +202,12 @@ const sections = [
         info: () => (
           <Chip
             color="secondary"
-            size="small"
             label="Updated"
+            size="small"
           />
-        )
-      }
-    ]
+        ),
+      },
+    ],
   },
   {
     subheader: 'Auth',
@@ -209,14 +215,14 @@ const sections = [
       {
         title: 'Login',
         href: '/login-unprotected',
-        icon: LockIcon
+        icon: LockIcon,
       },
       {
         title: 'Register',
         href: '/register-unprotected',
-        icon: UserPlusIcon
-      }
-    ]
+        icon: UserPlusIcon,
+      },
+    ],
   },
   {
     subheader: 'Pages',
@@ -224,19 +230,19 @@ const sections = [
       {
         title: 'Account',
         href: '/app/account',
-        icon: UserIcon
+        icon: UserIcon,
       },
       {
         title: 'Error',
         href: '/404',
-        icon: AlertCircleIcon
+        icon: AlertCircleIcon,
       },
       {
         title: 'Pricing',
         href: '/pricing',
-        icon: DollarSignIcon
-      }
-    ]
+        icon: DollarSignIcon,
+      },
+    ],
   },
   {
     subheader: 'Extra',
@@ -248,9 +254,9 @@ const sections = [
         items: [
           {
             title: 'Apex Charts',
-            href: '/app/extra/charts/apex'
-          }
-        ]
+            href: '/app/extra/charts/apex',
+          },
+        ],
       },
       {
         title: 'Forms',
@@ -259,13 +265,13 @@ const sections = [
         items: [
           {
             title: 'Formik',
-            href: '/app/extra/forms/formik'
+            href: '/app/extra/forms/formik',
           },
           {
             title: 'Redux Forms',
-            href: '/app/extra/forms/redux'
+            href: '/app/extra/forms/redux',
           },
-        ]
+        ],
       },
       {
         title: 'Editors',
@@ -274,29 +280,31 @@ const sections = [
         items: [
           {
             title: 'DraftJS Editor',
-            href: '/app/extra/editors/draft-js'
+            href: '/app/extra/editors/draft-js',
           },
           {
             title: 'Quill Editor',
-            href: '/app/extra/editors/quill'
-          }
-        ]
-      }
-    ]
-  }
+            href: '/app/extra/editors/quill',
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 function renderNavItems({
   items,
   pathname,
-  depth = 0
+  depth = 0,
 }) {
   return (
     <List disablePadding>
-      {items.reduce(
-        (acc, item) => reduceChildRoutes({ acc, item, pathname, depth }),
-        []
-      )}
+      {
+        items.reduce(
+          (acc, item) => reduceChildRoutes({ acc, item, pathname, depth }),
+          []
+        )
+      }
     </List>
   );
 }
@@ -305,14 +313,14 @@ function reduceChildRoutes({
   acc,
   pathname,
   item,
-  depth
+  depth,
 }) {
   const key = item.title + depth;
 
   if (item.items) {
     const open = matchPath(pathname, {
       path: item.href,
-      exact: false
+      exact: false,
     });
 
     acc.push(
@@ -324,11 +332,13 @@ function reduceChildRoutes({
         open={Boolean(open)}
         title={item.title}
       >
-        {renderNavItems({
-          depth: depth + 1,
-          pathname,
-          items: item.items
-        })}
+        {
+          renderNavItems({
+            depth: depth + 1,
+            pathname,
+            items: item.items,
+          })
+        }
       </NavItem>
     );
   } else {
@@ -349,18 +359,18 @@ function reduceChildRoutes({
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
-    width: 256
+    width: 256,
   },
   desktopDrawer: {
     width: 256,
     top: 64,
-    height: 'calc(100% - 64px)'
+    height: 'calc(100% - 64px)',
   },
   avatar: {
     cursor: 'pointer',
     width: 64,
-    height: 64
-  }
+    height: 64,
+  },
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
@@ -377,16 +387,16 @@ const NavBar = ({ onMobileClose, openMobile }) => {
 
   const content = (
     <Box
-      height="100%"
       display="flex"
       flexDirection="column"
+      height="100%"
     >
       <PerfectScrollbar options={{ suppressScrollX: true }}>
         <Hidden lgUp>
           <Box
-            p={2}
             display="flex"
             justifyContent="center"
+            p={2}
           >
             <RouterLink to="/">
               <Logo />
@@ -411,17 +421,17 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             textAlign="center"
           >
             <Link
+              color="textPrimary"
               component={RouterLink}
               to="/app/account"
-              variant="h5"
-              color="textPrimary"
               underline="none"
+              variant="h5"
             >
               {user.name}
             </Link>
             <Typography
-              variant="body2"
               color="textSecondary"
+              variant="body2"
             >
               Your tier:
               {' '}
@@ -436,43 +446,49 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </Box>
         <Divider />
         <Box p={2}>
-          {sections.map((section) => (
-            <List
-              key={section.subheader}
-              subheader={(
-                <ListSubheader
-                  disableGutters
-                  disableSticky
-                >
-                  {section.subheader}
-                </ListSubheader>
-              )}
-            >
-              {renderNavItems({
-                items: section.items,
-                pathname: location.pathname
-              })}
-            </List>
-          ))}
+          {
+            sections.map((section) => (
+              <List
+                key={section.subheader}
+                subheader={
+                  (
+                    <ListSubheader
+                      disableGutters
+                      disableSticky
+                    >
+                      {section.subheader}
+                    </ListSubheader>
+                  )
+                }
+              >
+                {
+                  renderNavItems({
+                    items: section.items,
+                    pathname: location.pathname,
+                  })
+                }
+              </List>
+            ))
+          }
         </Box>
         <Divider />
         <Box p={2}>
           <Box
-            p={2}
-            borderRadius="borderRadius"
             bgcolor="background.dark"
+            borderRadius="borderRadius"
+            p={2}
           >
             <Typography
-              variant="h6"
               color="textPrimary"
+              variant="h6"
             >
               Need Help?
             </Typography>
             <Link
-              variant="subtitle1"
               color="secondary"
               component={RouterLink}
               to="/docs"
+              variant="subtitle1"
             >
               Check our docs
             </Link>
@@ -511,7 +527,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
 
 NavBar.propTypes = {
   onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool
+  openMobile: PropTypes.bool,
 };
 
 export default NavBar;

@@ -5,11 +5,11 @@ import rootReducer from './rootReducer'
 
 const store = configureStore({
   reducer: rootReducer,
-  devTools: ENABLE_REDUX_DEV_TOOLS
-});
+  devTools: ENABLE_REDUX_DEV_TOOLS,
+})
 
-export const useSelector = useReduxSelector;
+export const useSelector = useReduxSelector
 
-export const useDispatch = () => useReduxDispatch();
+export const useDispatch = () => useReduxDispatch()
 
-export default store;
+export default store

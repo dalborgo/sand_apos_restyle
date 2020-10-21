@@ -8,7 +8,7 @@ mock.onGet('/api/projects/overview/projects').reply(() => {
       author: {
         id: '5e86809283e28b96d2d38537',
         avatar: '/static/images/avatars/avatar_6.png',
-        name: 'Katarina Smith'
+        name: 'Marco Dal Borgo'
       },
       budget: 2394.00,
       caption: 'We\'re looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -280,7 +280,7 @@ mock.onGet('/api/projects/projects/1').reply(() => {
           'MongoDB',
           'ExpressJS'
         ],
-        name: 'Katarina Smith'
+        name: 'Marco Dal Borgo'
       }
     ],
     author: {

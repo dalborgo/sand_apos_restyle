@@ -7,16 +7,16 @@ const initialState = {
   isLoaded: false,
   lists: {
     byId: {},
-    allIds: []
+    allIds: [],
   },
   cards: {
     byId: {},
-    allIds: []
+    allIds: [],
   },
   members: {
     byId: {},
-    allIds: []
-  }
+    allIds: [],
+  },
 };
 
 const slice = createSlice({
@@ -133,19 +133,19 @@ const slice = createSlice({
         checklists: _.map(card.checklists, (checklist) => {
           if (checklist.id === checklistId) {
             _.assign(checklist, {
-              checkItems: [...checklist.checkItems, checkItem]
+              checkItems: [...checklist.checkItems, checkItem],
             });
           }
 
           return checklist;
-        })
+        }),
       });
     },
     updateCheckItem(state, action) {
       const {
         cardId,
         checklistId,
-        checkItem
+        checkItem,
       } = action.payload;
       const card = state.cards.byId[cardId];
 
@@ -158,7 +158,7 @@ const slice = createSlice({
               }
 
               return _checkItem;
-            })
+            }),
           });
         }
 
@@ -172,14 +172,14 @@ const slice = createSlice({
       card.checklists = _.map(card.checklists, (checklist) => {
         if (checklist.id === checklistId) {
           _.assign(checklist, {
-            checkItems: _.reject(checklist.checkItems, { id: checkItemId })
+            checkItems: _.reject(checklist.checkItems, { id: checkItemId }),
           });
         }
 
         return checklist;
       });
-    }
-  }
+    },
+  },
 });
 
 export const reducer = slice.reducer;
@@ -192,7 +192,7 @@ export const getBoard = () => async (dispatch) => {
 
 export const createList = (name) => async (dispatch) => {
   const response = await axios.post('/api/kanban/lists/new', {
-    name
+    name,
   });
 
   dispatch(slice.actions.createList(response.data));
@@ -201,7 +201,7 @@ export const createList = (name) => async (dispatch) => {
 export const updateList = (listId, update) => async (dispatch) => {
   const response = await axios.post('/api/kanban/list/update', {
     listId,
-    update
+    update,
   });
 
   dispatch(slice.actions.updateList(response.data));
@@ -209,7 +209,7 @@ export const updateList = (listId, update) => async (dispatch) => {
 
 export const clearList = (listId) => async (dispatch) => {
   await axios.post('/api/kanban/lists/clear', {
-    listId
+    listId,
   });
 
   dispatch(slice.actions.clearList({ listId }));
@@ -217,7 +217,7 @@ export const clearList = (listId) => async (dispatch) => {
 
 export const deleteList = (listId) => async (dispatch) => {
   await axios.post('/api/kanban/lists/remove', {
-    listId
+    listId,
   });
 
   dispatch(slice.actions.deleteList({ listId }));
@@ -226,7 +226,7 @@ export const deleteList = (listId) => async (dispatch) => {
 export const createCard = (listId, name) => async (dispatch) => {
   const response = await axios.post('/api/kanban/cards/new', {
     listId,
-    name
+    name,
   });
 
   dispatch(slice.actions.createCard(response.data));
@@ -235,7 +235,7 @@ export const createCard = (listId, name) => async (dispatch) => {
 export const updateCard = (cardId, update) => async (dispatch) => {
   const response = await axios.post('/api/kanban/cards/update', {
     cardId,
-    update
+    update,
   });
 
   dispatch(slice.actions.updateCard(response.data));
@@ -245,19 +245,19 @@ export const moveCard = (cardId, position, listId) => async (dispatch) => {
   await axios.post('/api/kanban/cards/move', {
     cardId,
     position,
-    listId
+    listId,
   });
 
   dispatch(slice.actions.moveCard({
     cardId,
     position,
-    listId
+    listId,
   }));
 };
 
 export const deleteCard = (cardId) => async (dispatch) => {
   await axios.post('/api/kanban/cards/remove', {
-    cardId
+    cardId,
   });
 
   dispatch(slice.actions.deleteCard({ cardId }));
@@ -266,7 +266,7 @@ export const deleteCard = (cardId) => async (dispatch) => {
 export const addComment = (cardId, message) => async (dispatch) => {
   const response = await axios.post('/api/kanban/comments/new', {
     cardId,
-    message
+    message,
   });
 
   dispatch(slice.actions.addComment(response.data));
@@ -275,13 +275,13 @@ export const addComment = (cardId, message) => async (dispatch) => {
 export const addChecklist = (cardId, name) => async (dispatch) => {
   const response = await axios.post('/api/kanban/checklists/new', {
     cardId,
-    name
+    name,
   });
   const { checklist } = response.data;
 
   dispatch(slice.actions.addChecklist({
     cardId,
-    checklist
+    checklist,
   }));
 };
 
@@ -289,25 +289,25 @@ export const updateChecklist = (cardId, checklistId, update) => async (dispatch)
   const response = await axios.post('/api/kanban/checklists/update', {
     cardId,
     checklistId,
-    update
+    update,
   });
   const { checklist } = response.data;
 
   dispatch(slice.actions.updateChecklist({
     cardId,
-    checklist
+    checklist,
   }));
 };
 
 export const deleteChecklist = (cardId, checklistId) => async (dispatch) => {
   await axios.post('/api/kanban/checklists/remove', {
     cardId,
-    checklistId
+    checklistId,
   });
 
   dispatch(slice.actions.deleteChecklist({
     cardId,
-    checklistId
+    checklistId,
   }));
 };
 
@@ -315,14 +315,14 @@ export const addCheckItem = (cardId, checklistId, name) => async (dispatch) => {
   const response = await axios.post('/api/kanban/checkitems/new', {
     cardId,
     checklistId,
-    name
+    name,
   });
   const { checkItem } = response.data;
 
   dispatch(slice.actions.addCheckItem({
     cardId,
     checklistId,
-    checkItem
+    checkItem,
   }));
 };
 
@@ -331,14 +331,14 @@ export const updateCheckItem = (cardId, checklistId, checkItemId, update) => asy
     cardId,
     checklistId,
     checkItemId,
-    update
+    update,
   });
   const { checkItem } = response.data;
 
   dispatch(slice.actions.updateCheckItem({
     cardId,
     checklistId,
-    checkItem
+    checkItem,
   }));
 };
 
@@ -346,13 +346,13 @@ export const deleteCheckItem = (cardId, checklistId, checkItemId) => async (disp
   await axios.post('/api/kanban/checkitems/remove', {
     cardId,
     checklistId,
-    checkItemId
+    checkItemId,
   });
 
   dispatch(slice.actions.deleteCheckItem({
     cardId,
     checklistId,
-    checkItemId
+    checkItemId,
   }));
 };
 

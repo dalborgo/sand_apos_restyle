@@ -157,7 +157,7 @@ const board = {
     {
       id: '5e86809283e28b96d2d38537',
       avatar: '/static/images/avatars/avatar_6.png',
-      name: 'Katarina Smith'
+      name: 'Marco Dal Borgo'
     }
   ]
 };

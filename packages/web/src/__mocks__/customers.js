@@ -73,7 +73,7 @@ mock.onGet('/api/customers').reply(() => {
       hasAcceptedMarketing: true,
       isProspect: false,
       isReturning: true,
-      name: 'Katarina Smith',
+      name: 'Marco Dal Borgo',
       state: 'Madrid',
       totalAmountSpent: 500.00,
       totalOrders: 1,

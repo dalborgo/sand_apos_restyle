@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
   form: formReducer,
   kanban: kanbanReducer,
   mail: mailReducer,
-  notifications: notificationReducer
-});
+  notifications: notificationReducer,
+})
 
-export default rootReducer;
+export default rootReducer

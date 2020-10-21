@@ -68,7 +68,7 @@ mock.onGet('/api/reports/customer-activity').reply(() => {
         .getTime(),
       customer: {
         id: '5e86809283e28b96d2d38537',
-        name: 'Katarina Smith',
+        name: 'Marco Dal Borgo',
         avatar: '/static/images/avatars/avatar_6.png'
       },
       description: 'Subscription Purchase',
@@ -383,7 +383,7 @@ mock.onGet('/api/reports/latest-tasks').reply(() => {
         },
         {
           avatar: '/static/images/avatars/avatar_6.png',
-          name: 'Katarina Smith'
+          name: 'Marco Dal Borgo'
         }
       ],
       title: 'GDPR Compliance'

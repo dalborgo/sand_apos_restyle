@@ -41,7 +41,7 @@ export const renderRoutes = (routes = []) => (
     </Switch>
   </Suspense>
 )
-
+/* eslint-disable react/display-name */
 const routes = [
   {
     exact: true,
@@ -218,6 +218,11 @@ const routes = [
       },
       {
         exact: true,
+        path: '/app/reports/browser',
+        component: lazy(() => import('src/views/reports/Browser')),
+      },
+      {
+        exact: true,
         path: '/app/reports/dashboard',
         component: lazy(() => import('src/views/reports/DashboardView')),
       },
@@ -276,5 +281,6 @@ const routes = [
     ],
   },
 ]
+/* eslint-enable react/display-name */
 
 export default routes

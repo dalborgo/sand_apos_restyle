@@ -14,7 +14,7 @@ const users = [
     country: 'USA',
     email: 'demo@devias.io',
     isPublic: true,
-    name: 'Katarina Smith',
+    name: 'Marco Dal Borgo',
     password: 'Password123',
     phone: '+40 777666555',
     role: 'admin',

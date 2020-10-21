@@ -195,7 +195,7 @@ let threads = [
       {
         id: '5e86809283e28b96d2d38537',
         avatar: '/static/images/avatars/avatar_6.png',
-        name: 'Katarina Smith',
+        name: 'Marco Dal Borgo',
         username: 'katarina.smith'
       },
       {
@@ -249,7 +249,7 @@ let threads = [
       {
         id: '5e86809283e28b96d2d38537',
         avatar: '/static/images/avatars/avatar_6.png',
-        name: 'Katarina Smith',
+        name: 'Marco Dal Borgo',
         username: 'katarina.smith'
       },
       {
@@ -432,7 +432,7 @@ mock.onPost('/api/chat/messages/new').reply((request) => {
     const user = {
       id: '5e86809283e28b96d2d38537',
       avatar: '/static/images/avatars/avatar_6.png',
-      name: 'Katarina Smith',
+      name: 'Marco Dal Borgo',
       username: 'katarina.smith'
     };
 

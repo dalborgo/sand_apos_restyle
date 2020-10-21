@@ -111,7 +111,7 @@ Ekaterina Tankova
     },
     to: [
       {
-        name: 'Katarina Smith',
+        name: 'Marco Dal Borgo',
         email: 'katarina.smith@devias.io',
         avatar: null
       }
@@ -138,7 +138,7 @@ Hey, nice projects! I really liked the one in react. What's your quote on kinda 
     },
     to: [
       {
-        name: 'Katarina Smith',
+        name: 'Marco Dal Borgo',
         email: 'katarina.smith@devias.io',
         avatar: null
       }
@@ -165,7 +165,7 @@ Dear Shen, Your flight is coming up soon. Please don’t forget to check in for 
     },
     to: [
       {
-        name: 'Katarina Smith',
+        name: 'Marco Dal Borgo',
         email: 'katarina.smith@devias.io',
         avatar: null
       }
@@ -192,7 +192,7 @@ My market leading client has another fantastic opportunity for an experienced So
     },
     to: [
       {
-        name: 'Katarina Smith',
+        name: 'Marco Dal Borgo',
         email: 'katarina.smith@devias.io',
         avatar: null
       }
