@@ -62,11 +62,12 @@ function checkDuplicate (values, comparator) {
   return res
 }
 
-function objToQueryString (obj) {
-  return Object.keys(obj).reduce((arr, key) => {
+function objToQueryString (obj, prependQuestionMark = false) {
+  const output = Object.keys(obj).reduce((arr, key) => {
     !isNil(obj[key]) && arr.push(`${key}=${obj[key]}`)
     return arr
   }, []).join('&')
+  return prependQuestionMark && output ? `?${output}` : output
 }
 
 export default {

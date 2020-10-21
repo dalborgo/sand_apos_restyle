@@ -2,6 +2,7 @@ import couchbase from 'couchbase'
 import log from '@adapter/common/src/winston'
 import axios from 'axios'
 import config from 'config'
+import { cFunctions } from '@adapter/common'
 
 const Couchbase = require(`${__db}/class`)
 const DEBUG = process.env.DEBUG
@@ -28,7 +29,9 @@ async function getDatabase (key) {
       password: results.key,
       logFunc,
     }
-    const connStr = `couchbase://${results.couchbaseUrl}?config_total_timeout=${CONFIG_TOTAL_TIMEOUT}` //timeout for idea debug
+    const queryString = cFunctions.objToQueryString({ config_total_timeout: CONFIG_TOTAL_TIMEOUT }, true)
+    const connStr = `couchbase://${results.couchbaseUrl}${queryString}` //timeout for idea debug
+    log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const archive_ = new couchbase.Cluster(connStr, optionsArchive)
     const astenpos = astenpos_.bucket(results.key)

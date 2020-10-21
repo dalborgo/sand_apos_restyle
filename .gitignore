@@ -6,3 +6,4 @@
 /packages/manager/node_modules/
 /packages/manager/config/
 yarn.lock
+/packages/manager/errors.log
