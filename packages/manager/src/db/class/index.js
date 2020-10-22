@@ -41,7 +41,7 @@ export default class Couchbase {
   
   get astConnection () {
     return {
-      BUCKET_NAME: this.astenposBucketName() || AST_DEFAULT,
+      BUCKET_NAME: this.astenposBucketName || AST_DEFAULT,
       CLUSTER: this.cluster,
       COLLECTION: this.astenposBucketCollection,
       HOST: this.host,
@@ -51,7 +51,7 @@ export default class Couchbase {
   
   get arcConnection () {
     return {
-      BUCKET_NAME: this.archiveBucketName() || ARC_DEFAULT,
+      BUCKET_NAME: this.archiveBucketName || ARC_DEFAULT,
       CLUSTER: this.cluster,
       COLLECTION: this.archiveBucketCollection,
       HOST: this.host,
@@ -73,21 +73,20 @@ export default class Couchbase {
     }
   }
   
-  connHost () {
+  get astenposBucketName () {
+    return this._astenpos.name
+  }
   
+  get archiveBucketName () {
+    return this._archive.name
+  }
+  
+  connHost () {
     const base = get(this._astenpos, '_cluster._connStr', HOST_DEFAULT) //suppose the same form archive
     const regex = /couchbase:\/\/(.*)\?/
     const match = regex.exec(base)
     const [_, group] = match
     return group
-  }
-  
-  astenposBucketName () {
-    return this._astenpos.name
-  }
-  
-  archiveBucketName () {
-    return this._archive.name
   }
   
   astenposBucketPassword () {

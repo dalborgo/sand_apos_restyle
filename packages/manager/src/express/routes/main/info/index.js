@@ -1,4 +1,4 @@
-import { couchServer, couchViews } from '@adapter/io'
+import { couchServer } from '@adapter/io'
 
 const { axios } = require(__helpers)
 
@@ -12,12 +12,6 @@ function addRouters (router) {
   router.get('/info/couch_server', async function (req, res) {
     const { connJSON } = req
     const data = await couchServer.getVersion(connJSON)
-    res.send(data)
-  })
-  router.get('/info/browser', async function (req, res) {
-    const { connClass, query } = req
-    const params = { view: 'list_docs_all2', ...query }
-    const data = await couchViews.execViewService(params, connClass.astConnection)
     res.send(data)
   })
 }
