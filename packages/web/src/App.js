@@ -20,7 +20,14 @@ import routes, { renderRoutes } from 'src/routes'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
-const queryCache = new QueryCache()
+const queryCache = new QueryCache({
+  defaultConfig: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  },
+})
 const App = () => {
   const { settings } = useSettings()
   

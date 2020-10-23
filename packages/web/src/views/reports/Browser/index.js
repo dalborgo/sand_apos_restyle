@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { Box, makeStyles, Paper } from '@material-ui/core'
+import {
+  Box,
+  CircularProgress,
+  FormControl,
+  IconButton,
+  Input,
+  InputAdornment,
+  makeStyles,
+  Paper
+} from '@material-ui/core'
 import { useInfiniteQuery } from 'react-query'
 import Page from 'src/components/Page'
 import Header from './Header'
 import DocList from './DocList'
-import axios from 'axios'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import SearchIcon from '@material-ui/icons/Search'
 import CloseIcon from '@material-ui/icons/Close'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import FormControl from '@material-ui/core/FormControl'
-import Input from '@material-ui/core/Input'
+import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
+import log from '@adapter/common/src/log'
 
 const LIMIT = 40
 const focus = event => event.target.select()
 const fetchFunc = async (key, text, cursor) => {
-  const { data } = await axios.get('http://localhost:7000/api/docs/browser', {
+  const { data } = await axiosLocalInstance(`/api/${key}`, {
     params: {
       limit: LIMIT,
       startkey: cursor,
-      text,
+      text: text || undefined,
     },
   })
   return data
@@ -82,15 +87,17 @@ const DashboardView = () => {
     const browserPanel = document.getElementById('browserPanel')
     browserPanel.scrollTop = 0
   }, [text])
-  const response = useInfiniteQuery(['docs', text], fetchFunc, {
-    refetchOnWindowFocus: false,
-    retry: false,
+  const response = useInfiniteQuery(['docs/browser', text], fetchFunc, {
     getFetchMore: (lastGroup, allGroups) => {
       const { total_rows: totalRows, rows = [] } = lastGroup?.results
       const cursor = rows[rows.length - 1]?.key
       const rowsFetched = allGroups.length * LIMIT
       const isOver = !LIMIT || rowsFetched === totalRows || rows.length < LIMIT
       return isOver ? false : parseInt(cursor)
+    },
+    onError: err => {
+      log.error(err.message)
+      setText('')
     },
   })
   return (

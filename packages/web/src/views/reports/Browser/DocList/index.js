@@ -1,7 +1,6 @@
 import React from 'react'
-import Link from '@material-ui/core/Link'
 import useIntersectionObserver from 'src/utils/useIntersectionObserver'
-import { Button, makeStyles } from '@material-ui/core'
+import { Button, Link, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey['700'],
   },
   linkStandard: {
-    color: theme.palette.common.black,
+    color: theme.palette.text.primary,
   },
 }))
 

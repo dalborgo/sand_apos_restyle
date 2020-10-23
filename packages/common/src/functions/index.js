@@ -4,7 +4,7 @@ import * as paginator from './paginator'
 import camelCase from 'lodash/camelCase'
 import deburr from 'lodash/deburr'
 import isNil from 'lodash/isNil'
-import log from '../log'
+import omitBy from 'lodash/omitBy'
 
 const isProd = () => process.env.NODE_ENV === 'production'
 const generator = require('generate-password')
@@ -52,7 +52,6 @@ function checkDuplicate (values, comparator) {
   const { chain } = require('lodash')
   const res = []
   if (!isFunc(comparator)) {
-    log.warn('Invalid comparator!')
     return res
   }
   for (let index = 0; index < values.length; index++) {
@@ -62,9 +61,11 @@ function checkDuplicate (values, comparator) {
   return res
 }
 
+const filterQueryString = obj => omitBy(obj, inp => isNil(inp) || inp === '')
+
 function objToQueryString (obj, prependQuestionMark = false) {
-  const output = Object.keys(obj).reduce((arr, key) => {
-    !isNil(obj[key]) && arr.push(`${key}=${obj[key]}`)
+  const output = Object.keys(filterQueryString(obj)).reduce((arr, key) => {
+    arr.push(`${key}=${obj[key]}`)
     return arr
   }, []).join('&')
   return prependQuestionMark && output ? `?${output}` : output
@@ -76,6 +77,7 @@ export default {
   createChain,
   cursorPaginator: paginator.cursorPaginator,
   cursorPaginatorBoost: paginator.cursorPaginatorBoost,
+  filterQueryString,
   fromBase64,
   generateString,
   getAuth,
