@@ -1,30 +1,73 @@
-import React from 'react'
-import { Box, Container, Divider, makeStyles, Paper, Typography } from '@material-ui/core'
+import React, { useEffect, useState } from 'react'
+import { Box, makeStyles, Paper } from '@material-ui/core'
+import { useInfiniteQuery } from 'react-query'
 import Page from 'src/components/Page'
 import Header from './Header'
+import DocList from './DocList'
+import axios from 'axios'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import { lighten } from '@material-ui/core/styles/colorManipulator'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import SearchIcon from '@material-ui/icons/Search'
+import CloseIcon from '@material-ui/icons/Close'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import IconButton from '@material-ui/core/IconButton'
+import FormControl from '@material-ui/core/FormControl'
+import OutlinedInput from '@material-ui/core/OutlinedInput'
+import Input from '@material-ui/core/Input'
+
+const LIMIT = 40
+const focus = event => event.target.select()
+const fetchFunc = async (key, text, cursor) => {
+  const { data } = await axios.get('http://localhost:7000/api/docs/browser', {
+    params: {
+      limit: LIMIT,
+      startkey: cursor,
+      text,
+    },
+  })
+  return data
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
-    minHeight: '100%',
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
+    height: '100%',
+    display: 'flex',
+    overflow: 'hidden',
+    flexDirection: 'column',
   },
-  container: {
-    marginTop: theme.spacing(4),
+  box: {
+    backgroundColor: 'none',
+  },
+  circularProgress: {
+    alignItems: 'center',
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  content: {
+    flexGrow: 1,
+    flexShrink: 1,
+    display: 'flex',
+    overflowY: 'hidden',
+    overflowX: 'auto',
+  },
+  innerFirst: {
+    display: 'flex',
+    paddingBottom: theme.spacing(3),
+    paddingLeft: theme.spacing(2),
   },
   inner: {
     display: 'flex',
     flexDirection: 'column',
     maxHeight: '100%',
-    overflowY: 'hidden',
-    overflowX: 'hidden',
-    width: 380,
+    width: 430,
   },
   browserArea: {
-    minHeight: 80,
     flexGrow: 1,
     overflowY: 'auto',
+    overflowX: 'hidden',
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(2),
@@ -34,37 +77,106 @@ const useStyles = makeStyles((theme) => ({
 
 const DashboardView = () => {
   const classes = useStyles()
+  const [text, setText] = useState('')
+  useEffect(() => {
+    const browserSearchBox = document.getElementById('browserSearchBox')
+    browserSearchBox.select()
+    const browserPanel = document.getElementById('browserPanel')
+    browserPanel.scrollTop = 0
+  }, [text])
+  const response = useInfiniteQuery(['docs', text], fetchFunc, {
+    refetchOnWindowFocus: false,
+    retry: false,
+    getFetchMore: (lastGroup, allGroups) => {
+      const { total_rows: totalRows, rows = [] } = lastGroup?.results
+      const cursor = rows[rows.length - 1]?.key
+      const rowsFetched = allGroups.length * LIMIT
+      const isOver = !LIMIT || rowsFetched === totalRows || rows.length < LIMIT
+      return isOver ? false : parseInt(cursor)
+    },
+  })
   return (
     <Page
       className={classes.root}
       title="Browser"
     >
-      <Container maxWidth={false}>
+      <Box p={3}>
         <Header/>
-        <div className={classes.container}>
-          <Paper className={classes.inner}>
+      </Box>
+      <div className={classes.content}>
+        <div className={classes.innerFirst}>
+          <Paper className={classes.inner} elevation={2}>
             <Box
               alignItems="center"
+              className={classes.box}
               display="flex"
               px={2}
               py={1}
             >
-              <Typography
-                color="inherit"
-                variant="h5"
-              >
-                PlaceHolder Filter
-              </Typography>
+              <form onSubmit={event => event.preventDefault()} style={{ width: '100%' }}>
+                <Box alignItems="center" display="flex" mb={0}>
+                  <Box flexGrow={1} mr={2}>
+                    <FormControl fullWidth size={'small'}>
+                      <Input
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={
+                                event => {
+                                  event.persist()
+                                  const browserSearchBox = document.getElementById('browserSearchBox')
+                                  browserSearchBox.value = ''
+                                  if (text) {
+                                    setText('')
+                                  } else {
+                                    browserSearchBox.focus()
+                                  }
+                                }
+                              }
+                              style={{ padding: 8 }}
+                            >
+                              <CloseIcon/>
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        id="browserSearchBox"
+                        onFocus={focus}
+                      />
+                    </FormControl>
+                  </Box>
+                  <Box>
+                    <IconButton
+                      color="primary"
+                      onClick={
+                        event => {
+                          event.persist()
+                          const filter = document.getElementById('browserSearchBox').value
+                          setText(filter)
+                        }
+                      }
+                      type="submit"
+                    >
+                      <SearchIcon/>
+                    </IconButton>
+                  </Box>
+                </Box>
+              </form>
             </Box>
-            <Divider/>
-            <div className={classes.browserArea}>
-              <Typography>
-                PLACEHOLDER LISTA
-              </Typography>
+            <div className={classes.browserArea} id="browserPanel">
+              {
+                response.isLoading ?
+                  <div className={classes.circularProgress}>
+                    <CircularProgress/>
+                  </div>
+                  :
+                  <PerfectScrollbar options={{ suppressScrollX: true }}>
+                    <DocList {...response}/>
+                  </PerfectScrollbar>
+              }
             </div>
           </Paper>
         </div>
-      </Container>
+      </div>
     </Page>
   )
 }
