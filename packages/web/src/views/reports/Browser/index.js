@@ -7,7 +7,7 @@ import {
   Input,
   InputAdornment,
   makeStyles,
-  Paper
+  Paper,
 } from '@material-ui/core'
 import { useInfiniteQuery } from 'react-query'
 import Page from 'src/components/Page'
