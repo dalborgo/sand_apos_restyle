@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { memo, useCallback } from 'react'
 import useIntersectionObserver from 'src/utils/useIntersectionObserver'
+import { useHistory } from 'react-router'
 import { Button, Link, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
+import { testParams } from 'src/utils/urlFunctions'
+
+const BG_COLOR = '#c0efdd'
 
 const useStyles = makeStyles((theme) => ({
   link: {
     cursor: 'pointer',
     whiteSpace: 'nowrap',
+    '&:hover': {
+      backgroundColor: theme.palette.grey[200],
+    },
+  },
+  linkSelected: {
+    backgroundColor: BG_COLOR,
+    '&:hover': {
+      backgroundColor: BG_COLOR,
+    },
   },
   linkPhone: {
     color: theme.palette.secondary.main,
@@ -17,24 +30,44 @@ const useStyles = makeStyles((theme) => ({
   linkStandard: {
     color: theme.palette.text.primary,
   },
-}))
+}), { name: 'MuiBrowserElem' })
 
-function ListElem ({ text, value }) {
+const ListElem = ({ text, value }) => {
+  console.log('%cRENDER_SEC', 'color: pink')
   const classes = useStyles()
-  let className
+  const history = useHistory()
+  const baseUrl = '/app/reports/browser'
+  
+  const handleSelect = useCallback(event => {
+    const docId = event.target.id
+    const params = testParams(`${baseUrl}/:docId`)
+    if (params && params['docId'] !== docId) {
+      const elem = document.getElementById(params.docId)
+      if (elem) {elem.classList.remove('MuiBrowserElem-linkSelected')}
+    }
+    const elem = document.getElementById(docId)
+    if (elem) {
+      elem.classList.add('MuiBrowserElem-linkSelected')
+      history.push(`${baseUrl}/${docId}`)
+    }
+  }, [history])
+  
+  const params = testParams(`${baseUrl}/:docId`)
+  let className = clsx(classes.link, { [classes.linkSelected]: params && params['docId'] === text })
   if (value) {
     const [first] = value
-    className = clsx(classes.link, first.includes('phone') ? classes.linkPhone : classes.linkServer)
+    className += ` ${clsx(first.includes('phone') ? classes.linkPhone : classes.linkServer)}`
   } else {
-    className = clsx(classes.link, classes.linkStandard)
+    className += ` ${clsx(classes.linkStandard)}`
   }
-  const preventDefault = (event) => event.preventDefault()
   return (
     <Link
       className={className}
       component={'div'}
       href="#"
-      onClick={preventDefault}
+      id={text}
+      onClick={handleSelect}
+      underline={'none'}
       variant="body2"
     >
       {text}
@@ -42,7 +75,8 @@ function ListElem ({ text, value }) {
   )
 }
 
-const DocList = ({ data, fetchMore, canFetchMore, isFetchingMore }) => {
+let DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore }) => {
+  console.log('%cRENDER_LIST', 'color: orange')
   const loadMoreButtonRef = React.useRef()
   useIntersectionObserver({
     target: loadMoreButtonRef,
@@ -67,7 +101,7 @@ const DocList = ({ data, fetchMore, canFetchMore, isFetchingMore }) => {
           </React.Fragment>
         ))
       }
-      <div style={{width:'100%',  textAlign: 'center'}}>
+      <div style={{ width: '100%', textAlign: 'center' }}>
         <Button
           color="primary"
           disabled={!!isFetchingMore}
@@ -86,6 +120,6 @@ const DocList = ({ data, fetchMore, canFetchMore, isFetchingMore }) => {
       </div>
     </div>
   )
-}
-
+})
+DocList.displayName = 'DocList'
 export default DocList

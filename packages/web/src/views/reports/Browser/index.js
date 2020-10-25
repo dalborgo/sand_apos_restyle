@@ -18,6 +18,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import CloseIcon from '@material-ui/icons/Close'
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
+import { useHistory } from 'react-router'
 
 const LIMIT = 40
 const focus = event => event.target.select()
@@ -78,9 +79,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const DashboardView = () => {
+const BrowserView = () => {
   const classes = useStyles()
   const [text, setText] = useState('')
+  const history = useHistory()
+  /*const { docId } = useParams()
+  console.log('docId:', docId)*/
   useEffect(() => {
     const browserSearchBox = document.getElementById('browserSearchBox')
     browserSearchBox.select()
@@ -118,7 +122,7 @@ const DashboardView = () => {
               px={2}
               py={1}
             >
-              <form onSubmit={event => event.preventDefault()} style={{ width: '100%' }}>
+              <form autoComplete="off" onSubmit={event => event.preventDefault()} style={{ width: '100%' }}>
                 <Box alignItems="center" display="flex" mb={0}>
                   <Box flexGrow={1} mr={2}>
                     <FormControl fullWidth size={'small'}>
@@ -156,6 +160,7 @@ const DashboardView = () => {
                         event => {
                           event.persist()
                           const filter = document.getElementById('browserSearchBox').value
+                          history.push('/app/reports/browser')
                           setText(filter)
                         }
                       }
@@ -186,4 +191,4 @@ const DashboardView = () => {
   )
 }
 
-export default DashboardView
+export default BrowserView

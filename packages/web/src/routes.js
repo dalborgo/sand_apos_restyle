@@ -218,7 +218,10 @@ const routes = [
       },
       {
         exact: true,
-        path: '/app/reports/browser',
+        path: [
+          '/app/reports/browser',
+          '/app/reports/browser/:docId',
+        ],
         component: lazy(() => import('src/views/reports/Browser')),
       },
       {
