@@ -31,6 +31,14 @@ export default class Couchbase {
     }
   }
   
+  get astenposBucketName () {
+    return this._astenpos.name || AST_DEFAULT
+  }
+  
+  get archiveBucketName () {
+    return this._archive.name || ARC_DEFAULT
+  }
+  
   get astenposBucketCollection () {
     return this._astenpos.defaultCollection()
   }
@@ -41,7 +49,7 @@ export default class Couchbase {
   
   get astConnection () {
     return {
-      BUCKET_NAME: this.astenposBucketName || AST_DEFAULT,
+      BUCKET_NAME: this.astenposBucketName,
       CLUSTER: this.cluster,
       COLLECTION: this.astenposBucketCollection,
       HOST: this.host,
@@ -51,7 +59,7 @@ export default class Couchbase {
   
   get arcConnection () {
     return {
-      BUCKET_NAME: this.archiveBucketName || ARC_DEFAULT,
+      BUCKET_NAME: this.archiveBucketName,
       CLUSTER: this.cluster,
       COLLECTION: this.archiveBucketCollection,
       HOST: this.host,
@@ -61,8 +69,8 @@ export default class Couchbase {
   
   get oldConnection () {
     return {
-      _archivio: this.archiveBucketName(),
-      _bucket: this.astenposBucketName(),
+      _archivio: this.archiveBucketName,
+      _bucket: this.astenposBucketName,
       _password_archivio: this.archiveBucketPassword(),
       _password_bucket: this.astenposBucketPassword(),
       archivio: this.astenposBucketCollection,
@@ -71,14 +79,6 @@ export default class Couchbase {
       cluster: this.cluster,
       server: this.host,
     }
-  }
-  
-  get astenposBucketName () {
-    return this._astenpos.name
-  }
-  
-  get archiveBucketName () {
-    return this._archive.name
   }
   
   connHost () {

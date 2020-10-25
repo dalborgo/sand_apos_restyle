@@ -41,6 +41,23 @@ function addRouters (router) {
       res.send(data)
     }
   })
+  router.get('/docs/get_by_id', async function (req, res) {
+    const { connClass, docId = 'general_configuration' } = req
+    const { ok, results: data, message } = await couchQueries.exec(
+      'SELECT '
+      + 'meta(ast).id _id, '
+      + 'meta(ast).xattrs._sync.rev _rev, '
+      + 'ast.* '
+      + 'FROM ' + connClass.astenposBucketName + ' ast '
+      + 'USE KEYS "' + docId + '"',
+      connClass.cluster
+    )
+    if (!ok) {
+      return res.send(ok, message)
+    }
+    const [results] = data
+    res.send({ ok, results })
+  })
 }
 
 export default {

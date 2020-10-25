@@ -4,6 +4,7 @@ import { useHistory } from 'react-router'
 import { Button, Link, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { testParams } from 'src/utils/urlFunctions'
+import { FormattedMessage } from 'react-intl'
 
 const BG_COLOR = '#c0efdd'
 
@@ -115,7 +116,7 @@ let DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore }) => {
             }
           }
         >
-          Carica ancora
+          <FormattedMessage defaultMessage="Mostra di più" id="reports.browser.showMore"/>
         </Button>
       </div>
     </div>

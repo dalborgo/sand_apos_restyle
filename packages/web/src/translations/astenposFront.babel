@@ -1,0 +1,83 @@
+<babeledit_project be_version="2.7.1" version="1.2">
+    <!--
+
+    BabelEdit project file
+    https://www.codeandweb.com/babeledit
+
+    This file contains meta data for all translations, but not the translation texts itself.
+    They are stored in framework-specific message files (.json / .vue / .yaml / .properties)
+
+    -->
+    <preset_collections/>
+    <framework>react-intl</framework>
+    <filename>astenposFront.babel</filename>
+    <source_root_dir>../../</source_root_dir>
+    <folder_node>
+        <name></name>
+        <children>
+            <folder_node>
+                <name>reports</name>
+                <children>
+                    <folder_node>
+                        <name>browser</name>
+                        <children>
+                            <concept_node>
+                                <name>showMore</name>
+                                <definition_loaded>true</definition_loaded>
+                                <description></description>
+                                <comment></comment>
+                                <default_text>Mostra di più</default_text>
+                                <translations>
+                                    <translation>
+                                        <language>it-IT</language>
+                                        <approved>false</approved>
+                                    </translation>
+                                    <translation>
+                                        <language>en-US</language>
+                                        <approved>false</approved>
+                                    </translation>
+                                </translations>
+                            </concept_node>
+                        </children>
+                    </folder_node>
+                </children>
+            </folder_node>
+        </children>
+    </folder_node>
+    <isTemplateProject>false</isTemplateProject>
+    <languages>
+        <language>
+            <code>en-US</code>
+            <source_id></source_id>
+            <source_file>en-US.json</source_file>
+        </language>
+        <language>
+            <code>it-IT</code>
+            <source_id></source_id>
+            <source_file>it-IT.json</source_file>
+        </language>
+    </languages>
+    <translation_files>
+        <translation_file>
+            <file>it-IT.json</file>
+        </translation_file>
+        <translation_file>
+            <file>en-US.json</file>
+        </translation_file>
+    </translation_files>
+    <editor_configuration>
+        <save_empty_translations>true</save_empty_translations>
+        <copy_templates>
+            <copy_template></copy_template>
+            <copy_template></copy_template>
+            <copy_template></copy_template>
+        </copy_templates>
+    </editor_configuration>
+    <primary_language>it-IT</primary_language>
+    <configuration>
+        <definitions>.</definitions>
+        <indent>space2</indent>
+        <format>json</format>
+        <support_arrays>true</support_arrays>
+    </configuration>
+</babeledit_project>
