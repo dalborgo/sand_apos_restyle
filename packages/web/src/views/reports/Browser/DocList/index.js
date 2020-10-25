@@ -53,16 +53,16 @@ const ListElem = ({ text, value }) => {
   }, [history])
   
   const params = testParams(`${baseUrl}/:docId`)
-  let className = clsx(classes.link, { [classes.linkSelected]: params && params['docId'] === text })
+  let linkClasses = clsx(classes.link, { [classes.linkSelected]: params && params['docId'] === text })
   if (value) {
     const [first] = value
-    className += ` ${clsx(first.includes('phone') ? classes.linkPhone : classes.linkServer)}`
+    linkClasses += ` ${clsx(first.includes('phone') ? classes.linkPhone : classes.linkServer)}`
   } else {
-    className += ` ${clsx(classes.linkStandard)}`
+    linkClasses += ` ${clsx(classes.linkStandard)}`
   }
   return (
     <Link
-      className={className}
+      className={linkClasses}
       component={'div'}
       href="#"
       id={text}

@@ -13,7 +13,7 @@ import CookiesNotification from 'src/components/CookiesNotification'
 import GoogleAnalytics from 'src/components/GoogleAnalytics'
 import SettingsNotification from 'src/components/SettingsNotification'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query-devtools'
+//import { ReactQueryDevtools } from 'react-query-devtools'
 import { AuthProvider } from 'src/contexts/JWTAuthContext'
 import useSettings from 'src/hooks/useSettings'
 import { createTheme } from 'src/theme'
@@ -55,7 +55,7 @@ const App = () => {
                 <SettingsNotification/>
                 <ReactQueryCacheProvider queryCache={queryCache}>
                   {renderRoutes(routes)}
-                  <ReactQueryDevtools initialIsOpen/>
+                  {/*<ReactQueryDevtools initialIsOpen/>*/}
                 </ReactQueryCacheProvider>
               </AuthProvider>
             </Router>
