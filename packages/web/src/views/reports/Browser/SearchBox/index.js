@@ -1,11 +1,10 @@
 import React, { memo } from 'react'
-import { Box, FormControl, IconButton, Input, InputAdornment, makeStyles } from '@material-ui/core'
+import { Box, CircularProgress, FormControl, IconButton, Input, InputAdornment, makeStyles } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import SearchIcon from '@material-ui/icons/Search'
 import ReplayIcon from '@material-ui/icons/Replay'
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
 import { useHistory } from 'react-router'
-import CircularProgress from '@material-ui/core/CircularProgress'
 
 const focus = event => event.target.select()
 
@@ -24,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-let SearchBox = memo(({ isFetching, text, setText, refetch }) => {
+const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => {
   console.log('%cRENDER_SEARCH', 'color: cyan')
   const classes = useStyles()
   const history = useHistory()
@@ -39,7 +38,7 @@ let SearchBox = memo(({ isFetching, text, setText, refetch }) => {
       <form autoComplete="off" onSubmit={event => event.preventDefault()} style={{ width: '100%' }}>
         <Box alignItems="center" display="flex" mb={0}>
           <Box flexGrow={1} mr={2}>
-            <FormControl fullWidth size={'small'}>
+            <FormControl fullWidth size="small">
               <Input
                 endAdornment={
                   <InputAdornment position="end">
@@ -72,8 +71,10 @@ let SearchBox = memo(({ isFetching, text, setText, refetch }) => {
               onClick={
                 () => {
                   const filter = document.getElementById('browserSearchBox').value
-                  history.push('/app/reports/browser')
-                  setText(filter)
+                  if (filter !== text) {
+                    history.push('/app/reports/browser')
+                    setText(filter)
+                  }
                 }
               }
               type="submit"
@@ -84,7 +85,12 @@ let SearchBox = memo(({ isFetching, text, setText, refetch }) => {
               <IconButton
                 aria-label="save"
                 color="primary"
-                onClick={() => refetch()}
+                onClick={
+                  () => {
+                    refetch()
+                    refetchLine()
+                  }
+                }
               >
                 {isFetching ? <HourglassEmptyIcon/> : <ReplayIcon/>}
               </IconButton>

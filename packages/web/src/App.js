@@ -13,7 +13,7 @@ import CookiesNotification from 'src/components/CookiesNotification'
 import GoogleAnalytics from 'src/components/GoogleAnalytics'
 import SettingsNotification from 'src/components/SettingsNotification'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
-//import { ReactQueryDevtools } from 'react-query-devtools'
+import { ReactQueryDevtools } from 'react-query-devtools'
 import { IntlProvider } from 'react-intl'
 import messages from 'src/translations/it-IT.json'
 import { AuthProvider } from 'src/contexts/JWTAuthContext'
@@ -58,7 +58,7 @@ const App = () => {
                 <IntlProvider defaultLocale="it" locale="it" messages={messages}>
                   <ReactQueryCacheProvider queryCache={queryCache}>
                     {renderRoutes(routes)}
-                    {/*<ReactQueryDevtools initialIsOpen/>*/}
+                    <ReactQueryDevtools initialIsOpen/>
                   </ReactQueryCacheProvider>
                 </IntlProvider>
               </AuthProvider>

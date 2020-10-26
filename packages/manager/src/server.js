@@ -36,11 +36,11 @@ function onError (error) {
     : 'Port ' + port
   switch (error.code) {
     case 'EACCES':
-      log.error(bind + ' requires elevated privileges')
+      log.error(`${bind} requires elevated privileges`)
       process.exit(1)
       break
     case 'EADDRINUSE':
-      log.error(bind + ' is already in use')
+      log.error(`${bind} is already in use`)
       process.exit(1)
       break
     default:
@@ -51,8 +51,8 @@ function onError (error) {
 async function onListening () {
   const addr = server.address()
   const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port
+    ? `pipe ${addr}`
+    : `port ${addr.port}`
   if (cFunctions.isProd()) {
     const stream = fs.createReadStream('mdb.txt')
     log.hint(await getStream(stream))

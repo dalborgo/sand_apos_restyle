@@ -1,4 +1,4 @@
-import { couchQueries, couchViews } from '@adapter/io'
+import { couchQueries, couchSwagger, couchViews } from '@adapter/io'
 import Q from 'q'
 
 async function allSettled (promises) {
@@ -42,7 +42,9 @@ function addRouters (router) {
     }
   })
   router.get('/docs/get_by_id', async function (req, res) {
-    const { connClass, docId = 'general_configuration' } = req
+    const { connClass, query } = req
+    const { docId } = query
+    if (!docId) {return res.send({ ok: false, message: 'docId undefined!' })}
     const { ok, results: data, message } = await couchQueries.exec(
       'SELECT '
       + 'meta(ast).id _id, '
@@ -57,6 +59,12 @@ function addRouters (router) {
     }
     const [results] = data
     res.send({ ok, results })
+  })
+  router.post('/docs/bulk', async function (req, res) {
+    const { connClass, body } = req
+    const { docs } = body
+    const data = await couchSwagger.postDbBulkDocs(docs, connClass.astConnection)
+    res.send(data)
   })
 }
 

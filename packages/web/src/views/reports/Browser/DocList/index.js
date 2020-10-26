@@ -46,10 +46,12 @@ const ListElem = ({ text, value }) => {
       const elem = document.getElementById(params.docId)
       if (elem) {elem.classList.remove('MuiBrowserElem-linkSelected')}
     }
-    const elem = document.getElementById(docId)
-    if (elem) {
-      elem.classList.add('MuiBrowserElem-linkSelected')
-      history.push(`${baseUrl}/${docId}`)
+    if(!params || params['docId'] !== docId) {
+      const elem = document.getElementById(docId)
+      if (elem) {
+        elem.classList.add('MuiBrowserElem-linkSelected')
+        history.push(`${baseUrl}/${docId}`)
+      }
     }
   }, [history])
   
@@ -76,8 +78,8 @@ const ListElem = ({ text, value }) => {
   )
 }
 
-let DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore }) => {
-  console.log('%cRENDER_LIST', 'color: orange')
+const DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore }) => {
+  console.log('%c****EXPENSIVE_RENDER_LIST', 'color: gold')
   const loadMoreButtonRef = React.useRef()
   useIntersectionObserver({
     target: loadMoreButtonRef,
