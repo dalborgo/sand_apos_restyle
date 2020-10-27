@@ -11,19 +11,23 @@ import IconButton from '@material-ui/core/IconButton'
 const BG_COLOR = '#c0efdd'
 
 const useStyles = makeStyles((theme) => ({
-  link: {
-    cursor: 'pointer',
-    display: 'inline-block',
+  container: {
     '&:hover': {
       backgroundColor: theme.palette.grey[200],
     },
   },
-  linkSelected: {
+  containerSelected: {
     backgroundColor: BG_COLOR,
     '&:hover': {
       backgroundColor: BG_COLOR,
     },
   },
+  link: {
+    cursor: 'pointer',
+    display: 'inline-block',
+   
+  },
+  
   linkPhone: {
     color: theme.palette.secondary.main,
   },
@@ -42,16 +46,17 @@ const ListElem = ({ text, value, remove }) => {
   const baseUrl = '/app/reports/browser'
   
   const handleSelect = useCallback(event => {
-    const docId = event.target.id
+    const docId = event.currentTarget.id
+    console.log('docId:', docId)
     const params = testParams(`${baseUrl}/:docId`)
     if (params && params['docId'] !== docId) {
       const elem = document.getElementById(params.docId)
-      if (elem) {elem.classList.remove('MuiBrowserElem-linkSelected')}
+      if (elem) {elem.classList.remove('MuiBrowserElem-containerSelected')}
     }
     if (!params || params['docId'] !== docId) {
       const elem = document.getElementById(docId)
       if (elem) {
-        elem.classList.add('MuiBrowserElem-linkSelected')
+        elem.classList.add('MuiBrowserElem-containerSelected')
         history.push(`${baseUrl}/${docId}`)
       }
     }
@@ -62,7 +67,9 @@ const ListElem = ({ text, value, remove }) => {
   }, [remove])
   
   const params = testParams(`${baseUrl}/:docId`)
-  let linkClasses = clsx(classes.link, { [classes.linkSelected]: params && params['docId'] === text })
+  let linkClasses = clsx(classes.link)
+  //let linkClasses = clsx(classes.link, { [classes.linkSelected]: params && params['docId'] === text })
+  let containerClasses = clsx(classes.container, { [classes.containerSelected]: params && params['docId'] === text })
   if (value) {
     const [first] = value
     linkClasses += ` ${clsx(first.includes('phone') ? classes.linkPhone : classes.linkServer)}`
@@ -70,7 +77,7 @@ const ListElem = ({ text, value, remove }) => {
     linkClasses += ` ${clsx(classes.linkStandard)}`
   }
   return (
-    <div style={{ whiteSpace: 'nowrap' }}>
+    <div className={containerClasses} id={text} onClick={handleSelect} style={{ whiteSpace: 'nowrap' }}>
       <IconButton
         name={text}
         onClick={handleRemove}
@@ -82,8 +89,7 @@ const ListElem = ({ text, value, remove }) => {
         className={linkClasses}
         component={'div'}
         href="#"
-        id={text}
-        onClick={handleSelect}
+   
         underline={'none'}
         variant="body2"
       >

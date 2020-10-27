@@ -97,7 +97,6 @@ const saveMutation = async (docs) => {
   return data
 }
 const deleteMutation = async (docId) => {
-  console.log('docId:', docId)
   const { data } = await axiosLocalInstance.delete('/api/docs/delete', {
     data: {
       docId,
@@ -197,10 +196,14 @@ const BrowserView = () => {
       } else {
         if (data?.results) {
           const [first] = data.results
-          const outObj = Object.assign(variables, { _rev: first.rev })
-          document.getElementById('browserDisplayArea').value = JSON.stringify(outObj, null, 2)
-          const isNewDoc = first.rev.startsWith('1-')
-          setOutput({ error: false, text: `${isNewDoc ? '[CREATO]' : '[MODIFICATO]'} rev. ${first.rev}` })
+          if(first.error){
+            setOutput({ error: true, text: `${first.error}: ${first.reason} (${first.status})` })
+          }else {
+            const outObj = Object.assign(variables, { _rev: first.rev })
+            document.getElementById('browserDisplayArea').value = JSON.stringify(outObj, null, 2)
+            const isNewDoc = first.rev.startsWith('1-')
+            setOutput({ error: false, text: `${isNewDoc ? '[CREATED]' : '[UPDATED]'} rev. ${first.rev}` })
+          }
         }
         queryCache.invalidateQueries('docs/browser')
         queryCache.invalidateQueries(['docs/get_by_id', docId])
@@ -210,6 +213,7 @@ const BrowserView = () => {
   const [remove] = useMutation(deleteMutation, {
     onSettled: (data, error, variables) => {
       console.log('data:', data)
+      queryCache.invalidateQueries('docs/browser')
     },
   })
   

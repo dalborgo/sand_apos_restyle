@@ -18,8 +18,8 @@ const useStyles = makeStyles(theme => ({
   progress: {
     color: theme.palette.primary.main,
     position: 'absolute',
-    top: 2,
-    left: 2,
+    top: 0,
+    left: 0,
   },
 }))
 
@@ -96,7 +96,7 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => 
               >
                 {isFetching ? <HourglassEmptyIcon/> : <ReplayIcon/>}
               </IconButton>
-              {isFetching && <CircularProgress className={classes.progress} size={46}/>}
+              {isFetching && <CircularProgress className={classes.progress} size={46} thickness={2} />}
             </div>
           </Box>
         </Box>

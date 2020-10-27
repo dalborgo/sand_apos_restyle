@@ -69,8 +69,9 @@ function addRouters (router) {
   router.delete('/docs/delete', async function (req, res) {
     const { connClass, body } = req
     const { docId } = body
-    //const data = await couchSwagger.postDbBulkDocs(docs, connClass.astConnection)
-    res.send(docId)
+    const { collection } = connClass.astConnection
+    const data = await collection.remove(docId)
+    res.send({ok: true, results: data })
   })
 }
 
