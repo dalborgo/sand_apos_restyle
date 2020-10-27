@@ -9,19 +9,19 @@ const Page = forwardRef(({
   title = '',
   ...rest
 }, ref) => {
-  const location = useLocation();
-
+  const location = useLocation()
+  
   const sendPageViewEvent = useCallback(() => {
     track.pageview({
-      page_path: location.pathname
-    });
+      page_path: location.pathname,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  }, [])
+  
   useEffect(() => {
-    sendPageViewEvent();
-  }, [sendPageViewEvent]);
-
+    sendPageViewEvent()
+  }, [sendPageViewEvent])
+  
   return (
     <div
       ref={ref}
@@ -32,12 +32,12 @@ const Page = forwardRef(({
       </Helmet>
       {children}
     </div>
-  );
-});
+  )
+})
 
 Page.propTypes = {
   children: PropTypes.node.isRequired,
-  title: PropTypes.string
-};
+  title: PropTypes.string,
+}
 
-export default Page;
+export default Page

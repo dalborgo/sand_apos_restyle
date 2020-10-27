@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "connect-couchbase": "^0.2.10",
     "cors": "^2.8.5",
     "ejs": "^3.1.5",

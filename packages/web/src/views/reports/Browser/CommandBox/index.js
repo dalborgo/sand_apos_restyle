@@ -1,5 +1,6 @@
 import React, { memo, useCallback } from 'react'
 import { Box, Button, makeStyles, Typography } from '@material-ui/core'
+import { FormattedMessage } from 'react-intl'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,14 +17,18 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const CommandBox = memo(({ mutate }) => {
+const CommandBox = memo(({ mutate, docId, output, setOutput }) => {
   console.log('%cRENDER_COMMAND_BOX', 'color: cyan')
   const classes = useStyles()
-  const save = useCallback(async event => {
-    const textArea = document.getElementById('textA')
-    const docs = JSON.parse(textArea.value)
-    await mutate(docs)
-  }, [mutate])
+  const save = useCallback(async () => {
+    try {
+      const textArea = document.getElementById('browserDisplayArea')
+      const docs = JSON.parse(textArea.value)
+      await mutate(docs)
+    } catch (err) {
+      setOutput({ error: true, text: err.message })
+    }
+  }, [mutate, setOutput])
   return (
     <Box
       alignItems="center"
@@ -33,10 +38,12 @@ const CommandBox = memo(({ mutate }) => {
       py={1}
     >
       <Box flexGrow={1}>
-        <Typography>Text</Typography>
+        <Typography color={output.error ? 'error' : 'initial'} variant="body2">{output.text}</Typography>
       </Box>
       <Box>
-        <Button color="primary" onClick={save} size="small" variant="contained">Salva</Button>
+        <Button color="primary" disabled={!docId} id="BrowserSaveButton" onClick={save} size="small">
+          <FormattedMessage defaultMessage="Salva" description="Bottone Salva" id="reports.browser.save"/>
+        </Button>
       </Box>
     </Box>
   )

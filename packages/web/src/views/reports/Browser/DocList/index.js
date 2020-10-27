@@ -5,13 +5,15 @@ import { Button, Link, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { testParams } from 'src/utils/urlFunctions'
 import { FormattedMessage } from 'react-intl'
+import CloseIcon from '@material-ui/icons/Close'
+import IconButton from '@material-ui/core/IconButton'
 
 const BG_COLOR = '#c0efdd'
 
 const useStyles = makeStyles((theme) => ({
   link: {
     cursor: 'pointer',
-    whiteSpace: 'nowrap',
+    display: 'inline-block',
     '&:hover': {
       backgroundColor: theme.palette.grey[200],
     },
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }), { name: 'MuiBrowserElem' })
 
-const ListElem = ({ text, value }) => {
+const ListElem = ({ text, value, remove }) => {
   console.log('%cRENDER_SEC', 'color: pink')
   const classes = useStyles()
   const history = useHistory()
@@ -46,7 +48,7 @@ const ListElem = ({ text, value }) => {
       const elem = document.getElementById(params.docId)
       if (elem) {elem.classList.remove('MuiBrowserElem-linkSelected')}
     }
-    if(!params || params['docId'] !== docId) {
+    if (!params || params['docId'] !== docId) {
       const elem = document.getElementById(docId)
       if (elem) {
         elem.classList.add('MuiBrowserElem-linkSelected')
@@ -54,6 +56,10 @@ const ListElem = ({ text, value }) => {
       }
     }
   }, [history])
+  const handleRemove = useCallback(async event => {
+    event.persist()
+    await remove(event.currentTarget.name)
+  }, [remove])
   
   const params = testParams(`${baseUrl}/:docId`)
   let linkClasses = clsx(classes.link, { [classes.linkSelected]: params && params['docId'] === text })
@@ -64,21 +70,31 @@ const ListElem = ({ text, value }) => {
     linkClasses += ` ${clsx(classes.linkStandard)}`
   }
   return (
-    <Link
-      className={linkClasses}
-      component={'div'}
-      href="#"
-      id={text}
-      onClick={handleSelect}
-      underline={'none'}
-      variant="body2"
-    >
-      {text}
-    </Link>
+    <div style={{ whiteSpace: 'nowrap' }}>
+      <IconButton
+        name={text}
+        onClick={handleRemove}
+        size="small"
+      >
+        <CloseIcon/>
+      </IconButton>
+      <Link
+        className={linkClasses}
+        component={'div'}
+        href="#"
+        id={text}
+        onClick={handleSelect}
+        underline={'none'}
+        variant="body2"
+      >
+        {text}
+      </Link>
+      <br/>
+    </div>
   )
 }
 
-const DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore }) => {
+const DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore, remove }) => {
   console.log('%c****EXPENSIVE_RENDER_LIST', 'color: gold')
   const loadMoreButtonRef = React.useRef()
   useIntersectionObserver({
@@ -96,6 +112,7 @@ const DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore }) => {
               !!page?.results?.rows?.length && page.results.rows.map(elem => (
                 <ListElem
                   key={elem.id}
+                  remove={remove}
                   text={elem.id}
                   value={elem.value}
                 />

@@ -23,6 +23,8 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+
+
 const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => {
   console.log('%cRENDER_SEARCH', 'color: cyan')
   const classes = useStyles()

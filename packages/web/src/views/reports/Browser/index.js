@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
 import { Box, makeStyles, Paper } from '@material-ui/core'
-import { useInfiniteQuery, useMutation, useQuery } from 'react-query'
+import { useInfiniteQuery, useMutation, useQuery, useQueryCache } from 'react-query'
 import Page from 'src/components/Page'
 import Header from './Header'
 import DocList from './DocList'
@@ -60,6 +60,8 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   displayArea: {
+    color: theme.palette.text.primary,
+    backgroundColor: 'transparent',
     border: 0,
     fontFamily: 'monospace',
     overflow: 'auto',
@@ -70,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const fetchFunc = async (key, text, cursor) => {
+const fetchList = async (key, text, cursor) => {
   const { data } = await axiosLocalInstance(`/api/${key}`, {
     params: {
       limit: LIMIT,
@@ -91,6 +93,15 @@ const fetchFunc2 = async (key, docId) => {
 const saveMutation = async (docs) => {
   const { data } = await axiosLocalInstance.post('/api/docs/bulk', {
     docs: [docs],
+  })
+  return data
+}
+const deleteMutation = async (docId) => {
+  console.log('docId:', docId)
+  const { data } = await axiosLocalInstance.delete('/api/docs/delete', {
+    data: {
+      docId,
+    },
   })
   return data
 }
@@ -115,6 +126,7 @@ const SearchComponent = memo((props => {
               data={props.data}
               fetchMore={props.fetchMore}
               isFetchingMore={props.isFetchingMore}
+              remove={props.remove}
             />
           </PerfectScrollbar>
         }
@@ -127,21 +139,15 @@ SearchComponent.displayName = 'SearchComponent'
 
 const DisplayComponent = memo((props => {
   console.log('%cRENDER_DisplayComponent', 'color: silver')
-  const docObj = props?.data?.results
-  const defaultValue = docObj ? JSON.stringify(docObj, null, 2) : ''
   return (
     <Paper className={props.classes.editDoc} elevation={2}>
-      <CommandBox mutate={props.mutate}/>
+      <CommandBox docId={props.docId} mutate={props.mutate} output={props.output} setOutput={props.setOutput}/>
       <Divider/>
       {
-        docObj &&
-        <React.Fragment key={docObj._id}>
-          <textarea
-            className={props.classes.displayArea}
-            defaultValue={defaultValue}
-            id={'textA'}
-          />
-        </React.Fragment>
+        <textarea
+          className={props.classes.displayArea}
+          id="browserDisplayArea"
+        />
       }
     </Paper>
   )
@@ -151,8 +157,10 @@ DisplayComponent.displayName = 'DisplayComponent'
 
 const BrowserView = () => {
   console.log('%cRENDER_BASE', 'color: purple')
+  const queryCache = useQueryCache()
   const classes = useStyles()
   const [text, setText] = useState('')
+  const [output, setOutput] = useState({ type: 'success', text: '' })
   const { docId } = useParams()
   useEffect(() => {
     const browserSearchBox = document.getElementById('browserSearchBox')
@@ -160,7 +168,7 @@ const BrowserView = () => {
     const browserPanel = document.getElementById('browserPanel')
     browserPanel.scrollTop = 0
   }, [text])
-  const respList = useInfiniteQuery(['docs/browser', text], fetchFunc, {
+  const respList = useInfiniteQuery(['docs/browser', text], fetchList, {
     getFetchMore: (lastGroup, allGroups) => {
       const { total_rows: totalRows, rows = [] } = lastGroup?.results
       const cursor = rows[rows.length - 1]?.key
@@ -175,22 +183,36 @@ const BrowserView = () => {
   })
   const respDoc = useQuery(['docs/get_by_id', docId], fetchFunc2, {
     enabled: docId,
+    onSuccess: ({ ok, results, message }) => {
+      const docObj = results
+      const defaultValue = docObj ? JSON.stringify(docObj, null, 2) : ''
+      const elem = document.getElementById('browserDisplayArea')
+      if (elem) {elem.value = defaultValue}
+    },
   })
   const [mutate] = useMutation(saveMutation, {
     onSettled: (data, error, variables) => {
-      if (data?.results) {
-        const [first] = data.results
-        const outObj = Object.assign(variables, { _rev: first.rev })
-        document.getElementById('textA').value = JSON.stringify(outObj, null, 2)
+      if (error) {
+        setOutput({ error: true, text: error.message })
+      } else {
+        if (data?.results) {
+          const [first] = data.results
+          const outObj = Object.assign(variables, { _rev: first.rev })
+          document.getElementById('browserDisplayArea').value = JSON.stringify(outObj, null, 2)
+          const isNewDoc = first.rev.startsWith('1-')
+          setOutput({ error: false, text: `${isNewDoc ? '[CREATO]' : '[MODIFICATO]'} rev. ${first.rev}` })
+        }
+        queryCache.invalidateQueries('docs/browser')
+        queryCache.invalidateQueries(['docs/get_by_id', docId])
       }
-      respList.refetch()
-      respDoc.refetch()
     },
   })
-  const displayBody = {
-    data: respDoc.data,
-    mutate,
-  }
+  const [remove] = useMutation(deleteMutation, {
+    onSettled: (data, error, variables) => {
+      console.log('data:', data)
+    },
+  })
+  
   const searchBody = {
     data: respList.data,
     fetchMore: respList.fetchMore,
@@ -200,6 +222,7 @@ const BrowserView = () => {
     isFetching: respList.isFetching || respDoc.isFetching,
     refetch: respList.refetch,
     refetchLine: respDoc.refetch,
+    remove,
   }
   return (
     <Page
@@ -217,7 +240,7 @@ const BrowserView = () => {
             text={text}
             {...searchBody}
           />
-          <DisplayComponent classes={classes} {...displayBody}/>
+          <DisplayComponent classes={classes} docId={docId} mutate={mutate} output={output} setOutput={setOutput}/>
         </div>
       </div>
     </Page>
