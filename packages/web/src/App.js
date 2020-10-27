@@ -12,20 +12,23 @@ import ScrollReset from 'src/components/ScrollReset'
 import CookiesNotification from 'src/components/CookiesNotification'
 import GoogleAnalytics from 'src/components/GoogleAnalytics'
 import SettingsNotification from 'src/components/SettingsNotification'
+import { defaultQueryFn } from 'src/utils/reactQueryFunctions'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query-devtools'
 import { IntlProvider } from 'react-intl'
 import messages from 'src/translations/it-IT.json'
 import { AuthProvider } from 'src/contexts/JWTAuthContext'
 import useSettings from 'src/hooks/useSettings'
 import { createTheme } from 'src/theme'
 import routes, { renderRoutes } from 'src/routes'
+//import { ReactQueryDevtools } from 'react-query-devtools'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
+
 const queryCache = new QueryCache({
   defaultConfig: {
     queries: {
+      queryFn: defaultQueryFn,
       refetchOnWindowFocus: false,
       retry: false,
     },
@@ -58,7 +61,7 @@ const App = () => {
                 <IntlProvider defaultLocale="it" locale="it" messages={messages}>
                   <ReactQueryCacheProvider queryCache={queryCache}>
                     {renderRoutes(routes)}
-                    <ReactQueryDevtools initialIsOpen/>
+                    {/*<ReactQueryDevtools initialIsOpen/>*/}
                   </ReactQueryCacheProvider>
                 </IntlProvider>
               </AuthProvider>

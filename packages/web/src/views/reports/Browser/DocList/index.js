@@ -12,6 +12,7 @@ const BG_COLOR = '#c0efdd'
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    cursor: 'pointer',
     '&:hover': {
       backgroundColor: theme.palette.grey[200],
     },
@@ -23,11 +24,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   link: {
-    cursor: 'pointer',
     display: 'inline-block',
-   
   },
-  
   linkPhone: {
     color: theme.palette.secondary.main,
   },
@@ -47,7 +45,6 @@ const ListElem = ({ text, value, remove }) => {
   
   const handleSelect = useCallback(event => {
     const docId = event.currentTarget.id
-    console.log('docId:', docId)
     const params = testParams(`${baseUrl}/:docId`)
     if (params && params['docId'] !== docId) {
       const elem = document.getElementById(params.docId)
@@ -89,7 +86,6 @@ const ListElem = ({ text, value, remove }) => {
         className={linkClasses}
         component={'div'}
         href="#"
-   
         underline={'none'}
         variant="body2"
       >

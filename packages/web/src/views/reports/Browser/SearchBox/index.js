@@ -9,30 +9,24 @@ import { useHistory } from 'react-router'
 const focus = event => event.target.select()
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: 'none',
-  },
   wrapper: {
     position: 'relative',
   },
   progress: {
     color: theme.palette.primary.main,
     position: 'absolute',
-    top: 0,
-    left: 0,
+    top: 1,
+    left: 1,
   },
 }))
 
-
-
-const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => {
+const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine, setOutput }) => {
   console.log('%cRENDER_SEARCH', 'color: cyan')
   const classes = useStyles()
   const history = useHistory()
   return (
     <Box
       alignItems="center"
-      className={classes.root}
       display="flex"
       px={2}
       py={1}
@@ -45,24 +39,39 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => 
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
+                      id="clearText"
                       onClick={
                         () => {
                           const browserSearchBox = document.getElementById('browserSearchBox')
                           browserSearchBox.value = ''
                           if (text) {
+                            history.push('/app/reports/browser')
                             setText('')
+                            setOutput('')
+                            document.getElementById('browserDisplayArea').value = ''
                           } else {
                             browserSearchBox.focus()
                           }
                         }
                       }
-                      style={{ padding: 8 }}
+                      style={{ padding: 8, visibility: text ? 'visible' : 'hidden' }}
                     >
                       <CloseIcon/>
                     </IconButton>
                   </InputAdornment>
                 }
                 id="browserSearchBox"
+                onChange={
+                  event => {
+                    const val = event.target.value
+                    const clearText = document.getElementById('clearText')
+                    if (!val && !text) {
+                      clearText.style.visibility = 'hidden'
+                    } else {
+                      clearText.style.visibility = 'visible'
+                    }
+                  }
+                }
                 onFocus={focus}
               />
             </FormControl>
@@ -76,6 +85,8 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => 
                   if (filter !== text) {
                     history.push('/app/reports/browser')
                     setText(filter)
+                    setOutput('')
+                    document.getElementById('browserDisplayArea').value = ''
                   }
                 }
               }
@@ -85,7 +96,6 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => 
             </IconButton>
             <div className={classes.wrapper}>
               <IconButton
-                aria-label="save"
                 color="primary"
                 onClick={
                   () => {
@@ -96,7 +106,7 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => 
               >
                 {isFetching ? <HourglassEmptyIcon/> : <ReplayIcon/>}
               </IconButton>
-              {isFetching && <CircularProgress className={classes.progress} size={46} thickness={2} />}
+              {isFetching && <CircularProgress className={classes.progress} size={46} thickness={2}/>}
             </div>
           </Box>
         </Box>

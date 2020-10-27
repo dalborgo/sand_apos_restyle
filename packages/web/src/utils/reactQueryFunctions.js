@@ -9,3 +9,10 @@ export const axiosLocalInstance = axios.create({
     return (status >= 200 && status < 300) || status === 412 //il 412 lo uso come identificativo di una risposta errata
   },
 })
+
+export const defaultQueryFn = async (key, params) => {
+  const { data } = await axiosLocalInstance(`/api/${key}`, {
+    params,
+  })
+  return data
+}

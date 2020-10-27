@@ -69,9 +69,9 @@ function addRouters (router) {
   router.delete('/docs/delete', async function (req, res) {
     const { connClass, body } = req
     const { docId } = body
-    const { collection } = connClass.astConnection
+    const { astenposBucketCollection: collection } = connClass
     const data = await collection.remove(docId)
-    res.send({ok: true, results: data })
+    res.send({ ok: true, results: { docId, data } })
   })
 }
 

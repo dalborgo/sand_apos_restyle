@@ -82,14 +82,7 @@ const fetchList = async (key, text, cursor) => {
   })
   return data
 }
-const fetchFunc2 = async (key, docId) => {
-  const { data } = await axiosLocalInstance(`/api/${key}`, {
-    params: {
-      docId,
-    },
-  })
-  return data
-}
+
 const saveMutation = async (docs) => {
   const { data } = await axiosLocalInstance.post('/api/docs/bulk', {
     docs: [docs],
@@ -113,6 +106,7 @@ const SearchComponent = memo((props => {
         isFetching={props.isFetching}
         refetch={props.refetch}
         refetchLine={props.refetchLine}
+        setOutput={props.setOutput}
         setText={props.setText}
         text={props.text}
       />
@@ -140,7 +134,7 @@ const DisplayComponent = memo((props => {
   console.log('%cRENDER_DisplayComponent', 'color: silver')
   return (
     <Paper className={props.classes.editDoc} elevation={2}>
-      <CommandBox docId={props.docId} mutate={props.mutate} output={props.output} setOutput={props.setOutput}/>
+      <CommandBox isDocId={!!props.docId} mutate={props.mutate} output={props.output} setOutput={props.setOutput}/>
       <Divider/>
       {
         <textarea
@@ -180,13 +174,14 @@ const BrowserView = () => {
       setText('')
     },
   })
-  const respDoc = useQuery(['docs/get_by_id', docId], fetchFunc2, {
+  const respDoc = useQuery(['docs/get_by_id', { docId }], {
     enabled: docId,
     onSuccess: ({ ok, results, message }) => {
       const docObj = results
       const defaultValue = docObj ? JSON.stringify(docObj, null, 2) : ''
       const elem = document.getElementById('browserDisplayArea')
       if (elem) {elem.value = defaultValue}
+      setOutput('')
     },
   })
   const [mutate] = useMutation(saveMutation, {
@@ -212,7 +207,8 @@ const BrowserView = () => {
   })
   const [remove] = useMutation(deleteMutation, {
     onSettled: (data, error, variables) => {
-      console.log('data:', data)
+      const { ok, results } = data
+      setOutput({ error: !ok, text: `[DELETED] docId: ${results.docId}` })
       queryCache.invalidateQueries('docs/browser')
     },
   })
@@ -226,6 +222,7 @@ const BrowserView = () => {
     isFetching: respList.isFetching || respDoc.isFetching,
     refetch: respList.refetch,
     refetchLine: respDoc.refetch,
+    setOutput,
     remove,
   }
   return (
