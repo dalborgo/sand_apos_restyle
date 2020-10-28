@@ -10,7 +10,6 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import GlobalStyles from 'src/components/GlobalStyles'
 import ScrollReset from 'src/components/ScrollReset'
 import CookiesNotification from 'src/components/CookiesNotification'
-import GoogleAnalytics from 'src/components/GoogleAnalytics'
 import SettingsNotification from 'src/components/SettingsNotification'
 import { defaultQueryFn } from 'src/utils/reactQueryFunctions'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
@@ -20,7 +19,8 @@ import { AuthProvider } from 'src/contexts/JWTAuthContext'
 import useSettings from 'src/hooks/useSettings'
 import { createTheme } from 'src/theme'
 import routes, { renderRoutes } from 'src/routes'
-//import { ReactQueryDevtools } from 'react-query-devtools'
+import { ReactQueryDevtools } from 'react-query-devtools'
+import { REACT_QUERY_DEV_TOOLS } from 'src/constants'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -55,13 +55,15 @@ const App = () => {
               <AuthProvider>
                 <GlobalStyles/>
                 <ScrollReset/>
-                <GoogleAnalytics/>
                 <CookiesNotification/>
                 <SettingsNotification/>
                 <IntlProvider defaultLocale="it" locale="it" messages={messages}>
                   <ReactQueryCacheProvider queryCache={queryCache}>
                     {renderRoutes(routes)}
-                    {/*<ReactQueryDevtools initialIsOpen/>*/}
+                    {
+                      REACT_QUERY_DEV_TOOLS &&
+                      <ReactQueryDevtools initialIsOpen/>
+                    }
                   </ReactQueryCacheProvider>
                 </IntlProvider>
               </AuthProvider>

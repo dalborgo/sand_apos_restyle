@@ -11,6 +11,7 @@ import log from '@adapter/common/src/log'
 import { useParams } from 'react-router'
 import CommandBox from './CommandBox'
 import Divider from '@material-ui/core/Divider'
+import Grid from '@material-ui/core/Grid'
 
 const LIMIT = 40
 
@@ -40,15 +41,15 @@ const useStyles = makeStyles((theme) => ({
   docList: {
     display: 'flex',
     flexDirection: 'column',
-    maxHeight: '100%',
-    width: '40%',
+    height: '100%',
   },
   editDoc: {
-    marginLeft: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
-    maxHeight: '100%',
-    width: '60%',
+    height: '100%',
+  },
+  gridItem: {
+    height: '100%',
   },
   browserArea: {
     flexGrow: 1,
@@ -191,9 +192,9 @@ const BrowserView = () => {
       } else {
         if (data?.results) {
           const [first] = data.results
-          if(first.error){
+          if (first.error) {
             setOutput({ error: true, text: `${first.error}: ${first.reason} (${first.status})` })
-          }else {
+          } else {
             const outObj = Object.assign(variables, { _rev: first.rev })
             document.getElementById('browserDisplayArea').value = JSON.stringify(outObj, null, 2)
             const isNewDoc = first.rev.startsWith('1-')
@@ -212,7 +213,6 @@ const BrowserView = () => {
       queryCache.invalidateQueries('docs/browser')
     },
   })
-  
   const searchBody = {
     data: respList.data,
     fetchMore: respList.fetchMore,
@@ -235,13 +235,19 @@ const BrowserView = () => {
       </Box>
       <div className={classes.content}>
         <div className={classes.innerFirst}>
-          <SearchComponent
-            classes={classes}
-            setText={setText}
-            text={text}
-            {...searchBody}
-          />
-          <DisplayComponent classes={classes} docId={docId} mutate={mutate} output={output} setOutput={setOutput}/>
+          <Grid container spacing={2}>
+            <Grid className={classes.gridItem} item xs={5}>
+              <SearchComponent
+                classes={classes}
+                setText={setText}
+                text={text}
+                {...searchBody}
+              />
+            </Grid>
+            <Grid className={classes.gridItem} item xs={7}>
+              <DisplayComponent classes={classes} docId={docId} mutate={mutate} output={output} setOutput={setOutput}/>
+            </Grid>
+          </Grid>
         </div>
       </div>
     </Page>

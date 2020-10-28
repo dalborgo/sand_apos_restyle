@@ -79,6 +79,7 @@ const ListElem = ({ text, value, remove }) => {
         name={text}
         onClick={handleRemove}
         size="small"
+        style={{marginRight: 5}}
       >
         <CloseIcon/>
       </IconButton>

@@ -4,16 +4,15 @@ import indexRouter from './routes'
 import appRouter from './routes/main'
 import createError from 'http-errors'
 import express from 'express'
-import session from 'express-session'
 import path from 'path'
 import cors from 'cors'
 import favicon from 'serve-favicon'
 import config from 'config'
 
-const CouchbaseStore = require('connect-couchbase')(session)
-const { dbSession } = require(__db)
+const { connInstance } = require(__db)
 const morgan = require('morgan')
 const { NAMESPACE, BODY_LIMIT = '100kb', MAXAGE_MINUTES = 30 } = config.get('express')
+const SESSION_ENABLED = false
 const app = express()
 app.disable('x-powered-by')
 
@@ -54,20 +53,25 @@ app.use(express.json({ limit: BODY_LIMIT }))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
-const couchbaseStore = new CouchbaseStore({ db: dbSession, prefix: 'sess::' })
-app.use(session({
-  cookie: {
-    maxAge: MAXAGE_MINUTES * 60 * 1000,
-    sameSite: true,
-    secure: false, //true if https server
-  },
-  name: 'astenposSession',
-  resave: true,
-  rolling: true,
-  saveUninitialized: false,
-  secret: 'boobs',
-  store: couchbaseStore,
-}))
+if (SESSION_ENABLED) {
+  log.silly('Session started')
+  const session = require('express-session')
+  const CouchbaseStore = require('connect-couchbase')(session)
+  const couchbaseStore = new CouchbaseStore({ db: connInstance, prefix: 'sess::' })
+  app.use(session({
+    cookie: {
+      maxAge: MAXAGE_MINUTES * 60 * 1000,
+      sameSite: true,
+      secure: false, //true if https server
+    },
+    name: 'astenposSession',
+    resave: true,
+    rolling: true,
+    saveUninitialized: false,
+    secret: 'boobs',
+    store: couchbaseStore,
+  }))
+}
 
 app.use('/', indexRouter)
 app.use(`/${NAMESPACE}`, appRouter)

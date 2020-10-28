@@ -7,7 +7,7 @@ import { cFunctions } from '@adapter/common'
 const { connections: connections_ } = require(__helpers)
 const { connections, utility, CONFIG_TOTAL_TIMEOUT } = config.get('couchbase')
 
-let dbSession
+let connInstance
 
 void (async () => {
   try {
@@ -31,17 +31,16 @@ void (async () => {
     const astenpos = astenpos_.bucket(connection._bucket)
     const archive = archive_.bucket(connection._archivio)
     __buckets[key] = new Couchbase(astenpos_, astenpos, archive) //first parameter for cluster
-    //region SESSION CONFIGURATION
+    //region CONNECTION INSTANCE CONFIGURATION
     if (key === 'astenposServer') {
       const conn = __buckets[key]
-      dbSession = conn.archiveBucketCollection
+      connInstance = conn.archiveBucketCollection
     } else {
       const options = { username: utility.user, password: utility.password, logFunc: connections_.logFunc }
       const cluster = new couchbase.Cluster(`couchbase://${utility.couchbase}`, options)
       const bucket = cluster.bucket(utility.session)
-      dbSession = bucket.defaultCollection()
+      connInstance = bucket.defaultCollection()
     }
-    log.silly('Session initialized!')
     //endregion
   } catch (err) {
     log.error('CB connection error:', err)
@@ -50,5 +49,5 @@ void (async () => {
 })()
 
 export {
-  dbSession,
+  connInstance,
 }
