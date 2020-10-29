@@ -7,133 +7,146 @@ import { Box, Button, FormHelperText, makeStyles, TextField } from '@material-ui
 import { Alert } from '@material-ui/lab'
 import useAuth from 'src/hooks/useAuth'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
-
+import log from '@adapter/common/src/log'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { messages } from 'src/translations/messages'
 const useStyles = makeStyles(() => ({
-  root: {}
-}));
+  root: {},
+}))
+
 
 const JWTLogin = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const { login } = useAuth();
-  const isMountedRef = useIsMountedRef();
-
+  const classes = useStyles()
+  const { login } = useAuth()
+  const isMountedRef = useIsMountedRef()
+  const intl = useIntl()
   return (
     <Formik
-      initialValues={{
-        email: 'demo@devias.io',
-        password: 'Password123',
-        submit: null
-      }}
-      validationSchema={Yup.object().shape({
-        email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-        password: Yup.string().max(255).required('Password is required')
-      })}
-      onSubmit={async (values, {
-        setErrors,
-        setStatus,
-        setSubmitting
-      }) => {
-        try {
-          await login(values.email, values.password);
-
-          if (isMountedRef.current) {
-            setStatus({ success: true });
-            setSubmitting(false);
-          }
-        } catch (err) {
-          console.error(err);
-          if (isMountedRef.current) {
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
-            setSubmitting(false);
+      initialValues={
+        {
+          username: 'asten',
+          password: '90210',
+          submit: null,
+        }
+      }
+      onSubmit={
+        async (values, {
+          setErrors,
+          setStatus,
+          setSubmitting,
+        }) => {
+          try {
+            await login(values.username, values.password)
+            if (isMountedRef.current) {
+              setStatus({ success: true })
+              setSubmitting(false)
+            }
+          } catch ({ message, response }) {
+            log.error(message)
+            const { data } = response || {}
+            if (isMountedRef.current) {
+              setStatus({ success: false })
+              setErrors({ submit: data.message || intl.formatMessage(messages[data.messageCode]) })
+              setSubmitting(false)
+            }
           }
         }
-      }}
+      }
+      validationSchema={
+        Yup.object().shape({
+          username: Yup.string().required(intl.formatMessage(messages.username_required)),
+          password: Yup.string().required(intl.formatMessage(messages.password_required)),
+        })
+      }
     >
-      {({
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isSubmitting,
-        touched,
-        values
-      }) => (
-        <form
-          noValidate
-          onSubmit={handleSubmit}
-          className={clsx(classes.root, className)}
-          {...rest}
-        >
-          <TextField
-            error={Boolean(touched.email && errors.email)}
-            fullWidth
-            autoFocus
-            helperText={touched.email && errors.email}
-            label="Email Address"
-            margin="normal"
-            name="email"
-            onBlur={handleBlur}
-            onChange={handleChange}
-            type="email"
-            value={values.email}
-            variant="outlined"
-          />
-          <TextField
-            error={Boolean(touched.password && errors.password)}
-            fullWidth
-            helperText={touched.password && errors.password}
-            label="Password"
-            margin="normal"
-            name="password"
-            onBlur={handleBlur}
-            onChange={handleChange}
-            type="password"
-            value={values.password}
-            variant="outlined"
-          />
-          {errors.submit && (
-            <Box mt={3}>
-              <FormHelperText error>
-                {errors.submit}
-              </FormHelperText>
-            </Box>
-          )}
-          <Box mt={2}>
-            <Button
-              color="secondary"
-              disabled={isSubmitting}
+      {
+        ({
+          errors,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+          isSubmitting,
+          touched,
+          values,
+        }) => (
+          <form
+            className={clsx(classes.root, className)}
+            noValidate
+            onSubmit={handleSubmit}
+            {...rest}
+          >
+            <TextField
+              autoFocus
+              error={Boolean(touched.username && errors.username)}
               fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-            >
-              Log In
-            </Button>
-          </Box>
-          <Box mt={2}>
-            <Alert
-              severity="info"
-            >
-              <div>
-                Use
-                {' '}
-                <b>demo@devias.io</b>
-                {' '}
-                and password
-                {' '}
-                <b>Password123</b>
-              </div>
-            </Alert>
-          </Box>
-        </form>
-      )}
+              helperText={touched.username && errors.username}
+              label="Nome Utente"
+              margin="normal"
+              name="username"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              type="text"
+              value={values.username}
+              variant="outlined"
+            />
+            <TextField
+              error={Boolean(touched.password && errors.password)}
+              fullWidth
+              helperText={touched.password && errors.password}
+              label="Password"
+              margin="normal"
+              name="password"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              type="password"
+              value={values.password}
+              variant="outlined"
+            />
+            {
+              errors.submit && (
+                <Box mt={3}>
+                  <FormHelperText error>
+                    {errors.submit}
+                  </FormHelperText>
+                </Box>
+              )
+            }
+            <Box mt={2}>
+              <Button
+                color="secondary"
+                disabled={isSubmitting}
+                fullWidth
+                size="large"
+                type="submit"
+                variant="contained"
+              >
+                <FormattedMessage defaultMessage="Entra" id="auth.login.enter"/>
+              </Button>
+            </Box>
+            <Box mt={2}>
+              <Alert
+                severity="info"
+              >
+                <div>
+                  Use
+                  {' '}
+                  <b>demo@devias.io</b>
+                  {' '}
+                  and password
+                  {' '}
+                  <b>Password123</b>
+                </div>
+              </Alert>
+            </Box>
+          </form>
+        )
+      }
     </Formik>
-  );
-};
+  )
+}
 
 JWTLogin.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default JWTLogin;
+export default JWTLogin

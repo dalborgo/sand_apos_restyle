@@ -7,12 +7,12 @@ import { Avatar, Box, Button, Card, CardActions, CardContent, Link, makeStyles, 
 const useStyles = makeStyles((theme) => ({
   root: {},
   name: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   avatar: {
     height: 100,
-    width: 100
-  }
+    width: 100,
+  },
 }));
 
 const ProfileDetails = ({ className, user, ...rest }) => {
@@ -25,8 +25,8 @@ const ProfileDetails = ({ className, user, ...rest }) => {
     >
       <CardContent>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
           flexDirection="column"
           textAlign="center"
         >
@@ -40,7 +40,7 @@ const ProfileDetails = ({ className, user, ...rest }) => {
             gutterBottom
             variant="h3"
           >
-            {user.name}
+            {user.display}
           </Typography>
           <Typography
             color="textPrimary"
@@ -52,7 +52,7 @@ const ProfileDetails = ({ className, user, ...rest }) => {
               component={RouterLink}
               to="/pricing"
             >
-              {user.tier}
+              {' '}
             </Link>
           </Typography>
         </Box>
@@ -71,7 +71,7 @@ const ProfileDetails = ({ className, user, ...rest }) => {
 
 ProfileDetails.propTypes = {
   className: PropTypes.string,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
 };
 
 export default ProfileDetails;

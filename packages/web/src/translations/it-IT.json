@@ -1,4 +1,9 @@
 {
   "reports.browser.showMore": "Mostra di più",
-  "reports.browser.save": "Salva"
+  "reports.browser.save": "Salva",
+  "auth.connect": "Collegati alla piattaforma",
+  "auth.login.enter": "Entra",
+  "auth.login.password_required": "Password obbligatoria!",
+  "auth.login.username_required": "Nome utente obbligatorio!",
+  "auth.login.wrong_credentials": "Nome utente o password errati!"
 }

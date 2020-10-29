@@ -6,7 +6,7 @@ const CONSISTENCY = {
 }
 
 /**
- * @param options: es. { parameters: { TYPE: 'USER' } } or ARRAY
+ * @param options: es. { parameters: { type: 'USER' } } or ARRAY
  */
 async function exec (query, cluster, options_ = {}) {
   const options = Object.assign({

@@ -3,81 +3,83 @@ import { Link as RouterLink, useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { Avatar, Box, ButtonBase, Hidden, makeStyles, Menu, MenuItem, Typography } from '@material-ui/core'
 import useAuth from 'src/hooks/useAuth'
-
+import log from '@adapter/common/src/log'
 const useStyles = makeStyles((theme) => ({
   avatar: {
     height: 32,
     width: 32,
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   popover: {
-    width: 200
-  }
-}));
+    width: 200,
+  },
+}))
 
 const Account = () => {
-  const classes = useStyles();
-  const history = useHistory();
-  const ref = useRef(null);
-  const { user, logout } = useAuth();
-  const { enqueueSnackbar } = useSnackbar();
-  const [isOpen, setOpen] = useState(false);
-
+  const classes = useStyles()
+  const history = useHistory()
+  const ref = useRef(null)
+  const { user, logout } = useAuth()
+  const { enqueueSnackbar } = useSnackbar()
+  const [isOpen, setOpen] = useState(false)
+  
   const handleOpen = () => {
-    setOpen(true);
-  };
-
+    setOpen(true)
+  }
+  
   const handleClose = () => {
-    setOpen(false);
-  };
-
+    setOpen(false)
+  }
+  
   const handleLogout = async () => {
     try {
-      handleClose();
-      await logout();
-      history.push('/');
+      handleClose()
+      await logout()
+      history.push('/')
     } catch (err) {
-      console.error(err);
+      log.error(err)
       enqueueSnackbar('Unable to logout', {
-        variant: 'error'
-      });
+        variant: 'error',
+      })
     }
-  };
-
+  }
+  
   return (
     <>
       <Box
-        display="flex"
         alignItems="center"
         component={ButtonBase}
+        display="flex"
         onClick={handleOpen}
         ref={ref}
       >
         <Avatar
           alt="User"
           className={classes.avatar}
-          src={user.avatar}
+          src="/static/images/avatars/avatar_6.png"
         />
         <Hidden smDown>
           <Typography
-            variant="h6"
             color="inherit"
+            variant="h6"
           >
-            {user.name}
+            {user.display}
           </Typography>
         </Hidden>
       </Box>
       <Menu
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center'
-        }}
-        keepMounted
-        PaperProps={{ className: classes.popover }}
-        getContentAnchorEl={null}
         anchorEl={ref.current}
+        anchorOrigin={
+          {
+            vertical: 'bottom',
+            horizontal: 'center',
+          }
+        }
+        getContentAnchorEl={null}
+        keepMounted
+        onClose={handleClose}
         open={isOpen}
+        PaperProps={{ className: classes.popover }}
       >
         <MenuItem
           component={RouterLink}
@@ -96,7 +98,7 @@ const Account = () => {
         </MenuItem>
       </Menu>
     </>
-  );
+  )
 }
 
-export default Account;
+export default Account

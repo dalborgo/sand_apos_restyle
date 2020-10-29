@@ -1,5 +1,25 @@
 [
   {
+    "id": "auth.connect",
+    "defaultMessage": "Collegati alla piattaforma"
+  },
+  {
+    "id": "auth.login.enter",
+    "defaultMessage": "Entra"
+  },
+  {
+    "id": "auth.login.password_required",
+    "defaultMessage": "Password obbligatoria!"
+  },
+  {
+    "id": "auth.login.username_required",
+    "defaultMessage": "Nome utente obbligatorio!"
+  },
+  {
+    "id": "auth.login.wrong_credentials",
+    "defaultMessage": "Nome utente o password errati!"
+  },
+  {
     "id": "reports.browser.save",
     "description": "Bottone Salva",
     "defaultMessage": "Salva"

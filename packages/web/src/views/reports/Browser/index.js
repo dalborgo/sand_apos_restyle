@@ -236,7 +236,7 @@ const BrowserView = () => {
       <div className={classes.content}>
         <div className={classes.innerFirst}>
           <Grid container spacing={2}>
-            <Grid className={classes.gridItem} item xs={5}>
+            <Grid className={classes.gridItem} item sm={5} xs={12}>
               <SearchComponent
                 classes={classes}
                 setText={setText}
@@ -244,7 +244,7 @@ const BrowserView = () => {
                 {...searchBody}
               />
             </Grid>
-            <Grid className={classes.gridItem} item xs={7}>
+            <Grid className={classes.gridItem} item sm={7} xs={12}>
               <DisplayComponent classes={classes} docId={docId} mutate={mutate} output={output} setOutput={setOutput}/>
             </Grid>
           </Grid>

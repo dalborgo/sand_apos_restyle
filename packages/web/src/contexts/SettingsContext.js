@@ -5,7 +5,7 @@ import { THEMES } from 'src/constants'
 const defaultSettings = {
   direction: 'ltr',
   responsiveFontSizes: true,
-  theme: THEMES.ONE_DARK
+  theme: THEMES.LIGHT,
 };
 
 export const restoreSettings = () => {
@@ -32,7 +32,7 @@ export const storeSettings = (settings) => {
 
 const SettingsContext = createContext({
   settings: defaultSettings,
-  saveSettings: () => { }
+  saveSettings: () => { },
 });
 
 export const SettingsProvider = ({ settings, children }) => {
@@ -59,10 +59,12 @@ export const SettingsProvider = ({ settings, children }) => {
 
   return (
     <SettingsContext.Provider
-      value={{
-        settings: currentSettings,
-        saveSettings: handleSaveSettings
-      }}
+      value={
+        {
+          settings: currentSettings,
+          saveSettings: handleSaveSettings,
+        }
+      }
     >
       {children}
     </SettingsContext.Provider>

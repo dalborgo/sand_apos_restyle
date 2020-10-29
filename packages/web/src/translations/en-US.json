@@ -1,4 +1,9 @@
 {
   "reports.browser.showMore": "Show more",
-  "reports.browser.save": ""
+  "reports.browser.save": "",
+  "auth.connect": "",
+  "auth.login.enter": "",
+  "auth.login.password_required": "",
+  "auth.login.username_required": "",
+  "auth.login.wrong_credentials": ""
 }

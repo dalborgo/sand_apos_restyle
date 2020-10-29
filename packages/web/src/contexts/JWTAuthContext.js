@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useReducer } from 'react'
 import jwtDecode from 'jwt-decode'
 import SplashScreen from 'src/components/SplashScreen'
-import axios from 'src/utils/axios'
+import {axiosLocalInstance} from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
 const initialAuthState = {
   isAuthenticated: false,
@@ -21,10 +21,13 @@ const isValidToken = (accessToken) => {
 const setSession = (accessToken) => {
   if (accessToken) {
     localStorage.setItem('accessToken', accessToken)
-    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
+    axiosLocalInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`
+    axiosLocalInstance.defaults.params = {
+      _key: 'astenposServer',
+    }
   } else {
     localStorage.removeItem('accessToken')
-    delete axios.defaults.headers.common.Authorization
+    delete axiosLocalInstance.defaults.headers.common.Authorization
   }
 }
 
@@ -71,8 +74,8 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState)
   
-  const login = async (email, password) => {
-    const response = await axios.post('/api/account/login', { email, password })
+  const login = async (username, password) => {
+    const response = await axiosLocalInstance.post('/api/jwt/login', { username, password })
     const { accessToken, user } = response.data
     
     setSession(accessToken)
@@ -97,7 +100,7 @@ export const AuthProvider = ({ children }) => {
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken)
           
-          const response = await axios.get('/api/account/me')
+          const response = await axiosLocalInstance.get('/api/jwt/me')
           const { user } = response.data
           
           dispatch({
@@ -127,7 +130,6 @@ export const AuthProvider = ({ children }) => {
         })
       }
     }
-    
     initialise().then()
   }, [])
   

@@ -412,7 +412,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
               <Avatar
                 alt="User"
                 className={classes.avatar}
-                src={user.avatar}
+                src="/static/images/avatars/avatar_6.png"
               />
             </RouterLink>
           </Box>
@@ -427,7 +427,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
               underline="none"
               variant="h5"
             >
-              {user.name}
+              {user.display}
             </Link>
             <Typography
               color="textSecondary"
@@ -439,7 +439,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
                 component={RouterLink}
                 to="/pricing"
               >
-                {user.tier}
+                {' '}
               </Link>
             </Typography>
           </Box>
