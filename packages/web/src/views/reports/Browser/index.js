@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
     top: theme.spacing(2),
     right: theme.spacing(3),
     color: theme.palette.primary.main,
+    opacity: 0.9,
     [theme.breakpoints.down('xs')]: {
       top: theme.spacing(2),
       right: theme.spacing(2),
@@ -78,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     backgroundColor: 'transparent',
     border: 0,
+    whiteSpace: 'pre',
     fontFamily: 'monospace',
     overflow: 'auto',
     scrollbarWidth: 'thin',
@@ -285,7 +287,7 @@ const BrowserView = () => {
       }
       <div className={classes.content}>
         <div className={classes.innerFirst}>
-          <Grid container spacing={2}>
+          <Grid container spacing={matches ? 2 : 0}>
             {
               (!docId || matches) &&
               <Grid className={classes.gridItem} item sm={5} xs={12}>
