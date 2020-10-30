@@ -1,20 +1,12 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import {
-  Box,
-  Container,
-  Grid,
-  makeStyles,
-} from '@material-ui/core';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import Page from 'src/components/Page';
-import Header from './Header';
-import OrderInfo from './OrderInfo';
-import OrderItems from './OrderItems';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Box, Container, Grid, makeStyles } from '@material-ui/core'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import Page from 'src/components/Page'
+import Header from './Header'
+import OrderInfo from './OrderInfo'
+import OrderItems from './OrderItems'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,40 +15,40 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
-}));
+}))
 
 const OrderDetailsView = () => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [order, setOrder] = useState(null);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [order, setOrder] = useState(null)
+  
   const getOrder = useCallback(async () => {
     try {
-      const response = await axios.get('/api/orders/1');
-
+      const response = await axios.get('/api/orders/1')
+      
       if (isMountedRef.current) {
-        setOrder(response.data.order);
+        setOrder(response.data.order)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getOrder();
-  }, [getOrder]);
-
+    getOrder()
+  }, [getOrder])
+  
   if (!order) {
-    return null;
+    return null
   }
-
+  
   return (
     <Page
       className={classes.root}
       title="Order Details"
     >
       <Container maxWidth={false}>
-        <Header />
+        <Header/>
         <Box mt={2}>
           <Grid
             container
@@ -68,7 +60,7 @@ const OrderDetailsView = () => {
               xl={3}
               xs={12}
             >
-              <OrderInfo order={order} />
+              <OrderInfo order={order}/>
             </Grid>
             <Grid
               item
@@ -76,13 +68,13 @@ const OrderDetailsView = () => {
               xl={9}
               xs={12}
             >
-              <OrderItems orderItems={order.items} />
+              <OrderItems orderItems={order.items}/>
             </Grid>
           </Grid>
         </Box>
       </Container>
     </Page>
-  );
+  )
 }
 
-export default OrderDetailsView;
+export default OrderDetailsView

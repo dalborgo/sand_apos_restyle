@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import * as Yup from 'yup'
-import { Field, reduxForm, SubmissionError, } from 'redux-form'
+import { Field, reduxForm, SubmissionError } from 'redux-form'
 import {
   Box,
   Button,
@@ -26,33 +26,33 @@ const validationSchema = Yup.object().shape({
   lastName: Yup.string().required('Required'),
   password: Yup.string().min(7, 'Must be at least 7 characters').max(255).required('Required'),
   policy: Yup.boolean().oneOf([true], 'This field must be checked'),
-});
+})
 
 const validate = (values) => {
-  const formErrors = {};
-
+  const formErrors = {}
+  
   try {
-    validationSchema.validateSync(values, { abortEarly: false });
+    validationSchema.validateSync(values, { abortEarly: false })
   } catch (errors) {
     errors.inner.forEach((error) => {
-      formErrors[error.path] = error.message;
-    });
+      formErrors[error.path] = error.message
+    })
   }
-
-  return formErrors;
-};
+  
+  return formErrors
+}
 
 const submit = async () => {
   try {
     // NOTE: Make API request
-    await wait(1000);
+    await wait(1000)
   } catch (err) {
     
     throw new SubmissionError({
       _error: 'Login failed!',
-    });
+    })
   }
-};
+}
 
 const renderTextField = ({
   input,
@@ -70,8 +70,8 @@ const renderTextField = ({
       {...input}
       {...rest}
     />
-  );
-};
+  )
+}
 
 const renderCheckbox = ({
   input,
@@ -102,17 +102,17 @@ const renderCheckbox = ({
         )
       }
     </div>
-  );
-};
+  )
+}
 
 const BasicForm = ({ handleSubmit, submitting }) => {
-  const [isAlertVisible, setAlertVisible] = useState(true);
-
+  const [isAlertVisible, setAlertVisible] = useState(true)
+  
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Card>
-        <CardHeader title="Basic Form" />
-        <Divider />
+        <CardHeader title="Basic Form"/>
+        <Divider/>
         <CardContent>
           {
             isAlertVisible && (
@@ -121,114 +121,116 @@ const BasicForm = ({ handleSubmit, submitting }) => {
                   onClose={() => setAlertVisible(false)}
                   severity="info"
                 >
-                This is an info alert - check it out!
+                  This is an info alert - check it out!
                 </Alert>
               </Box>
             )
           }
           {
-            (submitting) ? (
-              <Box
-                display="flex"
-                justifyContent="center"
-                my={5}
-              >
-                <CircularProgress />
-              </Box>
-            ) : (
-              <>
-                <Grid
-                  container
-                  spacing={2}
+            (submitting) ?
+              (
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  my={5}
                 >
+                  <CircularProgress/>
+                </Box>
+              ) :
+              (
+                <>
                   <Grid
-                    item
-                    md={6}
-                    xs={12}
+                    container
+                    spacing={2}
                   >
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <Field
+                        component={renderTextField}
+                        label="First Name"
+                        name="firstName"
+                      />
+                    </Grid>
+                    <Grid
+                      item
+                      md={6}
+                      xs={12}
+                    >
+                      <Field
+                        component={renderTextField}
+                        label="Last Name"
+                        name="lastName"
+                      />
+                    </Grid>
+                  </Grid>
+                  <Box mt={2}>
                     <Field
                       component={renderTextField}
-                      label="First Name"
-                      name="firstName"
+                      label="Email Address"
+                      name="email"
+                      type="email"
                     />
-                  </Grid>
-                  <Grid
-                    item
-                    md={6}
-                    xs={12}
-                  >
+                  </Box>
+                  <Box mt={2}>
                     <Field
                       component={renderTextField}
-                      label="Last Name"
-                      name="lastName"
+                      label="Password"
+                      name="password"
+                      type="password"
                     />
-                  </Grid>
-                </Grid>
-                <Box mt={2}>
-                  <Field
-                    component={renderTextField}
-                    label="Email Address"
-                    name="email"
-                    type="email"
-                  />
-                </Box>
-                <Box mt={2}>
-                  <Field
-                    component={renderTextField}
-                    label="Password"
-                    name="password"
-                    type="password"
-                  />
-                </Box>
-                <Box mt={2}>
-                  <Field
-                    component={renderCheckbox}
-                    label={
-                      (
-                        <Typography
-                          color="textSecondary"
-                          variant="body2"
-                        >
-                      I have read the
-                          {' '}
-                          <Link
-                            color="secondary"
-                            component="a"
-                            href="#"
+                  </Box>
+                  <Box mt={2}>
+                    <Field
+                      component={renderCheckbox}
+                      label={
+                        (
+                          <Typography
+                            color="textSecondary"
+                            variant="body2"
                           >
-                        Terms and Conditions
-                          </Link>
-                        </Typography>
-                      )
-                    }
-                    name="policy"
-                  />
-                </Box>
-                <Box mt={2}>
-                  <Button
-                    color="secondary"
-                    disabled={submitting}
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                  >
-                  Sign up
-                  </Button>
-                </Box>
-              </>
-            )
+                            I have read the
+                            {' '}
+                            <Link
+                              color="secondary"
+                              component="a"
+                              href="#"
+                            >
+                              Terms and Conditions
+                            </Link>
+                          </Typography>
+                        )
+                      }
+                      name="policy"
+                    />
+                  </Box>
+                  <Box mt={2}>
+                    <Button
+                      color="secondary"
+                      disabled={submitting}
+                      fullWidth
+                      size="large"
+                      type="submit"
+                      variant="contained"
+                    >
+                      Sign up
+                    </Button>
+                  </Box>
+                </>
+              )
           }
         </CardContent>
       </Card>
     </form>
-  );
-};
+  )
+}
 
 BasicForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
-};
+}
 
 export default reduxForm({
   form: 'BasicForm',
@@ -240,4 +242,4 @@ export default reduxForm({
     password: 'thisisasecuredpassword',
     policy: false,
   },
-})(BasicForm);
+})(BasicForm)

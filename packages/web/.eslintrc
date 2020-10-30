@@ -21,6 +21,9 @@
           "_",
           "j",
           "i",
+          "x",
+          "y",
+          "s",
           "Q"
         ]
       }
@@ -94,12 +97,14 @@
         "assignment": "parens-new-line"
       }
     ],
+    "react-hooks/exhaustive-deps": 1,
     "react/display-name": 1,
     "react/forbid-prop-types": 0,
     "react/sort-prop-types": [
       1,
       {
-        "ignoreCase": true
+        "ignoreCase": true,
+        "callbacksLast": true
       }
     ],
     "react/jsx-boolean-value": 1,

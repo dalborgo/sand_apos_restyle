@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import * as Yup from 'yup';
-import { Formik } from 'formik';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import * as Yup from 'yup'
+import { Formik } from 'formik'
 import {
   Box,
   Button,
   Chip,
   FormHelperText,
   IconButton,
+  makeStyles,
   SvgIcon,
   TextField,
   Typography,
-  makeStyles,
-} from '@material-ui/core';
-import { KeyboardDatePicker } from '@material-ui/pickers';
-import { Plus as PlusIcon } from 'react-feather';
+} from '@material-ui/core'
+import { KeyboardDatePicker } from '@material-ui/pickers'
+import { Plus as PlusIcon } from 'react-feather'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(2),
     },
   },
-}));
+}))
 
 const ProjectDetails = ({
   className,
@@ -40,9 +40,9 @@ const ProjectDetails = ({
   onNext,
   ...rest
 }) => {
-  const classes = useStyles();
-  const [tag, setTag] = useState('');
-
+  const classes = useStyles()
+  const [tag, setTag] = useState('')
+  
   return (
     <Formik
       initialValues={
@@ -61,20 +61,20 @@ const ProjectDetails = ({
           setSubmitting,
         }) => {
           try {
-          // Call API to store step data in server session
-          // It is important to have it on server to be able to reuse it if user
-          // decides to continue later.
-            setStatus({ success: true });
-            setSubmitting(false);
-
+            // Call API to store step data in server session
+            // It is important to have it on server to be able to reuse it if user
+            // decides to continue later.
+            setStatus({ success: true })
+            setSubmitting(false)
+            
             if (onNext) {
-              onNext();
+              onNext()
             }
           } catch (err) {
             
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
-            setSubmitting(false);
+            setStatus({ success: false })
+            setErrors({ submit: err.message })
+            setSubmitting(false)
           }
         }
       }
@@ -108,15 +108,15 @@ const ProjectDetails = ({
               color="textPrimary"
               variant="h3"
             >
-            Please select one option
+              Please select one option
             </Typography>
             <Box mt={2}>
               <Typography
                 color="textSecondary"
                 variant="subtitle1"
               >
-              Proin tincidunt lacus sed ante efficitur efficitur.
-              Quisque aliquam fringilla velit sit amet euismod.
+                Proin tincidunt lacus sed ante efficitur efficitur.
+                Quisque aliquam fringilla velit sit amet euismod.
               </Typography>
             </Box>
             <Box mt={2}>
@@ -149,16 +149,16 @@ const ProjectDetails = ({
                   onClick={
                     () => {
                       if (!tag) {
-                        return;
+                        return
                       }
-
-                      setFieldValue('tags', [...values.tags, tag]);
-                      setTag('');
+                      
+                      setFieldValue('tags', [...values.tags, tag])
+                      setTag('')
                     }
                   }
                 >
                   <SvgIcon>
-                    <PlusIcon />
+                    <PlusIcon/>
                   </SvgIcon>
                 </IconButton>
               </Box>
@@ -171,9 +171,8 @@ const ProjectDetails = ({
                       label={tag}
                       onDelete={
                         () => {
-                          const newTags = values.tags.filter((t) => t !== tag);
-
-                          setFieldValue('tags', newTags);
+                          const newTags = values.tags.filter((t_) => t_ !== tag)
+                          setFieldValue('tags', newTags)
                         }
                       }
                       variant="outlined"
@@ -245,11 +244,11 @@ const ProjectDetails = ({
                     onClick={onBack}
                     size="large"
                   >
-                Previous
+                    Previous
                   </Button>
                 )
               }
-              <Box flexGrow={1} />
+              <Box flexGrow={1}/>
               <Button
                 color="secondary"
                 disabled={isSubmitting}
@@ -257,25 +256,25 @@ const ProjectDetails = ({
                 type="submit"
                 variant="contained"
               >
-              Next
+                Next
               </Button>
             </Box>
           </form>
         )
       }
     </Formik>
-  );
-};
+  )
+}
 
 ProjectDetails.propTypes = {
   className: PropTypes.string,
-  onNext: PropTypes.func,
   onBack: PropTypes.func,
-};
+  onNext: PropTypes.func,
+}
 
 ProjectDetails.defaultProps = {
   onNext: () => {},
   onBack: () => {},
-};
+}
 
-export default ProjectDetails;
+export default ProjectDetails

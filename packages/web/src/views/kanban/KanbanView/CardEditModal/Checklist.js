@@ -1,31 +1,20 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { useSnackbar } from 'notistack';
-import {
-  Box,
-  Button,
-  LinearProgress,
-  Typography,
-  TextField,
-  SvgIcon,
-  makeStyles,
-} from '@material-ui/core';
-import { List as ListIcon } from 'react-feather';
-import { useDispatch } from 'src/store';
-import {
-  updateChecklist,
-  deleteChecklist,
-} from 'src/slices/kanban';
-import CheckItem from './CheckItem';
-import CheckItemAdd from './CheckItemAdd';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { useSnackbar } from 'notistack'
+import { Box, Button, LinearProgress, makeStyles, SvgIcon, TextField, Typography } from '@material-ui/core'
+import { List as ListIcon } from 'react-feather'
+import { useDispatch } from 'src/store'
+import { deleteChecklist, updateChecklist } from 'src/slices/kanban'
+import CheckItem from './CheckItem'
+import CheckItemAdd from './CheckItemAdd'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   listIcon: {
     marginRight: theme.spacing(3),
   },
-}));
+}))
 
 const Checklist = ({
   card,
@@ -33,80 +22,80 @@ const Checklist = ({
   className,
   ...rest
 }) => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
-  const [name, setName] = useState(checklist.name);
-  const [editingName, setEditingName] = useState(false);
-  const [editingCheckItem, setEditingCheckItem] = useState(null);
-
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
+  const [name, setName] = useState(checklist.name)
+  const [editingName, setEditingName] = useState(false)
+  const [editingCheckItem, setEditingCheckItem] = useState(null)
+  
   const handleNameEdit = () => {
-    setEditingName(true);
-  };
-
+    setEditingName(true)
+  }
+  
   const handleNameChange = (event) => {
-    event.persist();
-    setName(event.target.value);
-  };
-
+    event.persist()
+    setName(event.target.value)
+  }
+  
   const handleNameSave = async () => {
     try {
       if (!name || name === checklist.name) {
-        setEditingName(false);
-        setName(checklist.name);
-        return;
+        setEditingName(false)
+        setName(checklist.name)
+        return
       }
-
-      setEditingName(false);
-      await dispatch(updateChecklist(card.id, checklist.id, { name }));
+      
+      setEditingName(false)
+      await dispatch(updateChecklist(card.id, checklist.id, { name }))
       enqueueSnackbar('Checklist updated', {
         variant: 'success',
-      });
+      })
     } catch (err) {
       
       enqueueSnackbar('Something went wrong', {
         variant: 'error',
-      });
+      })
     }
-  };
-
+  }
+  
   const handleNameCancel = () => {
-    setEditingName(false);
-    setName(checklist.name);
-  };
-
+    setEditingName(false)
+    setName(checklist.name)
+  }
+  
   const handleDelete = async () => {
     try {
-      await dispatch(deleteChecklist(card.id, checklist.id));
+      await dispatch(deleteChecklist(card.id, checklist.id))
       enqueueSnackbar('Checklist deleted', {
         variant: 'success',
-      });
+      })
     } catch (err) {
       
       enqueueSnackbar('Something went wrong', {
         variant: 'error',
-      });
+      })
     }
-  };
-
+  }
+  
   const handleCheckItemEditInit = (checkItemId) => {
-    setEditingCheckItem(checkItemId);
-  };
-
+    setEditingCheckItem(checkItemId)
+  }
+  
   const handleCheckItemEditCancel = () => {
-    setEditingCheckItem(null);
-  };
-
+    setEditingCheckItem(null)
+  }
+  
   const handleCheckItemEditComplete = () => {
-    setEditingCheckItem(null);
-  };
-
-  const totalCheckItems = checklist.checkItems.length;
-  const completedCheckItems = (checklist.checkItems.filter((checkItem) => checkItem.state === 'complete')).length;
+    setEditingCheckItem(null)
+  }
+  
+  const totalCheckItems = checklist.checkItems.length
+  const completedCheckItems = (checklist.checkItems.filter((checkItem) => checkItem.state === 'complete')).length
   const completePercentage = totalCheckItems === 0
     ? 100
-    : (completedCheckItems / totalCheckItems) * 100;
-
+    : (completedCheckItems / totalCheckItems) * 100
+  
   return (
     <div
       className={clsx(classes.root, className)}
@@ -120,56 +109,59 @@ const Checklist = ({
           color="action"
           fontSize="small"
         >
-          <ListIcon />
+          <ListIcon/>
         </SvgIcon>
         {
-          editingName ? (
-            <Box flexGrow={1}>
-              <TextField
-                fullWidth
-                onChange={handleNameChange}
-                value={name}
-                variant="outlined"
-              />
-              <Box mt={1}>
-                <Button
-                  color="primary"
-                  onClick={handleNameSave}
-                  size="small"
-                  variant="contained"
+          editingName ?
+            (
+              <Box flexGrow={1}>
+                <TextField
+                  fullWidth
+                  onChange={handleNameChange}
+                  value={name}
+                  variant="outlined"
+                />
+                <Box mt={1}>
+                  <Button
+                    color="primary"
+                    onClick={handleNameSave}
+                    size="small"
+                    variant="contained"
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    onClick={handleNameCancel}
+                    size="small"
+                  >
+                    Cancel
+                  </Button>
+                </Box>
+              </Box>
+            )
+            :
+            (
+              <Box
+                alignItems="center"
+                display="flex"
+                flexGrow={1}
+              >
+                <Typography
+                  color="textPrimary"
+                  onClick={handleNameEdit}
+                  variant="h4"
                 >
-                Save
-                </Button>
+                  {checklist.name}
+                </Typography>
+                <Box flexGrow={1}/>
                 <Button
-                  onClick={handleNameCancel}
+                  onClick={handleDelete}
                   size="small"
                 >
-                Cancel
+                  Delete
                 </Button>
               </Box>
-            </Box>
-          ) : (
-            <Box
-              alignItems="center"
-              display="flex"
-              flexGrow={1}
-            >
-              <Typography
-                color="textPrimary"
-                onClick={handleNameEdit}
-                variant="h4"
-              >
-                {checklist.name}
-              </Typography>
-              <Box flexGrow={1} />
-              <Button
-                onClick={handleDelete}
-                size="small"
-              >
-              Delete
-              </Button>
-            </Box>
-          )
+            )
         }
       </Box>
       <Box
@@ -221,13 +213,13 @@ const Checklist = ({
         />
       </Box>
     </div>
-  );
-};
+  )
+}
 
 Checklist.propTypes = {
-  className: PropTypes.string,
   card: PropTypes.object.isRequired,
   checklist: PropTypes.object.isRequired,
-};
+  className: PropTypes.string,
+}
 
-export default Checklist;
+export default Checklist

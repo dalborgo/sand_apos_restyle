@@ -7,4 +7,5 @@
 /packages/manager/config/
 /packages/manager/errors.log
 /packages/web/node_modules/
+/packages/web/build/
 yarn.lock

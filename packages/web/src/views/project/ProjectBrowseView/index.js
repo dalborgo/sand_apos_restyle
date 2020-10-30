@@ -1,19 +1,12 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-} from 'react';
-import {
-  Box,
-  Container,
-  makeStyles,
-} from '@material-ui/core';
-import Page from 'src/components/Page';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import Header from './Header';
-import Filter from './Filter';
-import Results from './Results';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Box, Container, makeStyles } from '@material-ui/core'
+import Page from 'src/components/Page'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import Header from './Header'
+import Filter from './Filter'
+import Results from './Results'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,45 +15,45 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
-}));
+}))
 
 const ProjectBrowseView = () => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [projects, setProjects] = useState([]);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [projects, setProjects] = useState([])
+  
   const getProjects = useCallback(async () => {
     try {
-      const response = await axios.get('/api/projects/projects');
-  
+      const response = await axios.get('/api/projects/projects')
+      
       if (isMountedRef.current) {
-        setProjects(response.data.projects);
+        setProjects(response.data.projects)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getProjects();
-  }, [getProjects]);
-
+    getProjects().then()
+  }, [getProjects])
+  
   return (
     <Page
       className={classes.root}
       title="Project List"
     >
       <Container maxWidth="lg">
-        <Header />
+        <Header/>
         <Box mt={3}>
-          <Filter />
+          <Filter/>
         </Box>
         <Box mt={6}>
-          <Results projects={projects} />
+          <Results projects={projects}/>
         </Box>
       </Container>
     </Page>
-  );
+  )
 }
 
-export default ProjectBrowseView;
+export default ProjectBrowseView

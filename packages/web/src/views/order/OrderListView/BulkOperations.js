@@ -1,20 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {
-  Button,
-  Drawer,
-  Grid,
-  Hidden,
-  SvgIcon,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
-import {
-  Check as CheckIcon,
-  X as XIcon,
-  Trash as TrashIcon,
-} from 'react-feather';
+import React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { Button, Drawer, Grid, Hidden, makeStyles, SvgIcon, Typography } from '@material-ui/core'
+import { Check as CheckIcon, Trash as TrashIcon, X as XIcon } from 'react-feather'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(2),
     },
   },
-}));
+}))
 
 const BulkOperations = ({
   className,
@@ -39,8 +27,8 @@ const BulkOperations = ({
   selected,
   ...rest
 }) => {
-  const classes = useStyles();
-
+  const classes = useStyles()
+  
   return (
     <Drawer
       anchor="bottom"
@@ -81,8 +69,8 @@ const BulkOperations = ({
               <Button
                 onClick={onMarkPaid}
                 startIcon={
-                  <SvgIcon fontSize="small" >
-                    <CheckIcon />
+                  <SvgIcon fontSize="small">
+                    <CheckIcon/>
                   </SvgIcon>
                 }
               >
@@ -91,8 +79,8 @@ const BulkOperations = ({
               <Button
                 onClick={onMarkUnpaid}
                 startIcon={
-                  <SvgIcon fontSize="small" >
-                    <XIcon />
+                  <SvgIcon fontSize="small">
+                    <XIcon/>
                   </SvgIcon>
                 }
               >
@@ -101,8 +89,8 @@ const BulkOperations = ({
               <Button
                 onClick={onDelete}
                 startIcon={
-                  <SvgIcon fontSize="small" >
-                    <TrashIcon />
+                  <SvgIcon fontSize="small">
+                    <TrashIcon/>
                   </SvgIcon>
                 }
               >
@@ -113,23 +101,23 @@ const BulkOperations = ({
         </Grid>
       </div>
     </Drawer>
-  );
+  )
 }
 
 BulkOperations.propTypes = {
   className: PropTypes.string,
+  open: PropTypes.bool,
+  selected: PropTypes.array.isRequired,
   onDelete: PropTypes.func,
   onMarkPaid: PropTypes.func,
   onMarkUnpaid: PropTypes.func,
-  open: PropTypes.bool,
-  selected: PropTypes.array.isRequired,
-};
+}
 
 BulkOperations.defaultProps = {
   onDelete: () => {},
   onMarkPaid: () => {},
   onMarkUnpaid: () => {},
   open: false,
-};
+}
 
-export default BulkOperations;
+export default BulkOperations

@@ -135,9 +135,9 @@ const ApplyModal = ({
 ApplyModal.propTypes = {
   author: PropTypes.object.isRequired,
   className: PropTypes.string,
+  open: PropTypes.bool.isRequired,
   onApply: PropTypes.func,
   onClose: PropTypes.func,
-  open: PropTypes.bool.isRequired,
 };
 
 ApplyModal.defaultProps = {

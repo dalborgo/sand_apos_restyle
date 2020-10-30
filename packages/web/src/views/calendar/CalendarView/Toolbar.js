@@ -103,12 +103,12 @@ Toolbar.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   date: PropTypes.instanceOf(Date).isRequired,
+  view: PropTypes.oneOf(['dayGridMonth', 'timeGridWeek', 'timeGridDay', 'listWeek']),
   onAddClick: PropTypes.func,
   onDateNext: PropTypes.func,
   onDatePrev: PropTypes.func,
   onDateToday: PropTypes.func,
   onViewChange: PropTypes.func,
-  view: PropTypes.oneOf(['dayGridMonth', 'timeGridWeek', 'timeGridDay', 'listWeek']),
 };
 
 Toolbar.defaultProps = {

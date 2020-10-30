@@ -5,6 +5,7 @@ import Page from 'src/components/Page'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
 import Header from './Header'
 import Results from './Results'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,7 +29,7 @@ const CustomerListView = () => {
         setCustomers(response.data.customers);
       }
     } catch (err) {
-    
+      log.error(err)
     }
   }, [isMountedRef]);
 

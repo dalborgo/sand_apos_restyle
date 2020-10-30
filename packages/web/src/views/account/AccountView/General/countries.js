@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-anonymous-default-export
-export default [
+const countries = [
   { text: 'Afghanistan', value: 'AF' },
   { text: 'Åland Islands', value: 'AX' },
   { text: 'Albania', value: 'AL' },
@@ -243,4 +242,6 @@ export default [
   { text: 'Yemen', value: 'YE' },
   { text: 'Zambia', value: 'ZM' },
   { text: 'Zimbabwe', value: 'ZW' },
-];
+]
+
+export default countries

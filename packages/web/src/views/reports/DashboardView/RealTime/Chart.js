@@ -1,14 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { Bar } from 'react-chartjs-2';
-import { makeStyles, useTheme } from '@material-ui/core';
+import React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { Bar } from 'react-chartjs-2'
+import { makeStyles, useTheme } from '@material-ui/core'
 
 const useStyles = makeStyles(() => ({
   root: {
     position: 'relative',
   },
-}));
+}))
 
 const Chart = ({
   data: dataProp,
@@ -16,9 +16,9 @@ const Chart = ({
   className,
   ...rest
 }) => {
-  const classes = useStyles();
-  const theme = useTheme();
-
+  const classes = useStyles()
+  const theme = useTheme()
+  
   const data = {
     datasets: [
       {
@@ -31,8 +31,8 @@ const Chart = ({
       },
     ],
     labels,
-  };
-
+  }
+  
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -88,14 +88,12 @@ const Chart = ({
         legend: () => {},
         title: () => {},
         label: (tooltipItem) => {
-          const label = `Views: ${tooltipItem.yLabel}`;
-
-          return label;
+          return `Views: ${tooltipItem.yLabel}`
         },
       },
     },
-  };
-
+  }
+  
   return (
     <div
       className={clsx(classes.root, className)}
@@ -106,13 +104,13 @@ const Chart = ({
         options={options}
       />
     </div>
-  );
-};
+  )
+}
 
 Chart.propTypes = {
   className: PropTypes.string,
   data: PropTypes.array.isRequired,
   labels: PropTypes.array.isRequired,
-};
+}
 
-export default Chart;
+export default Chart

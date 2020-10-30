@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'src/store'
 import { clearList, deleteList, updateList } from 'src/slices/kanban'
 import Card from './Card'
 import CardAdd from './CardAdd'
+import log from '@adapter/common/src/log'
 
 const listSelector = (state, listId) => {
   const { lists } = state.kanban
@@ -103,7 +104,7 @@ const List = ({ className, listId, ...rest }) => {
         variant: 'success',
       })
     } catch (err) {
-      console.error(err)
+      log.error(err)
       enqueueSnackbar('Something went wrong', {
         variant: 'error',
       })
@@ -118,7 +119,7 @@ const List = ({ className, listId, ...rest }) => {
         variant: 'success',
       })
     } catch (err) {
-      console.error(err)
+      log.error(err)
       enqueueSnackbar('Something went wrong', {
         variant: 'error',
       })
@@ -133,7 +134,7 @@ const List = ({ className, listId, ...rest }) => {
         variant: 'success',
       })
     } catch (err) {
-      console.error(err)
+      log.error(err)
       enqueueSnackbar('Something went wrong', {
         variant: 'error',
       })
@@ -153,25 +154,27 @@ const List = ({ className, listId, ...rest }) => {
           py={1}
         >
           {
-            isRenaming ? (
-              <ClickAwayListener onClickAway={handleRename}>
-                <TextField
-                  margin="dense"
-                  onBlur={handleRename}
-                  onChange={handleChange}
-                  value={name}
-                  variant="outlined"
-                />
-              </ClickAwayListener>
-            ) : (
-              <Typography
-                color="inherit"
-                onClick={handleRenameInit}
-                variant="h5"
-              >
-                {list.name}
-              </Typography>
-            )
+            isRenaming ? 
+              (
+                <ClickAwayListener onClickAway={handleRename}>
+                  <TextField
+                    margin="dense"
+                    onBlur={handleRename}
+                    onChange={handleChange}
+                    value={name}
+                    variant="outlined"
+                  />
+                </ClickAwayListener>
+              ) : 
+              (
+                <Typography
+                  color="inherit"
+                  onClick={handleRenameInit}
+                  variant="h5"
+                >
+                  {list.name}
+                </Typography>
+              )
           }
           <Box flexGrow={1}/>
           <IconButton

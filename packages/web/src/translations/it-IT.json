@@ -5,5 +5,6 @@
   "auth.login.enter": "Entra",
   "auth.login.password_required": "Password obbligatoria!",
   "auth.login.username_required": "Nome utente obbligatorio!",
-  "auth.login.wrong_credentials": "Nome utente o password errati!"
+  "auth.login.wrong_credentials": "Nome utente o password errati!",
+  "reports.header.list_documents": "Lista Documenti"
 }

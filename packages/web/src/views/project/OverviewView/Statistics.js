@@ -1,22 +1,12 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-} from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import numeral from 'numeral';
-import {
-  Box,
-  Card,
-  Grid,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import Label from 'src/components/Label';
-
+import React, { useCallback, useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import numeral from 'numeral'
+import { Box, Card, Grid, makeStyles, Typography } from '@material-ui/core'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import Label from 'src/components/Label'
+import log from '@adapter/common/src/log'
 const useStyles = makeStyles((theme) => ({
   root: {},
   item: {
@@ -39,33 +29,33 @@ const useStyles = makeStyles((theme) => ({
   overline: {
     marginTop: theme.spacing(1),
   },
-}));
+}))
 
 const Statistics = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [statistics, setStatistics] = useState(null);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [statistics, setStatistics] = useState(null)
+  
   const getStatistics = useCallback(async () => {
     try {
-      const response = await axios.get('/api/projects/overview/statistics');
-  
+      const response = await axios.get('/api/projects/overview/statistics')
+      
       if (isMountedRef.current) {
-        setStatistics(response.data.statistics);
+        setStatistics(response.data.statistics)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getStatistics();
-  }, [getStatistics]);
-
+    getStatistics()
+  }, [getStatistics])
+  
   if (!statistics) {
-    return null;
+    return null
   }
-
+  
   return (
     <Card
       className={clsx(classes.root, className)}
@@ -175,11 +165,11 @@ const Statistics = ({ className, ...rest }) => {
         </Grid>
       </Grid>
     </Card>
-  );
-};
+  )
+}
 
 Statistics.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default Statistics;
+export default Statistics

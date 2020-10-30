@@ -28,7 +28,7 @@ const iconsMap = {
   order_placed: PackageIcon,
   new_message: MessageIcon,
   item_shipped: TruckIcon,
-};
+}
 
 const useStyles = makeStyles((theme) => ({
   popover: {
@@ -38,27 +38,27 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
   },
-}));
+}))
 
 const Notifications = () => {
-  const classes = useStyles();
-  const { notifications } = useSelector((state) => state.notifications);
-  const ref = useRef(null);
-  const dispatch = useDispatch();
-  const [isOpen, setOpen] = useState(false);
-
+  const classes = useStyles()
+  const { notifications } = useSelector((state) => state.notifications)
+  const ref = useRef(null)
+  const dispatch = useDispatch()
+  const [isOpen, setOpen] = useState(false)
+  
   const handleOpen = () => {
-    setOpen(true);
-  };
-
+    setOpen(true)
+  }
+  
   const handleClose = () => {
-    setOpen(false);
-  };
-
+    setOpen(false)
+  }
+  
   useEffect(() => {
-    dispatch(getNotifications());
-  }, [dispatch]);
-
+    dispatch(getNotifications())
+  }, [dispatch])
+  
   return (
     <>
       <Tooltip title="Notifications">
@@ -68,7 +68,7 @@ const Notifications = () => {
           ref={ref}
         >
           <SvgIcon>
-            <BellIcon />
+            <BellIcon/>
           </SvgIcon>
         </IconButton>
       </Tooltip>
@@ -93,67 +93,70 @@ const Notifications = () => {
           </Typography>
         </Box>
         {
-          notifications.length === 0 ? (
-            <Box p={2}>
-              <Typography
-                color="textPrimary"
-                variant="h6"
-              >
-              There are no notifications
-              </Typography>
-            </Box>
-          ) : (
-            <>
-              <List disablePadding>
-                {
-                  notifications.map((notification) => {
-                    const Icon = iconsMap[notification.type];
-
-                    return (
-                      <ListItem
-                        component={RouterLink}
-                        divider
-                        key={notification.id}
-                        to="#"
-                      >
-                        <ListItemAvatar>
-                          <Avatar
-                            className={classes.icon}
-                          >
-                            <SvgIcon fontSize="small">
-                              <Icon />
-                            </SvgIcon>
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={notification.title}
-                          primaryTypographyProps={{ variant: 'subtitle2', color: 'textPrimary' }}
-                          secondary={notification.description}
-                        />
-                      </ListItem>
-                    );
-                  })
-                }
-              </List>
-              <Box
-                display="flex"
-                justifyContent="center"
-                p={1}
-              >
-                <Button
-                  component={RouterLink}
-                  size="small"
-                  to="#"
+          notifications.length === 0 ?
+            (
+              <Box p={2}>
+                <Typography
+                  color="textPrimary"
+                  variant="h6"
                 >
-                Mark all as read
-                </Button>
+                  There are no notifications
+                </Typography>
               </Box>
-            </>
-          )
+            )
+            :
+            (
+              <>
+                <List disablePadding>
+                  {
+                    notifications.map((notification) => {
+                      const Icon = iconsMap[notification.type]
+                      
+                      return (
+                        <ListItem
+                          component={RouterLink}
+                          divider
+                          key={notification.id}
+                          to="#"
+                        >
+                          <ListItemAvatar>
+                            <Avatar
+                              className={classes.icon}
+                            >
+                              <SvgIcon fontSize="small">
+                                <Icon/>
+                              </SvgIcon>
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={notification.title}
+                            primaryTypographyProps={{ variant: 'subtitle2', color: 'textPrimary' }}
+                            secondary={notification.description}
+                          />
+                        </ListItem>
+                      )
+                    })
+                  }
+                </List>
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  p={1}
+                >
+                  <Button
+                    component={RouterLink}
+                    size="small"
+                    to="#"
+                  >
+                    Mark all as read
+                  </Button>
+                </Box>
+              </>
+            )
         }
       </Popover>
     </>
-  );
-};
+  )
+}
 
-export default Notifications;
+export default Notifications

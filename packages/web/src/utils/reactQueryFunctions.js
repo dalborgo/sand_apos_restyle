@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const wlh = window.location.hostname
 export const axiosLocalInstance = axios.create({
-  baseURL: 'http://127.0.0.1:7000',
+  baseURL: `http://${wlh}:7000`,
   params: {
     _key: 'astenposServer',
   },

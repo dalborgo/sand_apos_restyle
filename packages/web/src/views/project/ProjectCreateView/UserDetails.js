@@ -170,8 +170,8 @@ const UserDetails = ({
 
 UserDetails.propTypes = {
   className: PropTypes.string,
-  onNext: PropTypes.func,
   onBack: PropTypes.func,
+  onNext: PropTypes.func,
 };
 
 UserDetails.defaultProps = {

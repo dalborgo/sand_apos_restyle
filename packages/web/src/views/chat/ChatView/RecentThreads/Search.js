@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     height: 32,
     width: 32,
   },
-}));
+}))
 
 const Search = forwardRef(({
   className,
@@ -51,16 +51,16 @@ const Search = forwardRef(({
   results,
   ...rest
 }, ref) => {
-  const classes = useStyles();
-
-  const displayResults = query && isFocused;
-
+  const classes = useStyles()
+  
+  const displayResults = query && isFocused
+  
   const handleSelect = (result) => {
     if (onSelect) {
-      onSelect(result);
+      onSelect(result)
     }
-  };
-
+  }
+  
   return (
     <ClickAwayListener onClickAway={onClickAway}>
       <div
@@ -73,7 +73,7 @@ const Search = forwardRef(({
             color="action"
             fontSize="small"
           >
-            <SearchIcon />
+            <SearchIcon/>
           </SvgIcon>
           <Input
             className={classes.searchInput}
@@ -91,7 +91,7 @@ const Search = forwardRef(({
                 color="textSecondary"
                 variant="h6"
               >
-              Contacts
+                Contacts
               </Typography>
               <List>
                 {
@@ -119,7 +119,7 @@ const Search = forwardRef(({
                           }
                         />
                       </ListItem>
-                    );
+                    )
                   })
                 }
               </List>
@@ -128,23 +128,23 @@ const Search = forwardRef(({
         }
       </div>
     </ClickAwayListener>
-  );
-});
+  )
+})
 
 Search.propTypes = {
   className: PropTypes.string,
+  query: PropTypes.string,
+  results: PropTypes.array,
   onChange: PropTypes.func,
   onClickAway: PropTypes.func,
   onFocus: PropTypes.func,
   onSelect: PropTypes.func,
-  query: PropTypes.string,
-  results: PropTypes.array,
-};
+}
 
 Search.defaultProps = {
   isFocused: false,
   query: '',
   results: [],
-};
-
-export default Search;
+}
+Search.displayName = 'Search Recent Thread'
+export default Search

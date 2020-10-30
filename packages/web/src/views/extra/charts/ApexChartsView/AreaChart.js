@@ -1,10 +1,10 @@
 import React from 'react'
 import Chart from 'react-apexcharts'
-import { Card, CardContent, Typography, useTheme, } from '@material-ui/core'
+import { Card, CardContent, Typography, useTheme } from '@material-ui/core'
 
 const AreaChart = () => {
-  const theme = useTheme();
-
+  const theme = useTheme()
+  
   const data = {
     options: {
       chart: {
@@ -89,8 +89,8 @@ const AreaChart = () => {
         data: [23, 12, 54, 61, 32, 56, 81, 19],
       },
     ],
-  };
-
+  }
+  
   return (
     <Card>
       <CardContent>
@@ -108,7 +108,7 @@ const AreaChart = () => {
         />
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default AreaChart;
+export default AreaChart

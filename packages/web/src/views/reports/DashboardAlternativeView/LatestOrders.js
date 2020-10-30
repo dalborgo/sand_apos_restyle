@@ -1,20 +1,17 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import moment from 'moment';
-import numeral from 'numeral';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import clsx from 'clsx'
+import moment from 'moment'
+import numeral from 'numeral'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import PropTypes from 'prop-types'
 import {
   Box,
   Button,
   Card,
   CardHeader,
   Divider,
+  makeStyles,
   Table,
   TableBody,
   TableCell,
@@ -22,55 +19,54 @@ import {
   TableRow,
   TableSortLabel,
   Tooltip,
-  makeStyles,
-} from '@material-ui/core';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Label from 'src/components/Label';
-import GenericMoreButton from 'src/components/GenericMoreButton';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-
+} from '@material-ui/core'
+import NavigateNextIcon from '@material-ui/icons/NavigateNext'
+import Label from 'src/components/Label'
+import GenericMoreButton from 'src/components/GenericMoreButton'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import log from '@adapter/common/src/log'
 const labelColors = {
   complete: 'success',
   pending: 'warning',
   rejected: 'error',
-};
+}
 
 const useStyles = makeStyles(() => ({
   root: {},
-}));
+}))
 
 const LatestOrders = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [orders, setOrders] = useState([]);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [orders, setOrders] = useState([])
+  
   const getOrders = useCallback(async () => {
     try {
-      const response = await axios.get('/api/reports/latest-orders');
-  
+      const response = await axios.get('/api/reports/latest-orders')
+      
       if (isMountedRef.current) {
-        setOrders(response.data.orders);
+        setOrders(response.data.orders)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getOrders();
-  }, [getOrders]);
-
+    getOrders()
+  }, [getOrders])
+  
   return (
     <Card
       className={clsx(classes.root, className)}
       {...rest}
     >
       <CardHeader
-        action={<GenericMoreButton />}
+        action={<GenericMoreButton/>}
         title="Latest Orders"
       />
-      <Divider />
+      <Divider/>
       <PerfectScrollbar>
         <Box minWidth={700}>
           <Table>
@@ -141,7 +137,7 @@ const LatestOrders = ({ className, ...rest }) => {
       >
         <Button
           component={RouterLink}
-          endIcon={<NavigateNextIcon />}
+          endIcon={<NavigateNextIcon/>}
           size="small"
           to="/app/management/orders"
         >
@@ -149,11 +145,11 @@ const LatestOrders = ({ className, ...rest }) => {
         </Button>
       </Box>
     </Card>
-  );
-};
+  )
+}
 
 LatestOrders.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default LatestOrders;
+export default LatestOrders

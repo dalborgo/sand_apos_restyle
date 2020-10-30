@@ -1,17 +1,17 @@
-import React, { memo, useEffect, useState } from 'react'
-import { Box, makeStyles, Paper, useMediaQuery } from '@material-ui/core'
+import React, { memo, useCallback, useEffect, useState } from 'react'
+import { Box, Grid, makeStyles, Paper, useMediaQuery } from '@material-ui/core'
 import { useInfiniteQuery, useMutation, useQuery, useQueryCache } from 'react-query'
 import Page from 'src/components/Page'
-import Header from './Header'
 import DocList from './DocList'
 import SearchBox from './SearchBox'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
 import { useParams } from 'react-router'
-import CommandBox from './CommandBox'
-import Divider from '@material-ui/core/Divider'
-import Grid from '@material-ui/core/Grid'
+import Header from './Header'
+import { useSnackbar } from 'notistack'
+import SaveIcon from '@material-ui/icons/Save'
+import Fab from '@material-ui/core/Fab'
 
 const LIMIT = 40
 
@@ -36,7 +36,11 @@ const useStyles = makeStyles((theme) => ({
   innerFirst: {
     display: 'flex',
     padding: theme.spacing(2),
+    paddingTop: theme.spacing(1),
     width: '100%',
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+    },
   },
   docList: {
     display: 'flex',
@@ -51,11 +55,21 @@ const useStyles = makeStyles((theme) => ({
   gridItem: {
     height: '100%',
   },
+  floatIcon: {
+    position: 'absolute',
+    top: theme.spacing(2),
+    right: theme.spacing(3),
+    color: theme.palette.primary.main,
+    [theme.breakpoints.down('xs')]: {
+      top: theme.spacing(2),
+      right: theme.spacing(2),
+    },
+  },
   browserArea: {
     flexGrow: 1,
     overflowY: 'auto',
     overflowX: 'hidden',
-    paddingTop: theme.spacing(1),
+    paddingTop: theme.spacing(0),
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
@@ -66,6 +80,7 @@ const useStyles = makeStyles((theme) => ({
     border: 0,
     fontFamily: 'monospace',
     overflow: 'auto',
+    scrollbarWidth: 'thin',
     padding: 10,
     resize: 'none',
     width: '100%',
@@ -107,7 +122,6 @@ const SearchComponent = memo((props => {
         isFetching={props.isFetching}
         refetch={props.refetch}
         refetchLine={props.refetchLine}
-        setOutput={props.setOutput}
         setText={props.setText}
         text={props.text}
       />
@@ -133,15 +147,33 @@ SearchComponent.displayName = 'SearchComponent'
 
 const DisplayComponent = memo((props => {
   console.log('%cRENDER_DisplayComponent', 'color: silver')
+  const { enqueueSnackbar } = useSnackbar()
+  const save = useCallback(async () => {
+    try {
+      const textArea = document.getElementById('browserDisplayArea')
+      const docs = JSON.parse(textArea.value)
+      await props.mutate(docs)
+    } catch (err) {
+      enqueueSnackbar(err.message, { variant: 'error' })
+    }
+  }, [enqueueSnackbar, props])
   return (
     <Paper className={props.classes.editDoc} elevation={2}>
-      <CommandBox isDocId={!!props.docId} mutate={props.mutate} output={props.output} setOutput={props.setOutput}/>
-      <Divider/>
       {
-        <textarea
-          className={props.classes.displayArea}
-          id="browserDisplayArea"
-        />
+        <div style={{ position: 'relative', height: '100%' }}>
+          <textarea
+            className={props.classes.displayArea}
+            id="browserDisplayArea"
+          />
+          <Fab
+            className={props.classes.floatIcon}
+            disabled={!props.docId}
+            onClick={save}
+            size="small"
+          >
+            <SaveIcon/>
+          </Fab>
+        </div>
       }
     </Paper>
   )
@@ -153,9 +185,9 @@ const BrowserView = () => {
   console.log('%cRENDER_BASE', 'color: purple')
   const matches = useMediaQuery(theme => theme.breakpoints.up('sm'))
   const queryCache = useQueryCache()
+  const { enqueueSnackbar } = useSnackbar()
   const classes = useStyles()
   const [text, setText] = useState('')
-  const [output, setOutput] = useState({ type: 'success', text: '' })
   const { docId } = useParams()
   useEffect(() => {
     const browserSearchBox = document.getElementById('browserSearchBox')
@@ -164,7 +196,7 @@ const BrowserView = () => {
     if (browserPanel) {
       browserPanel.scrollTop = 0
     }
-  }, [text])
+  }, [])
   const respList = useInfiniteQuery(['docs/browser', text], fetchList, {
     getFetchMore: (lastGroup, allGroups) => {
       const { total_rows: totalRows, rows = [] } = lastGroup?.results
@@ -180,23 +212,23 @@ const BrowserView = () => {
   })
   const respDoc = useQuery(['docs/get_by_id', { docId }], {
     enabled: docId,
-    onSuccess: ({ ok, results, message }) => {
+    onSuccess: ({ results }) => {
       const docObj = results
       const defaultValue = docObj ? JSON.stringify(docObj, null, 2) : ''
       const elem = document.getElementById('browserDisplayArea')
       if (elem) {elem.value = defaultValue}
-      setOutput('')
     },
   })
   const [mutate] = useMutation(saveMutation, {
     onSettled: (data, error, variables) => {
       if (error) {
-        setOutput({ error: true, text: error.message })
+        enqueueSnackbar(error.message, { variant: 'error' })
       } else {
         if (data?.results) {
           const [first] = data.results
           if (first.error) {
-            setOutput({ error: true, text: `${first.error}: ${first.reason} (${first.status})` })
+            const message = `${first.error}: ${first.reason} (${first.status})`
+            enqueueSnackbar(message, { variant: 'error' })
           } else {
             const isNewDoc = variables._id !== docId
             let outObj = variables
@@ -204,41 +236,53 @@ const BrowserView = () => {
               outObj = Object.assign(outObj, { _rev: first.rev })
             }
             document.getElementById('browserDisplayArea').value = JSON.stringify(outObj, null, 2)
-            setOutput({ error: false, text: `${isNewDoc ? '[CREATED]' : '[UPDATED]'} rev. ${first.rev}` })
+            const message = `${isNewDoc ? '[CREATED]' : '[UPDATED]'} rev. ${first.rev}`
+            enqueueSnackbar(message, { variant: 'success' })
           }
         }
-        queryCache.invalidateQueries('docs/browser')
-        queryCache.invalidateQueries(['docs/get_by_id', docId])
+        queryCache.invalidateQueries('docs/browser').then()
+        queryCache.invalidateQueries(['docs/get_by_id', docId]).then()
       }
     },
   })
   const [remove] = useMutation(deleteMutation, {
-    onSettled: (data, error, variables) => {
+    onSettled: (data) => {
       const { ok, results } = data
-      setOutput({ error: !ok, text: `[DELETED] docId: ${results.docId}` })
-      queryCache.invalidateQueries('docs/browser')
+      const message = `[DELETED] docId: ${results.docId}`
+      enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
+      queryCache.invalidateQueries('docs/browser').then()
     },
   })
   const searchBody = {
+    canFetchMore: respList.canFetchMore,
+    classes,
     data: respList.data,
     fetchMore: respList.fetchMore,
-    canFetchMore: respList.canFetchMore,
+    isFetching: respList.isFetching || respDoc.isFetching,
     isFetchingMore: respList.isFetchingMore,
     isLoading: respList.isLoading,
-    isFetching: respList.isFetching || respDoc.isFetching,
     refetch: respList.refetch,
     refetchLine: respDoc.refetch,
-    setOutput,
     remove,
+    setText,
+    text,
+  }
+  const displayBody = {
+    classes,
+    docId,
+    mutate,
   }
   return (
     <Page
       className={classes.root}
       title="Browser"
     >
-      <Box p={3} pb={2}>
-        <Header/>
-      </Box>
+      {
+        matches &&
+        < Box p={3} pb={2}>
+          <Header/>
+        </Box>
+      }
       <div className={classes.content}>
         <div className={classes.innerFirst}>
           <Grid container spacing={2}>
@@ -246,9 +290,6 @@ const BrowserView = () => {
               (!docId || matches) &&
               <Grid className={classes.gridItem} item sm={5} xs={12}>
                 <SearchComponent
-                  classes={classes}
-                  setText={setText}
-                  text={text}
                   {...searchBody}
                 />
               </Grid>
@@ -257,11 +298,7 @@ const BrowserView = () => {
               (docId || matches) &&
               <Grid className={classes.gridItem} item sm={7} xs={12}>
                 <DisplayComponent
-                  classes={classes}
-                  docId={docId}
-                  mutate={mutate}
-                  output={output}
-                  setOutput={setOutput}
+                  {...displayBody}
                 />
               </Grid>
             }

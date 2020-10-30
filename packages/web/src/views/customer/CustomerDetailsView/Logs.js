@@ -18,7 +18,7 @@ import {
 import axios from 'src/utils/axios'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
 import Label from 'src/components/Label'
-
+import log from '@adapter/common/src/log'
 const useStyles = makeStyles(() => ({
   root: {},
   methodCell: {
@@ -42,7 +42,7 @@ const Logs = ({ className, ...rest }) => {
         setLogs(response.data.logs);
       }
     } catch (err) {
-    
+      log.error(err)
     }
   }, [isMountedRef]);
 

@@ -14,7 +14,7 @@ import Page from 'src/components/Page';
 import PostAdd from 'src/components/PostAdd';
 import PostCard from 'src/components/PostCard';
 import Header from './Header';
-
+import log from '@adapter/common/src/log'
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -37,7 +37,7 @@ const SocialFeedView = () => {
         setPosts(response.data.posts);
       }
     } catch (err) {
-    
+      log.error(err)
     }
   }, [isMountedRef]);
 

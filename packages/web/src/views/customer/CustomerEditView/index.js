@@ -5,6 +5,7 @@ import Page from 'src/components/Page'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
 import CustomerEditForm from './CustomerEditForm'
 import Header from './Header'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,48 +14,48 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
-}));
+}))
 
 const CustomerEditView = () => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [customer, setCustomer] = useState(null);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [customer, setCustomer] = useState(null)
+  
   const getCustomer = useCallback(async () => {
     try {
-      const response = await axios.get('/api/customers/1');
-    
+      const response = await axios.get('/api/customers/1')
+      
       if (isMountedRef.current) {
-        setCustomer(response.data.customer);
+        setCustomer(response.data.customer)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getCustomer();
-  }, [getCustomer]);
-
+    getCustomer().then()
+  }, [getCustomer])
+  
   if (!customer) {
-    return null;
+    return null
   }
-
+  
   return (
     <Page
       className={classes.root}
       title="Customer Edit"
     >
       <Container maxWidth={false}>
-        <Header />
+        <Header/>
       </Container>
       <Box mt={3}>
         <Container maxWidth="lg">
-          <CustomerEditForm customer={customer} />
+          <CustomerEditForm customer={customer}/>
         </Container>
       </Box>
     </Page>
-  );
-};
+  )
+}
 
-export default CustomerEditView;
+export default CustomerEditView

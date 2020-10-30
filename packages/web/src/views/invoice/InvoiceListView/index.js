@@ -1,18 +1,11 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
-import {
-  Box,
-  Container,
-  makeStyles,
-} from '@material-ui/core';
-import axios from 'src/utils/axios';
-import Page from 'src/components/Page';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import Header from './Header';
-import Results from './Results';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Box, Container, makeStyles } from '@material-ui/core'
+import axios from 'src/utils/axios'
+import Page from 'src/components/Page'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import Header from './Header'
+import Results from './Results'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,42 +14,42 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: 100,
   },
-}));
+}))
 
 const InvoiceListView = () => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [invoices, setInvoices] = useState([]);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [invoices, setInvoices] = useState([])
+  
   const getInvoices = useCallback(async () => {
     try {
-      const response = await axios.get('/api/invoices');
-
+      const response = await axios.get('/api/invoices')
+      
       if (isMountedRef.current) {
-        setInvoices(response.data.invoices);
+        setInvoices(response.data.invoices)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getInvoices();
-  }, [getInvoices]);
-
+    getInvoices().then()
+  }, [getInvoices])
+  
   return (
     <Page
       className={classes.root}
       title="Invoice List"
     >
       <Container maxWidth={false}>
-        <Header />
+        <Header/>
         <Box mt={3}>
-          <Results invoices={invoices} />
+          <Results invoices={invoices}/>
         </Box>
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default InvoiceListView;
+export default InvoiceListView

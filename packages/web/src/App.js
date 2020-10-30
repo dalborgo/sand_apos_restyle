@@ -4,7 +4,6 @@ import { createBrowserHistory } from 'history'
 import { create } from 'jss'
 import rtl from 'jss-rtl'
 import MomentUtils from '@date-io/moment'
-import { SnackbarProvider } from 'notistack'
 import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/core'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import GlobalStyles from 'src/components/GlobalStyles'
@@ -21,6 +20,7 @@ import { createTheme } from 'src/theme'
 import routes, { renderRoutes } from 'src/routes'
 import { ReactQueryDevtools } from 'react-query-devtools'
 import { REACT_QUERY_DEV_TOOLS } from 'src/constants'
+import SnackMyProvider from 'src/components/Snack/SnackComponents'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -47,10 +47,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <StylesProvider jss={jss}>
         <MuiPickersUtilsProvider utils={MomentUtils}>
-          <SnackbarProvider
-            dense
-            maxSnack={3}
-          >
+          <SnackMyProvider>
             <Router history={history}>
               <AuthProvider>
                 <GlobalStyles/>
@@ -68,7 +65,7 @@ const App = () => {
                 </IntlProvider>
               </AuthProvider>
             </Router>
-          </SnackbarProvider>
+          </SnackMyProvider>
         </MuiPickersUtilsProvider>
       </StylesProvider>
     </ThemeProvider>

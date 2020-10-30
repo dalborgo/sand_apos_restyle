@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     width: 380,
   },
-}));
+}))
 
 const MessageItem = ({
   className,
@@ -30,24 +30,27 @@ const MessageItem = ({
   thread,
   ...rest
 }) => {
-  const classes = useStyles();
-  const { user } = useAuth();
-  const [selectedImage, setSelectedImage] = useState(null);
-
+  const classes = useStyles()
+  const { user } = useAuth()
+  const [selectedImage, setSelectedImage] = useState(null)
+  
   // Since chat mock db is not synced with external auth providers
   // we set the user details from user auth state instead of thread participants
-  const sender = thread.participants.find((_participant) => _participant.id === message.senderId);
+  const sender = thread.participants.find((_participant) => _participant.id === message.senderId)
   const senderDetails = message.senderId === '5e86809283e28b96d2d38537'
-    ? {
+    ?
+    {
       avatar: user.avatar,
       name: 'Me',
       type: 'user',
-    } : {
+    }
+    :
+    {
       avatar: sender.avatar,
       name: sender.name,
       type: 'contact',
-    };
-
+    }
+  
   return (
     <div
       className={clsx(classes.root, className)}
@@ -81,25 +84,28 @@ const MessageItem = ({
             </Link>
             <Box mt={1}>
               {
-                message.contentType === 'image' ? (
-                  <Box
-                    mt={2}
-                    onClick={() => setSelectedImage(message.body)}
-                  >
-                    <img
-                      alt="Attachment"
-                      className={classes.image}
-                      src={message.body}
-                    />
-                  </Box>
-                ) : (
-                  <Typography
-                    color="inherit"
-                    variant="body1"
-                  >
-                    {message.body}
-                  </Typography>
-                )
+                message.contentType === 'image' ?
+                  (
+                    <Box
+                      mt={2}
+                      onClick={() => setSelectedImage(message.body)}
+                    >
+                      <img
+                        alt="Attachment"
+                        className={classes.image}
+                        src={message.body}
+                      />
+                    </Box>
+                  )
+                  :
+                  (
+                    <Typography
+                      color="inherit"
+                      variant="body1"
+                    >
+                      {message.body}
+                    </Typography>
+                  )
               }
             </Box>
           </Box>
@@ -127,13 +133,13 @@ const MessageItem = ({
         )
       }
     </div>
-  );
-};
+  )
+}
 
 MessageItem.propTypes = {
   className: PropTypes.string,
   message: PropTypes.object.isRequired,
   thread: PropTypes.object.isRequired,
-};
+}
 
-export default MessageItem;
+export default MessageItem

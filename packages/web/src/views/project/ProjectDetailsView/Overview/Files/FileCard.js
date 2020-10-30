@@ -1,33 +1,30 @@
-import React, {
-  useRef,
-  useState,
-} from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import React, { useRef, useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
 import {
   Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  colors,
   Divider,
   IconButton,
   ListItemIcon,
   ListItemText,
+  makeStyles,
   Menu,
   MenuItem,
   Tooltip,
   Typography,
-  colors,
-  makeStyles,
-} from '@material-ui/core';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFileOutlined';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-import ArchiveIcon from '@material-ui/icons/ArchiveOutlined';
-import EditIcon from '@material-ui/icons/Edit';
-import bytesToSize from 'src/utils/bytesToSize';
+} from '@material-ui/core'
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFileOutlined'
+import GetAppIcon from '@material-ui/icons/GetApp'
+import MoreIcon from '@material-ui/icons/MoreVert'
+import DeleteIcon from '@material-ui/icons/DeleteOutlined'
+import ArchiveIcon from '@material-ui/icons/ArchiveOutlined'
+import EditIcon from '@material-ui/icons/Edit'
+import bytesToSize from 'src/utils/bytesToSize'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -57,37 +54,40 @@ const useStyles = makeStyles((theme) => ({
     width: 250,
     maxWidth: '100%',
   },
-}));
+}))
 
 const FileCard = ({ className, file, ...rest }) => {
-  const classes = useStyles();
-  const moreRef = useRef(null);
-  const [openMenu, setOpenMenu] = useState(false);
-
+  const classes = useStyles()
+  const moreRef = useRef(null)
+  const [openMenu, setOpenMenu] = useState(false)
+  
   const handleMenuOpen = () => {
-    setOpenMenu(true);
-  };
-
+    setOpenMenu(true)
+  }
+  
   const handleMenuClose = () => {
-    setOpenMenu(false);
-  };
-
+    setOpenMenu(false)
+  }
+  
   return (
     <Card
       className={clsx(classes.root, className)}
       {...rest}
     >
       {
-        file.mimeType.includes('image/') ? (
-          <CardMedia
-            className={classes.media}
-            image={file.url}
-          />
-        ) : (
-          <div className={classes.placeholder}>
-            <InsertDriveFileIcon className={classes.insertDriveFileIcon} />
-          </div>
-        )
+        file.mimeType.includes('image/') ? 
+          (
+            <CardMedia
+              className={classes.media}
+              image={file.url}
+            />
+          ) 
+          : 
+          (
+            <div className={classes.placeholder}>
+              <InsertDriveFileIcon className={classes.insertDriveFileIcon}/>
+            </div>
+          )
       }
       <CardContent className={classes.content}>
         <div>
@@ -112,15 +112,15 @@ const FileCard = ({ className, file, ...rest }) => {
               ref={moreRef}
               size="small"
             >
-              <MoreIcon />
+              <MoreIcon/>
             </IconButton>
           </Tooltip>
         </div>
       </CardContent>
-      <Divider />
+      <Divider/>
       <CardActions>
         <Button fullWidth>
-          <GetAppIcon className={classes.getAppIcon} />
+          <GetAppIcon className={classes.getAppIcon}/>
           Download
         </Button>
       </CardActions>
@@ -145,30 +145,30 @@ const FileCard = ({ className, file, ...rest }) => {
       >
         <MenuItem divider>
           <ListItemIcon>
-            <EditIcon />
+            <EditIcon/>
           </ListItemIcon>
-          <ListItemText primary="Rename" />
+          <ListItemText primary="Rename"/>
         </MenuItem>
         <MenuItem divider>
           <ListItemIcon>
-            <DeleteIcon />
+            <DeleteIcon/>
           </ListItemIcon>
-          <ListItemText primary="Delete" />
+          <ListItemText primary="Delete"/>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <ArchiveIcon />
+            <ArchiveIcon/>
           </ListItemIcon>
-          <ListItemText primary="Archive" />
+          <ListItemText primary="Archive"/>
         </MenuItem>
       </Menu>
     </Card>
-  );
+  )
 }
 
 FileCard.propTypes = {
   className: PropTypes.string,
   file: PropTypes.object.isRequired,
-};
+}
 
-export default FileCard;
+export default FileCard

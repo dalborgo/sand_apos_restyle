@@ -169,22 +169,28 @@ const MailItem = ({
           <Tooltip title="Starred">
             <IconButton onClick={handleStarToggle}>
               {
-                mail.isStarred ? (
-                  <StarIcon className={classes.filterActive} />
-                ) : (
-                  <StarBorderIcon />
-                )
+                mail.isStarred ? 
+                  (
+                    <StarIcon className={classes.filterActive} />
+                
+                  ) 
+                  : 
+                  (
+                    <StarBorderIcon />
+                  )
               }
             </IconButton>
           </Tooltip>
           <Tooltip title="Important">
             <IconButton onClick={handleImportantToggle}>
               {
-                mail.isImportant ? (
-                  <LabelImportantIcon className={classes.filterActive} />
-                ) : (
-                  <LabelImportantOutlinedIcon />
-                )
+                mail.isImportant ? 
+                  (
+                    <LabelImportantIcon className={classes.filterActive} />
+                  ) : 
+                  (
+                    <LabelImportantOutlinedIcon />
+                  )
               }
             </IconButton>
           </Tooltip>
@@ -277,9 +283,9 @@ const MailItem = ({
 MailItem.propTypes = {
   className: PropTypes.string,
   mail: PropTypes.object.isRequired,
+  selected: PropTypes.bool.isRequired,
   onDeselect: PropTypes.func,
   onSelect: PropTypes.func,
-  selected: PropTypes.bool.isRequired,
 };
 
 MailItem.defaultProps = {

@@ -1,11 +1,7 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import numeral from 'numeral';
+import React, { useCallback, useEffect, useState } from 'react'
+import clsx from 'clsx'
+import PropTypes from 'prop-types'
+import numeral from 'numeral'
 import {
   Avatar,
   Card,
@@ -15,12 +11,13 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Typography,
   makeStyles,
-} from '@material-ui/core';
-import GenericMoreButton from 'src/components/GenericMoreButton';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
+  Typography,
+} from '@material-ui/core'
+import GenericMoreButton from 'src/components/GenericMoreButton'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,7 +44,7 @@ const TopReferrals = ({ className, ...rest }) => {
         setReferrals(response.data.referrals);
       }
     } catch (err) {
-    
+      log.error(err)
     }
   }, [isMountedRef]);
 

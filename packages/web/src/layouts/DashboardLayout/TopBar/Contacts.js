@@ -35,27 +35,27 @@ const useStyles = makeStyles((theme) => ({
   lastActivity: {
     whiteSpace: 'nowrap',
   },
-}));
+}))
 
 const Contacts = () => {
-  const classes = useStyles();
-  const ref = useRef(null);
-  const dispatch = useDispatch();
-  const { contacts } = useSelector((state) => state.chat);
-  const [isOpen, setOpen] = useState(false);
-
+  const classes = useStyles()
+  const ref = useRef(null)
+  const dispatch = useDispatch()
+  const { contacts } = useSelector((state) => state.chat)
+  const [isOpen, setOpen] = useState(false)
+  
   const handleOpen = () => {
-    setOpen(true);
-  };
-
+    setOpen(true)
+  }
+  
   const handleClose = () => {
-    setOpen(false);
-  };
-
+    setOpen(false)
+  }
+  
   useEffect(() => {
-    dispatch(getContacts());
-  }, [dispatch]);
-
+    dispatch(getContacts())
+  }, [dispatch])
+  
   return (
     <>
       <Tooltip title="Contacts">
@@ -65,7 +65,7 @@ const Contacts = () => {
           ref={ref}
         >
           <SvgIcon fontSize="small">
-            <UsersIcon />
+            <UsersIcon/>
           </SvgIcon>
         </IconButton>
       </Tooltip>
@@ -81,7 +81,7 @@ const Contacts = () => {
         onClose={handleClose}
         open={isOpen}
       >
-
+        
         <Typography
           color="textPrimary"
           variant="h4"
@@ -92,8 +92,8 @@ const Contacts = () => {
           <List disablePadding>
             {
               contacts.allIds.map((contactId) => {
-                const contact = contacts.byId[contactId];
-
+                const contact = contacts.byId[contactId]
+                
                 return (
                   <ListItem
                     disableGutters
@@ -125,30 +125,32 @@ const Contacts = () => {
                       }
                     />
                     {
-                      contact.isActive ? (
-                        <OnlineIndicator
-                          size="small"
-                          status="online"
-                        />
-                      ) : (
-                        <Typography
-                          color="textSecondary"
-                          noWrap
-                          variant="caption"
-                        >
-                          {moment(contact.lastActivity).fromNow()}
-                        </Typography>
-                      )
+                      contact.isActive ?
+                        (
+                          <OnlineIndicator
+                            size="small"
+                            status="online"
+                          />
+                        ) :
+                        (
+                          <Typography
+                            color="textSecondary"
+                            noWrap
+                            variant="caption"
+                          >
+                            {moment(contact.lastActivity).fromNow()}
+                          </Typography>
+                        )
                     }
                   </ListItem>
-                );
+                )
               })
             }
           </List>
         </Box>
       </Popover>
     </>
-  );
-};
+  )
+}
 
-export default Contacts;
+export default Contacts

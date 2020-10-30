@@ -17,14 +17,15 @@ import {
   Typography,
 } from '@material-ui/core'
 import axios from 'src/utils/axios'
+import log from '@adapter/common/src/log'
 
 const getFilteredSearchResults = (results, recipients) => {
   const recipientIds = recipients.reduce((acc, recipient) => {
-    return [...acc, recipient.id];
-  }, []);
-
-  return results.filter((result) => !recipientIds.includes(result.id));
-};
+    return [...acc, recipient.id]
+  }, [])
+  
+  return results.filter((result) => !recipientIds.includes(result.id))
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     width: 320,
   },
-}));
+}))
 
 const ComposeHeader = ({
   className,
@@ -63,70 +64,70 @@ const ComposeHeader = ({
   recipients,
   ...rest
 }) => {
-  const classes = useStyles();
-  const containerRef = useRef(null);
-  const [query, setQuery] = useState('');
-  const [isSearchFocused, setSearchFocused] = useState(true);
-  const [searchResults, setSearchResults] = useState([]);
-
-  const filteredSearchResults = getFilteredSearchResults(searchResults, recipients);
-  const displayResults = query && isSearchFocused;
-
+  const classes = useStyles()
+  const containerRef = useRef(null)
+  const [query, setQuery] = useState('')
+  const [isSearchFocused, setSearchFocused] = useState(true)
+  const [searchResults, setSearchResults] = useState([])
+  
+  const filteredSearchResults = getFilteredSearchResults(searchResults, recipients)
+  const displayResults = query && isSearchFocused
+  
   const handleSearchChange = async (event) => {
     try {
-      event.persist();
-
-      const { value } = event.target;
-  
-      setQuery(value);
-
+      event.persist()
+      
+      const { value } = event.target
+      
+      setQuery(value)
+      
       if (value) {
         const response = await axios.get('/api/chat/search', {
           params: {
             query: value,
           },
-        });
-    
-        setSearchResults(response.data.results);
+        })
+        
+        setSearchResults(response.data.results)
       } else {
-        setSearchResults([]);
+        setSearchResults([])
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  };
-
+  }
+  
   const handleSearchBlur = (event) => {
-    event.persist();
-
+    event.persist()
+    
     if (!displayResults) {
-      setSearchFocused(false);
+      setSearchFocused(false)
     }
-  };
-
+  }
+  
   const handleSearchFocus = (event) => {
-    event.persist();
-    setSearchFocused(true);
-  };
-
+    event.persist()
+    setSearchFocused(true)
+  }
+  
   const handleSearchResultsClickAway = () => {
-    setSearchFocused(false);
-  };
-
+    setSearchFocused(false)
+  }
+  
   const handleAddRecipient = (contact) => {
-    setQuery('');
-
+    setQuery('')
+    
     if (onAddRecipient) {
-      onAddRecipient(contact);
+      onAddRecipient(contact)
     }
-  };
-
+  }
+  
   const handleRemoveRecipient = (recipientId) => {
     if (onRemoveRecipient) {
-      onRemoveRecipient(recipientId);
+      onRemoveRecipient(recipientId)
     }
-  };
-
+  }
+  
   return (
     <div
       className={clsx(classes.root, className)}
@@ -174,69 +175,71 @@ const ComposeHeader = ({
             >
               <Paper className={classes.searchResults}>
                 {
-                  filteredSearchResults.length === 0 ? (
-                    <Box
-                      pb={2}
-                      pt={2}
-                      px={2}
-                      textAlign="center"
-                    >
-                      <Typography
-                        color="textPrimary"
-                        gutterBottom
-                        variant="h4"
-                      >
-                    Nothing Found
-                      </Typography>
-                      <Typography
-                        color="textSecondary"
-                        variant="body2"
-                      >
-                    We couldn&apos;t find any matches for &quot;
-                        {query}
-                    &quot;. Try checking for typos or using complete words.
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <>
+                  filteredSearchResults.length === 0 ?
+                    (
                       <Box
+                        pb={2}
                         pt={2}
                         px={2}
+                        textAlign="center"
                       >
                         <Typography
-                          color="textSecondary"
-                          variant="h6"
+                          color="textPrimary"
+                          gutterBottom
+                          variant="h4"
                         >
-                      Contacts
+                          Nothing Found
+                        </Typography>
+                        <Typography
+                          color="textSecondary"
+                          variant="body2"
+                        >
+                          We couldn&apos;t find any matches for &quot;
+                          {query}
+                          &quot;. Try checking for typos or using complete words.
                         </Typography>
                       </Box>
-                      <List>
-                        {
-                          filteredSearchResults.map((result) => (
-                            <ListItem
-                              button
-                              key={result.id}
-                              onClick={() => handleAddRecipient(result)}
-                            >
-                              <ListItemAvatar>
-                                <Avatar src={result.avatar} />
-                              </ListItemAvatar>
-                              <ListItemText
-                                primary={result.name}
-                                primaryTypographyProps={
-                                  {
-                                    color: 'textPrimary',
-                                    noWrap: true,
-                                    variant: 'h6',
+                    ) :
+                    (
+                      <>
+                        <Box
+                          pt={2}
+                          px={2}
+                        >
+                          <Typography
+                            color="textSecondary"
+                            variant="h6"
+                          >
+                            Contacts
+                          </Typography>
+                        </Box>
+                        <List>
+                          {
+                            filteredSearchResults.map((result) => (
+                              <ListItem
+                                button
+                                key={result.id}
+                                onClick={() => handleAddRecipient(result)}
+                              >
+                                <ListItemAvatar>
+                                  <Avatar src={result.avatar}/>
+                                </ListItemAvatar>
+                                <ListItemText
+                                  primary={result.name}
+                                  primaryTypographyProps={
+                                    {
+                                      color: 'textPrimary',
+                                      noWrap: true,
+                                      variant: 'h6',
+                                    }
                                   }
-                                }
-                              />
-                            </ListItem>
-                          ))
-                        }
-                      </List>
-                    </>
-                  )
+                                />
+                              </ListItem>
+                            ))
+                          }
+                        </List>
+                      </>
+                    )
                 }
               </Paper>
             </Popper>
@@ -244,20 +247,20 @@ const ComposeHeader = ({
         )
       }
     </div>
-  );
-};
+  )
+}
 
 ComposeHeader.propTypes = {
   className: PropTypes.string,
+  recipients: PropTypes.array,
   onAddRecipient: PropTypes.func,
   onRemoveRecipient: PropTypes.func,
-  recipients: PropTypes.array,
-};
+}
 
 ComposeHeader.defaultProps = {
   onAddRecipient: () => { },
   onRemoveRecipient: () => { },
   recipients: [],
-};
+}
 
-export default ComposeHeader;
+export default ComposeHeader

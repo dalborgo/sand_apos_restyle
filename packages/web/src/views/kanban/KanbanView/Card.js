@@ -1,38 +1,35 @@
-import React, {
-  forwardRef,
-  useState,
-} from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
+import React, { forwardRef, useState } from 'react'
+import clsx from 'clsx'
+import PropTypes from 'prop-types'
 import {
   Avatar,
   Box,
   Card as MuiCard,
   CardContent,
   CardMedia,
+  makeStyles,
   SvgIcon,
   Typography,
-  makeStyles,
-} from '@material-ui/core';
-import { AvatarGroup } from '@material-ui/lab';
+} from '@material-ui/core'
+import { AvatarGroup } from '@material-ui/lab'
 import {
   CheckSquare as CheckIcon,
   Eye as EyeIcon,
   File as FileIcon,
   MessageCircle as MessageIcon,
-} from 'react-feather';
-import { useSelector } from 'src/store';
-import CardEditModal from './CardEditModal';
+} from 'react-feather'
+import { useSelector } from 'src/store'
+import CardEditModal from './CardEditModal'
 
 const cardSelector = (state, cardId) => {
-  const { cards, members } = state.kanban;
-  const card = cards.byId[cardId];
-
+  const { cards, members } = state.kanban
+  const card = cards.byId[cardId]
+  
   return {
     ...card,
     members: card.memberIds.map((memberId) => members.byId[memberId]),
-  };
-};
+  }
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(2),
     },
   },
-}));
+}))
 
 const Card = forwardRef(({
   cardId,
@@ -67,18 +64,18 @@ const Card = forwardRef(({
   style,
   ...rest
 }, ref) => {
-  const classes = useStyles();
-  const card = useSelector((state) => cardSelector(state, cardId));
-  const [isOpened, setOpened] = useState(false);
-
+  const classes = useStyles()
+  const card = useSelector((state) => cardSelector(state, cardId))
+  const [isOpened, setOpened] = useState(false)
+  
   const handleOpen = () => {
-    setOpened(true);
-  };
-
+    setOpened(true)
+  }
+  
   const handleClose = () => {
-    setOpened(false);
-  };
-
+    setOpened(false)
+  }
+  
   return (
     <div
       className={clsx(classes.root, className)}
@@ -125,7 +122,7 @@ const Card = forwardRef(({
                   color="action"
                   fontSize="small"
                 >
-                  <EyeIcon />
+                  <EyeIcon/>
                 </SvgIcon>
               )
             }
@@ -136,7 +133,7 @@ const Card = forwardRef(({
                   color="action"
                   fontSize="small"
                 >
-                  <FileIcon />
+                  <FileIcon/>
                 </SvgIcon>
               )
             }
@@ -147,7 +144,7 @@ const Card = forwardRef(({
                   color="action"
                   fontSize="small"
                 >
-                  <CheckIcon />
+                  <CheckIcon/>
                 </SvgIcon>
               )
             }
@@ -158,11 +155,11 @@ const Card = forwardRef(({
                   color="action"
                   fontSize="small"
                 >
-                  <MessageIcon />
+                  <MessageIcon/>
                 </SvgIcon>
               )
             }
-            <Box flexGrow={1} />
+            <Box flexGrow={1}/>
             {
               card.members.length > 0 && (
                 <AvatarGroup max={5}>
@@ -187,8 +184,8 @@ const Card = forwardRef(({
         open={isOpened}
       />
     </div>
-  );
-});
+  )
+})
 
 Card.propTypes = {
   cardId: PropTypes.string.isRequired,
@@ -197,11 +194,11 @@ Card.propTypes = {
   index: PropTypes.number,
   list: PropTypes.object.isRequired,
   style: PropTypes.object,
-};
+}
 
 Card.defaultProps = {
   dragging: false,
   style: {},
-};
-
-export default Card;
+}
+Card.displayName = 'Card Kanban'
+export default Card

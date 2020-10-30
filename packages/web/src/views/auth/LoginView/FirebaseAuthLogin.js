@@ -6,6 +6,7 @@ import { Formik } from 'formik'
 import { Box, Button, Divider, FormHelperText, makeStyles, TextField, Typography } from '@material-ui/core'
 import useAuth from 'src/hooks/useAuth'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -21,21 +22,21 @@ const useStyles = makeStyles((theme) => ({
   dividerText: {
     margin: theme.spacing(2),
   },
-}));
+}))
 
 const FirebaseAuthLogin = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const { signInWithEmailAndPassword, signInWithGoogle } = useAuth();
-  const isMountedRef = useIsMountedRef();
-
+  const classes = useStyles()
+  const { signInWithEmailAndPassword, signInWithGoogle } = useAuth()
+  const isMountedRef = useIsMountedRef()
+  
   const handleGoogleClick = async () => {
     try {
-      await signInWithGoogle();
-    } catch(err) {
-    
+      await signInWithGoogle()
+    } catch (err) {
+      log.error(err)
     }
-  };
-
+  }
+  
   return (
     <>
       <Button
@@ -61,7 +62,7 @@ const FirebaseAuthLogin = ({ className, ...rest }) => {
           className={classes.divider}
           orientation="horizontal"
         />
-        <Typography 
+        <Typography
           className={classes.dividerText}
           color="textSecondary"
           variant="body1"
@@ -88,18 +89,18 @@ const FirebaseAuthLogin = ({ className, ...rest }) => {
             setSubmitting,
           }) => {
             try {
-              await signInWithEmailAndPassword(values.email, values.password);
-
+              await signInWithEmailAndPassword(values.email, values.password)
+              
               if (isMountedRef.current) {
-                setStatus({ success: true });
-                setSubmitting(false);
+                setStatus({ success: true })
+                setSubmitting(false)
               }
             } catch (err) {
               
               if (isMountedRef.current) {
-                setStatus({ success: false });
-                setErrors({ submit: err.message });
-                setSubmitting(false);
+                setStatus({ success: false })
+                setErrors({ submit: err.message })
+                setSubmitting(false)
               }
             }
           }
@@ -171,7 +172,7 @@ const FirebaseAuthLogin = ({ className, ...rest }) => {
                   type="submit"
                   variant="contained"
                 >
-                Log In
+                  Log In
                 </Button>
               </Box>
             </form>
@@ -179,11 +180,11 @@ const FirebaseAuthLogin = ({ className, ...rest }) => {
         }
       </Formik>
     </>
-  );
-};
+  )
+}
 
 FirebaseAuthLogin.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default FirebaseAuthLogin;
+export default FirebaseAuthLogin

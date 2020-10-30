@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useState } from 'react'
+import clsx from 'clsx'
+import PropTypes from 'prop-types'
+import { Link as RouterLink } from 'react-router-dom'
 import {
   Avatar,
   Box,
@@ -9,30 +9,25 @@ import {
   Button,
   Card,
   CardContent,
+  colors,
   Container,
   Grid,
   Link,
+  makeStyles,
   Paper,
   Step,
   StepConnector,
   StepLabel,
   Stepper,
   Typography,
-  colors,
-  makeStyles,
   withStyles,
-} from '@material-ui/core';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import {
-  User as UserIcon,
-  Star as StarIcon,
-  Briefcase as BriefcaseIcon,
-  File as FileIcon,
-} from 'react-feather';
-import Page from 'src/components/Page';
-import UserDetails from './UserDetails';
-import ProjectDetails from './ProjectDetails';
-import ProjectDescription from './ProjectDescription';
+} from '@material-ui/core'
+import NavigateNextIcon from '@material-ui/icons/NavigateNext'
+import { Briefcase as BriefcaseIcon, File as FileIcon, Star as StarIcon, User as UserIcon } from 'react-feather'
+import Page from 'src/components/Page'
+import UserDetails from './UserDetails'
+import ProjectDetails from './ProjectDetails'
+import ProjectDescription from './ProjectDescription'
 
 const steps = [
   {
@@ -47,7 +42,7 @@ const steps = [
     label: 'Project Description',
     icon: FileIcon,
   },
-];
+]
 
 const CustomStepConnector = withStyles((theme) => ({
   vertical: {
@@ -57,7 +52,7 @@ const CustomStepConnector = withStyles((theme) => ({
   line: {
     borderColor: theme.palette.divider,
   },
-}))(StepConnector);
+}))(StepConnector)
 
 const useCustomStepIconStyles = makeStyles((theme) => ({
   root: {},
@@ -70,13 +65,13 @@ const useCustomStepIconStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
   },
-}));
+}))
 
 const CustomStepIcon = ({ active, completed, icon }) => {
-  const classes = useCustomStepIconStyles();
-
-  const Icon = steps[icon - 1].icon;
-
+  const classes = useCustomStepIconStyles()
+  
+  const Icon = steps[icon - 1].icon
+  
   return (
     <Avatar
       className={
@@ -86,16 +81,16 @@ const CustomStepIcon = ({ active, completed, icon }) => {
         })
       }
     >
-      <Icon size="20" />
+      <Icon size="20"/>
     </Avatar>
-  );
-};
+  )
+}
 
 CustomStepIcon.propTypes = {
   active: PropTypes.bool,
   completed: PropTypes.bool,
   icon: PropTypes.number.isRequired,
-};
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -110,25 +105,25 @@ const useStyles = makeStyles((theme) => ({
   stepper: {
     backgroundColor: 'transparent',
   },
-}));
+}))
 
-const ProjectCreateView  = () => {
-  const classes = useStyles();
-  const [activeStep, setActiveStep] = useState(0);
-  const [completed, setCompleted] = useState(false);
-
+const ProjectCreateView = () => {
+  const classes = useStyles()
+  const [activeStep, setActiveStep] = useState(0)
+  const [completed, setCompleted] = useState(false)
+  
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
+    setActiveStep((prevActiveStep) => prevActiveStep + 1)
+  }
+  
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
+    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+  }
+  
   const handleComplete = () => {
-    setCompleted(true);
-  };
-
+    setCompleted(true)
+  }
+  
   return (
     <Page
       className={classes.root}
@@ -138,7 +133,7 @@ const ProjectCreateView  = () => {
         <Box mb={3}>
           <Breadcrumbs
             aria-label="breadcrumb"
-            separator={<NavigateNextIcon fontSize="small" />}
+            separator={<NavigateNextIcon fontSize="small"/>}
           >
             <Link
               color="inherit"
@@ -163,118 +158,121 @@ const ProjectCreateView  = () => {
           </Typography>
         </Box>
         {
-          !completed ? (
-            <Paper>
-              <Grid container>
-                <Grid
-                  item
-                  md={3}
-                  xs={12}
-                >
-                  <Stepper
-                    activeStep={activeStep}
-                    className={classes.stepper}
-                    connector={<CustomStepConnector />}
-                    orientation="vertical"
+          !completed ?
+            (
+              <Paper>
+                <Grid container>
+                  <Grid
+                    item
+                    md={3}
+                    xs={12}
                   >
-                    {
-                      steps.map((step) => (
-                        <Step key={step.label}>
-                          <StepLabel StepIconComponent={CustomStepIcon}>
-                            {step.label}
-                          </StepLabel>
-                        </Step>
-                      ))
-                    }
-                  </Stepper>
+                    <Stepper
+                      activeStep={activeStep}
+                      className={classes.stepper}
+                      connector={<CustomStepConnector/>}
+                      orientation="vertical"
+                    >
+                      {
+                        steps.map((step) => (
+                          <Step key={step.label}>
+                            <StepLabel StepIconComponent={CustomStepIcon}>
+                              {step.label}
+                            </StepLabel>
+                          </Step>
+                        ))
+                      }
+                    </Stepper>
+                  </Grid>
+                  <Grid
+                    item
+                    md={9}
+                    xs={12}
+                  >
+                    <Box p={3}>
+                      {
+                        activeStep === 0 && (
+                          <UserDetails onNext={handleNext}/>
+                        )
+                      }
+                      {
+                        activeStep === 1 && (
+                          <ProjectDetails
+                            onBack={handleBack}
+                            onNext={handleNext}
+                          />
+                        )
+                      }
+                      {
+                        activeStep === 2 && (
+                          <ProjectDescription
+                            onBack={handleBack}
+                            onComplete={handleComplete}
+                          />
+                        )
+                      }
+                    </Box>
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  md={9}
-                  xs={12}
-                >
-                  <Box p={3}>
-                    {
-                      activeStep === 0 && (
-                        <UserDetails onNext={handleNext} />
-                      )
-                    }
-                    {
-                      activeStep === 1 && (
-                        <ProjectDetails
-                          onBack={handleBack}
-                          onNext={handleNext}
-                        />
-                      )
-                    }
-                    {
-                      activeStep === 2 && (
-                        <ProjectDescription
-                          onBack={handleBack}
-                          onComplete={handleComplete}
-                        />
-                      )
-                    }
-                  </Box>
-                </Grid>
-              </Grid>
-            </Paper>
-          ) : (
-            <Card>
-              <CardContent>
-                <Box
-                  maxWidth={450}
-                  mx="auto"
-                >
+              </Paper>
+            )
+            :
+            (
+              <Card>
+                <CardContent>
                   <Box
-                    display="flex"
-                    justifyContent="center"
+                    maxWidth={450}
+                    mx="auto"
                   >
-                    <Avatar className={classes.avatar}>
-                      <StarIcon />
-                    </Avatar>
-                  </Box>
-                  <Box mt={2}>
-                    <Typography
-                      align="center"
-                      color="textPrimary"
-                      variant="h3"
+                    <Box
+                      display="flex"
+                      justifyContent="center"
                     >
-                    You are all done!
-                    </Typography>
-                  </Box>
-                  <Box mt={2}>
-                    <Typography
-                      align="center"
-                      color="textSecondary"
-                      variant="subtitle1"
+                      <Avatar className={classes.avatar}>
+                        <StarIcon/>
+                      </Avatar>
+                    </Box>
+                    <Box mt={2}>
+                      <Typography
+                        align="center"
+                        color="textPrimary"
+                        variant="h3"
+                      >
+                        You are all done!
+                      </Typography>
+                    </Box>
+                    <Box mt={2}>
+                      <Typography
+                        align="center"
+                        color="textSecondary"
+                        variant="subtitle1"
+                      >
+                        Donec ut augue sed nisi ullamcorper posuere sit amet eu mauris.
+                        Ut eget mauris scelerisque.
+                      </Typography>
+                    </Box>
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      mt={2}
                     >
-                    Donec ut augue sed nisi ullamcorper posuere sit amet eu mauris.
-                    Ut eget mauris scelerisque.
-                    </Typography>
+                      <Button
+                        color="secondary"
+                        component={RouterLink}
+                        to="/app/projects/1"
+                        variant="contained"
+                      >
+                        View your project
+                      </Button>
+                    </Box>
                   </Box>
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    mt={2}
-                  >
-                    <Button
-                      color="secondary"
-                      component={RouterLink}
-                      to="/app/projects/1"
-                      variant="contained"
-                    >
-                    View your project
-                    </Button>
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          )
+                </CardContent>
+              </Card>
+            )
         }
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default ProjectCreateView;
+export default ProjectCreateView

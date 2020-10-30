@@ -1,23 +1,13 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-} from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import ProjectCard from 'src/components/ProjectCard';
-
+import React, { useCallback, useEffect, useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { Box, Button, Grid, makeStyles, Typography } from '@material-ui/core'
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import ProjectCard from 'src/components/ProjectCard'
+import log from '@adapter/common/src/log'
 const useStyles = makeStyles((theme) => ({
   root: {},
   title: {
@@ -32,29 +22,29 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.primary.main,
     },
   },
-}));
+}))
 
 const Projects = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [projects, setProjects] = useState([]);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [projects, setProjects] = useState([])
+  
   const getProjects = useCallback(async () => {
     try {
-      const response = await axios.get('/api/projects/overview/projects');
-
+      const response = await axios.get('/api/projects/overview/projects')
+      
       if (isMountedRef.current) {
-        setProjects(response.data.projects);
+        setProjects(response.data.projects)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getProjects();
-  }, [getProjects]);
-
+    getProjects()
+  }, [getProjects])
+  
   return (
     <div
       className={clsx(classes.root, className)}
@@ -75,7 +65,7 @@ const Projects = ({ className, ...rest }) => {
         </Typography>
         <Button
           component={RouterLink}
-          endIcon={<KeyboardArrowRightIcon />}
+          endIcon={<KeyboardArrowRightIcon/>}
           to="/app/projects/browse"
         >
           See all
@@ -94,17 +84,17 @@ const Projects = ({ className, ...rest }) => {
               sm={6}
               xs={12}
             >
-              <ProjectCard project={project} />
+              <ProjectCard project={project}/>
             </Grid>
           ))
         }
       </Grid>
     </div>
-  );
-};
+  )
+}
 
 Projects.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default Projects;
+export default Projects

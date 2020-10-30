@@ -292,9 +292,9 @@ const sections = [
       },
     ],
   },
-];
+]
 
-function renderNavItems({
+function renderNavItems ({
   items,
   pathname,
   depth = 0,
@@ -308,23 +308,23 @@ function renderNavItems({
         )
       }
     </List>
-  );
+  )
 }
 
-function reduceChildRoutes({
+function reduceChildRoutes ({
   acc,
   pathname,
   item,
   depth,
 }) {
-  const key = item.title + depth;
-
+  const key = item.title + depth
+  
   if (item.items) {
     const open = matchPath(pathname, {
       path: item.href,
       exact: false,
-    });
-
+    })
+    
     acc.push(
       <NavItem
         depth={depth}
@@ -342,7 +342,7 @@ function reduceChildRoutes({
           })
         }
       </NavItem>
-    );
+    )
   } else {
     acc.push(
       <NavItem
@@ -353,10 +353,10 @@ function reduceChildRoutes({
         key={key}
         title={item.title}
       />
-    );
+    )
   }
-
-  return acc;
+  
+  return acc
 }
 
 const useStyles = makeStyles(() => ({
@@ -373,16 +373,16 @@ const useStyles = makeStyles(() => ({
     width: 64,
     height: 64,
   },
-}));
+}))
 
 const NavBar = ({ onMobileClose, openMobile }) => {
-  const classes = useStyles();
-  const location = useLocation();
-  const { user } = useAuth();
-
+  const classes = useStyles()
+  const location = useLocation()
+  const { user } = useAuth()
+  
   useEffect(() => {
     if (openMobile && onMobileClose) {
-      onMobileClose();
+      onMobileClose()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
@@ -401,7 +401,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             p={2}
           >
             <RouterLink to="/">
-              <Logo />
+              <Logo/>
             </RouterLink>
           </Box>
         </Hidden>
@@ -446,7 +446,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             </Typography>
           </Box>
         </Box>
-        <Divider />
+        <Divider/>
         <Box p={2}>
           {
             sections.map((section) => (
@@ -473,7 +473,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             ))
           }
         </Box>
-        <Divider />
+        <Divider/>
         <Box p={2}>
           <Box
             bgcolor="background.dark"
@@ -498,8 +498,8 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </Box>
       </PerfectScrollbar>
     </Box>
-  );
-
+  )
+  
   return (
     <>
       <Hidden lgUp>
@@ -524,12 +524,12 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         </Drawer>
       </Hidden>
     </>
-  );
-};
+  )
+}
 
 NavBar.propTypes = {
-  onMobileClose: PropTypes.func,
   openMobile: PropTypes.bool,
-};
+  onMobileClose: PropTypes.func,
+}
 
-export default NavBar;
+export default NavBar

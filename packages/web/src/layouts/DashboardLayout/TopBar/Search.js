@@ -24,41 +24,41 @@ const useStyles = makeStyles(() => ({
     width: 500,
     maxWidth: '100%',
   },
-}));
+}))
 
 const Search = () => {
-  const classes = useStyles();
-  const { enqueueSnackbar } = useSnackbar();
-  const [value, setValue] = useState('');
-  const [isOpen, setOpen] = useState(false);
-  const [isLoading, setLoading] = useState(false);
-  const [results, setResults] = useState([]);
-
+  const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
+  const [value, setValue] = useState('')
+  const [isOpen, setOpen] = useState(false)
+  const [isLoading, setLoading] = useState(false)
+  const [results, setResults] = useState([])
+  
   const handleOpen = () => {
-    setOpen(true);
-  };
-
+    setOpen(true)
+  }
+  
   const handleClose = () => {
-    setOpen(false);
-  };
-
+    setOpen(false)
+  }
+  
   const handleSearch = async () => {
     try {
-      setLoading(true);
-
-      const response = await axios.get('/api/search');
-
-      setResults(response.data.results);
+      setLoading(true)
+      
+      const response = await axios.get('/api/search')
+      
+      setResults(response.data.results)
     } catch (err) {
       
       enqueueSnackbar('Something went wrong', {
         variant: 'error',
-      });
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
-
+  }
+  
   return (
     <>
       <Tooltip title="Search">
@@ -67,7 +67,7 @@ const Search = () => {
           onClick={handleOpen}
         >
           <SvgIcon fontSize="small">
-            <SearchIcon />
+            <SearchIcon/>
           </SvgIcon>
         </IconButton>
       </Tooltip>
@@ -94,7 +94,7 @@ const Search = () => {
               </Typography>
               <IconButton onClick={handleClose}>
                 <SvgIcon fontSize="small">
-                  <XIcon />
+                  <XIcon/>
                 </SvgIcon>
               </IconButton>
             </Box>
@@ -109,7 +109,7 @@ const Search = () => {
                           color="action"
                           fontSize="small"
                         >
-                          <SearchIcon />
+                          <SearchIcon/>
                         </SvgIcon>
                       </InputAdornment>
                     ),
@@ -136,47 +136,50 @@ const Search = () => {
             </Box>
             <Box mt={4}>
               {
-                isLoading ? (
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                  >
-                    <CircularProgress />
-                  </Box>
-                ) : (
-                  <>
-                    {
-                      results.map((result, i) => (
-                        <Box
-                          key={i}
-                          mb={2}
-                        >
-                          <Link
-                            color="textPrimary"
-                            component={RouterLink}
-                            to="/app"
-                            variant="h4"
+                isLoading ?
+                  (
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                    >
+                      <CircularProgress/>
+                    </Box>
+                  )
+                  :
+                  (
+                    <>
+                      {
+                        results.map((result, i) => (
+                          <Box
+                            key={i}
+                            mb={2}
                           >
-                            {result.title}
-                          </Link>
-                          <Typography
-                            color="textPrimary"
-                            variant="body2"
-                          >
-                            {result.description}
-                          </Typography>
-                        </Box>
-                      ))
-                    }
-                  </>
-                )
+                            <Link
+                              color="textPrimary"
+                              component={RouterLink}
+                              to="/app"
+                              variant="h4"
+                            >
+                              {result.title}
+                            </Link>
+                            <Typography
+                              color="textPrimary"
+                              variant="body2"
+                            >
+                              {result.description}
+                            </Typography>
+                          </Box>
+                        ))
+                      }
+                    </>
+                  )
               }
             </Box>
           </Box>
         </PerfectScrollbar>
       </Drawer>
     </>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search

@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import numeral from 'numeral';
-import PropTypes from 'prop-types';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import React, { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import clsx from 'clsx'
+import numeral from 'numeral'
+import PropTypes from 'prop-types'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import {
   Box,
   Button,
   Card,
   Checkbox,
-  InputAdornment,
   FormControlLabel,
   IconButton,
+  InputAdornment,
   Link,
+  makeStyles,
   SvgIcon,
   Table,
   TableBody,
@@ -21,15 +22,14 @@ import {
   TablePagination,
   TableRow,
   TextField,
-  makeStyles,
-} from '@material-ui/core';
+} from '@material-ui/core'
 import {
-  Image as ImageIcon,
-  Edit as EditIcon,
   ArrowRight as ArrowRightIcon,
+  Edit as EditIcon,
+  Image as ImageIcon,
   Search as SearchIcon,
-} from 'react-feather';
-import Label from 'src/components/Label';
+} from 'react-feather'
+import Label from 'src/components/Label'
 
 const categoryOptions = [
   {
@@ -52,7 +52,7 @@ const categoryOptions = [
     id: 'beauty',
     name: 'Beauty',
   },
-];
+]
 
 const avalabilityOptions = [
   {
@@ -67,7 +67,7 @@ const avalabilityOptions = [
     id: 'unavailable',
     name: 'Unavailable',
   },
-];
+]
 
 const sortOptions = [
   {
@@ -86,7 +86,7 @@ const sortOptions = [
     value: 'createdAt|asc',
     label: 'Creation date (oldest first)',
   },
-];
+]
 
 const getInventoryLabel = (inventoryType) => {
   const map = {
@@ -102,54 +102,54 @@ const getInventoryLabel = (inventoryType) => {
       text: 'Out of Stock',
       color: 'error',
     },
-  };
-
-  const { text, color } = map[inventoryType];
-
+  }
+  
+  const { text, color } = map[inventoryType]
+  
   return (
     <Label color={color}>
       {text}
     </Label>
-  );
-};
+  )
+}
 
 const applyFilters = (products, query, filters) => {
   return products.filter((product) => {
-    let matches = true;
-
+    let matches = true
+    
     if (query && !product.name.toLowerCase().includes(query.toLowerCase())) {
-      matches = false;
+      matches = false
     }
-
+    
     if (filters.category && product.category !== filters.category) {
-      matches = false;
+      matches = false
     }
-
+    
     if (filters.availability) {
       if (filters.availability === 'available' && !product.isAvailable) {
-        matches = false;
+        matches = false
       }
-
+      
       if (filters.availability === 'unavailable' && product.isAvailable) {
-        matches = false;
+        matches = false
       }
     }
-
+    
     if (filters.inStock && !['in_stock', 'limited'].includes(product.inventoryType)) {
-      matches = false;
+      matches = false
     }
-
+    
     if (filters.isShippable && !product.isShippable) {
-      matches = false;
+      matches = false
     }
-
-    return matches;
-  });
-};
+    
+    return matches
+  })
+}
 
 const applyPagination = (products, page, limit) => {
-  return products.slice(page * limit, page * limit + limit);
-};
+  return products.slice(page * limit, page * limit + limit)
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -195,121 +195,121 @@ const useStyles = makeStyles((theme) => ({
     height: 68,
     width: 68,
   },
-}));
+}))
 
 const Results = ({ className, products, ...rest }) => {
-  const classes = useStyles();
-  const [selectedProducts, setSelectedProducts] = useState([]);
-  const [page, setPage] = useState(0);
-  const [limit, setLimit] = useState(10);
-  const [query, setQuery] = useState('');
-  const [sort, setSort] = useState(sortOptions[0].value);
+  const classes = useStyles()
+  const [selectedProducts, setSelectedProducts] = useState([])
+  const [page, setPage] = useState(0)
+  const [limit, setLimit] = useState(10)
+  const [query, setQuery] = useState('')
+  const [sort, setSort] = useState(sortOptions[0].value)
   const [filters, setFilters] = useState({
     category: null,
     availability: null,
     inStock: null,
     isShippable: null,
-  });
-
+  })
+  
   const handleQueryChange = (event) => {
-    event.persist();
-    setQuery(event.target.value);
-  };
-
+    event.persist()
+    setQuery(event.target.value)
+  }
+  
   const handleCategoryChange = (event) => {
-    event.persist();
-
-    let value = null;
-
+    event.persist()
+    
+    let value = null
+    
     if (event.target.value !== 'all') {
-      value = event.target.value;
+      value = event.target.value
     }
-
+    
     setFilters((prevFilters) => ({
       ...prevFilters,
       category: value,
-    }));
-  };
-
+    }))
+  }
+  
   const handleAvailabilityChange = (event) => {
-    event.persist();
-
-    let value = null;
-
+    event.persist()
+    
+    let value = null
+    
     if (event.target.value !== 'all') {
-      value = event.target.value;
+      value = event.target.value
     }
-
+    
     setFilters((prevFilters) => ({
       ...prevFilters,
       availability: value,
-    }));
-  };
-
+    }))
+  }
+  
   const handleStockChange = (event) => {
-    event.persist();
-
-    let value = null;
-
+    event.persist()
+    
+    let value = null
+    
     if (event.target.checked) {
-      value = true;
+      value = true
     }
-
+    
     setFilters((prevFilters) => ({
       ...prevFilters,
       inStock: value,
-    }));
-  };
-
+    }))
+  }
+  
   const handleShippableChange = (event) => {
-    event.persist();
-
-    let value = null;
-
+    event.persist()
+    
+    let value = null
+    
     if (event.target.checked) {
-      value = true;
+      value = true
     }
-
+    
     setFilters((prevFilters) => ({
       ...prevFilters,
       isShippable: value,
-    }));
-  };
-
+    }))
+  }
+  
   const handleSortChange = (event) => {
-    event.persist();
-    setSort(event.target.value);
-  };
-
+    event.persist()
+    setSort(event.target.value)
+  }
+  
   const handleSelectAllProducts = (event) => {
     setSelectedProducts(event.target.checked
       ? products.map((product) => product.id)
-      : []);
-  };
-
+      : [])
+  }
+  
   const handleSelectOneProduct = (event, productId) => {
     if (!selectedProducts.includes(productId)) {
-      setSelectedProducts((prevSelected) => [...prevSelected, productId]);
+      setSelectedProducts((prevSelected) => [...prevSelected, productId])
     } else {
-      setSelectedProducts((prevSelected) => prevSelected.filter((id) => id !== productId));
+      setSelectedProducts((prevSelected) => prevSelected.filter((id) => id !== productId))
     }
-  };
-
+  }
+  
   const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
-
+    setPage(newPage)
+  }
+  
   const handleLimitChange = (event) => {
-    setLimit(parseInt(event.target.value));
-  };
-
+    setLimit(parseInt(event.target.value))
+  }
+  
   // Usually query is done on backend with indexing solutions
-  const filteredProducts = applyFilters(products, query, filters);
-  const paginatedProducts = applyPagination(filteredProducts, page, limit);
-  const enableBulkOperations = selectedProducts.length > 0;
-  const selectedSomeProducts = selectedProducts.length > 0 && selectedProducts.length < products.length;
-  const selectedAllProducts = selectedProducts.length === products.length;
-
+  const filteredProducts = applyFilters(products, query, filters)
+  const paginatedProducts = applyPagination(filteredProducts, page, limit)
+  const enableBulkOperations = selectedProducts.length > 0
+  const selectedSomeProducts = selectedProducts.length > 0 && selectedProducts.length < products.length
+  const selectedAllProducts = selectedProducts.length === products.length
+  
   return (
     <Card
       className={clsx(classes.root, className)}
@@ -330,7 +330,7 @@ const Results = ({ className, products, ...rest }) => {
                       color="action"
                       fontSize="small"
                     >
-                      <SearchIcon />
+                      <SearchIcon/>
                     </SvgIcon>
                   </InputAdornment>
                 ),
@@ -341,7 +341,7 @@ const Results = ({ className, products, ...rest }) => {
             value={query}
             variant="outlined"
           />
-          <Box flexGrow={1} />
+          <Box flexGrow={1}/>
           <TextField
             label="Sort By"
             name="sort"
@@ -451,13 +451,13 @@ const Results = ({ className, products, ...rest }) => {
                 className={classes.bulkAction}
                 variant="outlined"
               >
-              Delete
+                Delete
               </Button>
               <Button
                 className={classes.bulkAction}
                 variant="outlined"
               >
-              Edit
+                Edit
               </Button>
             </div>
           </div>
@@ -475,7 +475,7 @@ const Results = ({ className, products, ...rest }) => {
                     onChange={handleSelectAllProducts}
                   />
                 </TableCell>
-                <TableCell />
+                <TableCell/>
                 <TableCell>
                   Name
                 </TableCell>
@@ -499,8 +499,8 @@ const Results = ({ className, products, ...rest }) => {
             <TableBody>
               {
                 paginatedProducts.map((product) => {
-                  const isProductSelected = selectedProducts.includes(product.id);
-
+                  const isProductSelected = selectedProducts.includes(product.id)
+                  
                   return (
                     <TableRow
                       hover
@@ -516,22 +516,25 @@ const Results = ({ className, products, ...rest }) => {
                       </TableCell>
                       <TableCell className={classes.imageCell}>
                         {
-                          product.image ? (
-                            <img
-                              alt="Product"
-                              className={classes.image}
-                              src={product.image}
-                            />
-                          ) : (
-                            <Box
-                              bgcolor="background.dark"
-                              p={2}
-                            >
-                              <SvgIcon>
-                                <ImageIcon />
-                              </SvgIcon>
-                            </Box>
-                          )
+                          product.image ?
+                            (
+                              <img
+                                alt="Product"
+                                className={classes.image}
+                                src={product.image}
+                              />
+                            )
+                            :
+                            (
+                              <Box
+                                bgcolor="background.dark"
+                                p={2}
+                              >
+                                <SvgIcon>
+                                  <ImageIcon/>
+                                </SvgIcon>
+                              </Box>
+                            )
                         }
                       </TableCell>
                       <TableCell>
@@ -551,7 +554,7 @@ const Results = ({ className, products, ...rest }) => {
                       <TableCell>
                         {product.quantity}
                         {' '}
-                      in stock
+                        in stock
                         {product.variants > 1 && ` in ${product.variants} variants`}
                       </TableCell>
                       <TableCell>
@@ -563,17 +566,17 @@ const Results = ({ className, products, ...rest }) => {
                       <TableCell align="right">
                         <IconButton>
                           <SvgIcon fontSize="small">
-                            <EditIcon />
+                            <EditIcon/>
                           </SvgIcon>
                         </IconButton>
                         <IconButton>
                           <SvgIcon fontSize="small">
-                            <ArrowRightIcon />
+                            <ArrowRightIcon/>
                           </SvgIcon>
                         </IconButton>
                       </TableCell>
                     </TableRow>
-                  );
+                  )
                 })
               }
             </TableBody>
@@ -590,16 +593,16 @@ const Results = ({ className, products, ...rest }) => {
         </Box>
       </PerfectScrollbar>
     </Card>
-  );
-};
+  )
+}
 
 Results.propTypes = {
   className: PropTypes.string,
   products: PropTypes.array.isRequired,
-};
+}
 
 Results.defaultProps = {
   products: [],
-};
+}
 
-export default Results;
+export default Results

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import { Box, Breadcrumbs, Container, Link, makeStyles, Paper, Typography, } from '@material-ui/core'
+import { Box, Breadcrumbs, Container, Link, makeStyles, Paper, Typography } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import Page from 'src/components/Page'
 import QuillEditor from 'src/components/QuillEditor'

@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { useSnackbar } from 'notistack';
-import {
-  Box,
-  Button,
-  makeStyles,
-  TextField,
-} from '@material-ui/core';
-import { useDispatch } from 'src/store';
-import { addCheckItem } from 'src/slices/kanban';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { useSnackbar } from 'notistack'
+import { Box, Button, makeStyles, TextField } from '@material-ui/core'
+import { useDispatch } from 'src/store'
+import { addCheckItem } from 'src/slices/kanban'
 
 const useStyles = makeStyles(() => ({
   root: {},
-}));
+}))
 
 const CheckItemAdd = ({
   card,
@@ -21,96 +16,99 @@ const CheckItemAdd = ({
   className,
   ...rest
 }) => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
-  const [name, setName] = useState('');
-  const [isExpanded, setExpanded] = useState(false);
-
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
+  const [name, setName] = useState('')
+  const [isExpanded, setExpanded] = useState(false)
+  
   const handleAdd = () => {
-    setExpanded(true);
-  };
-
+    setExpanded(true)
+  }
+  
   const handleCancel = () => {
-    setExpanded(false);
-    setName('');
-  };
-
+    setExpanded(false)
+    setName('')
+  }
+  
   const handleChange = (event) => {
-    event.persist();
-    setName(event.target.value);
-  };
-
+    event.persist()
+    setName(event.target.value)
+  }
+  
   const handleSave = async () => {
     try {
       if (!name) {
-        return;
+        return
       }
-
-      await dispatch(addCheckItem(card.id, checklist.id, name));
-      setExpanded(false);
-      setName('');
+      
+      await dispatch(addCheckItem(card.id, checklist.id, name))
+      setExpanded(false)
+      setName('')
       enqueueSnackbar('Check item added', {
         variant: 'success',
-      });
+      })
     } catch (err) {
       
       enqueueSnackbar('Something went wrong', {
         variant: 'error',
-      });
+      })
     }
-  };
-
+  }
+  
   return (
     <div
       className={clsx(classes.root, className)}
       {...rest}
     >
       {
-        isExpanded ? (
-          <div>
-            <TextField
-              fullWidth
-              onChange={handleChange}
-              placeholder="Add an item"
-              value={name}
+        isExpanded ?
+          (
+            <div>
+              <TextField
+                fullWidth
+                onChange={handleChange}
+                placeholder="Add an item"
+                value={name}
+                variant="outlined"
+              />
+              <Box mt={1}>
+                <Button
+                  color="primary"
+                  onClick={handleSave}
+                  size="small"
+                  variant="contained"
+                >
+                  Save
+                </Button>
+                <Button
+                  onClick={handleCancel}
+                  size="small"
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </div>
+          )
+          :
+          (
+            <Button
+              onClick={handleAdd}
+              size="small"
               variant="outlined"
-            />
-            <Box mt={1}>
-              <Button
-                color="primary"
-                onClick={handleSave}
-                size="small"
-                variant="contained"
-              >
-              Save
-              </Button>
-              <Button
-                onClick={handleCancel}
-                size="small"
-              >
-              Cancel
-              </Button>
-            </Box>
-          </div>
-        ) : (
-          <Button
-            onClick={handleAdd}
-            size="small"
-            variant="outlined"
-          >
-          Add an item
-          </Button>
-        )
+            >
+              Add an item
+            </Button>
+          )
       }
     </div>
-  );
-};
+  )
+}
 
 CheckItemAdd.propTypes = {
   card: PropTypes.object.isRequired,
   checklist: PropTypes.object.isRequired,
   className: PropTypes.string,
-};
+}
 
-export default CheckItemAdd;
+export default CheckItemAdd

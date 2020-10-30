@@ -15,26 +15,30 @@ import Settings from './Settings'
 const useStyles = makeStyles((theme) => ({
   root: {
     zIndex: theme.zIndex.drawer + 100,
-    ...theme.name === THEMES.LIGHT ? {
-      boxShadow: 'none',
-      backgroundColor: theme.palette.primary.main,
-    } : {},
-    ...theme.name === THEMES.ONE_DARK ? {
-      backgroundColor: theme.palette.background.default,
-    } : {},
+    ...theme.name === THEMES.LIGHT ?
+      {
+        boxShadow: 'none',
+        backgroundColor: theme.palette.primary.main,
+      }
+      : {},
+    ...theme.name === THEMES.ONE_DARK ?
+      {
+        backgroundColor: theme.palette.background.default,
+      }
+      : {},
   },
   toolbar: {
     minHeight: 64,
   },
-}));
+}))
 
 const TopBar = ({
   className,
   onMobileNavOpen,
   ...rest
 }) => {
-  const classes = useStyles();
-
+  const classes = useStyles()
+  
   return (
     <AppBar
       className={clsx(classes.root, className)}
@@ -47,38 +51,38 @@ const TopBar = ({
             onClick={onMobileNavOpen}
           >
             <SvgIcon fontSize="small">
-              <MenuIcon />
+              <MenuIcon/>
             </SvgIcon>
           </IconButton>
         </Hidden>
         <Hidden mdDown>
           <RouterLink to="/">
-            <Logo />
+            <Logo/>
           </RouterLink>
         </Hidden>
         <Box
           flexGrow={1}
           ml={2}
         />
-        <Search />
-        <Contacts />
-        <Notifications />
-        <Settings />
+        <Search/>
+        <Contacts/>
+        <Notifications/>
+        <Settings/>
         <Box ml={2}>
-          <Account />
+          <Account/>
         </Box>
       </Toolbar>
     </AppBar>
-  );
-};
+  )
+}
 
 TopBar.propTypes = {
   className: PropTypes.string,
   onMobileNavOpen: PropTypes.func,
-};
+}
 
 TopBar.defaultProps = {
   onMobileNavOpen: () => {},
-};
+}
 
-export default TopBar;
+export default TopBar

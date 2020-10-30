@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core'
 import useAuth from 'src/hooks/useAuth'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
-
+import log from '@adapter/common/src/log'
 const useStyles = makeStyles((theme) => ({
   root: {},
   googleButton: {
@@ -31,21 +31,21 @@ const useStyles = makeStyles((theme) => ({
   dividerText: {
     margin: theme.spacing(2),
   },
-}));
+}))
 
 const FirebaseAuthRegister = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const { createUserWithEmailAndPassword, signInWithGoogle } = useAuth();
-  const isMountedRef = useIsMountedRef();
-
+  const classes = useStyles()
+  const { createUserWithEmailAndPassword, signInWithGoogle } = useAuth()
+  const isMountedRef = useIsMountedRef()
+  
   const handleGoogleClick = async () => {
     try {
-      await signInWithGoogle();
-    } catch(err) {
-    
+      await signInWithGoogle()
+    } catch (err) {
+      log.error(err)
     }
-  };
-
+  }
+  
   return (
     <>
       <Button
@@ -71,7 +71,7 @@ const FirebaseAuthRegister = ({ className, ...rest }) => {
           className={classes.divider}
           orientation="horizontal"
         />
-        <Typography 
+        <Typography
           className={classes.dividerText}
           color="textSecondary"
           variant="body1"
@@ -99,18 +99,18 @@ const FirebaseAuthRegister = ({ className, ...rest }) => {
             setSubmitting,
           }) => {
             try {
-              await createUserWithEmailAndPassword(values.email, values.password);
-
+              await createUserWithEmailAndPassword(values.email, values.password)
+              
               if (isMountedRef.current) {
-                setStatus({ success: true });
-                setSubmitting(false);
+                setStatus({ success: true })
+                setSubmitting(false)
               }
             } catch (err) {
               
               if (isMountedRef.current) {
-                setStatus({ success: false });
-                setErrors({ submit: err.message });
-                setSubmitting(false);
+                setStatus({ success: false })
+                setErrors({ submit: err.message })
+                setSubmitting(false)
               }
             }
           }
@@ -180,14 +180,14 @@ const FirebaseAuthRegister = ({ className, ...rest }) => {
                   color="textSecondary"
                   variant="body2"
                 >
-                I have read the
+                  I have read the
                   {' '}
                   <Link
                     color="secondary"
                     component="a"
                     href="#"
                   >
-                  Terms and Conditions
+                    Terms and Conditions
                   </Link>
                 </Typography>
               </Box>
@@ -216,7 +216,7 @@ const FirebaseAuthRegister = ({ className, ...rest }) => {
                   type="submit"
                   variant="contained"
                 >
-                Register
+                  Register
                 </Button>
               </Box>
             </form>
@@ -224,11 +224,11 @@ const FirebaseAuthRegister = ({ className, ...rest }) => {
         }
       </Formik>
     </>
-  );
-};
+  )
+}
 
 FirebaseAuthRegister.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default FirebaseAuthRegister;
+export default FirebaseAuthRegister

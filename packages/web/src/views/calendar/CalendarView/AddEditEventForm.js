@@ -22,6 +22,7 @@ import { DateTimePicker } from '@material-ui/pickers'
 import { Trash as TrashIcon } from 'react-feather'
 import { useDispatch } from 'src/store'
 import { createEvent, deleteEvent, updateEvent } from 'src/slices/calendar'
+import log from '@adapter/common/src/log'
 
 const getInitialValues = (event, range) => {
   if (event) {
@@ -33,9 +34,9 @@ const getInitialValues = (event, range) => {
       start: moment().toDate(),
       title: '',
       submit: null,
-    }, event);
+    }, event)
   }
-
+  
   if (range) {
     return _.merge({}, {
       allDay: false,
@@ -45,9 +46,9 @@ const getInitialValues = (event, range) => {
       start: new Date(range.start),
       title: '',
       submit: null,
-    }, event);
+    }, event)
   }
-
+  
   return {
     allDay: false,
     color: '',
@@ -56,15 +57,15 @@ const getInitialValues = (event, range) => {
     start: moment().toDate(),
     title: '',
     submit: null,
-  };
-};
+  }
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   confirmButton: {
     marginLeft: theme.spacing(2),
   },
-}));
+}))
 
 const AddEditEventForm = ({
   event,
@@ -74,21 +75,21 @@ const AddEditEventForm = ({
   onEditComplete,
   range,
 }) => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
-
-  const isCreating = !event;
-
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const { enqueueSnackbar } = useSnackbar()
+  
+  const isCreating = !event
+  
   const handleDelete = async () => {
     try {
-      await dispatch(deleteEvent(event.id));
-      onDeleteComplete();
+      await dispatch(deleteEvent(event.id))
+      onDeleteComplete()
     } catch (err) {
-    
+      log.error(err)
     }
-  };
-
+  }
+  
   return (
     <Formik
       initialValues={getInitialValues(event, range)}
@@ -106,31 +107,31 @@ const AddEditEventForm = ({
               end: values.end,
               start: values.start,
               title: values.title,
-            };
-
-            if (event) {
-              await dispatch(updateEvent(event.id, data));
-            } else {
-              await dispatch(createEvent(data));
             }
-
-            resetForm();
-            setStatus({ success: true });
-            setSubmitting(false);
+            
+            if (event) {
+              await dispatch(updateEvent(event.id, data))
+            } else {
+              await dispatch(createEvent(data))
+            }
+            
+            resetForm()
+            setStatus({ success: true })
+            setSubmitting(false)
             enqueueSnackbar('Calendar updated', {
               variant: 'success',
-            });
-
+            })
+            
             if (isCreating) {
-              onAddComplete();
+              onAddComplete()
             } else {
-              onEditComplete();
+              onEditComplete()
             }
           } catch (err) {
             
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
-            setSubmitting(false);
+            setStatus({ success: false })
+            setErrors({ submit: err.message })
+            setSubmitting(false)
           }
         }
       }
@@ -242,7 +243,7 @@ const AddEditEventForm = ({
                 )
               }
             </Box>
-            <Divider />
+            <Divider/>
             <Box
               alignItems="center"
               display="flex"
@@ -252,14 +253,14 @@ const AddEditEventForm = ({
                 !isCreating && (
                   <IconButton onClick={() => handleDelete()}>
                     <SvgIcon>
-                      <TrashIcon />
+                      <TrashIcon/>
                     </SvgIcon>
                   </IconButton>
                 )
               }
-              <Box flexGrow={1} />
+              <Box flexGrow={1}/>
               <Button onClick={onCancel}>
-              Cancel
+                Cancel
               </Button>
               <Button
                 className={classes.confirmButton}
@@ -268,30 +269,30 @@ const AddEditEventForm = ({
                 type="submit"
                 variant="contained"
               >
-              Confirm
+                Confirm
               </Button>
             </Box>
           </form>
         )
       }
     </Formik>
-  );
-};
+  )
+}
 
 AddEditEventForm.propTypes = {
   event: PropTypes.object,
+  range: PropTypes.object,
   onAddComplete: PropTypes.func,
   onCancel: PropTypes.func,
   onDeleteComplete: PropTypes.func,
   onEditComplete: PropTypes.func,
-  range: PropTypes.object,
-};
+}
 
 AddEditEventForm.defaultProps = {
   onAddComplete: () => { },
   onCancel: () => { },
   onDeleteComplete: () => { },
   onEditComplete: () => { },
-};
+}
 
-export default AddEditEventForm;
+export default AddEditEventForm

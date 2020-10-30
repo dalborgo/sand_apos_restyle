@@ -80,8 +80,8 @@ const Comment = ({
 };
 
 Comment.propTypes = {
-  comment: PropTypes.object.isRequired,
   className: PropTypes.string,
+  comment: PropTypes.object.isRequired,
 };
 
 export default Comment;

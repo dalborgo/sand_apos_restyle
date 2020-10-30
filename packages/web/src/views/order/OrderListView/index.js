@@ -1,18 +1,11 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import {
-  Box,
-  Container,
-  makeStyles,
-} from '@material-ui/core';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import Page from 'src/components/Page';
-import Header from './Header';
-import Results from './Results';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Box, Container, makeStyles } from '@material-ui/core'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import Page from 'src/components/Page'
+import Header from './Header'
+import Results from './Results'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,42 +14,42 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
-}));
+}))
 
 const OrderListView = () => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [orders, setOrders] = useState([]);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [orders, setOrders] = useState([])
+  
   const getOrders = useCallback(async () => {
     try {
-      const response = await axios.get('/api/orders');
-
+      const response = await axios.get('/api/orders')
+      
       if (isMountedRef.current) {
-        setOrders(response.data.orders);
+        setOrders(response.data.orders)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getOrders();
-  }, [getOrders]);
-
+    getOrders().then()
+  }, [getOrders])
+  
   return (
     <Page
       className={classes.root}
       title="Orders List"
     >
       <Container maxWidth={false}>
-        <Header />
+        <Header/>
         <Box mt={3}>
-          <Results orders={orders} />
+          <Results orders={orders}/>
         </Box>
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default OrderListView;
+export default OrderListView

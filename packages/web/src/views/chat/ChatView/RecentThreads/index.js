@@ -6,60 +6,60 @@ import { makeStyles } from '@material-ui/core'
 import axios from 'src/utils/axios'
 import Search from './Search'
 import ThreadList from './ThreadList'
-
+import log from '@adapter/common/src/log'
 const useStyles = makeStyles(() => ({
   hideThreadList: {
     display: 'none',
   },
-}));
+}))
 
 const RecentThreads = () => {
-  const classes = useStyles();
-  const history = useHistory();
-  const [isSearchFocused, setSearchFocused] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-
+  const classes = useStyles()
+  const history = useHistory()
+  const [isSearchFocused, setSearchFocused] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState([])
+  
   const handleSearchClickAway = () => {
-    setSearchFocused(false);
-    setSearchQuery('');
-  };
-
+    setSearchFocused(false)
+    setSearchQuery('')
+  }
+  
   const handleSearchChange = async (event) => {
     try {
-      event.persist();
-
-      const { value } = event.target;
-
-      setSearchQuery(value);
-
+      event.persist()
+      
+      const { value } = event.target
+      
+      setSearchQuery(value)
+      
       if (value) {
         const response = await axios.get('/api/chat/search', {
           params: {
             query: value,
           },
-        });
-
-        setSearchResults(response.data.results);
+        })
+        
+        setSearchResults(response.data.results)
       } else {
-        setSearchResults([]);
+        setSearchResults([])
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  };
-
+  }
+  
   const handleSearchFocus = (event) => {
-    event.persist();
-    setSearchFocused(true);
-  };
-
+    event.persist()
+    setSearchFocused(true)
+  }
+  
   const handleSearchSelect = (result) => {
-    setSearchFocused(false);
-    setSearchQuery('');
-    history.push(`/app/chat/${result.username}`);
-  };
-
+    setSearchFocused(false)
+    setSearchQuery('')
+    history.push(`/app/chat/${result.username}`)
+  }
+  
   return (
     <PerfectScrollbar options={{ suppressScrollX: true }}>
       <Search
@@ -71,9 +71,9 @@ const RecentThreads = () => {
         query={searchQuery}
         results={searchResults}
       />
-      <ThreadList className={clsx({ [classes.hideThreadList]: isSearchFocused })} />
+      <ThreadList className={clsx({ [classes.hideThreadList]: isSearchFocused })}/>
     </PerfectScrollbar>
-  );
-};
+  )
+}
 
-export default RecentThreads;
+export default RecentThreads

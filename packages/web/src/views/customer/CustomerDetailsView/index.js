@@ -7,6 +7,7 @@ import Header from './Header'
 import Details from './Details'
 import Invoices from './Invoices'
 import Logs from './Logs'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,51 +16,51 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
-}));
+}))
 
 const CustomerDetailsView = () => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [customer, setCustomer] = useState(null);
-  const [currentTab, setCurrentTab] = useState('details');
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [customer, setCustomer] = useState(null)
+  const [currentTab, setCurrentTab] = useState('details')
+  
   const tabs = [
     { value: 'details', label: 'Details' },
     { value: 'invoices', label: 'Invoices' },
     { value: 'logs', label: 'Logs' },
-  ];
-
+  ]
+  
   const handleTabsChange = (event, value) => {
-    setCurrentTab(value);
-  };
-
+    setCurrentTab(value)
+  }
+  
   const getCustomer = useCallback(async () => {
     try {
-      const response = await axios.get('/api/customers/1');
-
+      const response = await axios.get('/api/customers/1')
+      
       if (isMountedRef.current) {
-        setCustomer(response.data.customer);
+        setCustomer(response.data.customer)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getCustomer();
-  }, [getCustomer]);
-
+    getCustomer()
+  }, [getCustomer])
+  
   if (!customer) {
-    return null;
+    return null
   }
-
+  
   return (
     <Page
       className={classes.root}
       title="Customer Details"
     >
       <Container maxWidth={false}>
-        <Header customer={customer} />
+        <Header customer={customer}/>
         <Box mt={3}>
           <Tabs
             onChange={handleTabsChange}
@@ -79,15 +80,15 @@ const CustomerDetailsView = () => {
             }
           </Tabs>
         </Box>
-        <Divider />
+        <Divider/>
         <Box mt={3}>
-          {currentTab === 'details' && <Details customer={customer} />}
-          {currentTab === 'invoices' && <Invoices />}
-          {currentTab === 'logs' && <Logs />}
+          {currentTab === 'details' && <Details customer={customer}/>}
+          {currentTab === 'invoices' && <Invoices/>}
+          {currentTab === 'logs' && <Logs/>}
         </Box>
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default CustomerDetailsView;
+export default CustomerDetailsView

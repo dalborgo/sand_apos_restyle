@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine, setOutput }) => {
+const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => {
   console.log('%cRENDER_SEARCH', 'color: cyan')
   const classes = useStyles()
   const history = useHistory()
@@ -47,7 +47,6 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine, setOu
                           if (text) {
                             history.push('/app/reports/browser')
                             setText('')
-                            setOutput('')
                             const elem = document.getElementById('browserDisplayArea')
                             if(elem){
                               elem.value=''
@@ -88,7 +87,6 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine, setOu
                   if (filter !== text) {
                     history.push('/app/reports/browser')
                     setText(filter)
-                    setOutput('')
                     const elem = document.getElementById('browserDisplayArea')
                     if(elem){
                       elem.value = ''

@@ -30,6 +30,7 @@ import axios from 'src/utils/axios';
 import getInitials from 'src/utils/getInitials';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import GenericMoreButton from 'src/components/GenericMoreButton';
+import log from '@adapter/common/src/log'
 
 const technologyMap = {
   'html-css': '/static/images/technologies/html.svg',
@@ -63,7 +64,7 @@ const LatestProjects = ({ className, ...rest }) => {
         setProjects(response.data.projects);
       }
     } catch (err) {
-    
+      log.error(err)
     }
   }, [isMountedRef]);
 

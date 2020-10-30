@@ -127,8 +127,8 @@ const ThreadItem = ({
 ThreadItem.propTypes = {
   active: PropTypes.bool,
   className: PropTypes.string,
-  onSelect: PropTypes.func,
   thread: PropTypes.object.isRequired,
+  onSelect: PropTypes.func,
 };
 
 ThreadItem.defaultProps = {

@@ -1,6 +1,6 @@
 import React from 'react'
 import Chart from 'react-apexcharts'
-import { Card, CardContent, Typography, useTheme, } from '@material-ui/core'
+import { Card, CardContent, Typography, useTheme } from '@material-ui/core'
 
 const RadialChart = () => {
   const theme = useTheme();

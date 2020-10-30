@@ -102,9 +102,9 @@ const MultiSelect = ({
 
 MultiSelect.propTypes = {
   label: PropTypes.string.isRequired,
-  onChange: PropTypes.func,
   options: PropTypes.array.isRequired,
   value: PropTypes.array.isRequired,
+  onChange: PropTypes.func,
 };
 
 export default MultiSelect;

@@ -27,5 +27,9 @@
   {
     "id": "reports.browser.showMore",
     "defaultMessage": "Mostra di più"
+  },
+  {
+    "id": "reports.header.list_documents",
+    "defaultMessage": "Lista Documenti"
   }
 ]

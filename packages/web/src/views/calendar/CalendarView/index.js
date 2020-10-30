@@ -17,16 +17,17 @@ import { closeModal, getEvents, openModal, selectEvent, selectRange, updateEvent
 import Header from './Header'
 import Toolbar from './Toolbar'
 import AddEditEventForm from './AddEditEventForm'
+import log from '@adapter/common/src/log'
 
 const selectedEventSelector = (state) => {
-  const { events, selectedEventId } = state.calendar;
-
+  const { events, selectedEventId } = state.calendar
+  
   if (selectedEventId) {
-    return events.find((_event) => _event.id === selectedEventId);
+    return events.find((_event) => _event.id === selectedEventId)
   } else {
-    return null;
+    return null
   }
-};
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -116,134 +117,134 @@ const useStyles = makeStyles((theme) => ({
       ...theme.typography.body2,
     },
   },
-}));
+}))
 
 const CalendarView = () => {
-  const classes = useStyles();
-  const calendarRef = useRef(null);
-  const theme = useTheme();
-  const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'));
-  const dispatch = useDispatch();
-  const { events, isModalOpen, selectedRange } = useSelector((state) => state.calendar);
-  const selectedEvent = useSelector(selectedEventSelector);
-  const [date, setDate] = useState(moment().toDate());
-  const [view, setView] = useState(mobileDevice ? 'listWeek' : 'dayGridMonth');
-
+  const classes = useStyles()
+  const calendarRef = useRef(null)
+  const theme = useTheme()
+  const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'))
+  const dispatch = useDispatch()
+  const { events, isModalOpen, selectedRange } = useSelector((state) => state.calendar)
+  const selectedEvent = useSelector(selectedEventSelector)
+  const [date, setDate] = useState(moment().toDate())
+  const [view, setView] = useState(mobileDevice ? 'listWeek' : 'dayGridMonth')
+  
   const handleDateToday = () => {
-    const calendarEl = calendarRef.current;
-
+    const calendarEl = calendarRef.current
+    
     if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.today();
-      setDate(calendarApi.getDate());
+      const calendarApi = calendarEl.getApi()
+      
+      calendarApi.today()
+      setDate(calendarApi.getDate())
     }
-  };
-
+  }
+  
   const handleViewChange = (newView) => {
-    const calendarEl = calendarRef.current;
-
+    const calendarEl = calendarRef.current
+    
     if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.changeView(newView);
-      setView(newView);
+      const calendarApi = calendarEl.getApi()
+      
+      calendarApi.changeView(newView)
+      setView(newView)
     }
-  };
-
+  }
+  
   const handleDatePrev = () => {
-    const calendarEl = calendarRef.current;
-
+    const calendarEl = calendarRef.current
+    
     if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.prev();
-      setDate(calendarApi.getDate());
+      const calendarApi = calendarEl.getApi()
+      
+      calendarApi.prev()
+      setDate(calendarApi.getDate())
     }
-  };
-
+  }
+  
   const handleDateNext = () => {
-    const calendarEl = calendarRef.current;
-
+    const calendarEl = calendarRef.current
+    
     if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.next();
-      setDate(calendarApi.getDate());
+      const calendarApi = calendarEl.getApi()
+      
+      calendarApi.next()
+      setDate(calendarApi.getDate())
     }
-  };
-
+  }
+  
   const handleAddClick = () => {
-    dispatch(openModal());
-  };
-
+    dispatch(openModal())
+  }
+  
   const handleRangeSelect = (arg) => {
-    const calendarEl = calendarRef.current;
-
+    const calendarEl = calendarRef.current
+    
     if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-
-      calendarApi.unselect();
+      const calendarApi = calendarEl.getApi()
+      
+      calendarApi.unselect()
     }
-
-    dispatch(selectRange(arg.start, arg.end));
-  };
-
+    
+    dispatch(selectRange(arg.start, arg.end))
+  }
+  
   const handleEventSelect = (arg) => {
-    dispatch(selectEvent(arg.event.id));
-  };
-
+    dispatch(selectEvent(arg.event.id))
+  }
+  
   const handleEventResize = async ({ event }) => {
     try {
       await dispatch(updateEvent(event.id, {
         allDay: event.allDay,
         start: event.start,
         end: event.end,
-      }));
+      }))
     } catch (err) {
-    
+      log.error(err)
     }
-  };
-
+  }
+  
   const handleEventDrop = async ({ event }) => {
     try {
       await dispatch(updateEvent(event.id, {
         allDay: event.allDay,
         start: event.start,
         end: event.end,
-      }));
+      }))
     } catch (err) {
-    
+      log.error(err)
     }
-  };
-
+  }
+  
   const handleModalClose = () => {
-    dispatch(closeModal());
-  };
-
+    dispatch(closeModal())
+  }
+  
   useEffect(() => {
-    dispatch(getEvents());
-  }, [dispatch]);
-
+    dispatch(getEvents())
+  }, [dispatch])
+  
   useEffect(() => {
-    const calendarEl = calendarRef.current;
-
+    const calendarEl = calendarRef.current
+    
     if (calendarEl) {
-      const calendarApi = calendarEl.getApi();
-      const newView = mobileDevice ? 'listWeek' : 'dayGridMonth';
-
-      calendarApi.changeView(newView);
-      setView(newView);
+      const calendarApi = calendarEl.getApi()
+      const newView = mobileDevice ? 'listWeek' : 'dayGridMonth'
+      
+      calendarApi.changeView(newView)
+      setView(newView)
     }
-  }, [mobileDevice]);
-
+  }, [mobileDevice])
+  
   return (
     <Page
       className={classes.root}
       title="Calendar"
     >
       <Container maxWidth={false}>
-        <Header onAddClick={handleAddClick} />
+        <Header onAddClick={handleAddClick}/>
         <Toolbar
           date={date}
           onDateNext={handleDateNext}
@@ -305,7 +306,7 @@ const CalendarView = () => {
         </Dialog>
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default CalendarView;
+export default CalendarView

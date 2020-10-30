@@ -98,8 +98,8 @@ const ApplicantCard = ({ className, applicant, ...rest }) => {
 }
 
 ApplicantCard.propTypes = {
-  className: PropTypes.string,
   applicant: PropTypes.object.isRequired,
+  className: PropTypes.string,
 };
 
 export default ApplicantCard;

@@ -1,46 +1,39 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {
-  Box,
-  Grid,
-  makeStyles,
-} from '@material-ui/core';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import PostAdd from 'src/components/PostAdd';
-import PostCard from 'src/components/PostCard';
-import About from './About';
+import React, { useCallback, useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { Box, Grid, makeStyles } from '@material-ui/core'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import PostAdd from 'src/components/PostAdd'
+import PostCard from 'src/components/PostCard'
+import About from './About'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles(() => ({
   root: {},
-}));
+}))
 
 const Timeline = ({ className, profile, ...rest }) => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [posts, setPosts] = useState([]);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [posts, setPosts] = useState([])
+  
   const getPosts = useCallback(async () => {
     try {
-      const response = await axios.get('/api/social/posts');
-
+      const response = await axios.get('/api/social/posts')
+      
       if (isMountedRef.current) {
-        setPosts(response.data.posts);
+        setPosts(response.data.posts)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getPosts();
-  }, [getPosts]);
-
+    getPosts()
+  }, [getPosts])
+  
   return (
     <div
       className={clsx(classes.root, className)}
@@ -56,7 +49,7 @@ const Timeline = ({ className, profile, ...rest }) => {
           md={6}
           xs={12}
         >
-          <About profile={profile} />
+          <About profile={profile}/>
         </Grid>
         <Grid
           item
@@ -64,26 +57,26 @@ const Timeline = ({ className, profile, ...rest }) => {
           md={6}
           xs={12}
         >
-          <PostAdd />
+          <PostAdd/>
           {
             posts.map((post) => (
               <Box
                 key={post.id}
                 mt={3}
               >
-                <PostCard post={post} />
+                <PostCard post={post}/>
               </Box>
             ))
           }
         </Grid>
       </Grid>
     </div>
-  );
-};
+  )
+}
 
 Timeline.propTypes = {
   className: PropTypes.string,
   profile: PropTypes.object.isRequired,
-};
+}
 
-export default Timeline;
+export default Timeline

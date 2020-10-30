@@ -1,32 +1,29 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import numeral from 'numeral';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import clsx from 'clsx'
+import numeral from 'numeral'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import PropTypes from 'prop-types'
 import {
   Box,
   Button,
   Card,
   CardHeader,
+  colors,
   Divider,
+  makeStyles,
   Table,
   TableBody,
   TableCell,
   TableRow,
   Typography,
-  colors,
-  makeStyles,
-} from '@material-ui/core';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import GenericMoreButton from 'src/components/GenericMoreButton';
-import CircularProgress from './CircularProgress';
+} from '@material-ui/core'
+import NavigateNextIcon from '@material-ui/icons/NavigateNext'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import GenericMoreButton from 'src/components/GenericMoreButton'
+import CircularProgress from './CircularProgress'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -42,39 +39,39 @@ const useStyles = makeStyles((theme) => ({
     color: colors.green[600],
     fontWeight: theme.typography.fontWeightMedium,
   },
-}));
+}))
 
 const MostProfitableProducts = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [products, setProducts] = useState([]);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [products, setProducts] = useState([])
+  
   const getProducts = useCallback(async () => {
     try {
-      const response = await axios.get('/api/reports/profitable-products');
-
+      const response = await axios.get('/api/reports/profitable-products')
+      
       if (isMountedRef.current) {
-        setProducts(response.data.products);
+        setProducts(response.data.products)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getProducts();
-  }, [getProducts]);
-
+    getProducts()
+  }, [getProducts])
+  
   return (
     <Card
       className={clsx(classes.root, className)}
       {...rest}
     >
       <CardHeader
-        action={<GenericMoreButton />}
+        action={<GenericMoreButton/>}
         title="Most Profitable Products"
       />
-      <Divider />
+      <Divider/>
       <PerfectScrollbar>
         <Box minWidth={700}>
           <Table>
@@ -110,7 +107,7 @@ const MostProfitableProducts = ({ className, ...rest }) => {
                               {numeral(product.subscriptions).format('0,0')}
                             </span>
                             {' '}
-                          Active
+                            Active
                           </Typography>
                         </Box>
                       </Box>
@@ -120,7 +117,7 @@ const MostProfitableProducts = ({ className, ...rest }) => {
                         color="textPrimary"
                         variant="h6"
                       >
-                      Price
+                        Price
                       </Typography>
                       <Typography
                         color="textSecondary"
@@ -131,7 +128,7 @@ const MostProfitableProducts = ({ className, ...rest }) => {
                           {numeral(product.price).format(`${product.currency}0,0.00`)}
                         </span>
                         {' '}
-                      monthly
+                        monthly
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -147,16 +144,16 @@ const MostProfitableProducts = ({ className, ...rest }) => {
                             variant="h6"
                           >
                             {product.conversionRate}
-                          %
+                            %
                           </Typography>
                           <Typography
                             color="textSecondary"
                             variant="body2"
                           >
-                          Conversion Rate
+                            Conversion Rate
                           </Typography>
                         </Box>
-                        <CircularProgress value={product.conversionRate} />
+                        <CircularProgress value={product.conversionRate}/>
                       </Box>
                     </TableCell>
                   </TableRow>
@@ -173,7 +170,7 @@ const MostProfitableProducts = ({ className, ...rest }) => {
       >
         <Button
           component={RouterLink}
-          endIcon={<NavigateNextIcon />}
+          endIcon={<NavigateNextIcon/>}
           size="small"
           to="#"
         >
@@ -181,11 +178,11 @@ const MostProfitableProducts = ({ className, ...rest }) => {
         </Button>
       </Box>
     </Card>
-  );
+  )
 }
 
 MostProfitableProducts.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default MostProfitableProducts;
+export default MostProfitableProducts

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
+import React, { useState } from 'react'
+import clsx from 'clsx'
 import {
   Backdrop,
   Box,
@@ -7,23 +7,19 @@ import {
   Divider,
   IconButton,
   Input,
+  makeStyles,
   Paper,
   Portal,
   SvgIcon,
   Tooltip,
   Typography,
-  makeStyles,
-} from '@material-ui/core';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
-import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
-import {
-  X as XIcon,
-  Maximize as MaximizeIcon,
-  Minimize as MinimizeIcon,
-} from 'react-feather';
-import QuillEditor from 'src/components/QuillEditor';
-import { useDispatch, useSelector } from 'src/store';
-import { closeCompose } from 'src/slices/mail';
+} from '@material-ui/core'
+import AttachFileIcon from '@material-ui/icons/AttachFile'
+import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate'
+import { Maximize as MaximizeIcon, Minimize as MinimizeIcon, X as XIcon } from 'react-feather'
+import QuillEditor from 'src/components/QuillEditor'
+import { useDispatch, useSelector } from 'src/store'
+import { closeCompose } from 'src/slices/mail'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,38 +52,38 @@ const useStyles = makeStyles((theme) => ({
   action: {
     marginRight: theme.spacing(1),
   },
-}));
+}))
 
 const Compose = () => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const { isComposeOpen } = useSelector((state) => state.mail);
-  const [fullScreen, setFullScreen] = useState(false);
-  const [messageBody, setMessageBody] = useState('');
-
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  const { isComposeOpen } = useSelector((state) => state.mail)
+  const [fullScreen, setFullScreen] = useState(false)
+  const [messageBody, setMessageBody] = useState('')
+  
   const handleChange = (value) => {
-    setMessageBody(value);
-  };
-
-  const handleExitFullScreen = () => {
-    setFullScreen(false);
-  };
-
-  const handleEnterFullScreen = () => {
-    setFullScreen(true);
-  };
-
-  const handleClose = () => {
-    dispatch(closeCompose());
-  };
-
-  if (!isComposeOpen) {
-    return null;
+    setMessageBody(value)
   }
-
+  
+  const handleExitFullScreen = () => {
+    setFullScreen(false)
+  }
+  
+  const handleEnterFullScreen = () => {
+    setFullScreen(true)
+  }
+  
+  const handleClose = () => {
+    dispatch(closeCompose())
+  }
+  
+  if (!isComposeOpen) {
+    return null
+  }
+  
   return (
     <Portal>
-      <Backdrop open={fullScreen} />
+      <Backdrop open={fullScreen}/>
       <Paper
         className={
           clsx(
@@ -110,25 +106,28 @@ const Compose = () => {
           >
             New Message
           </Typography>
-          <Box flexGrow={1} />
+          <Box flexGrow={1}/>
           {
-            fullScreen ? (
-              <IconButton onClick={handleExitFullScreen}>
-                <SvgIcon fontSize="small">
-                  <MinimizeIcon />
-                </SvgIcon>
-              </IconButton>
-            ) : (
-              <IconButton onClick={handleEnterFullScreen}>
-                <SvgIcon fontSize="small">
-                  <MaximizeIcon />
-                </SvgIcon>
-              </IconButton>
-            )
+            fullScreen ?
+              (
+                <IconButton onClick={handleExitFullScreen}>
+                  <SvgIcon fontSize="small">
+                    <MinimizeIcon/>
+                  </SvgIcon>
+                </IconButton>
+              )
+              :
+              (
+                <IconButton onClick={handleEnterFullScreen}>
+                  <SvgIcon fontSize="small">
+                    <MaximizeIcon/>
+                  </SvgIcon>
+                </IconButton>
+              )
           }
           <IconButton onClick={handleClose}>
             <SvgIcon fontSize="small">
-              <XIcon />
+              <XIcon/>
             </SvgIcon>
           </IconButton>
         </Box>
@@ -144,14 +143,14 @@ const Compose = () => {
             placeholder="Subject"
           />
         </Box>
-        <Divider />
+        <Divider/>
         <QuillEditor
           className={classes.editor}
           onChange={handleChange}
           placeholder="Leave a message"
           value={messageBody}
         />
-        <Divider />
+        <Divider/>
         <Box
           alignItems="center"
           display="flex"
@@ -170,7 +169,7 @@ const Compose = () => {
               className={classes.action}
               size="small"
             >
-              <AddPhotoIcon />
+              <AddPhotoIcon/>
             </IconButton>
           </Tooltip>
           <Tooltip title="Attach file">
@@ -178,13 +177,13 @@ const Compose = () => {
               className={classes.action}
               size="small"
             >
-              <AttachFileIcon />
+              <AttachFileIcon/>
             </IconButton>
           </Tooltip>
         </Box>
       </Paper>
     </Portal>
-  );
-};
+  )
+}
 
-export default Compose;
+export default Compose

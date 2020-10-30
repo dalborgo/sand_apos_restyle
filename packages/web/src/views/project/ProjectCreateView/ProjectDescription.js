@@ -1,15 +1,8 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {
-  Box,
-  Button,
-  FormHelperText,
-  Paper,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
-import QuillEditor from 'src/components/QuillEditor';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { Box, Button, FormHelperText, makeStyles, Paper, Typography } from '@material-ui/core'
+import QuillEditor from 'src/components/QuillEditor'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -21,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
       height: 400,
     },
   },
-}));
+}))
 
 const ProjectDescription = ({
   className,
@@ -29,34 +22,34 @@ const ProjectDescription = ({
   onComplete,
   ...rest
 }) => {
-  const classes = useStyles();
-  const [content, setContent] = useState('');
-  const [isSubmitting, setSubmitting] = useState(false);
-  const [error, setError] = useState(null);
-
+  const classes = useStyles()
+  const [content, setContent] = useState('')
+  const [isSubmitting, setSubmitting] = useState(false)
+  const [error, setError] = useState(null)
+  
   const handleChange = (value) => {
-    setContent(value);
-  };
-
+    setContent(value)
+  }
+  
   const handleSubmit = async (event) => {
-    event.preventDefault();
-
+    event.preventDefault()
+    
     try {
-      setSubmitting(true);
-
+      setSubmitting(true)
+      
       // NOTE: Make API request
-
+      
       if (onComplete) {
-        onComplete();
+        onComplete()
       }
     } catch (err) {
       
-      setError(err.message);
+      setError(err.message)
     } finally {
-      setSubmitting(false);
+      setSubmitting(false)
     }
-  };
-
+  }
+  
   return (
     <form
       className={clsx(classes.root, className)}
@@ -107,11 +100,11 @@ const ProjectDescription = ({
               onClick={onBack}
               size="large"
             >
-            Previous
+              Previous
             </Button>
           )
         }
-        <Box flexGrow={1} />
+        <Box flexGrow={1}/>
         <Button
           color="secondary"
           disabled={isSubmitting}
@@ -123,18 +116,18 @@ const ProjectDescription = ({
         </Button>
       </Box>
     </form>
-  );
-};
+  )
+}
 
 ProjectDescription.propTypes = {
   className: PropTypes.string,
-  onComplete: PropTypes.func,
   onBack: PropTypes.func,
-};
+  onComplete: PropTypes.func,
+}
 
 ProjectDescription.defaultProps = {
   onComplete: () => {},
   onBack: () => {},
-};
+}
 
-export default ProjectDescription;
+export default ProjectDescription

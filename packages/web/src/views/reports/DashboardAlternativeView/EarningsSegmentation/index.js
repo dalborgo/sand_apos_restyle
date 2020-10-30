@@ -1,22 +1,12 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {
-  Box,
-  Card,
-  CardHeader,
-  Divider,
-  Typography,
-  makeStyles,
-} from '@material-ui/core';
-import GenericMoreButton from 'src/components/GenericMoreButton';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import Chart from './Chart';
+import React, { useCallback, useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { Box, Card, CardHeader, Divider, makeStyles, Typography } from '@material-ui/core'
+import GenericMoreButton from 'src/components/GenericMoreButton'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import Chart from './Chart'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -31,51 +21,51 @@ const useStyles = makeStyles((theme) => ({
       borderRight: `1px solid ${theme.palette.divider}`,
     },
   },
-}));
+}))
 
 const EarningsSegmentation = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [earnings, setEarnings] = useState(null);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [earnings, setEarnings] = useState(null)
+  
   const getEarnings = useCallback(async () => {
-    try  {
-      const response = await axios.get('/api/reports/earnings');
-
+    try {
+      const response = await axios.get('/api/reports/earnings')
+      
       if (isMountedRef.current) {
-        setEarnings(response.data.earnings);
+        setEarnings(response.data.earnings)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getEarnings();
-  }, [getEarnings]);
-
+    getEarnings()
+  }, [getEarnings])
+  
   if (!earnings) {
-    return null;
+    return null
   }
-
+  
   return (
     <Card
       className={clsx(classes.root, className)}
       {...rest}
     >
       <CardHeader
-        action={<GenericMoreButton />}
+        action={<GenericMoreButton/>}
         title="Earnings Segmentation"
       />
-      <Divider />
+      <Divider/>
       <Box
         minHeight={320}
         p={3}
         position="relative"
       >
-        <Chart data={earnings} />
+        <Chart data={earnings}/>
       </Box>
-      <Divider />
+      <Divider/>
       <Box display="flex">
         {
           earnings.labels.map((label, i) => (
@@ -88,7 +78,7 @@ const EarningsSegmentation = ({ className, ...rest }) => {
                 variant="h4"
               >
                 {earnings.datasets[0].data[i]}
-              %
+                %
               </Typography>
               <Typography
                 color="textSecondary"
@@ -101,11 +91,11 @@ const EarningsSegmentation = ({ className, ...rest }) => {
         }
       </Box>
     </Card>
-  );
-};
+  )
+}
 
 EarningsSegmentation.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default EarningsSegmentation;
+export default EarningsSegmentation

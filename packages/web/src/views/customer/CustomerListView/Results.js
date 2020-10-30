@@ -27,7 +27,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import { ArrowRight as ArrowRightIcon, Edit as EditIcon, Search as SearchIcon, } from 'react-feather'
+import { ArrowRight as ArrowRightIcon, Edit as EditIcon, Search as SearchIcon } from 'react-feather'
 import getInitials from 'src/utils/getInitials'
 
 const tabs = [

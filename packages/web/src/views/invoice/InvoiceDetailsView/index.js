@@ -1,19 +1,11 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
-import {
-  Box,
-  Container,
-  Divider,
-  makeStyles,
-} from '@material-ui/core';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import Page from 'src/components/Page';
-import Header from './Header';
-import InvoicePreview from './InvoicePreview';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Box, Container, Divider, makeStyles } from '@material-ui/core'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import Page from 'src/components/Page'
+import Header from './Header'
+import InvoicePreview from './InvoicePreview'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,47 +14,47 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
-}));
+}))
 
 const InvoiceDetailsView = () => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [invoice, setInvoice] = useState(null);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [invoice, setInvoice] = useState(null)
+  
   const getInvoice = useCallback(async () => {
     try {
-      const response = await axios.get('/api/invoices/1');
-
+      const response = await axios.get('/api/invoices/1')
+      
       if (isMountedRef.current) {
-        setInvoice(response.data.invoice);
+        setInvoice(response.data.invoice)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getInvoice();
-  }, [getInvoice]);
-
+    getInvoice().then()
+  }, [getInvoice])
+  
   if (!invoice) {
-    return null;
+    return null
   }
-
+  
   return (
     <Page
       className={classes.root}
       title="Invoice Details"
     >
       <Container maxWidth="lg">
-        <Header invoice={invoice} />
+        <Header invoice={invoice}/>
         <Box my={2}>
-          <Divider />
+          <Divider/>
         </Box>
-        <InvoicePreview invoice={invoice} />
+        <InvoicePreview invoice={invoice}/>
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default InvoiceDetailsView;
+export default InvoiceDetailsView

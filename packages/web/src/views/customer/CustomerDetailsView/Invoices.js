@@ -24,7 +24,7 @@ import axios from 'src/utils/axios'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
 import Label from 'src/components/Label'
 import GenericMoreButton from 'src/components/GenericMoreButton'
-
+import log from '@adapter/common/src/log'
 const useStyles = makeStyles(() => ({
   root: {},
 }));
@@ -42,7 +42,7 @@ const Invoices = ({ className, ...rest }) => {
         setInvoices(response.data.invoices);
       }
     } catch (err) {
-    
+      log.error(err)
     }
   }, [isMountedRef]);
 

@@ -1,12 +1,8 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import moment from 'moment';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import clsx from 'clsx'
+import moment from 'moment'
+import PropTypes from 'prop-types'
 import {
   Avatar,
   Box,
@@ -18,13 +14,14 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Typography,
   makeStyles,
-} from '@material-ui/core';
-import axios from 'src/utils/axios';
-import getInitials from 'src/utils/getInitials';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import GenericMoreButton from 'src/components/GenericMoreButton';
+  Typography,
+} from '@material-ui/core'
+import axios from 'src/utils/axios'
+import getInitials from 'src/utils/getInitials'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import GenericMoreButton from 'src/components/GenericMoreButton'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -35,39 +32,39 @@ const useStyles = makeStyles((theme) => ({
       borderRight: `1px solid ${theme.palette.divider}`,
     },
   },
-}));
+}))
 
 const CustomerActivity = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [activities, setActivities] = useState([]);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [activities, setActivities] = useState([])
+  
   const getActivities = useCallback(async () => {
     try {
-      const response = await axios.get('/api/reports/customer-activity');
-
+      const response = await axios.get('/api/reports/customer-activity')
+      
       if (isMountedRef.current) {
-        setActivities(response.data.activities);
+        setActivities(response.data.activities)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getActivities();
-  }, [getActivities]);
-
+    getActivities()
+  }, [getActivities])
+  
   return (
     <Card
       className={clsx(classes.root, className)}
       {...rest}
     >
       <CardHeader
-        action={<GenericMoreButton />}
+        action={<GenericMoreButton/>}
         title="Customer Activity"
       />
-      <Divider />
+      <Divider/>
       <Box display="flex">
         <div className={classes.item}>
           <Typography
@@ -87,7 +84,7 @@ const CustomerActivity = ({ className, ...rest }) => {
             Registered
           </Typography>
         </div>
-        <Divider />
+        <Divider/>
         <div className={classes.item}>
           <Typography
             align="center"
@@ -107,7 +104,7 @@ const CustomerActivity = ({ className, ...rest }) => {
           </Typography>
         </div>
       </Box>
-      <Divider />
+      <Divider/>
       <List disablePadding>
         {
           activities.map((activity, i) => (
@@ -163,11 +160,11 @@ const CustomerActivity = ({ className, ...rest }) => {
         }
       </List>
     </Card>
-  );
+  )
 }
 
 CustomerActivity.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default CustomerActivity;
+export default CustomerActivity

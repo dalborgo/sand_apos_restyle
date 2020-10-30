@@ -165,9 +165,9 @@ const Toolbar = ({
 Toolbar.propTypes = {
   className: PropTypes.string,
   mails: PropTypes.number.isRequired,
+  selectedMails: PropTypes.number.isRequired,
   onDeselectAll: PropTypes.func,
   onSelectAll: PropTypes.func,
-  selectedMails: PropTypes.number.isRequired,
 };
 
 Toolbar.defaultProps = {

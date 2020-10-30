@@ -35,8 +35,8 @@ const Applicants = ({ className, applicants, ...rest }) => {
 };
 
 Applicants.propTypes = {
-  className: PropTypes.string,
   applicants: PropTypes.array.isRequired,
+  className: PropTypes.string,
 };
 
 export default Applicants;

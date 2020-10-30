@@ -19,7 +19,7 @@ import {
 import MaiIcon from '@material-ui/icons/MailOutline'
 import axios from 'src/utils/axios'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
-
+import log from '@adapter/common/src/log'
 const emailOptions = [
   'Resend last invoice',
   'Send password reset',
@@ -47,7 +47,7 @@ const Emails = ({ className, ...rest }) => {
         setEmails(response.data.emails);
       }
     } catch (err) {
-    
+      log.error(err)
     }
   }, [isMountedRef]);
 

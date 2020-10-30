@@ -1,59 +1,49 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-} from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import {
-  Box,
-  Card,
-  CardHeader,
-  Divider,
-  List,
-  makeStyles,
-} from '@material-ui/core';
-import axios from 'src/utils/axios';
-import useIsMountedRef from 'src/hooks/useIsMountedRef';
-import GenericMoreButton from 'src/components/GenericMoreButton';
-import TaskItem from './TaskItem';
+import React, { useCallback, useEffect, useState } from 'react'
+import clsx from 'clsx'
+import PropTypes from 'prop-types'
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import { Box, Card, CardHeader, Divider, List, makeStyles } from '@material-ui/core'
+import axios from 'src/utils/axios'
+import useIsMountedRef from 'src/hooks/useIsMountedRef'
+import GenericMoreButton from 'src/components/GenericMoreButton'
+import TaskItem from './TaskItem'
+import log from '@adapter/common/src/log'
 
 const useStyles = makeStyles(() => ({
   root: {},
-}));
+}))
 
 const TeamTasks = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const isMountedRef = useIsMountedRef();
-  const [tasks, setTasks] = useState([]);
-
+  const classes = useStyles()
+  const isMountedRef = useIsMountedRef()
+  const [tasks, setTasks] = useState([])
+  
   const getTasks = useCallback(async () => {
     try {
-      const response = await axios.get('/api/reports/latest-tasks');
-  
+      const response = await axios.get('/api/reports/latest-tasks')
+      
       if (isMountedRef.current) {
-        setTasks(response.data.tasks);
+        setTasks(response.data.tasks)
       }
     } catch (err) {
-    
+      log.error(err)
     }
-  }, [isMountedRef]);
-
+  }, [isMountedRef])
+  
   useEffect(() => {
-    getTasks();
-  }, [getTasks]);
-
+    getTasks()
+  }, [getTasks])
+  
   return (
     <Card
       className={clsx(classes.root, className)}
       {...rest}
     >
       <CardHeader
-        action={<GenericMoreButton />}
+        action={<GenericMoreButton/>}
         title="Team Tasks"
       />
-      <Divider />
+      <Divider/>
       <PerfectScrollbar>
         <Box minWidth={400}>
           <List>
@@ -70,11 +60,11 @@ const TeamTasks = ({ className, ...rest }) => {
         </Box>
       </PerfectScrollbar>
     </Card>
-  );
-};
+  )
+}
 
 TeamTasks.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default TeamTasks;
+export default TeamTasks

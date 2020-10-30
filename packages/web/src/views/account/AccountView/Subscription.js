@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
+import log from '@adapter/common/src/log'
 import {
   Box,
   Button,
@@ -61,7 +62,7 @@ const Subscription = ({ className, ...rest }) => {
         setSubscription(response.data.subscription);
       }
     } catch (err) {
-    
+      log.error(err)
     }
   }, [isMountedRef]);
 

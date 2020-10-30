@@ -262,21 +262,24 @@ const CardEditModal = ({
                 Make Template
               </ActionButton>
               {
-                card.isSubscribed ? (
-                  <ActionButton
-                    icon={<EyeOffIcon />}
-                    onClick={handleUnsubscribe}
-                  >
+                card.isSubscribed ? 
+                  (
+                    <ActionButton
+                      icon={<EyeOffIcon />}
+                      onClick={handleUnsubscribe}
+                    >
                   Unwatch
-                  </ActionButton>
-                ) : (
-                  <ActionButton
-                    icon={<EyeIcon />}
-                    onClick={handleSubscribe}
-                  >
+                    </ActionButton>
+                  ) 
+                  : 
+                  (
+                    <ActionButton
+                      icon={<EyeIcon />}
+                      onClick={handleSubscribe}
+                    >
                   Watch
-                  </ActionButton>
-                )
+                    </ActionButton>
+                  )
               }
               <Divider />
               <ActionButton
@@ -297,8 +300,8 @@ CardEditModal.propTypes = {
   card: PropTypes.object.isRequired,
   className: PropTypes.string,
   list: PropTypes.object.isRequired,
-  onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func,
 };
 
 CardEditModal.defaultProps = {

@@ -1,18 +1,20 @@
 import React, { memo, useCallback } from 'react'
 import { Box, Button, Typography } from '@material-ui/core'
 import { FormattedMessage } from 'react-intl'
+import { useSnackbar } from 'notistack';
 
-const CommandBox = memo(({ mutate, isDocId, output, setOutput }) => {
+const CommandBox = memo(({ mutate, isDocId, output }) => {
   console.log('%cRENDER_COMMAND_BOX', 'color: cyan')
+  const { enqueueSnackbar } = useSnackbar()
   const save = useCallback(async () => {
     try {
       const textArea = document.getElementById('browserDisplayArea')
       const docs = JSON.parse(textArea.value)
       await mutate(docs)
     } catch (err) {
-      setOutput({ error: true, text: err.message })
+      enqueueSnackbar(err.message, { variant: 'error'})
     }
-  }, [mutate, setOutput])
+  }, [enqueueSnackbar, mutate])
   return (
     <Box
       alignItems="center"

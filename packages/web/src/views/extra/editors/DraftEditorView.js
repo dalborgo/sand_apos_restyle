@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import { Box, Breadcrumbs, Container, Link, makeStyles, Paper, Typography, } from '@material-ui/core'
+import { Box, Breadcrumbs, Container, Link, makeStyles, Paper, Typography } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import Page from 'src/components/Page'
 import DraftEditor from 'src/components/DraftEditor'
@@ -12,11 +12,11 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
-}));
+}))
 
 const DraftEditorView = () => {
-  const classes = useStyles();
-
+  const classes = useStyles()
+  
   return (
     <Page
       className={classes.root}
@@ -25,7 +25,7 @@ const DraftEditorView = () => {
       <Container maxWidth="lg">
         <Breadcrumbs
           aria-label="breadcrumb"
-          separator={<NavigateNextIcon fontSize="small" />}
+          separator={<NavigateNextIcon fontSize="small"/>}
         >
           <Link
             color="inherit"
@@ -58,12 +58,12 @@ const DraftEditorView = () => {
         </Typography>
         <Box mt={3}>
           <Paper>
-            <DraftEditor />
+            <DraftEditor/>
           </Paper>
         </Box>
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default DraftEditorView;
+export default DraftEditorView
