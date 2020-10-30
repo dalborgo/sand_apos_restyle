@@ -1,6 +1,6 @@
 import React, {
   useState,
-  useRef
+  useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -9,27 +9,27 @@ import {
   FormControlLabel,
   Menu,
   MenuItem,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   menuItem: {
-    padding: 0
+    padding: 0,
   },
   formControlLabel: {
     padding: theme.spacing(0.5, 2),
     width: '100%',
-    margin: 0
-  }
+    margin: 0,
+  },
 }));
 
 const MultiSelect = ({
   label,
   options,
   value,
-  onChange
+  onChange,
 }) => {
   const classes = useStyles();
   const anchorRef = useRef(null);
@@ -73,24 +73,28 @@ const MultiSelect = ({
         open={openMenu}
         PaperProps={{ style: { width: 250 } }}
       >
-        {options.map((option) => (
-          <MenuItem
-            className={classes.menuItem}
-            key={option}
-          >
-            <FormControlLabel
-              className={classes.formControlLabel}
-              control={(
-                <Checkbox
-                  checked={value.indexOf(option) > -1}
-                  onChange={handleOptionToggle}
-                  value={option}
-                />
-              )}
-              label={option}
-            />
-          </MenuItem>
-        ))}
+        {
+          options.map((option) => (
+            <MenuItem
+              className={classes.menuItem}
+              key={option}
+            >
+              <FormControlLabel
+                className={classes.formControlLabel}
+                control={
+                  (
+                    <Checkbox
+                      checked={value.indexOf(option) > -1}
+                      onChange={handleOptionToggle}
+                      value={option}
+                    />
+                  )
+                }
+                label={option}
+              />
+            </MenuItem>
+          ))
+        }
       </Menu>
     </>
   );
@@ -100,7 +104,7 @@ MultiSelect.propTypes = {
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   options: PropTypes.array.isRequired,
-  value: PropTypes.array.isRequired
+  value: PropTypes.array.isRequired,
 };
 
 export default MultiSelect;

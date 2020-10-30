@@ -6,7 +6,7 @@ import useAuth from 'src/hooks/useAuth'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Auth0Login = ({ className, ...rest }) => {
@@ -19,7 +19,7 @@ const Auth0Login = ({ className, ...rest }) => {
     try {
       await loginWithPopup();
     } catch (err) {
-      console.error(err);
+      
       if (isMountedRef.current) {
         setError(err.message);
       }
@@ -31,21 +31,23 @@ const Auth0Login = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      {error && (
-        <Box my={3}>
-          <FormHelperText error>
-            {error}
-          </FormHelperText>
-        </Box>
-      )}
+      {
+        error && (
+          <Box my={3}>
+            <FormHelperText error>
+              {error}
+            </FormHelperText>
+          </Box>
+        )
+      }
       <Box
         display="flex"
         justifyContent="center"
       >
         <Button
+          color="secondary"
           onClick={handleLogin}
           variant="contained"
-          color="secondary"
         >
           Log in with Auth0
         </Button>
@@ -55,7 +57,7 @@ const Auth0Login = ({ className, ...rest }) => {
 };
 
 Auth0Login.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Auth0Login;

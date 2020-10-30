@@ -7,7 +7,7 @@ import {
   CardContent,
   Grid,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 
@@ -15,8 +15,8 @@ const useStyles = makeStyles((theme) => ({
   root: {},
   rating: {
     marginLeft: theme.spacing(2),
-    fontWeight: theme.typography.fontWeightBold
-  }
+    fontWeight: theme.typography.fontWeightBold,
+  },
 }));
 
 const OverallReviews = ({
@@ -40,22 +40,22 @@ const OverallReviews = ({
         >
           <Grid item>
             <Typography
-              variant="h5"
               color="textPrimary"
+              variant="h5"
             >
               Overall Reviews
             </Typography>
           </Grid>
           <Grid item>
             <Box
-              display="flex"
               alignItems="center"
+              display="flex"
             >
               <Rating value={rating} />
               <Typography
                 className={classes.rating}
-                variant="h6"
                 color="textPrimary"
+                variant="h6"
               >
                 {rating.toFixed(1)}
               </Typography>
@@ -80,7 +80,7 @@ const OverallReviews = ({
 OverallReviews.propTypes = {
   className: PropTypes.string,
   rating: PropTypes.number.isRequired,
-  reviewsCount: PropTypes.number.isRequired
+  reviewsCount: PropTypes.number.isRequired,
 };
 
 export default OverallReviews;

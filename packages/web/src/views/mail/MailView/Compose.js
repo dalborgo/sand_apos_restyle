@@ -12,14 +12,14 @@ import {
   SvgIcon,
   Tooltip,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
 import {
   X as XIcon,
   Maximize as MaximizeIcon,
-  Minimize as MinimizeIcon
+  Minimize as MinimizeIcon,
 } from 'react-feather';
 import QuillEditor from 'src/components/QuillEditor';
 import { useDispatch, useSelector } from 'src/store';
@@ -38,24 +38,24 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 2000,
     display: 'flex',
     flexDirection: 'column',
-    minHeight: 500
+    minHeight: 500,
   },
   fullScreen: {
     height: '100%',
-    width: '100%'
+    width: '100%',
   },
   input: {
-    width: '100%'
+    width: '100%',
   },
   editor: {
     flexGrow: 1,
     '& .ql-editor': {
-      minHeight: 300
-    }
+      minHeight: 300,
+    },
   },
   action: {
-    marginRight: theme.spacing(1)
-  }
+    marginRight: theme.spacing(1),
+  },
 }));
 
 const Compose = () => {
@@ -89,39 +89,43 @@ const Compose = () => {
     <Portal>
       <Backdrop open={fullScreen} />
       <Paper
-        className={clsx(
-          classes.root,
-          { [classes.fullScreen]: fullScreen }
-        )}
+        className={
+          clsx(
+            classes.root,
+            { [classes.fullScreen]: fullScreen }
+          )
+        }
         elevation={12}
       >
         <Box
+          alignItems="center"
           bgcolor="background.dark"
           display="flex"
-          alignItems="center"
-          py={1}
           px={2}
+          py={1}
         >
           <Typography
-            variant="h5"
             color="textPrimary"
+            variant="h5"
           >
             New Message
           </Typography>
           <Box flexGrow={1} />
-          {fullScreen ? (
-            <IconButton onClick={handleExitFullScreen}>
-              <SvgIcon fontSize="small">
-                <MinimizeIcon />
-              </SvgIcon>
-            </IconButton>
-          ) : (
-            <IconButton onClick={handleEnterFullScreen}>
-              <SvgIcon fontSize="small">
-                <MaximizeIcon />
-              </SvgIcon>
-            </IconButton>
-          )}
+          {
+            fullScreen ? (
+              <IconButton onClick={handleExitFullScreen}>
+                <SvgIcon fontSize="small">
+                  <MinimizeIcon />
+                </SvgIcon>
+              </IconButton>
+            ) : (
+              <IconButton onClick={handleEnterFullScreen}>
+                <SvgIcon fontSize="small">
+                  <MaximizeIcon />
+                </SvgIcon>
+              </IconButton>
+            )
+          }
           <IconButton onClick={handleClose}>
             <SvgIcon fontSize="small">
               <XIcon />
@@ -149,30 +153,30 @@ const Compose = () => {
         />
         <Divider />
         <Box
-          display="flex"
           alignItems="center"
-          py={1}
+          display="flex"
           px={2}
+          py={1}
         >
           <Button
+            className={classes.action}
             color="secondary"
             variant="contained"
-            className={classes.action}
           >
             Send
           </Button>
           <Tooltip title="Attach image">
             <IconButton
-              size="small"
               className={classes.action}
+              size="small"
             >
               <AddPhotoIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Attach file">
             <IconButton
-              size="small"
               className={classes.action}
+              size="small"
             >
               <AttachFileIcon />
             </IconButton>

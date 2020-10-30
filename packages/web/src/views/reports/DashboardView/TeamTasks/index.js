@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useState,
-  useEffect
+  useEffect,
 } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -12,7 +12,7 @@ import {
   CardHeader,
   Divider,
   List,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -20,7 +20,7 @@ import GenericMoreButton from 'src/components/GenericMoreButton';
 import TaskItem from './TaskItem';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const TeamTasks = ({ className, ...rest }) => {
@@ -36,7 +36,7 @@ const TeamTasks = ({ className, ...rest }) => {
         setTasks(response.data.tasks);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -57,13 +57,15 @@ const TeamTasks = ({ className, ...rest }) => {
       <PerfectScrollbar>
         <Box minWidth={400}>
           <List>
-            {tasks.map((task, i) => (
-              <TaskItem
-                divider={i < tasks.length - 1}
-                key={task.id}
-                task={task}
-              />
-            ))}
+            {
+              tasks.map((task, i) => (
+                <TaskItem
+                  divider={i < tasks.length - 1}
+                  key={task.id}
+                  task={task}
+                />
+              ))
+            }
           </List>
         </Box>
       </PerfectScrollbar>
@@ -72,7 +74,7 @@ const TeamTasks = ({ className, ...rest }) => {
 };
 
 TeamTasks.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default TeamTasks;

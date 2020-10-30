@@ -8,11 +8,11 @@ import { Avatar, Box, Link, makeStyles, Typography } from '@material-ui/core'
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   bubble: {
-    borderRadius: theme.shape.borderRadius
-  }
+    borderRadius: theme.shape.borderRadius,
+  },
 }));
 
 const Comment = ({ className, comment, ...rest }) => {
@@ -30,15 +30,15 @@ const Comment = ({ className, comment, ...rest }) => {
         to="#"
       />
       <Box
-        flexGrow={1}
-        p={2}
-        ml={2}
         bgcolor="background.dark"
         className={classes.bubble}
+        flexGrow={1}
+        ml={2}
+        p={2}
       >
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
           mb={1}
         >
           <Link
@@ -58,8 +58,8 @@ const Comment = ({ className, comment, ...rest }) => {
           </Typography>
         </Box>
         <Typography
-          variant="body1"
           color="textPrimary"
+          variant="body1"
         >
           {comment.message}
         </Typography>
@@ -70,7 +70,7 @@ const Comment = ({ className, comment, ...rest }) => {
 
 Comment.propTypes = {
   className: PropTypes.string,
-  comment: PropTypes.object.isRequired
+  comment: PropTypes.object.isRequired,
 };
 
 export default Comment;

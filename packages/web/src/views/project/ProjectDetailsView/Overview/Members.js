@@ -13,18 +13,18 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 
 const useStyles = makeStyles(() => ({
   root: {},
   header: {
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   content: {
-    paddingTop: 0
-  }
+    paddingTop: 0,
+  },
 }));
 
 const Members = ({ className, members, ...rest }) => {
@@ -38,32 +38,36 @@ const Members = ({ className, members, ...rest }) => {
       <CardHeader
         className={classes.header}
         title="Project members"
-        titleTypographyProps={{
-          variant: 'overline'
-        }}
+        titleTypographyProps={
+          {
+            variant: 'overline',
+          }
+        }
       />
       <CardContent className={classes.content}>
         <List>
-          {members.map((member) => (
-            <ListItem
-              disableGutters
-              key={member.id}
-            >
-              <ListItemAvatar>
-                <Avatar
-                  alt="Author"
-                  src={member.avatar}
-                >
-                  {getInitials(member.name)}
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={member.name}
-                primaryTypographyProps={{ variant: 'h6' }}
-                secondary={member.bio}
-              />
-            </ListItem>
-          ))}
+          {
+            members.map((member) => (
+              <ListItem
+                disableGutters
+                key={member.id}
+              >
+                <ListItemAvatar>
+                  <Avatar
+                    alt="Author"
+                    src={member.avatar}
+                  >
+                    {getInitials(member.name)}
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={member.name}
+                  primaryTypographyProps={{ variant: 'h6' }}
+                  secondary={member.bio}
+                />
+              </ListItem>
+            ))
+          }
         </List>
       </CardContent>
       <Divider />
@@ -78,7 +82,7 @@ const Members = ({ className, members, ...rest }) => {
 
 Members.propTypes = {
   className: PropTypes.string,
-  members: PropTypes.array.isRequired
+  members: PropTypes.array.isRequired,
 };
 
 export default Members;

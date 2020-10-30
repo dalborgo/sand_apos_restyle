@@ -12,7 +12,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
 import ReceiptIcon from '@material-ui/icons/ReceiptOutlined'
@@ -20,8 +20,8 @@ import ReceiptIcon from '@material-ui/icons/ReceiptOutlined'
 const useStyles = makeStyles((theme) => ({
   root: {},
   fontWeightMedium: {
-    fontWeight: theme.typography.fontWeightMedium
-  }
+    fontWeight: theme.typography.fontWeightMedium,
+  },
 }));
 
 const Invoices = ({
@@ -46,8 +46,8 @@ const Invoices = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 {customer.creditCard}
               </Typography>
@@ -59,8 +59,8 @@ const Invoices = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 2 ($50.00)
               </Typography>
@@ -72,8 +72,8 @@ const Invoices = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 1 ($5.00)
               </Typography>
@@ -85,8 +85,8 @@ const Invoices = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 1 ($12.00)
               </Typography>
@@ -98,8 +98,8 @@ const Invoices = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 0 ($0.00)
               </Typography>
@@ -111,8 +111,8 @@ const Invoices = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 $1,200.00
               </Typography>
@@ -121,10 +121,10 @@ const Invoices = ({
         </TableBody>
       </Table>
       <Box
-        p={1}
+        alignItems="flex-start"
         display="flex"
         flexDirection="column"
-        alignItems="flex-start"
+        p={1}
       >
         <Button startIcon={<AttachMoneyIcon />}>
           Create Invoice
@@ -139,7 +139,7 @@ const Invoices = ({
 
 Invoices.propTypes = {
   className: PropTypes.string,
-  customer: PropTypes.object.isRequired
+  customer: PropTypes.object.isRequired,
 };
 
 export default Invoices;

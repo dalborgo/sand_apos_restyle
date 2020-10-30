@@ -10,7 +10,7 @@ const notifications = [
       .getTime(),
     description: 'Dummy text',
     title: 'Your order is placed',
-    type: 'order_placed'
+    type: 'order_placed',
   },
   {
     id: '5e8883f7ed1486d665d8be1e',
@@ -20,7 +20,7 @@ const notifications = [
       .getTime(),
     description: 'You have 32 unread messages',
     title: 'New message received',
-    type: 'new_message'
+    type: 'new_message',
   },
   {
     id: '5e8883fca0e8612044248ecf',
@@ -30,7 +30,7 @@ const notifications = [
       .getTime(),
     description: 'Dummy text',
     title: 'Your item is shipped',
-    type: 'item_shipped'
+    type: 'item_shipped',
   },
   {
     id: '5e88840187f6b09b431bae68',
@@ -40,8 +40,8 @@ const notifications = [
       .getTime(),
     description: 'You have 32 unread messages',
     title: 'New message received',
-    type: 'new_message'
-  }
+    type: 'new_message',
+  },
 ];
 
 mock.onGet('/api/notifications').reply(200, { notifications });

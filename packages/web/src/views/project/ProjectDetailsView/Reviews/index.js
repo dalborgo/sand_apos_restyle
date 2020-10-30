@@ -8,8 +8,8 @@ import ReviewCard from './ReviewCard';
 const useStyles = makeStyles((theme) => ({
   root: {},
   review: {
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const Reviews = ({
@@ -29,20 +29,22 @@ const Reviews = ({
         rating={rating}
         reviewsCount={reviews.length}
       />
-      {reviews.map((review) => (
-        <ReviewCard
-          className={classes.review}
-          key={review.id}
-          review={review}
-        />
-      ))}
+      {
+        reviews.map((review) => (
+          <ReviewCard
+            className={classes.review}
+            key={review.id}
+            review={review}
+          />
+        ))
+      }
     </div>
   );
 };
 
 Reviews.propTypes = {
   className: PropTypes.string,
-  reviews: PropTypes.array
+  reviews: PropTypes.array,
 };
 
 export default Reviews;

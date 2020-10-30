@@ -1,6 +1,6 @@
 import React, {
   useEffect,
-  useRef
+  useRef,
 } from 'react';
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
@@ -17,8 +17,8 @@ const useStyles = makeStyles(() => ({
     height: '100%',
     display: 'flex',
     overflow: 'hidden',
-    position: 'relative'
-  }
+    position: 'relative',
+  },
 }));
 
 const MailView = () => {
@@ -34,8 +34,8 @@ const MailView = () => {
   return (
     <Page
       className={classes.root}
-      title="Mail"
       ref={pageRef}
+      title="Mail"
     >
       <Sidebar containerRef={pageRef} />
       {mailId ? <MailDetails /> : <MailList />}

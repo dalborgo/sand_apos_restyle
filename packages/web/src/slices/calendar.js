@@ -6,7 +6,7 @@ const initialState = {
   events: [],
   isModalOpen: false,
   selectedEventId: null,
-  selectedRange: null
+  selectedRange: null,
 };
 
 const slice = createSlice({
@@ -51,7 +51,7 @@ const slice = createSlice({
       state.isModalOpen = true;
       state.selectedRange = {
         start,
-        end
+        end,
       };
     },
     openModal(state) {
@@ -61,8 +61,8 @@ const slice = createSlice({
       state.isModalOpen = false;
       state.selectedEventId = null;
       state.selectedRange = null;
-    }
-  }
+    },
+  },
 });
 
 export const reducer = slice.reducer;
@@ -86,7 +86,7 @@ export const selectEvent = (eventId) => async (dispatch) => {
 export const updateEvent = (eventId, update) => async (dispatch) => {
   const response = await axios.post('/api/calendar/events/update', {
     eventId,
-    update
+    update,
   });
 
   dispatch(slice.actions.updateEvent(response.data));
@@ -94,7 +94,7 @@ export const updateEvent = (eventId, update) => async (dispatch) => {
 
 export const deleteEvent = (eventId) => async (dispatch) => {
   await axios.post('/api/calendar/events/remove', {
-    eventId
+    eventId,
   });
 
   dispatch(slice.actions.deleteEvent({ eventId }));
@@ -103,7 +103,7 @@ export const deleteEvent = (eventId) => async (dispatch) => {
 export const selectRange = (start, end) => (dispatch) => {
   dispatch(slice.actions.selectRange({
     start: start.getTime(),
-    end: end.getTime()
+    end: end.getTime(),
   }));
 };
 

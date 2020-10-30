@@ -9,8 +9,8 @@ import ThreadList from './ThreadList'
 
 const useStyles = makeStyles(() => ({
   hideThreadList: {
-    display: 'none'
-  }
+    display: 'none',
+  },
 }));
 
 const RecentThreads = () => {
@@ -36,8 +36,8 @@ const RecentThreads = () => {
       if (value) {
         const response = await axios.get('/api/chat/search', {
           params: {
-            query: value
-          }
+            query: value,
+          },
         });
 
         setSearchResults(response.data.results);
@@ -45,7 +45,7 @@ const RecentThreads = () => {
         setSearchResults([]);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   };
 

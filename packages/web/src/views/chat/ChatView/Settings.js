@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     height: 64,
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
-  }
+    paddingRight: theme.spacing(2),
+  },
 }));
 
 const Settings = ({ className, ...rest }) => {
@@ -24,8 +24,8 @@ const Settings = ({ className, ...rest }) => {
       {...rest}
     >
       <Typography
-        variant="h3"
         color="textPrimary"
+        variant="h3"
       >
         Chats
       </Typography>
@@ -48,7 +48,7 @@ const Settings = ({ className, ...rest }) => {
 };
 
 Settings.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Settings;

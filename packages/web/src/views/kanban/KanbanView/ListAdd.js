@@ -8,7 +8,7 @@ import {
   Button,
   Card,
   TextField,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { useDispatch } from 'src/store';
 import { createList } from 'src/slices/kanban';
@@ -20,9 +20,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     width: 380,
     [theme.breakpoints.down('xs')]: {
-      width: 300
-    }
-  }
+      width: 300,
+    },
+  },
 }));
 
 const ListAdd = ({ className, ...rest }) => {
@@ -52,12 +52,12 @@ const ListAdd = ({ className, ...rest }) => {
       setExpanded(false);
       setName('');
       enqueueSnackbar('List created', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -69,46 +69,48 @@ const ListAdd = ({ className, ...rest }) => {
     >
       <Card className={classes.inner}>
         <Box p={2}>
-          {isExpanded ? (
-            <>
-              <TextField
-                fullWidth
-                label="List Title"
-                name="listName"
-                onChange={handleChange}
-                value={name}
-                variant="outlined"
-              />
-              <Box
-                mt={2}
-                display="flex"
-                justifyContent="space-between"
-              >
-                <Button
-                  onClick={handleAddCancel}
-                  variant="text"
+          {
+            isExpanded ? (
+              <>
+                <TextField
+                  fullWidth
+                  label="List Title"
+                  name="listName"
+                  onChange={handleChange}
+                  value={name}
+                  variant="outlined"
+                />
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  mt={2}
                 >
+                  <Button
+                    onClick={handleAddCancel}
+                    variant="text"
+                  >
                   Cancel
-                </Button>
-                <Button
-                  onClick={handleAddConfirm}
-                  variant="contained"
-                  color="secondary"
-                >
+                  </Button>
+                  <Button
+                    color="secondary"
+                    onClick={handleAddConfirm}
+                    variant="contained"
+                  >
                   Add
+                  </Button>
+                </Box>
+              </>
+            ) : (
+              <Box
+                display="flex"
+                justifyContent="center"
+              >
+                <Button onClick={handleAddInit}>
+                Add another list
                 </Button>
               </Box>
-            </>
-          ) : (
-            <Box
-              display="flex"
-              justifyContent="center"
-            >
-              <Button onClick={handleAddInit}>
-                Add another list
-              </Button>
-            </Box>
-          )}
+            )
+          }
         </Box>
       </Card>
     </div>
@@ -116,7 +118,7 @@ const ListAdd = ({ className, ...rest }) => {
 };
 
 ListAdd.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default ListAdd;

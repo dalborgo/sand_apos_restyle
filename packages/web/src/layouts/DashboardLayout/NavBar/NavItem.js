@@ -10,12 +10,12 @@ const useStyles = makeStyles((theme) => ({
   item: {
     display: 'block',
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   itemLeaf: {
     display: 'flex',
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   button: {
     color: theme.palette.text.secondary,
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     textTransform: 'none',
     letterSpacing: 0,
-    width: '100%'
+    width: '100%',
   },
   buttonLeaf: {
     color: theme.palette.text.secondary,
@@ -35,27 +35,27 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
     '&.depth-0': {
       '& $title': {
-        fontWeight: theme.typography.fontWeightMedium
-      }
-    }
+        fontWeight: theme.typography.fontWeightMedium,
+      },
+    },
   },
   icon: {
     display: 'flex',
     alignItems: 'center',
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   title: {
-    marginRight: 'auto'
+    marginRight: 'auto',
   },
   active: {
     color: theme.palette.secondary.main,
     '& $title': {
-      fontWeight: theme.typography.fontWeightMedium
+      fontWeight: theme.typography.fontWeightMedium,
     },
     '& $icon': {
-      color: theme.palette.secondary.main
-    }
-  }
+      color: theme.palette.secondary.main,
+    },
+  },
 }));
 
 const NavItem = ({
@@ -97,12 +97,14 @@ const NavItem = ({
           onClick={handleToggle}
           style={style}
         >
-          {Icon && (
-            <Icon
-              className={classes.icon}
-              size="20"
-            />
-          )}
+          {
+            Icon && (
+              <Icon
+                className={classes.icon}
+                size="20"
+              />
+            )
+          }
           <span className={classes.title}>
             {title}
           </span>
@@ -130,12 +132,14 @@ const NavItem = ({
         style={style}
         to={href}
       >
-        {Icon && (
-          <Icon
-            className={classes.icon}
-            size="20"
-          />
-        )}
+        {
+          Icon && (
+            <Icon
+              className={classes.icon}
+              size="20"
+            />
+          )
+        }
         <span className={classes.title}>
           {title}
         </span>
@@ -153,11 +157,11 @@ NavItem.propTypes = {
   icon: PropTypes.elementType,
   info: PropTypes.elementType,
   open: PropTypes.bool,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
 NavItem.defaultProps = {
-  open: false
+  open: false,
 };
 
 export default NavItem;

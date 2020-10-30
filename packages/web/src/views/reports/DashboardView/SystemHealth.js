@@ -6,23 +6,23 @@ import {
   Card,
   LinearProgress,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
   },
   progress: {
     margin: theme.spacing(0, 1),
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 
 const SystemHealth = ({ className, ...rest }) => {
   const classes = useStyles();
   const data = {
-    value: 97
+    value: 97,
   };
 
   return (
@@ -31,29 +31,29 @@ const SystemHealth = ({ className, ...rest }) => {
       {...rest}
     >
       <Typography
+        color="textSecondary"
         component="h3"
         gutterBottom
         variant="overline"
-        color="textSecondary"
       >
         System Health
       </Typography>
       <Box
-        display="flex"
         alignItems="center"
+        display="flex"
         flexWrap="wrap"
       >
         <Typography
-          variant="h3"
           color="textPrimary"
+          variant="h3"
         >
           {data.value}
           %
         </Typography>
         <LinearProgress
           className={classes.progress}
-          value={data.value}
           color="secondary"
+          value={data.value}
           variant="determinate"
         />
       </Box>
@@ -62,7 +62,7 @@ const SystemHealth = ({ className, ...rest }) => {
 };
 
 SystemHealth.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default SystemHealth;

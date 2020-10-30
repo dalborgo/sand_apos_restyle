@@ -17,7 +17,7 @@ import {
   TableCell,
   TableHead,
   TablePagination,
-  TableRow
+  TableRow,
 } from '@material-ui/core'
 import { ArrowRight as ArrowRightIcon } from 'react-feather'
 import axios from 'src/utils/axios'
@@ -26,7 +26,7 @@ import Label from 'src/components/Label'
 import GenericMoreButton from 'src/components/GenericMoreButton'
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Invoices = ({ className, ...rest }) => {
@@ -42,7 +42,7 @@ const Invoices = ({ className, ...rest }) => {
         setInvoices(response.data.invoices);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -75,43 +75,45 @@ const Invoices = ({ className, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {invoices.map((invoice) => (
-                <TableRow key={invoice.id}>
-                  <TableCell>
+              {
+                invoices.map((invoice) => (
+                  <TableRow key={invoice.id}>
+                    <TableCell>
                     #
-                    {invoice.id}
-                  </TableCell>
-                  <TableCell>
-                    {moment(invoice.issueDate).format('DD/MM/YYYY | HH:MM')}
-                  </TableCell>
-                  <TableCell>
-                    {invoice.description}
-                  </TableCell>
-                  <TableCell>
-                    {invoice.paymentMethod}
+                      {invoice.id}
                     </TableCell>
-                  <TableCell>
-                    {invoice.currency}
-                    {invoice.value}
-                  </TableCell>
-                  <TableCell>
-                    {/* <Label color={statusColors[invoice.status]} > */}
-                    <Label color="primary">
-                      {invoice.status}
-                    </Label>
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      component={RouterLink}
-                      to="/app/management/invoices/1"
-                    >
-                      <SvgIcon fontSize="small">
-                        <ArrowRightIcon />
-                      </SvgIcon>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell>
+                      {moment(invoice.issueDate).format('DD/MM/YYYY | HH:MM')}
+                    </TableCell>
+                    <TableCell>
+                      {invoice.description}
+                    </TableCell>
+                    <TableCell>
+                      {invoice.paymentMethod}
+                    </TableCell>
+                    <TableCell>
+                      {invoice.currency}
+                      {invoice.value}
+                    </TableCell>
+                    <TableCell>
+                      {/* <Label color={statusColors[invoice.status]} > */}
+                      <Label color="primary">
+                        {invoice.status}
+                      </Label>
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        component={RouterLink}
+                        to="/app/management/invoices/1"
+                      >
+                        <SvgIcon fontSize="small">
+                          <ArrowRightIcon />
+                        </SvgIcon>
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </Box>
@@ -130,7 +132,7 @@ const Invoices = ({ className, ...rest }) => {
 };
 
 Invoices.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Invoices;

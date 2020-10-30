@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
   makeStyles,
-  Hidden
+  Hidden,
 } from '@material-ui/core';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import ReplyIcon from '@material-ui/icons/ReplyOutlined';
@@ -30,22 +30,22 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     height: '100%',
     flexDirection: 'column',
-    overflowY: 'auto'
+    overflowY: 'auto',
   },
   avatar: {
     height: 56,
-    width: 56
+    width: 56,
   },
   date: {
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
   },
   message: {
     color: theme.palette.text.secondary,
     '& > p': {
       ...theme.typography.body1,
-      marginBottom: theme.spacing(2)
-    }
-  }
+      marginBottom: theme.spacing(2),
+    },
+  },
 }));
 
 const MailDetails = () => {
@@ -67,14 +67,14 @@ const MailDetails = () => {
       <Toolbar />
       <Divider />
       <Box
-        p={3}
         display="flex"
-        justifyContent="space-between"
         flexShrink={0}
+        justifyContent="space-between"
+        p={3}
       >
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
         >
           <Avatar
             className={classes.avatar}
@@ -84,9 +84,9 @@ const MailDetails = () => {
           </Avatar>
           <Box ml={2}>
             <Typography
+              color="textPrimary"
               display="inline"
               variant="h5"
-              color="textPrimary"
             >
               {mail.from.name}
             </Typography>
@@ -99,19 +99,21 @@ const MailDetails = () => {
               {mail.from.email}
             </Link>
             <Typography
-              variant="subtitle2"
               color="textSecondary"
+              variant="subtitle2"
             >
               To:
               {' '}
-              {mail.to.map((person) => (
-                <Link
-                  color="inherit"
-                  key={person.email}
-                >
-                  {person.email}
-                </Link>
-              ))}
+              {
+                mail.to.map((person) => (
+                  <Link
+                    color="inherit"
+                    key={person.email}
+                  >
+                    {person.email}
+                  </Link>
+                ))
+              }
             </Typography>
             <Typography
               className={classes.date}
@@ -123,8 +125,8 @@ const MailDetails = () => {
           </Box>
         </Box>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
         >
           <Hidden smDown>
             <Tooltip title="Reply">
@@ -152,21 +154,21 @@ const MailDetails = () => {
       </Box>
       <Divider />
       <Box
-        flexGrow={1}
-        py={6}
-        px={3}
         bgcolor="background.dark"
+        flexGrow={1}
+        px={3}
+        py={6}
       >
         <Typography
-          variant="h1"
           color="textPrimary"
+          variant="h1"
         >
           {mail.subject}
         </Typography>
         <Box mt={2}>
           <Markdown
-            source={mail.message}
             className={classes.message}
+            source={mail.message}
           />
         </Box>
       </Box>

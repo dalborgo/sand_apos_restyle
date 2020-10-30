@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Header = ({ className, ...rest }) => {
@@ -16,14 +16,14 @@ const Header = ({ className, ...rest }) => {
       {...rest}
     >
       <Typography
-        variant="overline"
         color="textSecondary"
+        variant="overline"
       >
         Social Feed
       </Typography>
       <Typography
-        variant="h3"
         color="textPrimary"
+        variant="h3"
       >
         Here&apos;s what your connections posted
       </Typography>
@@ -32,7 +32,7 @@ const Header = ({ className, ...rest }) => {
 };
 
 Header.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Header;

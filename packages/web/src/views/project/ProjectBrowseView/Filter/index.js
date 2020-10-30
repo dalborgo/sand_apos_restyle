@@ -9,7 +9,7 @@ import {
   Divider,
   FormControlLabel,
   Input,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import MultiSelect from './MultiSelect';
@@ -21,11 +21,11 @@ const selectOptions = [
       'Freelance',
       'Full Time',
       'Part Time',
-      'Internship']
+      'Internship'],
   },
   {
     label: 'Level',
-    options: ['Novice', 'Expert']
+    options: ['Novice', 'Expert'],
   },
   {
     label: 'Location',
@@ -35,23 +35,23 @@ const selectOptions = [
       'Australia',
       'Europe',
       'North America',
-      'South America'
-    ]
+      'South America',
+    ],
   },
   {
     label: 'Roles',
-    options: ['Android', 'Web Developer', 'iOS']
-  }
+    options: ['Android', 'Web Developer', 'iOS'],
+  },
 ];
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   searchInput: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   chip: {
-    margin: theme.spacing(1)
-  }
+    margin: theme.spacing(1),
+  },
 }));
 
 const Filter = ({ className, ...rest }) => {
@@ -63,7 +63,7 @@ const Filter = ({ className, ...rest }) => {
     'Novice',
     'Europe',
     'Android',
-    'Web Developer'
+    'Web Developer',
   ]);
 
   const handleInputChange = (event) => {
@@ -96,15 +96,15 @@ const Filter = ({ className, ...rest }) => {
       {...rest}
     >
       <Box
-        p={2}
-        display="flex"
         alignItems="center"
+        display="flex"
+        p={2}
       >
         <SearchIcon />
         <Input
+          className={classes.searchInput}
           disableUnderline
           fullWidth
-          className={classes.searchInput}
           onChange={handleInputChange}
           onKeyUp={handleInputKeyup}
           placeholder="Enter a keyword"
@@ -113,36 +113,40 @@ const Filter = ({ className, ...rest }) => {
       </Box>
       <Divider />
       <Box
-        p={2}
-        display="flex"
         alignItems="center"
+        display="flex"
         flexWrap="wrap"
+        p={2}
       >
-        {chips.map((chip) => (
-          <Chip
-            className={classes.chip}
-            key={chip}
-            label={chip}
-            onDelete={() => handleChipDelete(chip)}
-          />
-        ))}
+        {
+          chips.map((chip) => (
+            <Chip
+              className={classes.chip}
+              key={chip}
+              label={chip}
+              onDelete={() => handleChipDelete(chip)}
+            />
+          ))
+        }
       </Box>
       <Divider />
       <Box
-        display="flex"
         alignItems="center"
+        display="flex"
         flexWrap="wrap"
         p={1}
       >
-        {selectOptions.map((option) => (
-          <MultiSelect
-            key={option.label}
-            label={option.label}
-            onChange={handleMultiSelectChange}
-            options={option.options}
-            value={chips}
-          />
-        ))}
+        {
+          selectOptions.map((option) => (
+            <MultiSelect
+              key={option.label}
+              label={option.label}
+              onChange={handleMultiSelectChange}
+              options={option.options}
+              value={chips}
+            />
+          ))
+        }
         <Box flexGrow={1} />
         <FormControlLabel
           control={(
@@ -156,7 +160,7 @@ const Filter = ({ className, ...rest }) => {
 };
 
 Filter.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Filter;

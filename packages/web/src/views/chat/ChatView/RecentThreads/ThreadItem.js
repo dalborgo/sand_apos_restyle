@@ -20,28 +20,28 @@ const getDetails = (thread, currentUserId) => {
   return {
     otherParticipants,
     displayNames,
-    displayText
+    displayText,
   };
 };
 
 const useStyles = makeStyles((theme) => ({
   active: {
     backgroundColor: theme.palette.action.selected,
-    boxShadow: `inset 4px 0px 0px ${theme.palette.secondary.main}`
+    boxShadow: `inset 4px 0px 0px ${theme.palette.secondary.main}`,
   },
   smallAvatar: {
     height: 30,
     width: 30,
     '&:first-child': {
-      marginTop: 10
-    }
+      marginTop: 10,
+    },
   },
   unreadIndicator: {
     height: 18,
     marginTop: 2,
     minWidth: 18,
-    padding: 2
-  }
+    padding: 2,
+  },
 }));
 
 const ThreadItem = ({
@@ -60,10 +60,12 @@ const ThreadItem = ({
   return (
     <ListItem
       button
-      className={clsx(
-        { [classes.active]: active },
-        className
-      )}
+      className={
+        clsx(
+          { [classes.active]: active },
+          className
+        )
+      }
       onClick={onSelect}
       {...rest}
     >
@@ -72,43 +74,51 @@ const ThreadItem = ({
           classes={{ avatar: details.otherParticipants.length > 1 ? classes.smallAvatar : null }}
           max={2}
         >
-          {details.otherParticipants.map((participant) => (
-            <Avatar
-              alt="Person"
-              key={participant.id}
-              src={participant.avatar}
-            />
-          ))}
+          {
+            details.otherParticipants.map((participant) => (
+              <Avatar
+                alt="Person"
+                key={participant.id}
+                src={participant.avatar}
+              />
+            ))
+          }
         </AvatarGroup>
       </ListItemAvatar>
       <ListItemText
         primary={details.displayNames}
-        primaryTypographyProps={{
-          noWrap: true,
-          variant: 'h6',
-          color: 'textPrimary'
-        }}
+        primaryTypographyProps={
+          {
+            noWrap: true,
+            variant: 'h6',
+            color: 'textPrimary',
+          }
+        }
         secondary={details.displayText}
-        secondaryTypographyProps={{
-          noWrap: true,
-          variant: 'body2',
-          color: 'textSecondary'
-        }}
+        secondaryTypographyProps={
+          {
+            noWrap: true,
+            variant: 'body2',
+            color: 'textSecondary',
+          }
+        }
       />
       <Box
-        ml={2}
+        alignItems="flex-end"
         display="flex"
         flexDirection="column"
-        alignItems="flex-end"
+        ml={2}
       >
-        {thread.unreadCount > 0 && (
-          <Chip
-            className={classes.unreadIndicator}
-            color="secondary"
-            size="small"
-            label={thread.unreadCount}
-          />
-        )}
+        {
+          thread.unreadCount > 0 && (
+            <Chip
+              className={classes.unreadIndicator}
+              color="secondary"
+              label={thread.unreadCount}
+              size="small"
+            />
+          )
+        }
       </Box>
     </ListItem>
   );
@@ -118,12 +128,12 @@ ThreadItem.propTypes = {
   active: PropTypes.bool,
   className: PropTypes.string,
   onSelect: PropTypes.func,
-  thread: PropTypes.object.isRequired
+  thread: PropTypes.object.isRequired,
 };
 
 ThreadItem.defaultProps = {
   active: false,
-  onSelect: () => { }
+  onSelect: () => { },
 };
 
 export default ThreadItem;

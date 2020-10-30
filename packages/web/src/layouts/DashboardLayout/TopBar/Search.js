@@ -14,7 +14,7 @@ import {
   SvgIcon,
   TextField,
   Tooltip,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import { Search as SearchIcon, XCircle as XIcon } from 'react-feather'
 import axios from 'src/utils/axios'
@@ -22,8 +22,8 @@ import axios from 'src/utils/axios'
 const useStyles = makeStyles(() => ({
   drawer: {
     width: 500,
-    maxWidth: '100%'
-  }
+    maxWidth: '100%',
+  },
 }));
 
 const Search = () => {
@@ -50,9 +50,9 @@ const Search = () => {
 
       setResults(response.data.results);
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     } finally {
       setLoading(false);
@@ -82,13 +82,13 @@ const Search = () => {
         <PerfectScrollbar options={{ suppressScrollX: true }}>
           <Box p={3}>
             <Box
+              alignItems="center"
               display="flex"
               justifyContent="space-between"
-              alignItems="center"
             >
               <Typography
-                variant="h4"
                 color="textPrimary"
+                variant="h4"
               >
                 Search
               </Typography>
@@ -101,18 +101,20 @@ const Search = () => {
             <Box mt={2}>
               <TextField
                 fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SvgIcon
-                        fontSize="small"
-                        color="action"
-                      >
-                        <SearchIcon />
-                      </SvgIcon>
-                    </InputAdornment>
-                  )
-                }}
+                InputProps={
+                  {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SvgIcon
+                          color="action"
+                          fontSize="small"
+                        >
+                          <SearchIcon />
+                        </SvgIcon>
+                      </InputAdornment>
+                    ),
+                  }
+                }
                 onChange={(event) => setValue(event.target.value)}
                 placeholder="Search people &amp; places"
                 value={value}
@@ -120,51 +122,55 @@ const Search = () => {
               />
             </Box>
             <Box
-              mt={2}
               display="flex"
               justifyContent="flex-end"
+              mt={2}
             >
               <Button
                 color="secondary"
-                variant="contained"
                 onClick={handleSearch}
+                variant="contained"
               >
                 Search
               </Button>
             </Box>
             <Box mt={4}>
-              {isLoading ? (
-                <Box
-                  display="flex"
-                  justifyContent="center"
-                >
-                  <CircularProgress />
-                </Box>
-              ) : (
-                <>
-                  {results.map((result, i) => (
-                    <Box
-                      key={i}
-                      mb={2}
-                    >
-                      <Link
-                        variant="h4"
-                        color="textPrimary"
-                        component={RouterLink}
-                        to="/app"
-                      >
-                        {result.title}
-                      </Link>
-                      <Typography
-                        variant="body2"
-                        color="textPrimary"
-                      >
-                        {result.description}
-                      </Typography>
-                    </Box>
-                  ))}
-                </>
-              )}
+              {
+                isLoading ? (
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <>
+                    {
+                      results.map((result, i) => (
+                        <Box
+                          key={i}
+                          mb={2}
+                        >
+                          <Link
+                            color="textPrimary"
+                            component={RouterLink}
+                            to="/app"
+                            variant="h4"
+                          >
+                            {result.title}
+                          </Link>
+                          <Typography
+                            color="textPrimary"
+                            variant="body2"
+                          >
+                            {result.description}
+                          </Typography>
+                        </Box>
+                      ))
+                    }
+                  </>
+                )
+              }
             </Box>
           </Box>
         </PerfectScrollbar>

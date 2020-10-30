@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Box,
   Container,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import Header from './Header';
@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const OverviewView = () => {

@@ -12,9 +12,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
     backgroundColor: theme.palette.error.main,
     '&:hover': {
-      backgroundColor: theme.palette.error.dark
-    }
-  }
+      backgroundColor: theme.palette.error.dark,
+    },
+  },
 }));
 
 const OtherActions = ({ className, ...rest }) => {
@@ -29,9 +29,9 @@ const OtherActions = ({ className, ...rest }) => {
       <Divider />
       <CardContent>
         <Box
+          alignItems="flex-start"
           display="flex"
           flexDirection="column"
-          alignItems="flex-start"
         >
           <Button startIcon={<NotInterestedIcon />}>
             Close Account
@@ -41,12 +41,12 @@ const OtherActions = ({ className, ...rest }) => {
           </Button>
         </Box>
         <Box
-          mt={1}
           mb={2}
+          mt={1}
         >
           <Typography
-            variant="body2"
             color="textSecondary"
+            variant="body2"
           >
             Remove this customer’s data if he requested that, if not please
             be aware that what has been deleted can never brough back
@@ -64,7 +64,7 @@ const OtherActions = ({ className, ...rest }) => {
 };
 
 OtherActions.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default OtherActions;

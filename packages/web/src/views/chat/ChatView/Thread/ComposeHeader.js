@@ -14,7 +14,7 @@ import {
   makeStyles,
   Paper,
   Popper,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import axios from 'src/utils/axios'
 
@@ -30,30 +30,30 @@ const useStyles = makeStyles((theme) => ({
   root: {
     alignItems: 'center',
     display: 'flex',
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   container: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   recipient: {
     marginLeft: 4,
-    marginRight: 4
+    marginRight: 4,
   },
   input: {
     backgroundColor: theme.palette.background.default,
     borderRadius: 16,
     height: 32,
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    paddingRight: theme.spacing(2),
   },
   compactInput: {
-    maxWidth: 120
+    maxWidth: 120,
   },
   searchResults: {
     marginTop: theme.spacing(1),
     maxWidth: '100%',
-    width: 320
-  }
+    width: 320,
+  },
 }));
 
 const ComposeHeader = ({
@@ -83,8 +83,8 @@ const ComposeHeader = ({
       if (value) {
         const response = await axios.get('/api/chat/search', {
           params: {
-            query: value
-          }
+            query: value,
+          },
         });
     
         setSearchResults(response.data.results);
@@ -92,7 +92,7 @@ const ComposeHeader = ({
         setSearchResults([]);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   };
 
@@ -133,8 +133,8 @@ const ComposeHeader = ({
       {...rest}
     >
       <Typography
-        variant="body1"
         color="textSecondary"
+        variant="body1"
       >
         To:
       </Typography>
@@ -142,16 +142,18 @@ const ComposeHeader = ({
         className={classes.container}
         ref={containerRef}
       >
-        {recipients.map((recipient) => (
-          <Chip
-            className={classes.recipient}
-            color="primary"
-            key={recipient.id}
-            label={recipient.name}
-            onDelete={() => handleRemoveRecipient(recipient.id)}
-            size="small"
-          />
-        ))}
+        {
+          recipients.map((recipient) => (
+            <Chip
+              className={classes.recipient}
+              color="primary"
+              key={recipient.id}
+              label={recipient.name}
+              onDelete={() => handleRemoveRecipient(recipient.id)}
+              size="small"
+            />
+          ))
+        }
         <Input
           className={clsx(classes.input, { [classes.compactInput]: recipients.length > 0 })}
           disableUnderline
@@ -162,77 +164,85 @@ const ComposeHeader = ({
           value={query}
         />
       </div>
-      {displayResults && (
-        <ClickAwayListener onClickAway={handleSearchResultsClickAway}>
-          <Popper
-            anchorEl={containerRef.current}
-            open={isSearchFocused}
-            placement="bottom-start"
-          >
-            <Paper className={classes.searchResults}>
-              {filteredSearchResults.length === 0 ? (
-                <Box
-                  pb={2}
-                  pt={2}
-                  px={2}
-                  textAlign="center"
-                >
-                  <Typography
-                    color="textPrimary"
-                    gutterBottom
-                    variant="h4"
-                  >
-                    Nothing Found
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    variant="body2"
-                  >
-                    We couldn&apos;t find any matches for &quot;
-                    {query}
-                    &quot;. Try checking for typos or using complete words.
-                  </Typography>
-                </Box>
-              ) : (
-                <>
-                  <Box
-                    px={2}
-                    pt={2}
-                  >
-                    <Typography
-                      color="textSecondary"
-                      variant="h6"
+      {
+        displayResults && (
+          <ClickAwayListener onClickAway={handleSearchResultsClickAway}>
+            <Popper
+              anchorEl={containerRef.current}
+              open={isSearchFocused}
+              placement="bottom-start"
+            >
+              <Paper className={classes.searchResults}>
+                {
+                  filteredSearchResults.length === 0 ? (
+                    <Box
+                      pb={2}
+                      pt={2}
+                      px={2}
+                      textAlign="center"
                     >
-                      Contacts
-                    </Typography>
-                  </Box>
-                  <List>
-                    {filteredSearchResults.map((result) => (
-                      <ListItem
-                        button
-                        key={result.id}
-                        onClick={() => handleAddRecipient(result)}
+                      <Typography
+                        color="textPrimary"
+                        gutterBottom
+                        variant="h4"
                       >
-                        <ListItemAvatar>
-                          <Avatar src={result.avatar} />
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={result.name}
-                          primaryTypographyProps={{
-                            color: 'textPrimary',
-                            noWrap: true,
-                            variant: 'h6'
-                          }}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </>
-              )}
-            </Paper>
-          </Popper>
-        </ClickAwayListener>
-      )}
+                    Nothing Found
+                      </Typography>
+                      <Typography
+                        color="textSecondary"
+                        variant="body2"
+                      >
+                    We couldn&apos;t find any matches for &quot;
+                        {query}
+                    &quot;. Try checking for typos or using complete words.
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <>
+                      <Box
+                        pt={2}
+                        px={2}
+                      >
+                        <Typography
+                          color="textSecondary"
+                          variant="h6"
+                        >
+                      Contacts
+                        </Typography>
+                      </Box>
+                      <List>
+                        {
+                          filteredSearchResults.map((result) => (
+                            <ListItem
+                              button
+                              key={result.id}
+                              onClick={() => handleAddRecipient(result)}
+                            >
+                              <ListItemAvatar>
+                                <Avatar src={result.avatar} />
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={result.name}
+                                primaryTypographyProps={
+                                  {
+                                    color: 'textPrimary',
+                                    noWrap: true,
+                                    variant: 'h6',
+                                  }
+                                }
+                              />
+                            </ListItem>
+                          ))
+                        }
+                      </List>
+                    </>
+                  )
+                }
+              </Paper>
+            </Popper>
+          </ClickAwayListener>
+        )
+      }
     </div>
   );
 };
@@ -241,13 +251,13 @@ ComposeHeader.propTypes = {
   className: PropTypes.string,
   onAddRecipient: PropTypes.func,
   onRemoveRecipient: PropTypes.func,
-  recipients: PropTypes.array
+  recipients: PropTypes.array,
 };
 
 ComposeHeader.defaultProps = {
   onAddRecipient: () => { },
   onRemoveRecipient: () => { },
-  recipients: []
+  recipients: [],
 };
 
 export default ComposeHeader;

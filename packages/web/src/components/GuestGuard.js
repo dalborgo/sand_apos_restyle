@@ -18,7 +18,7 @@ const GuestGuard = ({ children }) => {
 };
 
 GuestGuard.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default GuestGuard;

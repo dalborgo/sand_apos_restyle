@@ -12,7 +12,7 @@ import {
   Link,
   makeStyles,
   TextField,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import useAuth from 'src/hooks/useAuth'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
@@ -20,17 +20,17 @@ import useIsMountedRef from 'src/hooks/useIsMountedRef'
 const useStyles = makeStyles((theme) => ({
   root: {},
   googleButton: {
-    backgroundColor: theme.palette.common.white
+    backgroundColor: theme.palette.common.white,
   },
   providerIcon: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   divider: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   dividerText: {
-    margin: theme.spacing(2)
-  }
+    margin: theme.spacing(2),
+  },
 }));
 
 const FirebaseAuthRegister = ({ className, ...rest }) => {
@@ -42,7 +42,7 @@ const FirebaseAuthRegister = ({ className, ...rest }) => {
     try {
       await signInWithGoogle();
     } catch(err) {
-      console.error(err);
+    
     }
   };
 
@@ -72,9 +72,9 @@ const FirebaseAuthRegister = ({ className, ...rest }) => {
           orientation="horizontal"
         />
         <Typography 
+          className={classes.dividerText}
           color="textSecondary"
           variant="body1"
-          className={classes.dividerText}
         >
           OR
         </Typography>
@@ -84,139 +84,151 @@ const FirebaseAuthRegister = ({ className, ...rest }) => {
         />
       </Box>
       <Formik
-        initialValues={{
-          email: '',
-          password: '',
-          policy: true,
-          submit: null
-        }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-          password: Yup.string().min(7).max(255).required('Password is required'),
-          policy: Yup.boolean().oneOf([true], 'This field must be checked')
-        })}
-        onSubmit={async (values, {
-          setErrors,
-          setStatus,
-          setSubmitting
-        }) => {
-          try {
-            await createUserWithEmailAndPassword(values.email, values.password);
+        initialValues={
+          {
+            email: '',
+            password: '',
+            policy: true,
+            submit: null,
+          }
+        }
+        onSubmit={
+          async (values, {
+            setErrors,
+            setStatus,
+            setSubmitting,
+          }) => {
+            try {
+              await createUserWithEmailAndPassword(values.email, values.password);
 
-            if (isMountedRef.current) {
-              setStatus({ success: true });
-              setSubmitting(false);
-            }
-          } catch (err) {
-            console.error(err);
-            if (isMountedRef.current) {
-              setStatus({ success: false });
-              setErrors({ submit: err.message });
-              setSubmitting(false);
+              if (isMountedRef.current) {
+                setStatus({ success: true });
+                setSubmitting(false);
+              }
+            } catch (err) {
+              
+              if (isMountedRef.current) {
+                setStatus({ success: false });
+                setErrors({ submit: err.message });
+                setSubmitting(false);
+              }
             }
           }
-        }}
+        }
+        validationSchema={
+          Yup.object().shape({
+            email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+            password: Yup.string().min(7).max(255).required('Password is required'),
+            policy: Yup.boolean().oneOf([true], 'This field must be checked'),
+          })
+        }
       >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values
-        }) => (
-          <form
-            noValidate
-            className={clsx(classes.root, className)}
-            onSubmit={handleSubmit}
-            {...rest}
-          >
-            <TextField
-              error={Boolean(touched.email && errors.email)}
-              fullWidth
-              helperText={touched.email && errors.email}
-              label="Email Address"
-              margin="normal"
-              name="email"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              type="email"
-              value={values.email}
-              variant="outlined"
-            />
-            <TextField
-              error={Boolean(touched.password && errors.password)}
-              fullWidth
-              helperText={touched.password && errors.password}
-              label="Password"
-              margin="normal"
-              name="password"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              type="password"
-              value={values.password}
-              variant="outlined"
-            />
-            <Box
-              alignItems="center"
-              display="flex"
-              mt={2}
-              ml={-1}
+        {
+          ({
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+            values,
+          }) => (
+            <form
+              className={clsx(classes.root, className)}
+              noValidate
+              onSubmit={handleSubmit}
+              {...rest}
             >
-              <Checkbox
-                checked={values.policy}
-                name="policy"
-                onChange={handleChange}
-              />
-              <Typography
-                variant="body2"
-                color="textSecondary"
-              >
-                I have read the
-                {' '}
-                <Link
-                  component="a"
-                  href="#"
-                  color="secondary"
-                >
-                  Terms and Conditions
-                </Link>
-              </Typography>
-            </Box>
-            {Boolean(touched.policy && errors.policy) && (
-              <FormHelperText error>
-                {errors.policy}
-              </FormHelperText>
-            )}
-            {errors.submit && (
-              <Box mt={3}>
-                <FormHelperText error>
-                  {errors.submit}
-                </FormHelperText>
-              </Box>
-            )}
-            <Box mt={2}>
-              <Button
-                color="secondary"
-                disabled={isSubmitting}
+              <TextField
+                error={Boolean(touched.email && errors.email)}
                 fullWidth
-                size="large"
-                type="submit"
-                variant="contained"
+                helperText={touched.email && errors.email}
+                label="Email Address"
+                margin="normal"
+                name="email"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                type="email"
+                value={values.email}
+                variant="outlined"
+              />
+              <TextField
+                error={Boolean(touched.password && errors.password)}
+                fullWidth
+                helperText={touched.password && errors.password}
+                label="Password"
+                margin="normal"
+                name="password"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                type="password"
+                value={values.password}
+                variant="outlined"
+              />
+              <Box
+                alignItems="center"
+                display="flex"
+                ml={-1}
+                mt={2}
               >
+                <Checkbox
+                  checked={values.policy}
+                  name="policy"
+                  onChange={handleChange}
+                />
+                <Typography
+                  color="textSecondary"
+                  variant="body2"
+                >
+                I have read the
+                  {' '}
+                  <Link
+                    color="secondary"
+                    component="a"
+                    href="#"
+                  >
+                  Terms and Conditions
+                  </Link>
+                </Typography>
+              </Box>
+              {
+                Boolean(touched.policy && errors.policy) && (
+                  <FormHelperText error>
+                    {errors.policy}
+                  </FormHelperText>
+                )
+              }
+              {
+                errors.submit && (
+                  <Box mt={3}>
+                    <FormHelperText error>
+                      {errors.submit}
+                    </FormHelperText>
+                  </Box>
+                )
+              }
+              <Box mt={2}>
+                <Button
+                  color="secondary"
+                  disabled={isSubmitting}
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
                 Register
-              </Button>
-            </Box>
-          </form>
-        )}
+                </Button>
+              </Box>
+            </form>
+          )
+        }
       </Formik>
     </>
   );
 };
 
 FirebaseAuthRegister.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default FirebaseAuthRegister;

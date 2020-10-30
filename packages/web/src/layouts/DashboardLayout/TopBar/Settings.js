@@ -12,7 +12,7 @@ import {
   Switch,
   TextField,
   Tooltip,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import { Settings as SettingsIcon } from 'react-feather'
 import useSettings from 'src/hooks/useSettings'
@@ -24,12 +24,12 @@ const useStyles = makeStyles((theme) => ({
     width: 10,
     borderRadius: 5,
     marginTop: 10,
-    marginRight: 5
+    marginRight: 5,
   },
   popover: {
     width: 320,
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }));
 
 const Settings = () => {
@@ -40,7 +40,7 @@ const Settings = () => {
   const [values, setValues] = useState({
     direction: settings.direction,
     responsiveFontSizes: settings.responsiveFontSizes,
-    theme: settings.theme
+    theme: settings.theme,
   });
 
   const handleOpen = () => {
@@ -54,7 +54,7 @@ const Settings = () => {
   const handleChange = (field, value) => {
     setValues({
       ...values,
-      [field]: value
+      [field]: value,
     });
   };
 
@@ -67,9 +67,9 @@ const Settings = () => {
     <>
       <Tooltip title="Settings">
         <Badge
+          classes={{ badge: classes.badge }}
           color="secondary"
           variant="dot"
-          classes={{ badge: classes.badge }}
         >
           <IconButton
             color="inherit"
@@ -83,18 +83,20 @@ const Settings = () => {
         </Badge>
       </Tooltip>
       <Popover
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center'
-        }}
-        classes={{ paper: classes.popover }}
         anchorEl={ref.current}
+        anchorOrigin={
+          {
+            vertical: 'bottom',
+            horizontal: 'center',
+          }
+        }
+        classes={{ paper: classes.popover }}
         onClose={handleClose}
         open={isOpen}
       >
         <Typography
-          variant="h4"
           color="textPrimary"
+          variant="h4"
         >
           Settings
         </Typography>
@@ -103,14 +105,16 @@ const Settings = () => {
           px={1}
         >
           <FormControlLabel
-            control={(
-              <Switch
-                checked={values.direction === 'rtl'}
-                edge="start"
-                name="direction"
-                onChange={(event) => handleChange('direction', event.target.checked ? 'rtl' : 'ltr')}
-              />
-            )}
+            control={
+              (
+                <Switch
+                  checked={values.direction === 'rtl'}
+                  edge="start"
+                  name="direction"
+                  onChange={(event) => handleChange('direction', event.target.checked ? 'rtl' : 'ltr')}
+                />
+              )
+            }
             label="RTL"
           />
         </Box>
@@ -119,14 +123,16 @@ const Settings = () => {
           px={1}
         >
           <FormControlLabel
-            control={(
-              <Switch
-                checked={values.responsiveFontSizes}
-                edge="start"
-                name="direction"
-                onChange={(event) => handleChange('responsiveFontSizes', event.target.checked)}
-              />
-            )}
+            control={
+              (
+                <Switch
+                  checked={values.responsiveFontSizes}
+                  edge="start"
+                  name="direction"
+                  onChange={(event) => handleChange('responsiveFontSizes', event.target.checked)}
+                />
+              )
+            }
             label="Responsive font sizes"
           />
         </Box>
@@ -141,22 +147,24 @@ const Settings = () => {
             value={values.theme}
             variant="outlined"
           >
-            {Object.keys(THEMES).map((theme) => (
-              <option
-                key={theme}
-                value={theme}
-              >
-                {capitalCase(theme)}
-              </option>
-            ))}
+            {
+              Object.keys(THEMES).map((theme) => (
+                <option
+                  key={theme}
+                  value={theme}
+                >
+                  {capitalCase(theme)}
+                </option>
+              ))
+            }
           </TextField>
         </Box>
         <Box mt={2}>
           <Button
-            variant="contained"
             color="secondary"
             fullWidth
             onClick={handleSave}
+            variant="contained"
           >
             Save Settings
           </Button>

@@ -9,13 +9,13 @@ import {
   Link,
   SvgIcon,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { PlusCircle as PlusIcon } from 'react-feather';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Header = ({ className, ...rest }) => {
@@ -24,43 +24,43 @@ const Header = ({ className, ...rest }) => {
   return (
     <Grid
       alignItems="center"
+      className={clsx(classes.root, className)}
       container
       justify="space-between"
       spacing={3}
-      className={clsx(classes.root, className)}
       {...rest}
     >
       <Grid item>
         <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
+          separator={<NavigateNextIcon fontSize="small" />}
         >
           <Link
-            variant="body1"
             color="inherit"
-            to="/app"
             component={RouterLink}
+            to="/app"
+            variant="body1"
           >
             Dashboard
           </Link>
           <Link
-            variant="body1"
             color="inherit"
-            to="/app/projects"
             component={RouterLink}
+            to="/app/projects"
+            variant="body1"
           >
             Projects
           </Link>
           <Typography
-            variant="body1"
             color="textPrimary"
+            variant="body1"
           >
             Browse
           </Typography>
         </Breadcrumbs>
         <Typography
-          variant="h3"
           color="textPrimary"
+          variant="h3"
         >
           See the latest opportunities
         </Typography>
@@ -69,13 +69,13 @@ const Header = ({ className, ...rest }) => {
         <Button
           color="secondary"
           component={RouterLink}
-          to="/app/projects/create"
-          variant="contained"
           startIcon={
             <SvgIcon fontSize="small">
               <PlusIcon />
             </SvgIcon>
           }
+          to="/app/projects/create"
+          variant="contained"
         >
           Add new project
         </Button>
@@ -85,7 +85,7 @@ const Header = ({ className, ...rest }) => {
 }
 
 Header.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Header;

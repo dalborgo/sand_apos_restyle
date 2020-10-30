@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import axios from 'src/utils/axios'
 
 const initialState = {
-  notifications: []
+  notifications: [],
 };
 
 const slice = createSlice({
@@ -13,8 +13,8 @@ const slice = createSlice({
       const { notifications } = action.payload;
 
       state.notifications = notifications;
-    }
-  }
+    },
+  },
 });
 
 export const reducer = slice.reducer;

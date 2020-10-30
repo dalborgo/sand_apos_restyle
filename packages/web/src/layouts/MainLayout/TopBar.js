@@ -8,26 +8,26 @@ import Logo from 'src/components/Logo'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
   toolbar: {
-    height: 64
+    height: 64,
   },
   logo: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   link: {
     fontWeight: theme.typography.fontWeightMedium,
     '& + &': {
-      marginLeft: theme.spacing(2)
-    }
+      marginLeft: theme.spacing(2),
+    },
   },
   divider: {
     width: 1,
     height: 32,
     marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2)
-  }
+    marginRight: theme.spacing(2),
+  },
 }));
 
 const TopBar = ({ className, ...rest }) => {
@@ -45,8 +45,8 @@ const TopBar = ({ className, ...rest }) => {
         </RouterLink>
         <Hidden mdDown>
           <Typography
-            variant="caption"
             color="textSecondary"
+            variant="caption"
           >
             Version
             {' '}
@@ -79,8 +79,8 @@ const TopBar = ({ className, ...rest }) => {
           color="secondary"
           component="a"
           href="https://material-ui.com/store/items/devias-kit-pro"
-          variant="contained"
           size="small"
+          variant="contained"
         >
           Get the kit
         </Button>
@@ -90,7 +90,7 @@ const TopBar = ({ className, ...rest }) => {
 };
 
 TopBar.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default TopBar;

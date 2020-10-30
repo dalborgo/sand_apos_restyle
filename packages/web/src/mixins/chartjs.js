@@ -105,7 +105,9 @@ function draw() {
 
     const width = corners[2][0] - corners[1][0];
     const height = corners[0][1] - corners[1][1];
+    // eslint-disable-next-line id-length
     const x = corners[1][0];
+    // eslint-disable-next-line id-length
     const y = corners[1][1];
 
     radius = cornerRadius;
@@ -187,5 +189,5 @@ function draw() {
 }
 
 Chart.helpers.extend(Chart.elements.Rectangle.prototype, {
-  draw
+  draw,
 });

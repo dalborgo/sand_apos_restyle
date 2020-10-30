@@ -1,13 +1,13 @@
 import React, {
   useState,
   useEffect,
-  useCallback
+  useCallback,
 } from 'react';
 import {
   Box,
   Container,
   Divider,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const InvoiceDetailsView = () => {
@@ -37,7 +37,7 @@ const InvoiceDetailsView = () => {
         setInvoice(response.data.invoice);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 

@@ -1,7 +1,7 @@
 import React, {
   useState,
   useEffect,
-  useCallback
+  useCallback,
 } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -15,7 +15,7 @@ import {
   ListItem,
   ListItemText,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
   root: {},
   current: {
     marginTop: theme.spacing(0.5),
-    marginRight: theme.spacing(0.5)
-  }
+    marginRight: theme.spacing(0.5),
+  },
 }));
 
 const getRandomInt = (min, max) => {
@@ -53,7 +53,7 @@ const RealTime = ({ className, ...rest }) => {
     167,
     183,
     176,
-    172
+    172,
   ]);
 
   const getData = useCallback(() => {
@@ -92,20 +92,20 @@ const RealTime = ({ className, ...rest }) => {
   const pages = [
     {
       pathname: '/app/projects',
-      views: '24'
+      views: '24',
     },
     {
       pathname: '/app/chat',
-      views: '21'
+      views: '21',
     },
     {
       pathname: '/cart',
-      views: '15'
+      views: '15',
     },
     {
       pathname: '/cart/checkout',
-      views: '8'
-    }
+      views: '8',
+    },
   ];
 
   return (
@@ -114,18 +114,20 @@ const RealTime = ({ className, ...rest }) => {
       {...rest}
     >
       <CardHeader
-        action={(
-          <Typography
-            color="inherit"
-            variant="h3"
-          >
-            {
-              data[data.length - 1] === 0
-                ? data[data.length - 2]
-                : data[data.length - 1]
-            }
-          </Typography>
-        )}
+        action={
+          (
+            <Typography
+              color="inherit"
+              variant="h3"
+            >
+              {
+                data[data.length - 1] === 0
+                  ? data[data.length - 2]
+                  : data[data.length - 1]
+              }
+            </Typography>
+          )
+        }
         classes={{ action: classes.current }}
         subheader="Page views per second"
         subheaderTypographyProps={{ color: 'textSecondary', variant: 'body2' }}
@@ -137,31 +139,33 @@ const RealTime = ({ className, ...rest }) => {
         labels={labels}
       />
       <List>
-        {pages.map((page) => (
-          <ListItem
-            divider
-            key={page.pathname}
-          >
-            <ListItemText
-              primary={page.pathname}
-              primaryTypographyProps={{ color: 'textSecondary', variant: 'body2' }}
-            />
-            <Typography color="inherit">
-              {page.views}
-            </Typography>
-          </ListItem>
-        ))}
+        {
+          pages.map((page) => (
+            <ListItem
+              divider
+              key={page.pathname}
+            >
+              <ListItemText
+                primary={page.pathname}
+                primaryTypographyProps={{ color: 'textSecondary', variant: 'body2' }}
+              />
+              <Typography color="inherit">
+                {page.views}
+              </Typography>
+            </ListItem>
+          ))
+        }
       </List>
       <Box
-        p={2}
         display="flex"
         justifyContent="flex-end"
+        p={2}
       >
         <Button
           component={RouterLink}
+          endIcon={<NavigateNextIcon />}
           size="small"
           to="#"
-          endIcon={<NavigateNextIcon />}
         >
           See all
         </Button>
@@ -171,7 +175,7 @@ const RealTime = ({ className, ...rest }) => {
 };
 
 RealTime.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default RealTime;

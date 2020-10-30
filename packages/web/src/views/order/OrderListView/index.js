@@ -1,12 +1,12 @@
 import React, {
   useCallback,
   useEffect,
-  useState
+  useState,
 } from 'react';
 import {
   Box,
   Container,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const OrderListView = () => {
@@ -36,7 +36,7 @@ const OrderListView = () => {
         setOrders(response.data.orders);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 

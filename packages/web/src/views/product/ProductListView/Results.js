@@ -21,87 +21,87 @@ import {
   TablePagination,
   TableRow,
   TextField,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import {
   Image as ImageIcon,
   Edit as EditIcon,
   ArrowRight as ArrowRightIcon,
-  Search as SearchIcon
+  Search as SearchIcon,
 } from 'react-feather';
 import Label from 'src/components/Label';
 
 const categoryOptions = [
   {
     id: 'all',
-    name: 'All'
+    name: 'All',
   },
   {
     id: 'dress',
-    name: 'Dress'
+    name: 'Dress',
   },
   {
     id: 'jewelry',
-    name: 'Jewelry'
+    name: 'Jewelry',
   },
   {
     id: 'blouse',
-    name: 'Blouse'
+    name: 'Blouse',
   },
   {
     id: 'beauty',
-    name: 'Beauty'
-  }
+    name: 'Beauty',
+  },
 ];
 
 const avalabilityOptions = [
   {
     id: 'all',
-    name: 'All'
+    name: 'All',
   },
   {
     id: 'available',
-    name: 'Available'
+    name: 'Available',
   },
   {
     id: 'unavailable',
-    name: 'Unavailable'
-  }
+    name: 'Unavailable',
+  },
 ];
 
 const sortOptions = [
   {
     value: 'updatedAt|desc',
-    label: 'Last update (newest first)'
+    label: 'Last update (newest first)',
   },
   {
     value: 'updatedAt|asc',
-    label: 'Last update (oldest first)'
+    label: 'Last update (oldest first)',
   },
   {
     value: 'createdAt|desc',
-    label: 'Creation date (newest first)'
+    label: 'Creation date (newest first)',
   },
   {
     value: 'createdAt|asc',
-    label: 'Creation date (oldest first)'
-  }
+    label: 'Creation date (oldest first)',
+  },
 ];
 
 const getInventoryLabel = (inventoryType) => {
   const map = {
     in_stock: {
       text: 'In Stock',
-      color: 'success'
+      color: 'success',
     },
     limited: {
       text: 'Limited',
-      color: 'warning'
+      color: 'warning',
     },
     out_of_stock: {
       text: 'Out of Stock',
-      color: 'error'
-    }
+      color: 'error',
+    },
   };
 
   const { text, color } = map[inventoryType];
@@ -154,7 +154,7 @@ const applyPagination = (products, page, limit) => {
 const useStyles = makeStyles((theme) => ({
   root: {},
   bulkOperations: {
-    position: 'relative'
+    position: 'relative',
   },
   bulkActions: {
     paddingLeft: 4,
@@ -163,38 +163,38 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: '100%',
     zIndex: 2,
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
   bulkAction: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   queryField: {
-    width: 500
+    width: 500,
   },
   categoryField: {
-    flexBasis: 200
+    flexBasis: 200,
   },
   availabilityField: {
     marginLeft: theme.spacing(2),
-    flexBasis: 200
+    flexBasis: 200,
   },
   stockField: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   shippableField: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   imageCell: {
     fontSize: 0,
     width: 68,
     flexBasis: 68,
     flexGrow: 0,
-    flexShrink: 0
+    flexShrink: 0,
   },
   image: {
     height: 68,
-    width: 68
-  }
+    width: 68,
+  },
 }));
 
 const Results = ({ className, products, ...rest }) => {
@@ -208,7 +208,7 @@ const Results = ({ className, products, ...rest }) => {
     category: null,
     availability: null,
     inStock: null,
-    isShippable: null
+    isShippable: null,
   });
 
   const handleQueryChange = (event) => {
@@ -227,7 +227,7 @@ const Results = ({ className, products, ...rest }) => {
 
     setFilters((prevFilters) => ({
       ...prevFilters,
-      category: value
+      category: value,
     }));
   };
 
@@ -242,7 +242,7 @@ const Results = ({ className, products, ...rest }) => {
 
     setFilters((prevFilters) => ({
       ...prevFilters,
-      availability: value
+      availability: value,
     }));
   };
 
@@ -257,7 +257,7 @@ const Results = ({ className, products, ...rest }) => {
 
     setFilters((prevFilters) => ({
       ...prevFilters,
-      inStock: value
+      inStock: value,
     }));
   };
 
@@ -272,7 +272,7 @@ const Results = ({ className, products, ...rest }) => {
 
     setFilters((prevFilters) => ({
       ...prevFilters,
-      isShippable: value
+      isShippable: value,
     }));
   };
 
@@ -317,23 +317,25 @@ const Results = ({ className, products, ...rest }) => {
     >
       <Box p={2}>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
         >
           <TextField
             className={classes.queryField}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SvgIcon
-                    fontSize="small"
-                    color="action"
-                  >
-                    <SearchIcon />
-                  </SvgIcon>
-                </InputAdornment>
-              )
-            }}
+            InputProps={
+              {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SvgIcon
+                      color="action"
+                      fontSize="small"
+                    >
+                      <SearchIcon />
+                    </SvgIcon>
+                  </InputAdornment>
+                ),
+              }
+            }
             onChange={handleQueryChange}
             placeholder="Search products"
             value={query}
@@ -349,20 +351,22 @@ const Results = ({ className, products, ...rest }) => {
             value={sort}
             variant="outlined"
           >
-            {sortOptions.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-              >
-                {option.label}
-              </option>
-            ))}
+            {
+              sortOptions.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                >
+                  {option.label}
+                </option>
+              ))
+            }
           </TextField>
         </Box>
         <Box
-          mt={3}
-          display="flex"
           alignItems="center"
+          display="flex"
+          mt={3}
         >
           <TextField
             className={classes.categoryField}
@@ -374,14 +378,16 @@ const Results = ({ className, products, ...rest }) => {
             value={filters.category || 'all'}
             variant="outlined"
           >
-            {categoryOptions.map((categoryOption) => (
-              <option
-                key={categoryOption.id}
-                value={categoryOption.id}
-              >
-                {categoryOption.name}
-              </option>
-            ))}
+            {
+              categoryOptions.map((categoryOption) => (
+                <option
+                  key={categoryOption.id}
+                  value={categoryOption.id}
+                >
+                  {categoryOption.name}
+                </option>
+              ))
+            }
           </TextField>
           <TextField
             className={classes.availabilityField}
@@ -393,62 +399,70 @@ const Results = ({ className, products, ...rest }) => {
             value={filters.availability || 'all'}
             variant="outlined"
           >
-            {avalabilityOptions.map((avalabilityOption) => (
-              <option
-                key={avalabilityOption.id}
-                value={avalabilityOption.id}
-              >
-                {avalabilityOption.name}
-              </option>
-            ))}
+            {
+              avalabilityOptions.map((avalabilityOption) => (
+                <option
+                  key={avalabilityOption.id}
+                  value={avalabilityOption.id}
+                >
+                  {avalabilityOption.name}
+                </option>
+              ))
+            }
           </TextField>
           <FormControlLabel
             className={classes.stockField}
-            control={(
-              <Checkbox
-                checked={!!filters.inStock}
-                onChange={handleStockChange}
-                name="inStock"
-              />
-            )}
+            control={
+              (
+                <Checkbox
+                  checked={!!filters.inStock}
+                  name="inStock"
+                  onChange={handleStockChange}
+                />
+              )
+            }
             label="In Stock"
           />
           <FormControlLabel
             className={classes.shippableField}
-            control={(
-              <Checkbox
-                checked={!!filters.isShippable}
-                onChange={handleShippableChange}
-                name="Shippable"
-              />
-            )}
+            control={
+              (
+                <Checkbox
+                  checked={!!filters.isShippable}
+                  name="Shippable"
+                  onChange={handleShippableChange}
+                />
+              )
+            }
             label="Shippable"
           />
         </Box>
       </Box>
-      {enableBulkOperations && (
-        <div className={classes.bulkOperations}>
-          <div className={classes.bulkActions}>
-            <Checkbox
-              checked={selectedAllProducts}
-              indeterminate={selectedSomeProducts}
-              onChange={handleSelectAllProducts}
-            />
-            <Button
-              variant="outlined"
-              className={classes.bulkAction}
-            >
+      {
+        enableBulkOperations && (
+          <div className={classes.bulkOperations}>
+            <div className={classes.bulkActions}>
+              <Checkbox
+                checked={selectedAllProducts}
+                indeterminate={selectedSomeProducts}
+                onChange={handleSelectAllProducts}
+              />
+              <Button
+                className={classes.bulkAction}
+                variant="outlined"
+              >
               Delete
-            </Button>
-            <Button
-              variant="outlined"
-              className={classes.bulkAction}
-            >
+              </Button>
+              <Button
+                className={classes.bulkAction}
+                variant="outlined"
+              >
               Edit
-            </Button>
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
       <PerfectScrollbar>
         <Box minWidth={1200}>
           <Table>
@@ -483,81 +497,85 @@ const Results = ({ className, products, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedProducts.map((product) => {
-                const isProductSelected = selectedProducts.includes(product.id);
+              {
+                paginatedProducts.map((product) => {
+                  const isProductSelected = selectedProducts.includes(product.id);
 
-                return (
-                  <TableRow
-                    hover
-                    key={product.id}
-                    selected={isProductSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isProductSelected}
-                        onChange={(event) => handleSelectOneProduct(event, product.id)}
-                        value={isProductSelected}
-                      />
-                    </TableCell>
-                    <TableCell className={classes.imageCell}>
-                      {product.image ? (
-                        <img
-                          alt="Product"
-                          src={product.image}
-                          className={classes.image}
+                  return (
+                    <TableRow
+                      hover
+                      key={product.id}
+                      selected={isProductSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isProductSelected}
+                          onChange={(event) => handleSelectOneProduct(event, product.id)}
+                          value={isProductSelected}
                         />
-                      ) : (
-                        <Box
-                          p={2}
-                          bgcolor="background.dark"
+                      </TableCell>
+                      <TableCell className={classes.imageCell}>
+                        {
+                          product.image ? (
+                            <img
+                              alt="Product"
+                              className={classes.image}
+                              src={product.image}
+                            />
+                          ) : (
+                            <Box
+                              bgcolor="background.dark"
+                              p={2}
+                            >
+                              <SvgIcon>
+                                <ImageIcon />
+                              </SvgIcon>
+                            </Box>
+                          )
+                        }
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          color="textPrimary"
+                          component={RouterLink}
+                          to="#"
+                          underline="none"
+                          variant="subtitle2"
                         >
-                          <SvgIcon>
-                            <ImageIcon />
-                          </SvgIcon>
-                        </Box>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        variant="subtitle2"
-                        color="textPrimary"
-                        component={RouterLink}
-                        underline="none"
-                        to="#"
-                      >
-                        {product.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      {getInventoryLabel(product.inventoryType)}
-                    </TableCell>
-                    <TableCell>
-                      {product.quantity}
-                      {' '}
+                          {product.name}
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        {getInventoryLabel(product.inventoryType)}
+                      </TableCell>
+                      <TableCell>
+                        {product.quantity}
+                        {' '}
                       in stock
-                      {product.variants > 1 && ` in ${product.variants} variants`}
-                    </TableCell>
-                    <TableCell>
-                      {product.attributes.map((attr) => attr)}
-                    </TableCell>
-                    <TableCell>
-                      {numeral(product.price).format(`${product.currency}0,0.00`)}
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton>
-                        <SvgIcon fontSize="small">
-                          <EditIcon />
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton>
-                        <SvgIcon fontSize="small">
-                          <ArrowRightIcon />
-                        </SvgIcon>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                        {product.variants > 1 && ` in ${product.variants} variants`}
+                      </TableCell>
+                      <TableCell>
+                        {product.attributes.map((attr) => attr)}
+                      </TableCell>
+                      <TableCell>
+                        {numeral(product.price).format(`${product.currency}0,0.00`)}
+                      </TableCell>
+                      <TableCell align="right">
+                        <IconButton>
+                          <SvgIcon fontSize="small">
+                            <EditIcon />
+                          </SvgIcon>
+                        </IconButton>
+                        <IconButton>
+                          <SvgIcon fontSize="small">
+                            <ArrowRightIcon />
+                          </SvgIcon>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              }
             </TableBody>
           </Table>
           <TablePagination
@@ -577,11 +595,11 @@ const Results = ({ className, products, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  products: PropTypes.array.isRequired
+  products: PropTypes.array.isRequired,
 };
 
 Results.defaultProps = {
-  products: []
+  products: [],
 };
 
 export default Results;

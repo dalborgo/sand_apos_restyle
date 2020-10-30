@@ -6,7 +6,7 @@ import { Breadcrumbs, Link, makeStyles, Typography } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Header = ({ className, ...rest }) => {
@@ -18,10 +18,10 @@ const Header = ({ className, ...rest }) => {
       {...rest}
     >
       <Breadcrumbs
-        separator={<NavigateNextIcon fontSize="small" />}
         aria-label="breadcrumb"
+        separator={<NavigateNextIcon fontSize="small" />}
       >
-        <Link color="inherit" to="/app" component={RouterLink}>
+        <Link color="inherit" component={RouterLink} to="/app">
           Dashboard
         </Link>
         <Typography color="textPrimary">
@@ -29,8 +29,8 @@ const Header = ({ className, ...rest }) => {
         </Typography>
       </Breadcrumbs>
       <Typography
-        variant="h3"
         color="textPrimary"
+        variant="h3"
       >
         Settings
       </Typography>
@@ -39,7 +39,7 @@ const Header = ({ className, ...rest }) => {
 }
 
 Header.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Header;

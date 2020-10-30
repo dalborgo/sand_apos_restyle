@@ -10,7 +10,7 @@ import {
   Link,
   makeStyles,
   Tooltip,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import Page from 'src/components/Page'
 import Logo from 'src/components/Logo'
@@ -20,9 +20,9 @@ import FirebaseAuthRegister from './FirebaseAuthRegister'
 import JWTRegister from './JWTRegister'
 
 const methodIcons = {
-  'Auth0': '/static/images/auth0.svg',
-  'FirebaseAuth': '/static/images/firebase.svg',
-  'JWT': '/static/images/jwt.svg'
+  Auth0: '/static/images/auth0.svg',
+  FirebaseAuth: '/static/images/firebase.svg',
+  JWT: '/static/images/jwt.svg',
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -30,21 +30,21 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh'
+    minHeight: '100vh',
   },
   banner: {
     backgroundColor: theme.palette.background.paper,
     paddingBottom: theme.spacing(2),
     paddingTop: theme.spacing(2),
-    borderBottom: `1px solid ${theme.palette.divider}`
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
   bannerChip: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   methodIcon: {
     height: 30,
     marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   cardContainer: {
     paddingBottom: 80,
@@ -54,15 +54,15 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(4),
     display: 'flex',
     flexDirection: 'column',
-    minHeight: 400
+    minHeight: 400,
   },
   currentMethodIcon: {
     height: 40,
     '& > img': {
       width: 'auto',
-      maxHeight: '100%'
-    }
-  }
+      maxHeight: '100%',
+    },
+  },
 }));
 
 const RegisterView = () => {
@@ -82,10 +82,10 @@ const RegisterView = () => {
             justifyContent="center"
           >
             <Chip
+              className={classes.bannerChip}
               color="secondary"
               label="NEW"
               size="small"
-              className={classes.bannerChip}
             />
             <Box
               alignItems="center"
@@ -136,9 +136,9 @@ const RegisterView = () => {
         maxWidth="sm"
       >
         <Box
-          mb={8}
           display="flex"
           justifyContent="center"
+          mb={8}
         >
           <RouterLink to="/">
             <Logo />
@@ -161,8 +161,8 @@ const RegisterView = () => {
                   Register
                 </Typography>
                 <Typography
-                  variant="body2"
                   color="textSecondary"
+                  variant="body2"
                 >
                   Register on the internal platform
                 </Typography>
@@ -186,10 +186,10 @@ const RegisterView = () => {
               <Divider />
             </Box>
             <Link
+              color="textSecondary"
               component={RouterLink}
               to="/login"
               variant="body2"
-              color="textSecondary"
             >
               Having an account
             </Link>

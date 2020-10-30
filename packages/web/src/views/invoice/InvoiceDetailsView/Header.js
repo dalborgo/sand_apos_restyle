@@ -12,7 +12,7 @@ import {
   Grid,
   Typography,
   makeStyles,
-  Hidden
+  Hidden,
 } from '@material-ui/core';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
   action: {
     marginBottom: theme.spacing(1),
     '& + &': {
-      marginLeft: theme.spacing(1)
-    }
-  }
+      marginLeft: theme.spacing(1),
+    },
+  },
 }));
 
 const Header = ({
@@ -38,43 +38,43 @@ const Header = ({
 
   return (
     <Grid
+      className={clsx(classes.root, className)}
       container
       justify="space-between"
       spacing={3}
-      className={clsx(classes.root, className)}
       {...rest}
     >
       <Grid item>
         <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
+          separator={<NavigateNextIcon fontSize="small" />}
         >
           <Link
-            variant="body1"
             color="inherit"
-            to="/app"
             component={RouterLink}
+            to="/app"
+            variant="body1"
           >
             Dashboard
           </Link>
           <Link
-            variant="body1"
             color="inherit"
-            to="/app/management"
             component={RouterLink}
+            to="/app/management"
+            variant="body1"
           >
             Management
           </Link>
           <Typography
-            variant="body1"
             color="textPrimary"
+            variant="body1"
           >
             Invoices
           </Typography>
         </Breadcrumbs>
         <Typography
-          variant="h3"
           color="textPrimary"
+          variant="h3"
         >
           Invoice Details
         </Typography>
@@ -94,27 +94,27 @@ const Header = ({
           style={{ textDecoration: 'none' }}
         >
           <Button
+            className={classes.action}
             color="secondary"
             variant="contained"
-            className={classes.action}
           >
             Download PDF
           </Button>
         </PDFDownloadLink>
         <Dialog fullScreen open={viewPDF}>
           <Box
-            height="100%"
             display="flex"
             flexDirection="column"
+            height="100%"
           >
             <Box
               bgcolor="common.white"
               p={2}
             >
               <Button
-                variant="contained"
                 color="secondary"
                 onClick={() => setViewPDF(false)}
+                variant="contained"
               >
                 <NavigateBeforeIcon />
                 Back
@@ -122,9 +122,9 @@ const Header = ({
             </Box>
             <Box flexGrow={1}>
               <PDFViewer
-                width="100%"
                 height="100%"
                 style={{ border: 'none' }}
+                width="100%"
               >
                 <InvoicePDF invoice={invoice} />
               </PDFViewer>
@@ -138,7 +138,7 @@ const Header = ({
 
 Header.propTypes = {
   className: PropTypes.string,
-  invoice: PropTypes.object.isRequired
+  invoice: PropTypes.object.isRequired,
 };
 
 export default Header;

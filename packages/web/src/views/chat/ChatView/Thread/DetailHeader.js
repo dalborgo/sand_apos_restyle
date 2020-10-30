@@ -12,7 +12,7 @@ import {
   MenuItem,
   SvgIcon,
   Tooltip,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import { AvatarGroup } from '@material-ui/lab'
 import {
@@ -22,7 +22,7 @@ import {
   MoreVertical as MoreIcon,
   Phone as PhoneIcon,
   Slash as SlashIcon,
-  Trash as TrashIcon
+  Trash as TrashIcon,
 } from 'react-feather'
 
 const useStyles = makeStyles((theme) => ({
@@ -36,15 +36,15 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(1),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    paddingTop: theme.spacing(1)
+    paddingTop: theme.spacing(1),
   },
   smallAvatar: {
     height: 30,
     width: 30,
     '&:first-child': {
-      marginTop: 10
-    }
-  }
+      marginTop: 10,
+    },
+  },
 }));
 
 const DetailHeader = ({
@@ -82,13 +82,15 @@ const DetailHeader = ({
           classes={{ avatar: otherParticipants.length > 1 ? classes.smallAvatar : null}}
           max={2}
         >
-          {otherParticipants.map((participant) => (
-            <Avatar
-              alt="Person"
-              key={participant.id}
-              src={participant.avatar}
-            />
-          ))}
+          {
+            otherParticipants.map((participant) => (
+              <Avatar
+                alt="Person"
+                key={participant.id}
+                src={participant.avatar}
+              />
+            ))
+          }
         </AvatarGroup>
         <Typography
           color="textPrimary"
@@ -120,8 +122,8 @@ const DetailHeader = ({
       </Tooltip>
       <Menu
         anchorEl={moreRef.current}
-        keepMounted
         elevation={1}
+        keepMounted
         onClose={handleMenuClose}
         open={openMenu}
       >
@@ -164,11 +166,11 @@ const DetailHeader = ({
 
 DetailHeader.propTypes = {
   className: PropTypes.string,
-  participants: PropTypes.array
+  participants: PropTypes.array,
 };
 
 DetailHeader.defaultProps = {
-  participants: []
+  participants: [],
 };
 
 export default DetailHeader;

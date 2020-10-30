@@ -8,21 +8,21 @@ mock.onGet('/api/invoices').reply(() => {
       currency: '$',
       customer: {
         email: 'contact@anahenisky.io',
-        name: 'Ana Henisky'
+        name: 'Ana Henisky',
       },
       issueDate: moment()
         .subtract(1, 'hours')
         .toDate()
         .getTime(),
       status: 'paid',
-      totalAmount: 55.50
+      totalAmount: 55.50,
     },
     {
       id: '5ecb868ada8deedee0638502',
       currency: '$',
       customer: {
         email: 'sales@matt-jason.com',
-        name: 'Matt Jason'
+        name: 'Matt Jason',
       },
       issueDate: moment()
         .subtract(2, 'days')
@@ -30,14 +30,14 @@ mock.onGet('/api/invoices').reply(() => {
         .toDate()
         .getTime(),
       status: 'pending',
-      totalAmount: 253.76
+      totalAmount: 253.76,
     },
     {
       id: '5ecb868700aba84d0f1c0e48',
       currency: '$',
       customer: {
         email: 'support@terrythomas.io',
-        name: 'Terry Thomas'
+        name: 'Terry Thomas',
       },
       issueDate: moment()
         .subtract(6, 'days')
@@ -45,14 +45,14 @@ mock.onGet('/api/invoices').reply(() => {
         .toDate()
         .getTime(),
       status: 'canceled',
-      totalAmount: 781.50
+      totalAmount: 781.50,
     },
     {
       id: '5ecb8682038e1ddf4e868764',
       currency: '$',
       customer: {
         email: 'contact@triv-shopper.co.uk',
-        name: 'Triv Shopper'
+        name: 'Triv Shopper',
       },
       issueDate: moment()
         .subtract(15, 'days')
@@ -60,8 +60,8 @@ mock.onGet('/api/invoices').reply(() => {
         .toDate()
         .getTime(),
       status: 'paid',
-      totalAmount: 96.64
-    }
+      totalAmount: 96.64,
+    },
   ];
 
   return [200, { invoices }];
@@ -76,7 +76,7 @@ mock.onGet('/api/invoices/1').reply(() => {
       company: 'Countdown Grey Lynn',
       email: 'contact@anahenisky.io',
       name: 'Ana Henisky',
-      taxId: '6934656584231'
+      taxId: '6934656584231',
     },
     dueDate: moment()
       .toDate()
@@ -90,14 +90,14 @@ mock.onGet('/api/invoices/1').reply(() => {
         id: '5ecb8694db1760a701dfbf74',
         currency: '$',
         description: 'Freelancer Subscription (12/05/2019 - 11/06/2019)',
-        unitAmount: 55.50
-      }
+        unitAmount: 55.50,
+      },
     ],
     number: 'DEV-9483',
     status: 'paid',
     subtotalAmount: 50.00,
     taxAmount: 5.50,
-    totalAmount: 55.50
+    totalAmount: 55.50,
   }
 
   return [200, { invoice }];

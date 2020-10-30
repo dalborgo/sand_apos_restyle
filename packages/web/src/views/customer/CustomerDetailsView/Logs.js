@@ -13,7 +13,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import axios from 'src/utils/axios'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
@@ -22,11 +22,11 @@ import Label from 'src/components/Label'
 const useStyles = makeStyles(() => ({
   root: {},
   methodCell: {
-    width: 100
+    width: 100,
   },
   statusCell: {
-    width: 64
-  }
+    width: 64,
+  },
 }));
 
 const Logs = ({ className, ...rest }) => {
@@ -42,7 +42,7 @@ const Logs = ({ className, ...rest }) => {
         setLogs(response.data.logs);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -61,41 +61,43 @@ const Logs = ({ className, ...rest }) => {
         <Box minWidth={1150}>
           <Table>
             <TableBody>
-              {logs.map((log) => (
-                <TableRow key={log.id}>
-                  <TableCell className={classes.methodCell}>
-                    <Typography
-                      variant="h6"
-                      color="textPrimary"
-                    >
-                      {log.method}
-                    </Typography>
-                  </TableCell>
-                  <TableCell className={classes.statusCell}>
-                    <Label
-                      color={
-                        log.status === 200
-                          ? 'success'
-                          : 'error'
-                      }
-                    >
-                      {log.status}
-                    </Label>
-                  </TableCell>
-                  <TableCell>
-                    {log.route}
-                  </TableCell>
-                  <TableCell>
-                    {log.description}
-                  </TableCell>
-                  <TableCell align="right">
-                    {log.ip}
-                  </TableCell>
-                  <TableCell align="right">
-                    {moment(log.createdAt).format('YYYY/MM/DD | hh:mm:ss')}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {
+                logs.map((log) => (
+                  <TableRow key={log.id}>
+                    <TableCell className={classes.methodCell}>
+                      <Typography
+                        color="textPrimary"
+                        variant="h6"
+                      >
+                        {log.method}
+                      </Typography>
+                    </TableCell>
+                    <TableCell className={classes.statusCell}>
+                      <Label
+                        color={
+                          log.status === 200
+                            ? 'success'
+                            : 'error'
+                        }
+                      >
+                        {log.status}
+                      </Label>
+                    </TableCell>
+                    <TableCell>
+                      {log.route}
+                    </TableCell>
+                    <TableCell>
+                      {log.description}
+                    </TableCell>
+                    <TableCell align="right">
+                      {log.ip}
+                    </TableCell>
+                    <TableCell align="right">
+                      {moment(log.createdAt).format('YYYY/MM/DD | hh:mm:ss')}
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </Box>
@@ -105,7 +107,7 @@ const Logs = ({ className, ...rest }) => {
 };
 
 Logs.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Logs;

@@ -8,7 +8,7 @@ import {
   ListItem,
   ListItemText,
   Tooltip,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { AvatarGroup } from '@material-ui/lab';
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
@@ -16,8 +16,8 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 const useStyles = makeStyles((theme) => ({
   root: {},
   viewButton: {
-    marginLeft: theme.spacing(2)
-  }
+    marginLeft: theme.spacing(2),
+  },
 }));
 
 const TaskItem = ({ className, task, ...rest }) => {
@@ -45,14 +45,16 @@ const TaskItem = ({ className, task, ...rest }) => {
         secondary={deadline}
       />
       <AvatarGroup max={3}>
-        {task.members.map((member) => (
-          <Tooltip
-            key={member.name}
-            title="View"
-          >
-            <Avatar src={member.avatar} />
-          </Tooltip>
-        ))}
+        {
+          task.members.map((member) => (
+            <Tooltip
+              key={member.name}
+              title="View"
+            >
+              <Avatar src={member.avatar} />
+            </Tooltip>
+          ))
+        }
       </AvatarGroup>
       <Tooltip title="View task">
         <IconButton
@@ -68,7 +70,7 @@ const TaskItem = ({ className, task, ...rest }) => {
 
 TaskItem.propTypes = {
   className: PropTypes.string,
-  task: PropTypes.object.isRequired
+  task: PropTypes.object.isRequired,
 };
 
 export default TaskItem;

@@ -5,7 +5,7 @@ import { Grid, makeStyles } from '@material-ui/core';
 import ApplicantCard from './ApplicantCard';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Applicants = ({ className, applicants, ...rest }) => {
@@ -18,23 +18,25 @@ const Applicants = ({ className, applicants, ...rest }) => {
       spacing={3}
       {...rest}
     >
-      {applicants.map((applicant) => (
-        <Grid
-          item
-          key={applicant.id}
-          lg={4}
-          xs={12}
-        >
-          <ApplicantCard applicant={applicant} />
-        </Grid>
-      ))}
+      {
+        applicants.map((applicant) => (
+          <Grid
+            item
+            key={applicant.id}
+            lg={4}
+            xs={12}
+          >
+            <ApplicantCard applicant={applicant} />
+          </Grid>
+        ))
+      }
     </Grid>
   );
 };
 
 Applicants.propTypes = {
   className: PropTypes.string,
-  applicants: PropTypes.array.isRequired
+  applicants: PropTypes.array.isRequired,
 };
 
 export default Applicants;

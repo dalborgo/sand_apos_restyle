@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const AccountView = () => {
@@ -24,7 +24,7 @@ const AccountView = () => {
     { value: 'general', label: 'General' },
     { value: 'subscription', label: 'Subscription' },
     { value: 'notifications', label: 'Notifications' },
-    { value: 'security', label: 'Security' }
+    { value: 'security', label: 'Security' },
   ];
 
   const handleTabsChange = (event, value) => {
@@ -42,17 +42,19 @@ const AccountView = () => {
           <Tabs
             onChange={handleTabsChange}
             scrollButtons="auto"
+            textColor="secondary"
             value={currentTab}
             variant="scrollable"
-            textColor="secondary"
           >
-            {tabs.map((tab) => (
-              <Tab
-                key={tab.value}
-                label={tab.label}
-                value={tab.value}
-              />
-            ))}
+            {
+              tabs.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  label={tab.label}
+                  value={tab.value}
+                />
+              ))
+            }
           </Tabs>
         </Box>
         <Divider />

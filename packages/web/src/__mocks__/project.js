@@ -8,7 +8,7 @@ mock.onGet('/api/projects/overview/projects').reply(() => {
       author: {
         id: '5e86809283e28b96d2d38537',
         avatar: '/static/images/avatars/avatar_6.png',
-        name: 'Marco Dal Borgo'
+        name: 'Marco Dal Borgo',
       },
       budget: 2394.00,
       caption: 'We\'re looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -25,8 +25,8 @@ mock.onGet('/api/projects/overview/projects').reply(() => {
       updatedAt: moment()
         .subtract(24, 'minutes')
         .toDate()
-        .getTime()
-    }
+        .getTime(),
+    },
   ];
 
   return [200, { projects }];
@@ -37,8 +37,8 @@ mock.onGet('/api/projects/overview/statistics').reply(200, {
     nextPayout: 4250,
     totalIncome: 12500,
     visitorsToday: 230,
-    watchingNow: 5
-  }
+    watchingNow: 5,
+  },
 });
 
 mock.onGet('/api/projects/projects').reply(() => {
@@ -48,7 +48,7 @@ mock.onGet('/api/projects/projects').reply(() => {
       author: {
         id: '5e887b7602bdbc4dbb234b27',
         avatar: '/static/images/avatars/avatar_5.png',
-        name: 'Anje Keizer'
+        name: 'Anje Keizer',
       },
       budget: 6125.00,
       caption: 'We\'re looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -64,14 +64,14 @@ mock.onGet('/api/projects/projects').reply(() => {
       updatedAt: moment()
         .subtract(24, 'minutes')
         .toDate()
-        .getTime()
+        .getTime(),
     },
     {
       id: '5e8dcf076c50b9d8e756a5a2',
       author: {
         id: '5e887d0b3d090c1b8f162003',
         avatar: '/static/images/avatars/avatar_9.png',
-        name: 'Emilee Simchenko'
+        name: 'Emilee Simchenko',
       },
       budget: 4205.00,
       caption: 'We\'re looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -87,14 +87,14 @@ mock.onGet('/api/projects/projects').reply(() => {
       updatedAt: moment()
         .subtract(1, 'hour')
         .toDate()
-        .getTime()
+        .getTime(),
     },
     {
       id: '5e8dcf105a6732b3ed82cf7a',
       author: {
         id: '5e88792be2d4cfb4bf0971d9',
         avatar: '/static/images/avatars/avatar_10.png',
-        name: 'Elliott Stone'
+        name: 'Elliott Stone',
       },
       budget: 2394.00,
       caption: 'We\'re looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -110,14 +110,14 @@ mock.onGet('/api/projects/projects').reply(() => {
       updatedAt: moment()
         .subtract(16, 'hour')
         .toDate()
-        .getTime()
+        .getTime(),
     },
     {
       id: '5e8dcf1cc7155d0e947dc27f',
       author: {
         id: '5e8877da9a65442b11551975',
         avatar: '/static/images/avatars/avatar_11.png',
-        name: 'Shen Zhi'
+        name: 'Shen Zhi',
       },
       budget: 2784.00,
       caption: 'We\'re looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -133,14 +133,14 @@ mock.onGet('/api/projects/projects').reply(() => {
       updatedAt: moment()
         .subtract(3, 'days')
         .toDate()
-        .getTime()
+        .getTime(),
     },
     {
       id: '5e8dcf252313876001e83221',
       author: {
         id: '5e887ac47eed253091be10cb',
         avatar: '/static/images/avatars/avatar_3.png',
-        name: 'Cao Yu'
+        name: 'Cao Yu',
       },
       budget: 5835.00,
       caption: 'We\'re looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -156,14 +156,14 @@ mock.onGet('/api/projects/projects').reply(() => {
       updatedAt: moment()
         .subtract(7, 'days')
         .toDate()
-        .getTime()
+        .getTime(),
     },
     {
       id: '5e8dcf4250d77c954b04902e',
       author: {
         id: '5e887b7602bdbc4dbb234b27',
         avatar: '/static/images/avatars/avatar_5.png',
-        name: 'Anje Keizer'
+        name: 'Anje Keizer',
       },
       budget: 4255.00,
       caption: 'We\'re looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -179,8 +179,8 @@ mock.onGet('/api/projects/projects').reply(() => {
       updatedAt: moment()
         .subtract(8, 'days')
         .toDate()
-        .getTime()
-    }
+        .getTime(),
+    },
   ];
 
   return [200, { projects }];
@@ -198,7 +198,7 @@ mock.onGet('/api/projects/projects/1').reply(() => {
           .getTime(),
         description: 'has uploaded a new file',
         subject: 'Project author',
-        type: 'upload_file'
+        type: 'upload_file',
       },
       {
         id: '5e8dd0893a6725f2bb603617',
@@ -208,7 +208,7 @@ mock.onGet('/api/projects/projects/1').reply(() => {
           .getTime(),
         description: 'joined team as a Front-End Developer',
         subject: 'Adrian Stefan',
-        type: 'join_team'
+        type: 'join_team',
       },
       {
         id: '5e8dd08f44603e3300b75cf1',
@@ -218,7 +218,7 @@ mock.onGet('/api/projects/projects/1').reply(() => {
           .getTime(),
         description: 'joined team as a Full Stack Developer',
         subject: 'Alexndru Robert',
-        type: 'join_team'
+        type: 'join_team',
       },
       {
         id: '5e8dd0960f3f0fe04e64d8f4',
@@ -228,7 +228,7 @@ mock.onGet('/api/projects/projects/1').reply(() => {
           .getTime(),
         description: 'raised the project budget',
         subject: 'Project author',
-        type: 'price_change'
+        type: 'price_change',
       },
       {
         id: '5e8dd09db94421c502c53d13',
@@ -238,8 +238,8 @@ mock.onGet('/api/projects/projects/1').reply(() => {
           .getTime(),
         description: 'created',
         subject: 'Contest',
-        type: 'contest_created'
-      }
+        type: 'contest_created',
+      },
     ],
     applicants: [
       {
@@ -252,9 +252,9 @@ mock.onGet('/api/projects/projects/1').reply(() => {
           'FrontEnd development',
           'HTML5',
           'VueJS',
-          'ReactJS'
+          'ReactJS',
         ],
-        name: 'Ekaterina Tankova'
+        name: 'Ekaterina Tankova',
       },
       {
         id: '5e887ac47eed253091be10cb',
@@ -265,9 +265,9 @@ mock.onGet('/api/projects/projects/1').reply(() => {
           'User Interface',
           'FullStack development',
           'Angular',
-          'ExpressJS'
+          'ExpressJS',
         ],
-        name: 'Cao Yu'
+        name: 'Cao Yu',
       },
       {
         id: '5e86809283e28b96d2d38537',
@@ -278,15 +278,15 @@ mock.onGet('/api/projects/projects/1').reply(() => {
           'BackEnd development',
           'Firebase',
           'MongoDB',
-          'ExpressJS'
+          'ExpressJS',
         ],
-        name: 'Marco Dal Borgo'
-      }
+        name: 'Marco Dal Borgo',
+      },
     ],
     author: {
       id: '5e887d0b3d090c1b8f162003',
       avatar: '/static/images/avatars/avatar_9.png',
-      name: 'Emilee Simchenko'
+      name: 'Emilee Simchenko',
     },
     budget: 12500.00,
     caption: 'We\'re looking for experienced Developers and Product Designers to come aboard and help us build succesful businesses through software.',
@@ -310,22 +310,22 @@ The project has been created in Sketch so let me know if there are any problems 
         mimeType: 'image/png',
         name: 'example-project1.jpg',
         size: 1024 * 1024 * 3,
-        url: '/static/images/projects/project_4.png'
+        url: '/static/images/projects/project_4.png',
       },
       {
         id: '5e8dd0784431995a30eb2586',
         mimeType: 'application/zip',
         name: 'docs.zip',
         size: 1024 * 1024 * 25,
-        url: '#'
+        url: '#',
       },
       {
         id: '5e8dd07cbb62749296ecee1c',
         mimeType: 'image/png',
         name: 'example-project2.jpg',
         size: 1024 * 1024 * 2,
-        url: '/static/images/projects/project_1.png'
-      }
+        url: '/static/images/projects/project_1.png',
+      },
     ],
     isActive: true,
     isLiked: true,
@@ -335,20 +335,20 @@ The project has been created in Sketch so let me know if there are any problems 
         id: '5e887a62195cc5aef7e8ca5d',
         avatar: '/static/images/avatars/avatar_2.png',
         bio: 'Front End Developer',
-        name: 'Ekaterina Tankova'
+        name: 'Ekaterina Tankova',
       },
       {
         id: '5e887ac47eed253091be10cb',
         avatar: '/static/images/avatars/avatar_3.png',
         bio: 'UX Designer',
-        name: 'Cao Yu'
+        name: 'Cao Yu',
       },
       {
         id: '5e887b7602bdbc4dbb234b27',
         avatar: '/static/images/avatars/avatar_5.png',
         bio: 'Copyright',
-        name: 'Anje Keizer'
-      }
+        name: 'Anje Keizer',
+      },
     ],
     rating: 5,
     reviews: [
@@ -356,14 +356,14 @@ The project has been created in Sketch so let me know if there are any problems 
         id: '5f0366cd843161f193ebadd4',
         author: {
           avatar: '/static/images/avatars/avatar_2.png',
-          name: 'Ekaterina Tankova'
+          name: 'Ekaterina Tankova',
         },
         comment: 'Great company, providing an awesome & easy to use product.',
         createdAt: moment()
           .subtract(2, 'hours')
           .toDate()
           .getTime(),
-        value: 5
+        value: 5,
       },
       {
         id: 'to33twsyjphcfj55y3t07261',
@@ -376,7 +376,7 @@ The project has been created in Sketch so let me know if there are any problems 
           .subtract(2, 'hours')
           .toDate()
           .getTime(),
-        value: 2
+        value: 2,
       },
       {
         id: '6z9dwxjzkqbmxuluxx2681jd',
@@ -389,8 +389,8 @@ The project has been created in Sketch so let me know if there are any problems 
           .subtract(2, 'hours')
           .toDate()
           .getTime(),
-        value: 4
-      }
+        value: 4,
+      },
     ],
     startDate: moment()
       .add(7, 'days')
@@ -402,7 +402,7 @@ The project has been created in Sketch so let me know if there are any problems 
     updatedAt: moment()
       .subtract(23, 'minutes')
       .toDate()
-      .getTime()
+      .getTime(),
   };
 
   return [200, { project }];

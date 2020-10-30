@@ -7,7 +7,7 @@ import ProfileDetails from './ProfileDetails'
 import GeneralSettings from './GeneralSettings'
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const General = ({ className, ...rest }) => {
@@ -44,7 +44,7 @@ const General = ({ className, ...rest }) => {
 }
 
 General.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default General;

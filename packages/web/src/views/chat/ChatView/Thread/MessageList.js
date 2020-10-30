@@ -7,8 +7,8 @@ import MessageItem from './MessageItem'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }));
 
 const MessageList = ({
@@ -37,20 +37,22 @@ const MessageList = ({
       ref={scrollRef}
       {...rest}
     >
-      {thread.messages.map((message) => (
-        <MessageItem
-          key={message.id}
-          message={message}
-          thread={thread}
-        />
-      ))}
+      {
+        thread.messages.map((message) => (
+          <MessageItem
+            key={message.id}
+            message={message}
+            thread={thread}
+          />
+        ))
+      }
     </PerfectScrollbar>
   );
 };
 
 MessageItem.propTypes = {
   className: PropTypes.string,
-  thread: PropTypes.object.isRequired
+  thread: PropTypes.object.isRequired,
 };
 
 export default MessageList;

@@ -7,7 +7,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { Edit as EditIcon } from 'react-feather'
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Header = ({ className, customer, ...rest }) => {
@@ -15,43 +15,43 @@ const Header = ({ className, customer, ...rest }) => {
 
   return (
     <Grid
-      container
-      spacing={3}
-      justify="space-between"
       className={clsx(classes.root, className)}
+      container
+      justify="space-between"
+      spacing={3}
       {...rest}
     >
       <Grid item>
         <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
+          separator={<NavigateNextIcon fontSize="small" />}
         >
           <Link
-            variant="body1"
             color="inherit"
-            to="/app"
             component={RouterLink}
+            to="/app"
+            variant="body1"
           >
             Dashboard
           </Link>
           <Link
-            variant="body1"
             color="inherit"
-            to="/app/management"
             component={RouterLink}
+            to="/app/management"
+            variant="body1"
           >
             Management
           </Link>
           <Typography
-            variant="body1"
             color="textPrimary"
+            variant="body1"
           >
             Customers
           </Typography>
         </Breadcrumbs>
         <Typography
-          variant="h3"
           color="textPrimary"
+          variant="h3"
         >
           {customer.name}
         </Typography>
@@ -59,14 +59,14 @@ const Header = ({ className, customer, ...rest }) => {
       <Grid item>
         <Button
           color="secondary"
-          variant="contained"
           component={RouterLink}
-          to="/app/management/customers/1/edit"
           startIcon={
             <SvgIcon fontSize="small">
               <EditIcon />
             </SvgIcon>
           }
+          to="/app/management/customers/1/edit"
+          variant="contained"
         >
           Edit
         </Button>
@@ -77,7 +77,7 @@ const Header = ({ className, customer, ...rest }) => {
 
 Header.propTypes = {
   className: PropTypes.string,
-  customer: PropTypes.object.isRequired
+  customer: PropTypes.object.isRequired,
 };
 
 export default Header;

@@ -26,8 +26,8 @@ import {
   Edit as EditIcon,
   Folder as FolderIcon,
   Layout as LayoutIcon,
-  Lock as LockIcon,
   List as ListIcon,
+  Lock as LockIcon,
   Mail as MailIcon,
   MessageCircle as MessageCircleIcon,
   PieChart as PieChartIcon,
@@ -187,6 +187,7 @@ const sections = [
         title: 'Chat',
         href: '/app/chat',
         icon: MessageCircleIcon,
+        // eslint-disable-next-line react/display-name
         info: () => (
           <Chip
             color="secondary"
@@ -199,6 +200,7 @@ const sections = [
         title: 'Calendar',
         href: '/app/calendar',
         icon: CalendarIcon,
+        // eslint-disable-next-line react/display-name
         info: () => (
           <Chip
             color="secondary"

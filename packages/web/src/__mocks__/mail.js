@@ -6,56 +6,56 @@ const labels = [
   {
     id: 'all',
     type: 'system_label',
-    name: 'All Mail'
+    name: 'All Mail',
   },
   {
     id: 'inbox',
     type: 'system_label',
     name: 'Inbox',
     unreadCount: 1,
-    totalCount: 0
+    totalCount: 0,
   },
   {
     id: 'sent',
     type: 'system_label',
     name: 'Sent',
     unreadCount: 0,
-    totalCount: 0
+    totalCount: 0,
   },
   {
     id: 'drafts',
     type: 'system_label',
     name: 'Drafts',
     unreadCount: 0,
-    totalCount: 0
+    totalCount: 0,
   },
   {
     id: 'trash',
     type: 'system_label',
     name: 'Trash',
     unreadCount: 0,
-    totalCount: 1
+    totalCount: 1,
   },
   {
     id: 'spam',
     type: 'system_label',
     name: 'Spam',
     unreadCount: 1,
-    totalCount: 1
+    totalCount: 1,
   },
   {
     id: 'important',
     type: 'system_label',
     name: 'Important',
     unreadCount: 0,
-    totalCount: 1
+    totalCount: 1,
   },
   {
     id: 'starred',
     type: 'system_label',
     name: 'Starred',
     unreadCount: 1,
-    totalCount: 1
+    totalCount: 1,
   },
   {
     id: '5e892628d4bc60b4514d5d36',
@@ -63,7 +63,7 @@ const labels = [
     name: 'Work',
     unreadCount: 1,
     totalCount: 1,
-    color: colors.green[600]
+    color: colors.green[600],
   },
   {
     id: '5e8926820cf9ec6c834114ec',
@@ -71,7 +71,7 @@ const labels = [
     name: 'Business',
     unreadCount: 0,
     totalCount: 2,
-    color: colors.blue[600]
+    color: colors.blue[600],
   },
   {
     id: '5e892696db60f561c43c6f81',
@@ -79,8 +79,8 @@ const labels = [
     name: 'Personal',
     unreadCount: 0,
     totalCount: 1,
-    color: colors.orange[600]
-  }
+    color: colors.orange[600],
+  },
 ];
 
 const mails = [
@@ -107,18 +107,18 @@ Ekaterina Tankova
     from: {
       name: 'Ekaterina Tankova',
       email: 'ekaterina.tankova@devias.io',
-      avatar: '/static/images/avatars/avatar_2.png'
+      avatar: '/static/images/avatars/avatar_2.png',
     },
     to: [
       {
         name: 'Marco Dal Borgo',
         email: 'katarina.smith@devias.io',
-        avatar: null
-      }
+        avatar: null,
+      },
     ],
     createdAt: moment()
       .toDate()
-      .getTime()
+      .getTime(),
   },
   {
     id: '5e86bcbd8406cd3055f2b6c8',
@@ -134,18 +134,18 @@ Hey, nice projects! I really liked the one in react. What's your quote on kinda 
     from: {
       name: 'Adam Denisov',
       email: 'adam.denisov@devias.io',
-      avatar: '/static/images/avatars/avatar_7.png'
+      avatar: '/static/images/avatars/avatar_7.png',
     },
     to: [
       {
         name: 'Marco Dal Borgo',
         email: 'katarina.smith@devias.io',
-        avatar: null
-      }
+        avatar: null,
+      },
     ],
     createdAt: moment()
       .toDate()
-      .getTime()
+      .getTime(),
   },
   {
     id: '5e86bcb9fee1ec12453fa13b',
@@ -161,18 +161,18 @@ Dear Shen, Your flight is coming up soon. Please don’t forget to check in for 
     from: {
       name: 'Miller Edwards',
       email: 'miller.edwards@devias.io',
-      avatar: '/static/images/avatars/avatar_8.png'
+      avatar: '/static/images/avatars/avatar_8.png',
     },
     to: [
       {
         name: 'Marco Dal Borgo',
         email: 'katarina.smith@devias.io',
-        avatar: null
-      }
+        avatar: null,
+      },
     ],
     createdAt: moment()
       .toDate()
-      .getTime()
+      .getTime(),
   },
   {
     id: '5e86bcb5575181a5e527e24f',
@@ -188,19 +188,19 @@ My market leading client has another fantastic opportunity for an experienced So
     from: {
       name: 'Cao Yu',
       email: 'cao.yu@devias.io',
-      avatar: '/static/images/avatars/avatar_3.png'
+      avatar: '/static/images/avatars/avatar_3.png',
     },
     to: [
       {
         name: 'Marco Dal Borgo',
         email: 'katarina.smith@devias.io',
-        avatar: null
-      }
+        avatar: null,
+      },
     ],
     createdAt: moment()
       .toDate()
-      .getTime()
-  }
+      .getTime(),
+  },
 ];
 
 const filterMails = (
@@ -255,7 +255,6 @@ mock.onGet('/api/mail/mails').reply((config) => {
 
     return [200, { mails: filteredMails }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -271,7 +270,6 @@ mock.onGet('/api/mail/mail').reply((config) => {
 
     return [200, { mail }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });

@@ -10,13 +10,13 @@ import {
   SvgIcon,
   TextField,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { Trash as TrashIcon } from 'react-feather';
 import { useDispatch } from 'src/store';
 import {
   updateCheckItem,
-  deleteCheckItem
+  deleteCheckItem,
 } from 'src/slices/kanban';
 
 const useStyles = makeStyles((theme) => ({
@@ -28,22 +28,22 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.background.dark,
       '& $deleteButton': {
-        visibility: 'visible'
-      }
-    }
+        visibility: 'visible',
+      },
+    },
   },
   checkbox: {
     marginLeft: theme.spacing(-1),
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   name: {
     flexGrow: 1,
     cursor: 'pointer',
-    minHeight: 32
+    minHeight: 32,
   },
   deleteButton: {
-    visibility: 'hidden'
-  }
+    visibility: 'hidden',
+  },
 }));
 
 const CheckItem = ({
@@ -75,12 +75,12 @@ const CheckItem = ({
         { state }
       ));
       enqueueSnackbar('Check item updated', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -100,12 +100,12 @@ const CheckItem = ({
       ));
       onEditComplete();
       enqueueSnackbar('Check item updated', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -123,12 +123,12 @@ const CheckItem = ({
         checkItem.id
       ));
       enqueueSnackbar('Check item deleted', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -140,58 +140,60 @@ const CheckItem = ({
     >
       <Checkbox
         checked={checkItem.state === 'complete'}
-        onChange={handleStateChange}
         className={classes.checkbox}
+        onChange={handleStateChange}
       />
-      {editing ? (
-        <Box flexGrow={1}>
-          <TextField
-            value={name}
-            variant="outlined"
-            fullWidth
-            onChange={handleNameChange}
-          />
-          <Box mt={1}>
-            <Button
-              size="small"
-              variant="contained"
-              color="secondary"
-              onClick={handleSave}
-            >
+      {
+        editing ? (
+          <Box flexGrow={1}>
+            <TextField
+              fullWidth
+              onChange={handleNameChange}
+              value={name}
+              variant="outlined"
+            />
+            <Box mt={1}>
+              <Button
+                color="secondary"
+                onClick={handleSave}
+                size="small"
+                variant="contained"
+              >
               Save
-            </Button>
-            <Button
-              size="small"
-              onClick={handleCancel}
-            >
+              </Button>
+              <Button
+                onClick={handleCancel}
+                size="small"
+              >
               Cancel
-            </Button>
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      ) : (
-        <Box
-          display="flex"
-          alignItems="center"
-          flexGrow={1}
-        >
-          <Typography
-            onClick={onEditInit}
-            color="textPrimary"
-            variant="body1"
-            className={classes.name}
+        ) : (
+          <Box
+            alignItems="center"
+            display="flex"
+            flexGrow={1}
           >
-            {checkItem.name}
-          </Typography>
-          <IconButton
-            onClick={handleDelete}
-            className={classes.deleteButton}
-          >
-            <SvgIcon fontSize="small">
-              <TrashIcon />
-            </SvgIcon>
-          </IconButton>
-        </Box>
-      )}
+            <Typography
+              className={classes.name}
+              color="textPrimary"
+              onClick={onEditInit}
+              variant="body1"
+            >
+              {checkItem.name}
+            </Typography>
+            <IconButton
+              className={classes.deleteButton}
+              onClick={handleDelete}
+            >
+              <SvgIcon fontSize="small">
+                <TrashIcon />
+              </SvgIcon>
+            </IconButton>
+          </Box>
+        )
+      }
     </div>
   );
 };
@@ -204,14 +206,14 @@ CheckItem.propTypes = {
   editing: PropTypes.bool,
   onEditCancel: PropTypes.func,
   onEditComplete: PropTypes.func,
-  onEditInit: PropTypes.func
+  onEditInit: PropTypes.func,
 };
 
 CheckItem.defaultProps = {
   editing: false,
   onEditCancel: () => {},
   onEditComplete: () => {},
-  onEditInit: () => {}
+  onEditInit: () => {},
 };
 
 export default CheckItem;

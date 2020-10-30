@@ -12,24 +12,24 @@ import {
   Divider,
   Link,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   media: {
-    height: 125
+    height: 125,
   },
   content: {
-    paddingTop: 0
+    paddingTop: 0,
   },
   avatar: {
     height: 64,
-    width: 64
+    width: 64,
   },
   chip: {
-    margin: theme.spacing(0.5)
-  }
+    margin: theme.spacing(0.5),
+  },
 }));
 
 const ApplicantCard = ({ className, applicant, ...rest }) => {
@@ -46,10 +46,10 @@ const ApplicantCard = ({ className, applicant, ...rest }) => {
       />
       <CardContent className={classes.content}>
         <Box
-          mt={-4}
-          mb={2}
           display="flex"
           justifyContent="center"
+          mb={2}
+          mt={-4}
         >
           <Avatar
             alt="Applicant"
@@ -72,8 +72,8 @@ const ApplicantCard = ({ className, applicant, ...rest }) => {
         </Link>
         <Typography
           align="center"
-          variant="body2"
           color="textSecondary"
+          variant="body2"
         >
           {applicant.commonConnections}
           {' '}
@@ -82,14 +82,16 @@ const ApplicantCard = ({ className, applicant, ...rest }) => {
         <Box my={2}>
           <Divider />
         </Box>
-        {applicant.labels.map((label) => (
-          <Chip
-            key={label}
-            className={classes.chip}
-            label={label}
-            variant="outlined"
-          />
-        ))}
+        {
+          applicant.labels.map((label) => (
+            <Chip
+              className={classes.chip}
+              key={label}
+              label={label}
+              variant="outlined"
+            />
+          ))
+        }
       </CardContent>
     </Card>
   );
@@ -97,7 +99,7 @@ const ApplicantCard = ({ className, applicant, ...rest }) => {
 
 ApplicantCard.propTypes = {
   className: PropTypes.string,
-  applicant: PropTypes.object.isRequired
+  applicant: PropTypes.object.isRequired,
 };
 
 export default ApplicantCard;

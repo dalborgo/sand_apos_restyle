@@ -7,7 +7,7 @@ import {
   Grid,
   Hidden,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import useAuth from 'src/hooks/useAuth';
@@ -15,12 +15,12 @@ import useAuth from 'src/hooks/useAuth';
 const useStyles = makeStyles((theme) => ({
   root: {},
   action: {
-    backgroundColor: theme.palette.common.white
+    backgroundColor: theme.palette.common.white,
   },
   image: {
     width: '100%',
-    maxHeight: 400
-  }
+    maxHeight: 400,
+  },
 }));
 
 const Header = ({ className, ...rest }) => {
@@ -44,30 +44,30 @@ const Header = ({ className, ...rest }) => {
           xs={12}
         >
           <Typography
-            variant="overline"
             color="textSecondary"
+            variant="overline"
           >
             Overview
           </Typography>
           <Typography
-            variant="h3"
             color="textPrimary"
+            variant="h3"
           >
             Good Morning,
             {' '}
             {user.name}
           </Typography>
           <Typography
-            variant="subtitle1"
             color="textPrimary"
+            variant="subtitle1"
           >
             Here’s what’s happening with your projects today
           </Typography>
           <Box mt={2}>
             <Button
               className={classes.action}
-              variant="contained"
               startIcon={<BarChartIcon />}
+              variant="contained"
             >
               View summary
             </Button>
@@ -91,7 +91,7 @@ const Header = ({ className, ...rest }) => {
 };
 
 Header.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Header;

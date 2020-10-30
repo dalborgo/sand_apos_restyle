@@ -12,7 +12,7 @@ import {
   Tooltip,
   Typography,
   colors,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -32,13 +32,13 @@ const useStyles = makeStyles((theme) => ({
       left: 0,
       height: '100%',
       width: '100%',
-      backgroundImage: 'linear-gradient(-180deg, rgba(0,0,0,0.00) 58%, rgba(0,0,0,0.32) 100%)'
+      backgroundImage: 'linear-gradient(-180deg, rgba(0,0,0,0.00) 58%, rgba(0,0,0,0.32) 100%)',
     },
     '&:hover': {
       '& $changeButton': {
-        visibility: 'visible'
-      }
-    }
+        visibility: 'visible',
+      },
+    },
   },
   changeButton: {
     visibility: 'hidden',
@@ -49,11 +49,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.white,
     [theme.breakpoints.down('md')]: {
       top: theme.spacing(3),
-      bottom: 'auto'
+      bottom: 'auto',
     },
     '&:hover': {
-      backgroundColor: colors.blueGrey[900]
-    }
+      backgroundColor: colors.blueGrey[900],
+    },
   },
   avatar: {
     border: `2px solid ${theme.palette.common.white}`,
@@ -61,11 +61,11 @@ const useStyles = makeStyles((theme) => ({
     width: 120,
     top: -60,
     left: theme.spacing(3),
-    position: 'absolute'
+    position: 'absolute',
   },
   action: {
-    marginLeft: theme.spacing(1)
-  }
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const Header = ({ className, profile, ...rest }) => {
@@ -87,18 +87,18 @@ const Header = ({ className, profile, ...rest }) => {
       >
         <Button
           className={classes.changeButton}
-          variant="contained"
           startIcon={<AddPhotoIcon />}
+          variant="contained"
         >
           Change Cover
         </Button>
       </div>
       <Container maxWidth="lg">
         <Box
-          position="relative"
-          mt={1}
-          display="flex"
           alignItems="center"
+          display="flex"
+          mt={1}
+          position="relative"
         >
           <Avatar
             alt="Person"
@@ -107,47 +107,51 @@ const Header = ({ className, profile, ...rest }) => {
           />
           <Box marginLeft="160px">
             <Typography
-              variant="overline"
               color="textSecondary"
+              variant="overline"
             >
               {profile.bio}
             </Typography>
             <Typography
-              variant="h4"
               color="textPrimary"
+              variant="h4"
             >
               {profile.name}
             </Typography>
           </Box>
           <Box flexGrow={1} />
           <Hidden smDown>
-            {connectedStatus === 'not_connected' && (
-              <Button
-                onClick={handleConnectToggle}
-                size="small"
-                variant="outlined"
-                className={classes.action}
-              >
+            {
+              connectedStatus === 'not_connected' && (
+                <Button
+                  className={classes.action}
+                  onClick={handleConnectToggle}
+                  size="small"
+                  variant="outlined"
+                >
                 Connect
-              </Button>
-            )}
-            {connectedStatus === 'pending' && (
-              <Button
-                onClick={handleConnectToggle}
-                size="small"
-                variant="outlined"
-                className={classes.action}
-              >
+                </Button>
+              )
+            }
+            {
+              connectedStatus === 'pending' && (
+                <Button
+                  className={classes.action}
+                  onClick={handleConnectToggle}
+                  size="small"
+                  variant="outlined"
+                >
                 Pending
-              </Button>
-            )}
+                </Button>
+              )
+            }
             <Button
+              className={classes.action}
               color="secondary"
               component={RouterLink}
               size="small"
               to="/app/chat"
               variant="contained"
-              className={classes.action}
             >
               Send message
             </Button>
@@ -165,7 +169,7 @@ const Header = ({ className, profile, ...rest }) => {
 
 Header.propTypes = {
   className: PropTypes.string,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 
 export default Header;

@@ -11,9 +11,9 @@ const Chart = ({ data: dataProp, ...rest }) => {
       ...dataset,
       borderWidth: 8,
       borderColor: theme.palette.background.default,
-      hoverBorderColor: theme.palette.background.default
+      hoverBorderColor: theme.palette.background.default,
     }))),
-    labels: dataProp.labels
+    labels: dataProp.labels,
   };
 
   const options = {
@@ -22,10 +22,10 @@ const Chart = ({ data: dataProp, ...rest }) => {
     animation: false,
     cutoutPercentage: 80,
     legend: {
-      display: false
+      display: false,
     },
     layout: {
-      padding: 0
+      padding: 0,
     },
     tooltips: {
       enabled: true,
@@ -46,9 +46,9 @@ const Chart = ({ data: dataProp, ...rest }) => {
           const value = _data.datasets[0].data[tooltipItem.index];
 
           return `${label}: ${value}%`;
-        }
-      }
-    }
+        },
+      },
+    },
   };
 
   return (
@@ -62,7 +62,7 @@ const Chart = ({ data: dataProp, ...rest }) => {
 
 Chart.propTypes = {
   className: PropTypes.string,
-  data: PropTypes.object.isRequired
+  data: PropTypes.object.isRequired,
 };
 
 export default Chart;

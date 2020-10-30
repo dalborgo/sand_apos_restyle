@@ -9,8 +9,8 @@ import ArchiveIcon from '@material-ui/icons/ArchiveOutlined'
 const useStyles = makeStyles(() => ({
   menu: {
     width: 256,
-    maxWidth: '100%'
-  }
+    maxWidth: '100%',
+  },
 }));
 
 const GenericMoreButton = (props) => {
@@ -34,22 +34,26 @@ const GenericMoreButton = (props) => {
           ref={moreRef}
           {...props}
         >
-          <MoreIcon fontSize="small" />
+          <MoreIcon fontSize="small"/>
         </IconButton>
       </Tooltip>
       <Menu
         anchorEl={moreRef.current}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
+        anchorOrigin={
+          {
+            vertical: 'top',
+            horizontal: 'left',
+          }
+        }
         onClose={handleMenuClose}
         open={openMenu}
         PaperProps={{ className: classes.menu }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
+        transformOrigin={
+          {
+            vertical: 'top',
+            horizontal: 'left',
+          }
+        }
       >
         <MenuItem>
           <ListItemIcon>

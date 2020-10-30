@@ -1,7 +1,7 @@
 import React, {
   useState,
   useEffect,
-  useCallback
+  useCallback,
 } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -16,7 +16,7 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import GenericMoreButton from 'src/components/GenericMoreButton';
 import axios from 'src/utils/axios';
@@ -25,13 +25,13 @@ import useIsMountedRef from 'src/hooks/useIsMountedRef';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   avatar: {
     fontSize: 14,
     fontWeight: theme.typography.fontWeightBold,
-    color: theme.palette.common.white
-  }
+    color: theme.palette.common.white,
+  },
 }));
 
 const TopReferrals = ({ className, ...rest }) => {
@@ -47,7 +47,7 @@ const TopReferrals = ({ className, ...rest }) => {
         setReferrals(response.data.referrals);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -66,38 +66,40 @@ const TopReferrals = ({ className, ...rest }) => {
       />
       <Divider />
       <List disablePadding>
-        {referrals.map((referral, i) => (
-          <ListItem
-            divider={i < referrals.length - 1}
-            key={referral.name}
-          >
-            <ListItemAvatar>
-              <Avatar
-                className={classes.avatar}
-                style={{ backgroundColor: referral.color }}
-              >
-                {referral.initials}
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={referral.name}
-              primaryTypographyProps={{ variant: 'h6' }}
-            />
-            <Typography
-              variant="body2"
-              color="textSecondary"
+        {
+          referrals.map((referral, i) => (
+            <ListItem
+              divider={i < referrals.length - 1}
+              key={referral.name}
             >
-              {numeral(referral.value).format('0,0')}
-            </Typography>
-          </ListItem>
-        ))}
+              <ListItemAvatar>
+                <Avatar
+                  className={classes.avatar}
+                  style={{ backgroundColor: referral.color }}
+                >
+                  {referral.initials}
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={referral.name}
+                primaryTypographyProps={{ variant: 'h6' }}
+              />
+              <Typography
+                color="textSecondary"
+                variant="body2"
+              >
+                {numeral(referral.value).format('0,0')}
+              </Typography>
+            </ListItem>
+          ))
+        }
       </List>
     </Card>
   );
 };
 
 TopReferrals.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default TopReferrals;

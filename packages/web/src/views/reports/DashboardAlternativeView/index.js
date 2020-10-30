@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Container,
   Grid,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import CustomerActivity from './CustomerActivity';
@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const DashboardAlternativeView = () => {

@@ -14,7 +14,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  TextField
+  TextField,
 } from '@material-ui/core'
 import MaiIcon from '@material-ui/icons/MailOutline'
 import axios from 'src/utils/axios'
@@ -23,14 +23,14 @@ import useIsMountedRef from 'src/hooks/useIsMountedRef'
 const emailOptions = [
   'Resend last invoice',
   'Send password reset',
-  'Send verification'
+  'Send verification',
 ];
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   cell: {
-    padding: theme.spacing(1)
-  }
+    padding: theme.spacing(1),
+  },
 }));
 
 const Emails = ({ className, ...rest }) => {
@@ -47,7 +47,7 @@ const Emails = ({ className, ...rest }) => {
         setEmails(response.data.emails);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -72,19 +72,21 @@ const Emails = ({ className, ...rest }) => {
           value={emailOption}
           variant="outlined"
         >
-          {emailOptions.map((option) => (
-            <option
-              key={option}
-              value={option}
-            >
-              {option}
-            </option>
-          ))}
+          {
+            emailOptions.map((option) => (
+              <option
+                key={option}
+                value={option}
+              >
+                {option}
+              </option>
+            ))
+          }
         </TextField>
         <Box mt={2}>
           <Button
-            variant="contained"
             startIcon={<MaiIcon />}
+            variant="contained"
           >
             Send email
           </Button>
@@ -92,16 +94,18 @@ const Emails = ({ className, ...rest }) => {
         <Box mt={2}>
           <Table>
             <TableBody>
-              {emails.map((email) => (
-                <TableRow key={email.id}>
-                  <TableCell className={classes.cell}>
-                    {moment(email.createdAt).format('DD/MM/YYYY | HH:MM')}
-                  </TableCell>
-                  <TableCell className={classes.cell}>
-                    {email.description}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {
+                emails.map((email) => (
+                  <TableRow key={email.id}>
+                    <TableCell className={classes.cell}>
+                      {moment(email.createdAt).format('DD/MM/YYYY | HH:MM')}
+                    </TableCell>
+                    <TableCell className={classes.cell}>
+                      {email.description}
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </Box>

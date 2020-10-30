@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 import {
   Avatar,
   TextField,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { useDispatch } from 'src/store';
 import useAuth from 'src/hooks/useAuth';
@@ -14,11 +14,11 @@ import { addComment } from 'src/slices/kanban';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   field: {
-    marginLeft: theme.spacing(2)
-  }
+    marginLeft: theme.spacing(2),
+  },
 }));
 
 const CommentAdd = ({ cardId, className, ...rest }) => {
@@ -41,13 +41,13 @@ const CommentAdd = ({ cardId, className, ...rest }) => {
         await dispatch(addComment(cardId, message));
         setMessage('');
         enqueueSnackbar('Comment added', {
-          variant: 'success'
+          variant: 'success',
         });
       }
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -62,12 +62,12 @@ const CommentAdd = ({ cardId, className, ...rest }) => {
         src={user.avatar}
       />
       <TextField
-        fullWidth
         className={classes.field}
-        value={message}
+        fullWidth
         onChange={handleChange}
         onKeyUp={handleKeyUp}
         placeholder="Write a comment..."
+        value={message}
         variant="outlined"
       />
     </div>
@@ -76,7 +76,7 @@ const CommentAdd = ({ cardId, className, ...rest }) => {
 
 CommentAdd.propTypes = {
   cardId: PropTypes.string.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default CommentAdd;

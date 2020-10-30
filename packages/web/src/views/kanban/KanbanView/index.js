@@ -15,22 +15,22 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     display: 'flex',
     overflow: 'hidden',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   content: {
     flexGrow: 1,
     flexShrink: 1,
     display: 'flex',
     overflowY: 'hidden',
-    overflowX: 'auto'
+    overflowX: 'auto',
   },
   inner: {
     display: 'flex',
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(3),
     paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1)
-  }
+    paddingRight: theme.spacing(1),
+  },
 }));
 
 const KanbanView = () => {
@@ -48,8 +48,8 @@ const KanbanView = () => {
 
       // Card has not been moved
       if (
-        source.droppableId === destination.droppableId
-        && source.index === destination.index
+        source.droppableId === destination.droppableId &&
+        source.index === destination.index
       ) {
         return;
       }
@@ -63,12 +63,12 @@ const KanbanView = () => {
       }
 
       enqueueSnackbar('Card moved', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -88,12 +88,14 @@ const KanbanView = () => {
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className={classes.content}>
           <div className={classes.inner}>
-            {lists.allIds.map((listId) => (
-              <List
-                key={listId}
-                listId={listId}
-              />
-            ))}
+            {
+              lists.allIds.map((listId) => (
+                <List
+                  key={listId}
+                  listId={listId}
+                />
+              ))
+            }
             <ListAdd />
           </div>
         </div>

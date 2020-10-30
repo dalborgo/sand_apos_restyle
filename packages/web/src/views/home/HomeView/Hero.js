@@ -6,7 +6,7 @@ import {
   Container,
   Grid,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -16,12 +16,12 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 200,
     [theme.breakpoints.down('md')]: {
       paddingTop: 60,
-      paddingBottom: 60
-    }
+      paddingBottom: 60,
+    },
   },
   technologyIcon: {
     height: 40,
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
   image: {
     perspectiveOrigin: 'left center',
@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
       height: 'auto',
       transform: 'rotateY(-35deg) rotateX(15deg)',
       backfaceVisibility: 'hidden',
-      boxShadow: theme.shadows[16]
-    }
+      boxShadow: theme.shadows[16],
+    },
   },
   shape: {
     position: 'absolute',
@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     '& > img': {
       maxWidth: '90%',
-      height: 'auto'
-    }
-  }
+      height: 'auto',
+    },
+  },
 }));
 
 const Hero = ({ className, ...rest }) => {
@@ -61,31 +61,31 @@ const Hero = ({ className, ...rest }) => {
         >
           <Grid
             item
-            xs={12}
             md={5}
+            xs={12}
           >
             <Box
               display="flex"
               flexDirection="column"
-              justifyContent="center"
               height="100%"
+              justifyContent="center"
             >
               <Typography
-                variant="overline"
                 color="secondary"
+                variant="overline"
               >
                 Introducing
               </Typography>
               <Typography
-                variant="h1"
                 color="textPrimary"
+                variant="h1"
               >
                 Devias React Material Kit - PRO
               </Typography>
               <Box mt={3}>
                 <Typography
-                  variant="body1"
                   color="textSecondary"
+                  variant="body1"
                 >
                   A professional kit that comes with ready-to-use Material-UI© components
                   developed with one common goal in mind, help you build faster &amp; beautiful
@@ -100,42 +100,42 @@ const Hero = ({ className, ...rest }) => {
                 >
                   <Grid item>
                     <Typography
-                      variant="h1"
                       color="secondary"
+                      variant="h1"
                     >
                       30+
                     </Typography>
                     <Typography
-                      variant="overline"
                       color="textSecondary"
+                      variant="overline"
                     >
                       Demo Pages
                     </Typography>
                   </Grid>
                   <Grid item>
                     <Typography
-                      variant="h1"
                       color="secondary"
+                      variant="h1"
                     >
                       UX
                     </Typography>
                     <Typography
-                      variant="overline"
                       color="textSecondary"
+                      variant="overline"
                     >
                       Complete Flows
                     </Typography>
                   </Grid>
                   <Grid item>
                     <Typography
-                      variant="h1"
                       color="secondary"
+                      variant="h1"
                     >
                       300+
                     </Typography>
                     <Typography
-                      variant="overline"
                       color="textSecondary"
+                      variant="overline"
                     >
                       Components
                     </Typography>
@@ -158,8 +158,8 @@ const Hero = ({ className, ...rest }) => {
           </Grid>
           <Grid
             item
-            xs={12}
             md={7}
+            xs={12}
           >
             <Box position="relative">
               <div className={classes.shape}>
@@ -183,7 +183,7 @@ const Hero = ({ className, ...rest }) => {
 };
 
 Hero.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Hero;

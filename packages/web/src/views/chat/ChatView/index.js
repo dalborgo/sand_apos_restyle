@@ -13,13 +13,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     height: '100%',
     overflow: 'hidden',
-    position: 'relative'
+    position: 'relative',
   },
   sidebar: {
     backgroundColor: theme.palette.background.default,
     borderRight: `1px solid ${theme.palette.divider}`,
-    width: 300
-  }
+    width: 300,
+  },
 }));
 
 const ChatView = () => {
@@ -34,8 +34,8 @@ const ChatView = () => {
   return (
     <Page
       className={classes.root}
-      title="Chat"
       ref={pageRef}
+      title="Chat"
     >
       <div className={classes.sidebar}>
         <Settings />

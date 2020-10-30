@@ -1,15 +1,7 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import {
-  Box,
-  Button,
-  Container,
-  Typography,
-  useTheme,
-  useMediaQuery,
-  makeStyles
-} from '@material-ui/core';
-import Page from 'src/components/Page';
+import React from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import { Box, Button, Container, makeStyles, Typography, useMediaQuery, useTheme, } from '@material-ui/core'
+import Page from 'src/components/Page'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,14 +11,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: theme.spacing(3),
     paddingTop: 80,
-    paddingBottom: 80
+    paddingBottom: 80,
   },
   image: {
     maxWidth: '100%',
     width: 560,
     maxHeight: 300,
-    height: 'auto'
-  }
+    height: 'auto',
+  },
 }));
 
 const NotFoundView = () => {
@@ -42,23 +34,23 @@ const NotFoundView = () => {
       <Container maxWidth="lg">
         <Typography
           align="center"
-          variant={mobileDevice ? 'h4' : 'h1'}
           color="textPrimary"
+          variant={mobileDevice ? 'h4' : 'h1'}
         >
           404: The page you are looking for isn’t here
         </Typography>
         <Typography
           align="center"
-          variant="subtitle2"
           color="textSecondary"
+          variant="subtitle2"
         >
           You either tried some shady route or you
           came here by mistake. Whichever it is, try using the navigation.
         </Typography>
         <Box
-          mt={6}
           display="flex"
           justifyContent="center"
+          mt={6}
         >
           <img
             alt="Under development"
@@ -67,9 +59,9 @@ const NotFoundView = () => {
           />
         </Box>
         <Box
-          mt={6}
           display="flex"
           justifyContent="center"
+          mt={6}
         >
           <Button
             color="secondary"

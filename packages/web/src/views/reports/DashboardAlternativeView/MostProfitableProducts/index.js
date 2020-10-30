@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useEffect,
-  useState
+  useState,
 } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -20,7 +20,7 @@ import {
   TableRow,
   Typography,
   colors,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import axios from 'src/utils/axios';
@@ -33,15 +33,15 @@ const useStyles = makeStyles((theme) => ({
   image: {
     flexShrink: 0,
     height: 56,
-    width: 56
+    width: 56,
   },
   subscriptions: {
-    fontWeight: theme.typography.fontWeightMedium
+    fontWeight: theme.typography.fontWeightMedium,
   },
   value: {
     color: colors.green[600],
-    fontWeight: theme.typography.fontWeightMedium
-  }
+    fontWeight: theme.typography.fontWeightMedium,
+  },
 }));
 
 const MostProfitableProducts = ({ className, ...rest }) => {
@@ -57,7 +57,7 @@ const MostProfitableProducts = ({ className, ...rest }) => {
         setProducts(response.data.products);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -79,101 +79,103 @@ const MostProfitableProducts = ({ className, ...rest }) => {
         <Box minWidth={700}>
           <Table>
             <TableBody>
-              {products.map((product) => (
-                <TableRow
-                  hover
-                  key={product.id}
-                >
-                  <TableCell>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <img
-                        alt="Product"
-                        className={classes.image}
-                        src={product.image}
-                      />
-                      <Box ml={2}>
-                        <Typography
-                          variant="h6"
-                          color="textPrimary"
-                        >
-                          {product.name}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                        >
-                          <span className={classes.subscriptions}>
-                            {numeral(product.subscriptions).format('0,0')}
-                          </span>
-                          {' '}
+              {
+                products.map((product) => (
+                  <TableRow
+                    hover
+                    key={product.id}
+                  >
+                    <TableCell>
+                      <Box
+                        alignItems="center"
+                        display="flex"
+                      >
+                        <img
+                          alt="Product"
+                          className={classes.image}
+                          src={product.image}
+                        />
+                        <Box ml={2}>
+                          <Typography
+                            color="textPrimary"
+                            variant="h6"
+                          >
+                            {product.name}
+                          </Typography>
+                          <Typography
+                            color="textSecondary"
+                            variant="body2"
+                          >
+                            <span className={classes.subscriptions}>
+                              {numeral(product.subscriptions).format('0,0')}
+                            </span>
+                            {' '}
                           Active
-                        </Typography>
+                          </Typography>
+                        </Box>
                       </Box>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="h6"
-                      color="textPrimary"
-                    >
+                    </TableCell>
+                    <TableCell>
+                      <Typography
+                        color="textPrimary"
+                        variant="h6"
+                      >
                       Price
-                    </Typography>
-                    <Typography
-                      noWrap
-                      variant="body2"
-                      color="textSecondary"
-                    >
-                      <span className={classes.value}>
-                        {numeral(product.price).format(`${product.currency}0,0.00`)}
-                      </span>
-                      {' '}
+                      </Typography>
+                      <Typography
+                        color="textSecondary"
+                        noWrap
+                        variant="body2"
+                      >
+                        <span className={classes.value}>
+                          {numeral(product.price).format(`${product.currency}0,0.00`)}
+                        </span>
+                        {' '}
                       monthly
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="flex-end"
-                    >
-                      <Box mr={2}>
-                        <Typography
-                          align="right"
-                          variant="h6"
-                          color="textPrimary"
-                        >
-                          {product.conversionRate}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        alignItems="center"
+                        display="flex"
+                        justifyContent="flex-end"
+                      >
+                        <Box mr={2}>
+                          <Typography
+                            align="right"
+                            color="textPrimary"
+                            variant="h6"
+                          >
+                            {product.conversionRate}
                           %
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                        >
+                          </Typography>
+                          <Typography
+                            color="textSecondary"
+                            variant="body2"
+                          >
                           Conversion Rate
-                        </Typography>
+                          </Typography>
+                        </Box>
+                        <CircularProgress value={product.conversionRate} />
                       </Box>
-                      <CircularProgress value={product.conversionRate} />
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
       <Box
-        p={2}
         display="flex"
         justifyContent="flex-end"
+        p={2}
       >
         <Button
           component={RouterLink}
+          endIcon={<NavigateNextIcon />}
           size="small"
           to="#"
-          endIcon={<NavigateNextIcon />}
         >
           See all
         </Button>
@@ -183,7 +185,7 @@ const MostProfitableProducts = ({ className, ...rest }) => {
 }
 
 MostProfitableProducts.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default MostProfitableProducts;

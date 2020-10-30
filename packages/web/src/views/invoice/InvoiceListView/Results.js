@@ -24,12 +24,12 @@ import {
   TextField,
   Typography,
   colors,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import {
   Edit as EditIcon,
   ArrowRight as ArrowRightIcon,
-  Search as SearchIcon
+  Search as SearchIcon,
 } from 'react-feather';
 import Label from 'src/components/Label';
 import getInitials from 'src/utils/getInitials';
@@ -37,47 +37,47 @@ import getInitials from 'src/utils/getInitials';
 const statusOptions = [
   {
     id: 'all',
-    name: 'All'
+    name: 'All',
   },
   {
     id: 'paid',
-    name: 'Paid'
+    name: 'Paid',
   },
   {
     id: 'pending',
-    name: 'Pending'
+    name: 'Pending',
   },
   {
     id: 'canceled',
-    name: 'Canceled'
-  }
+    name: 'Canceled',
+  },
 ];
 
 const sortOptions = [
   {
     value: 'createdAt|desc',
-    label: 'Newest first'
+    label: 'Newest first',
   },
   {
     value: 'createdAt|asc',
-    label: 'Oldest first'
-  }
+    label: 'Oldest first',
+  },
 ];
 
 const getStatusLabel = (invoiceStatus) => {
   const map = {
     canceled: {
       text: 'Canceled',
-      color: 'error'
+      color: 'error',
     },
     paid: {
       text: 'Paid',
-      color: 'success'
+      color: 'success',
     },
     pending: {
       text: 'Pending',
-      color: 'warning'
-    }
+      color: 'warning',
+    },
   };
 
   const { text, color } = map[invoiceStatus];
@@ -123,13 +123,13 @@ const applyPagination = (invoices, page, limit) => {
 const useStyles = makeStyles((theme) => ({
   root: {},
   queryField: {
-    width: 500
+    width: 500,
   },
   statusField: {
-    flexBasis: 200
+    flexBasis: 200,
   },
   bulkOperations: {
-    position: 'relative'
+    position: 'relative',
   },
   bulkActions: {
     paddingLeft: 4,
@@ -138,15 +138,15 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: '100%',
     zIndex: 2,
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
   bulkAction: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   avatar: {
     backgroundColor: colors.red[500],
-    color: colors.common.white
-  }
+    color: colors.common.white,
+  },
 }));
 
 const Results = ({ className, invoices, ...rest }) => {
@@ -157,7 +157,7 @@ const Results = ({ className, invoices, ...rest }) => {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState(sortOptions[0].value);
   const [filters, setFilters] = useState({
-    status: null
+    status: null,
   });
 
   const handleQueryChange = (event) => {
@@ -176,7 +176,7 @@ const Results = ({ className, invoices, ...rest }) => {
 
     setFilters((prevFilters) => ({
       ...prevFilters,
-      status: value
+      status: value,
     }));
   };
 
@@ -221,23 +221,25 @@ const Results = ({ className, invoices, ...rest }) => {
     >
       <Box p={2}>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
         >
           <TextField
             className={classes.queryField}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SvgIcon
-                    fontSize="small"
-                    color="action"
-                  >
-                    <SearchIcon />
-                  </SvgIcon>
-                </InputAdornment>
-              )
-            }}
+            InputProps={
+              {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SvgIcon
+                      color="action"
+                      fontSize="small"
+                    >
+                      <SearchIcon />
+                    </SvgIcon>
+                  </InputAdornment>
+                ),
+              }
+            }
             onChange={handleQueryChange}
             placeholder="Search invoices by customer"
             value={query}
@@ -253,20 +255,22 @@ const Results = ({ className, invoices, ...rest }) => {
             value={sort}
             variant="outlined"
           >
-            {sortOptions.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-              >
-                {option.label}
-              </option>
-            ))}
+            {
+              sortOptions.map((option) => (
+                <option
+                  key={option.value}
+                  value={option.value}
+                >
+                  {option.label}
+                </option>
+              ))
+            }
           </TextField>
         </Box>
         <Box
-          mt={2}
-          display="flex"
           alignItems="center"
+          display="flex"
+          mt={2}
         >
           <TextField
             className={classes.statusField}
@@ -278,40 +282,44 @@ const Results = ({ className, invoices, ...rest }) => {
             value={filters.status || 'all'}
             variant="outlined"
           >
-            {statusOptions.map((statusOption) => (
-              <option
-                key={statusOption.id}
-                value={statusOption.id}
-              >
-                {statusOption.name}
-              </option>
-            ))}
+            {
+              statusOptions.map((statusOption) => (
+                <option
+                  key={statusOption.id}
+                  value={statusOption.id}
+                >
+                  {statusOption.name}
+                </option>
+              ))
+            }
           </TextField>
         </Box>
       </Box>
-      {enableBulkOperations && (
-        <div className={classes.bulkOperations}>
-          <div className={classes.bulkActions}>
-            <Checkbox
-              checked={selectedAllInvoices}
-              indeterminate={selectedSomeInvoices}
-              onChange={handleSelectAllInvoices}
-            />
-            <Button
-              variant="outlined"
-              className={classes.bulkAction}
-            >
+      {
+        enableBulkOperations && (
+          <div className={classes.bulkOperations}>
+            <div className={classes.bulkActions}>
+              <Checkbox
+                checked={selectedAllInvoices}
+                indeterminate={selectedSomeInvoices}
+                onChange={handleSelectAllInvoices}
+              />
+              <Button
+                className={classes.bulkAction}
+                variant="outlined"
+              >
               Delete
-            </Button>
-            <Button
-              variant="outlined"
-              className={classes.bulkAction}
-            >
+              </Button>
+              <Button
+                className={classes.bulkAction}
+                variant="outlined"
+              >
               Edit
-            </Button>
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
       <PerfectScrollbar>
         <Box minWidth={1200}>
           <Table>
@@ -345,82 +353,84 @@ const Results = ({ className, invoices, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedInvoices.map((invoice) => {
-                const isInvoiceSelected = selectedInvoices.includes(invoice.id);
+              {
+                paginatedInvoices.map((invoice) => {
+                  const isInvoiceSelected = selectedInvoices.includes(invoice.id);
 
-                return (
-                  <TableRow
-                    hover
-                    key={invoice.id}
-                    selected={isInvoiceSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isInvoiceSelected}
-                        onChange={(event) => handleSelectOneInvoice(event, invoice.id)}
-                        value={isInvoiceSelected}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                      >
-                        <Avatar className={classes.avatar}>
-                          {getInitials(invoice.customer.name)}
-                        </Avatar>
-                        <Box ml={2}>
-                          <Link
-                            variant="subtitle2"
-                            color="textPrimary"
-                            component={RouterLink}
-                            underline="none"
-                            to="#"
-                          >
-                            {invoice.customer.name}
-                          </Link>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                          >
-                            {invoice.customer.email}
-                          </Typography>
+                  return (
+                    <TableRow
+                      hover
+                      key={invoice.id}
+                      selected={isInvoiceSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isInvoiceSelected}
+                          onChange={(event) => handleSelectOneInvoice(event, invoice.id)}
+                          value={isInvoiceSelected}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          alignItems="center"
+                          display="flex"
+                        >
+                          <Avatar className={classes.avatar}>
+                            {getInitials(invoice.customer.name)}
+                          </Avatar>
+                          <Box ml={2}>
+                            <Link
+                              color="textPrimary"
+                              component={RouterLink}
+                              to="#"
+                              underline="none"
+                              variant="subtitle2"
+                            >
+                              {invoice.customer.name}
+                            </Link>
+                            <Typography
+                              color="textSecondary"
+                              variant="body2"
+                            >
+                              {invoice.customer.email}
+                            </Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      {getStatusLabel(invoice.status)}
-                    </TableCell>
-                    <TableCell>
-                      {numeral(invoice.totalAmount).format(`${invoice.currency}0,0.00`)}
-                    </TableCell>
-                    <TableCell>
-                      {invoice.id}
-                    </TableCell>
-                    <TableCell>
-                      {moment(invoice.issueDate).format('DD/MM/YYYY')}
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        component={RouterLink}
-                        to="#"
-                      >
-                        <SvgIcon fontSize="small">
-                          <EditIcon />
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton
-                        component={RouterLink}
-                        to="/app/management/invoices/1"
-                      >
-                        <SvgIcon fontSize="small">
-                          <ArrowRightIcon />
-                        </SvgIcon>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                      </TableCell>
+                      <TableCell>
+                        {getStatusLabel(invoice.status)}
+                      </TableCell>
+                      <TableCell>
+                        {numeral(invoice.totalAmount).format(`${invoice.currency}0,0.00`)}
+                      </TableCell>
+                      <TableCell>
+                        {invoice.id}
+                      </TableCell>
+                      <TableCell>
+                        {moment(invoice.issueDate).format('DD/MM/YYYY')}
+                      </TableCell>
+                      <TableCell align="right">
+                        <IconButton
+                          component={RouterLink}
+                          to="#"
+                        >
+                          <SvgIcon fontSize="small">
+                            <EditIcon />
+                          </SvgIcon>
+                        </IconButton>
+                        <IconButton
+                          component={RouterLink}
+                          to="/app/management/invoices/1"
+                        >
+                          <SvgIcon fontSize="small">
+                            <ArrowRightIcon />
+                          </SvgIcon>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              }
             </TableBody>
           </Table>
         </Box>
@@ -440,11 +450,11 @@ const Results = ({ className, invoices, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  invoices: PropTypes.array.isRequired
+  invoices: PropTypes.array.isRequired,
 };
 
 Results.defaultProps = {
-  invoices: []
+  invoices: [],
 };
 
 export default Results;

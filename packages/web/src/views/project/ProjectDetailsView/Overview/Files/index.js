@@ -6,13 +6,13 @@ import {
   Card,
   CardContent,
   Grid,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import FilesDropzone from 'src/components/FilesDropzone';
 import FileCard from './FileCard';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Files = ({ className, files, ...rest }) => {
@@ -33,18 +33,20 @@ const Files = ({ className, files, ...rest }) => {
           container
           spacing={3}
         >
-          {files.map((file) => (
-            <Grid
-              item
-              key={file.id}
-              lg={4}
-              md={4}
-              sm={6}
-              xs={12}
-            >
-              <FileCard file={file} />
-            </Grid>
-          ))}
+          {
+            files.map((file) => (
+              <Grid
+                item
+                key={file.id}
+                lg={4}
+                md={4}
+                sm={6}
+                xs={12}
+              >
+                <FileCard file={file} />
+              </Grid>
+            ))
+          }
         </Grid>
       </Box>
     </div>
@@ -53,7 +55,7 @@ const Files = ({ className, files, ...rest }) => {
 
 Files.propTypes = {
   className: PropTypes.string,
-  files: PropTypes.array.isRequired
+  files: PropTypes.array.isRequired,
 };
 
 export default Files;

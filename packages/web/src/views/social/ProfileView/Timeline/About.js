@@ -16,23 +16,23 @@ import {
   ListItemText,
   Typography,
   colors,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import {
   Plus as PlusIcon,
   Home as HomeIcon,
   Mail as MailIcon,
-  Briefcase as BriefcaseIcon
+  Briefcase as BriefcaseIcon,
 } from 'react-feather';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   jobAvatar: {
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   cityAvatar: {
-    backgroundColor: colors.red[600]
-  }
+    backgroundColor: colors.red[600],
+  },
 }));
 
 const About = ({ className, profile, ...rest }) => {
@@ -48,13 +48,13 @@ const About = ({ className, profile, ...rest }) => {
         <Divider />
         <CardContent>
           <LinearProgress
-            variant="determinate"
             value={profile.profileProgress}
+            variant="determinate"
           />
           <Box mt={2}>
             <Typography
-              variant="subtitle2"
               color="textSecondary"
+              variant="subtitle2"
             >
               50% Set Up Complete
             </Typography>
@@ -67,8 +67,8 @@ const About = ({ className, profile, ...rest }) => {
           <Divider />
           <CardContent>
             <Typography
-              variant="subtitle2"
               color="textSecondary"
+              variant="subtitle2"
             >
               &quot;
               {profile.quote}
@@ -86,41 +86,45 @@ const About = ({ className, profile, ...rest }) => {
                 </ListItemAvatar>
                 <ListItemText
                   disableTypography
-                  primary={(
-                    <Typography
-                      variant="body2"
-                      color="textPrimary"
-                    >
-                      {profile.currentJob.title}
-                      {' '}
-                      at
-                      {' '}
-                      <Link
-                        variant="subtitle2"
+                  primary={
+                    (
+                      <Typography
                         color="textPrimary"
-                        href="#"
+                        variant="body2"
                       >
-                        {profile.currentJob.company}
-                      </Link>
-                    </Typography>
-                  )}
-                  secondary={(
-                    <Typography
-                      variant="caption"
-                      color="textSecondary"
-                    >
-                      Past:
-                      {profile.previousJob.title}
-                      {' '}
-                      <Link
-                        variant="caption"
+                        {profile.currentJob.title}
+                        {' '}
+                      at
+                        {' '}
+                        <Link
+                          color="textPrimary"
+                          href="#"
+                          variant="subtitle2"
+                        >
+                          {profile.currentJob.company}
+                        </Link>
+                      </Typography>
+                    )
+                  }
+                  secondary={
+                    (
+                      <Typography
                         color="textSecondary"
-                        href="#"
+                        variant="caption"
                       >
-                        {profile.previousJob.company}
-                      </Link>
-                    </Typography>
-                  )}
+                      Past:
+                        {profile.previousJob.title}
+                        {' '}
+                        <Link
+                          color="textSecondary"
+                          href="#"
+                          variant="caption"
+                        >
+                          {profile.previousJob.company}
+                        </Link>
+                      </Typography>
+                    )
+                  }
                 />
               </ListItem>
               <ListItem
@@ -134,10 +138,12 @@ const About = ({ className, profile, ...rest }) => {
                 </ListItemAvatar>
                 <ListItemText
                   primary="Add school or collage"
-                  primaryTypographyProps={{
-                    variant: 'body2',
-                    color: 'textSecondary'
-                  }}
+                  primaryTypographyProps={
+                    {
+                      variant: 'body2',
+                      color: 'textSecondary',
+                    }
+                  }
                 />
               </ListItem>
               <ListItem
@@ -151,38 +157,42 @@ const About = ({ className, profile, ...rest }) => {
                 </ListItemAvatar>
                 <ListItemText
                   disableTypography
-                  primary={(
-                    <Typography
-                      variant="body2"
-                      color="textPrimary"
-                    >
-                      Lives in
-                      {' '}
-                      <Link
-                        variant="subtitle2"
+                  primary={
+                    (
+                      <Typography
                         color="textPrimary"
-                        href="#"
+                        variant="body2"
                       >
-                        {profile.currentCity}
-                      </Link>
-                    </Typography>
-                  )}
-                  secondary={(
-                    <Typography
-                      variant="caption"
-                      color="textSecondary"
-                    >
-                      Originally from
-                      {' '}
-                      <Link
-                        variant="caption"
+                      Lives in
+                        {' '}
+                        <Link
+                          color="textPrimary"
+                          href="#"
+                          variant="subtitle2"
+                        >
+                          {profile.currentCity}
+                        </Link>
+                      </Typography>
+                    )
+                  }
+                  secondary={
+                    (
+                      <Typography
                         color="textSecondary"
-                        href="#"
+                        variant="caption"
                       >
-                        {profile.originCity}
-                      </Link>
-                    </Typography>
-                  )}
+                      Originally from
+                        {' '}
+                        <Link
+                          color="textSecondary"
+                          href="#"
+                          variant="caption"
+                        >
+                          {profile.originCity}
+                        </Link>
+                      </Typography>
+                    )
+                  }
                 />
               </ListItem>
               <ListItem
@@ -196,10 +206,12 @@ const About = ({ className, profile, ...rest }) => {
                 </ListItemAvatar>
                 <ListItemText
                   primary={profile.email}
-                  primaryTypographyProps={{
-                    variant: 'body2',
-                    color: 'textPrimary'
-                  }}
+                  primaryTypographyProps={
+                    {
+                      variant: 'body2',
+                      color: 'textPrimary',
+                    }
+                  }
                 />
               </ListItem>
             </List>
@@ -212,7 +224,7 @@ const About = ({ className, profile, ...rest }) => {
 
 About.propTypes = {
   className: PropTypes.string,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 
 export default About;

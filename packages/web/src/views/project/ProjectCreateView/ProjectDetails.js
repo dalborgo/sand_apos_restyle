@@ -12,7 +12,7 @@ import {
   SvgIcon,
   TextField,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { Plus as PlusIcon } from 'react-feather';
@@ -20,18 +20,18 @@ import { Plus as PlusIcon } from 'react-feather';
 const useStyles = makeStyles((theme) => ({
   root: {},
   addTab: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   tag: {
     '& + &': {
-      marginLeft: theme.spacing(1)
-    }
+      marginLeft: theme.spacing(1),
+    },
   },
   datePicker: {
     '& + &': {
-      marginLeft: theme.spacing(2)
-    }
-  }
+      marginLeft: theme.spacing(2),
+    },
+  },
 }));
 
 const ProjectDetails = ({
@@ -45,202 +45,224 @@ const ProjectDetails = ({
 
   return (
     <Formik
-      initialValues={{
-        projectName: '',
-        tags: ['Full-Time'],
-        startDate: new Date(),
-        endDate: new Date(),
-        submit: null
-      }}
-      validationSchema={Yup.object().shape({
-        projectName: Yup.string().min(3, 'Must be at least 3 characters').max(255).required('Required'),
-        tags: Yup.array(),
-        startDate: Yup.date(),
-        endDate: Yup.date()
-      })}
-      onSubmit={async (values, {
-        setErrors,
-        setStatus,
-        setSubmitting
-      }) => {
-        try {
+      initialValues={
+        {
+          projectName: '',
+          tags: ['Full-Time'],
+          startDate: new Date(),
+          endDate: new Date(),
+          submit: null,
+        }
+      }
+      onSubmit={
+        async (values, {
+          setErrors,
+          setStatus,
+          setSubmitting,
+        }) => {
+          try {
           // Call API to store step data in server session
           // It is important to have it on server to be able to reuse it if user
           // decides to continue later.
-          setStatus({ success: true });
-          setSubmitting(false);
+            setStatus({ success: true });
+            setSubmitting(false);
 
-          if (onNext) {
-            onNext();
+            if (onNext) {
+              onNext();
+            }
+          } catch (err) {
+            
+            setStatus({ success: false });
+            setErrors({ submit: err.message });
+            setSubmitting(false);
           }
-        } catch (err) {
-          console.error(err);
-          setStatus({ success: false });
-          setErrors({ submit: err.message });
-          setSubmitting(false);
         }
-      }}
+      }
+      validationSchema={
+        Yup.object().shape({
+          projectName: Yup.string().min(3, 'Must be at least 3 characters').max(255).required('Required'),
+          tags: Yup.array(),
+          startDate: Yup.date(),
+          endDate: Yup.date(),
+        })
+      }
     >
-      {({
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isSubmitting,
-        setFieldValue,
-        setFieldTouched,
-        touched,
-        values
-      }) => (
-        <form
-          onSubmit={handleSubmit}
-          className={clsx(classes.root, className)}
-          {...rest}
-        >
-          <Typography
-            variant="h3"
-            color="textPrimary"
+      {
+        ({
+          errors,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+          isSubmitting,
+          setFieldValue,
+          setFieldTouched,
+          touched,
+          values,
+        }) => (
+          <form
+            className={clsx(classes.root, className)}
+            onSubmit={handleSubmit}
+            {...rest}
           >
-            Please select one option
-          </Typography>
-          <Box mt={2}>
             <Typography
-              variant="subtitle1"
-              color="textSecondary"
+              color="textPrimary"
+              variant="h3"
             >
+            Please select one option
+            </Typography>
+            <Box mt={2}>
+              <Typography
+                color="textSecondary"
+                variant="subtitle1"
+              >
               Proin tincidunt lacus sed ante efficitur efficitur.
               Quisque aliquam fringilla velit sit amet euismod.
-            </Typography>
-          </Box>
-          <Box mt={2}>
-            <TextField
-              error={Boolean(touched.projectName && errors.projectName)}
-              fullWidth
-              helperText={touched.projectName && errors.projectName}
-              label="Project Name"
-              name="projectName"
-              onBlur={handleBlur}
-              onChange={handleChange}
-              value={values.projectName}
-              variant="outlined"
-            />
-            <Box
-              mt={3}
-              display="flex"
-              alignItems="center"
-            >
-              <TextField
-                fullWidth
-                label="Tags"
-                name="tags"
-                value={tag}
-                onChange={(event) => setTag(event.target.value)}
-                variant="outlined"
-              />
-              <IconButton
-                className={classes.addTab}
-                onClick={() => {
-                  if (!tag) {
-                    return;
-                  }
-
-                  setFieldValue('tags', [...values.tags, tag]);
-                  setTag('');
-                }}
-              >
-                <SvgIcon>
-                  <PlusIcon />
-                </SvgIcon>
-              </IconButton>
+              </Typography>
             </Box>
             <Box mt={2}>
-              {values.tags.map((tag, i) => (
-                <Chip
-                  variant="outlined"
-                  key={i}
-                  label={tag}
-                  className={classes.tag}
-                  onDelete={() => {
-                    const newTags = values.tags.filter((t) => t !== tag);
-
-                    setFieldValue('tags', newTags);
-                  }}
-                />
-              ))}
-            </Box>
-            {Boolean(touched.tags && errors.tags) && (
-              <Box mt={2}>
-                <FormHelperText error>
-                  {errors.tags}
-                </FormHelperText>
-              </Box>
-            )}
-            <Box mt={4}>
-              <KeyboardDatePicker
-                className={classes.datePicker}
-                label="Start Date"
-                format="MM/DD/YYYY"
-                name="startDate"
-                inputVariant="outlined"
-                value={values.startDate}
-                onBlur={() => setFieldTouched('startDate')}
-                onClose={() => setFieldTouched('startDate')}
-                onAccept={() => setFieldTouched('startDate')}
-                onChange={(date) => setFieldValue('startDate', date)}
+              <TextField
+                error={Boolean(touched.projectName && errors.projectName)}
+                fullWidth
+                helperText={touched.projectName && errors.projectName}
+                label="Project Name"
+                name="projectName"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.projectName}
+                variant="outlined"
               />
-              <KeyboardDatePicker
-                className={classes.datePicker}
-                label="End Date"
-                format="MM/DD/YYYY"
-                name="endDate"
-                inputVariant="outlined"
-                value={values.endDate}
-                onBlur={() => setFieldTouched('endDate')}
-                onClose={() => setFieldTouched('endDate')}
-                onAccept={() => setFieldTouched('endDate')}
-                onChange={(date) => setFieldValue('endDate', date)}
-              />
-            </Box>
-            {Boolean(touched.startDate && errors.startDate) && (
-              <Box mt={2}>
-                <FormHelperText error>
-                  {errors.startDate}
-                </FormHelperText>
-              </Box>
-            )}
-            {Boolean(touched.endDate && errors.endDate) && (
-              <Box mt={2}>
-                <FormHelperText error>
-                  {errors.endDate}
-                </FormHelperText>
-              </Box>
-            )}
-          </Box>
-          <Box
-            mt={6}
-            display="flex"
-          >
-            {onBack && (
-              <Button
-                onClick={onBack}
-                size="large"
+              <Box
+                alignItems="center"
+                display="flex"
+                mt={3}
               >
-                Previous
-              </Button>
-            )}
-            <Box flexGrow={1} />
-            <Button
-              color="secondary"
-              disabled={isSubmitting}
-              type="submit"
-              variant="contained"
-              size="large"
+                <TextField
+                  fullWidth
+                  label="Tags"
+                  name="tags"
+                  onChange={(event) => setTag(event.target.value)}
+                  value={tag}
+                  variant="outlined"
+                />
+                <IconButton
+                  className={classes.addTab}
+                  onClick={
+                    () => {
+                      if (!tag) {
+                        return;
+                      }
+
+                      setFieldValue('tags', [...values.tags, tag]);
+                      setTag('');
+                    }
+                  }
+                >
+                  <SvgIcon>
+                    <PlusIcon />
+                  </SvgIcon>
+                </IconButton>
+              </Box>
+              <Box mt={2}>
+                {
+                  values.tags.map((tag, i) => (
+                    <Chip
+                      className={classes.tag}
+                      key={i}
+                      label={tag}
+                      onDelete={
+                        () => {
+                          const newTags = values.tags.filter((t) => t !== tag);
+
+                          setFieldValue('tags', newTags);
+                        }
+                      }
+                      variant="outlined"
+                    />
+                  ))
+                }
+              </Box>
+              {
+                Boolean(touched.tags && errors.tags) && (
+                  <Box mt={2}>
+                    <FormHelperText error>
+                      {errors.tags}
+                    </FormHelperText>
+                  </Box>
+                )
+              }
+              <Box mt={4}>
+                <KeyboardDatePicker
+                  className={classes.datePicker}
+                  format="MM/DD/YYYY"
+                  inputVariant="outlined"
+                  label="Start Date"
+                  name="startDate"
+                  onAccept={() => setFieldTouched('startDate')}
+                  onBlur={() => setFieldTouched('startDate')}
+                  onChange={(date) => setFieldValue('startDate', date)}
+                  onClose={() => setFieldTouched('startDate')}
+                  value={values.startDate}
+                />
+                <KeyboardDatePicker
+                  className={classes.datePicker}
+                  format="MM/DD/YYYY"
+                  inputVariant="outlined"
+                  label="End Date"
+                  name="endDate"
+                  onAccept={() => setFieldTouched('endDate')}
+                  onBlur={() => setFieldTouched('endDate')}
+                  onChange={(date) => setFieldValue('endDate', date)}
+                  onClose={() => setFieldTouched('endDate')}
+                  value={values.endDate}
+                />
+              </Box>
+              {
+                Boolean(touched.startDate && errors.startDate) && (
+                  <Box mt={2}>
+                    <FormHelperText error>
+                      {errors.startDate}
+                    </FormHelperText>
+                  </Box>
+                )
+              }
+              {
+                Boolean(touched.endDate && errors.endDate) && (
+                  <Box mt={2}>
+                    <FormHelperText error>
+                      {errors.endDate}
+                    </FormHelperText>
+                  </Box>
+                )
+              }
+            </Box>
+            <Box
+              display="flex"
+              mt={6}
             >
+              {
+                onBack && (
+                  <Button
+                    onClick={onBack}
+                    size="large"
+                  >
+                Previous
+                  </Button>
+                )
+              }
+              <Box flexGrow={1} />
+              <Button
+                color="secondary"
+                disabled={isSubmitting}
+                size="large"
+                type="submit"
+                variant="contained"
+              >
               Next
-            </Button>
-          </Box>
-        </form>
-      )}
+              </Button>
+            </Box>
+          </form>
+        )
+      }
     </Formik>
   );
 };
@@ -248,12 +270,12 @@ const ProjectDetails = ({
 ProjectDetails.propTypes = {
   className: PropTypes.string,
   onNext: PropTypes.func,
-  onBack: PropTypes.func
+  onBack: PropTypes.func,
 };
 
 ProjectDetails.defaultProps = {
   onNext: () => {},
-  onBack: () => {}
+  onBack: () => {},
 };
 
 export default ProjectDetails;

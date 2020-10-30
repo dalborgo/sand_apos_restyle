@@ -8,7 +8,7 @@ import CTA from './CTA';
 import FAQS from './FAQS';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const HomeView = () => {

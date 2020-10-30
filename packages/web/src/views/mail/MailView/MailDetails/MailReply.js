@@ -1,6 +1,6 @@
 import React, {
   useRef,
-  useState
+  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -12,7 +12,7 @@ import {
   Paper,
   TextareaAutosize,
   Tooltip,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import AddPhotoIcon from '@material-ui/icons/AddPhotoAlternate';
@@ -21,14 +21,14 @@ import useAuth from 'src/hooks/useAuth';
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(3),
-    display: 'flex'
+    display: 'flex',
   },
   avatar: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   textareaContainer: {
     flexGrow: 1,
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   textarea: {
     ...theme.typography.body1,
@@ -37,14 +37,14 @@ const useStyles = makeStyles((theme) => ({
     border: 'none',
     outline: 'none',
     resize: 'none',
-    width: '100%'
+    width: '100%',
   },
   action: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   fileInput: {
-    display: 'none'
-  }
+    display: 'none',
+  },
 }));
 
 const MailReply = ({ className, ...rest }) => {
@@ -84,31 +84,31 @@ const MailReply = ({ className, ...rest }) => {
           value={value}
         />
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
           mt={2}
         >
           <Button
+            className={classes.action}
             color="secondary"
             variant="contained"
-            className={classes.action}
           >
             Send
           </Button>
           <Tooltip title="Attach image">
             <IconButton
-              size="small"
               className={classes.action}
               onClick={handleAttach}
+              size="small"
             >
               <AddPhotoIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Attach file">
             <IconButton
-              size="small"
               className={classes.action}
               onClick={handleAttach}
+              size="small"
             >
               <AttachFileIcon />
             </IconButton>
@@ -125,7 +125,7 @@ const MailReply = ({ className, ...rest }) => {
 }
 
 MailReply.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default MailReply;

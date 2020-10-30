@@ -8,7 +8,7 @@ import {
   List,
   Button,
   Divider,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'src/store';
 import { closeSidebar, openCompose } from 'src/slices/mail';
@@ -17,18 +17,18 @@ import LabelItem from './LabelItem';
 const useStyles = makeStyles(() => ({
   drawerDesktopRoot: {
     width: 280,
-    flexShrink: 0
+    flexShrink: 0,
   },
   drawerDesktopPaper: {
-    position: 'relative'
+    position: 'relative',
   },
   drawerMobilePaper: {
     position: 'relative',
-    width: 280
+    width: 280,
   },
   drawerMobileBackdrop: {
-    position: 'absolute'
-  }
+    position: 'absolute',
+  },
 }));
 
 const Sidebar = ({ containerRef }) => {
@@ -61,24 +61,26 @@ const Sidebar = ({ containerRef }) => {
         <Button
           color="secondary"
           fullWidth
-          variant="contained"
           onClick={handleComposeClick}
+          variant="contained"
         >
           Compose
         </Button>
       </Box>
       <Divider />
       <Box
-        py={2}
         pr={2}
+        py={2}
       >
         <List>
-          {labels.map((label) => (
-            <LabelItem
-              key={label.id}
-              label={label}
-            />
-          ))}
+          {
+            labels.map((label) => (
+              <LabelItem
+                key={label.id}
+                label={label}
+              />
+            ))
+          }
         </List>
       </Box>
     </div>
@@ -88,26 +90,30 @@ const Sidebar = ({ containerRef }) => {
     <>
       <Hidden smDown>
         <Drawer
+          classes={
+            {
+              root: classes.drawerDesktopRoot,
+              paper: classes.drawerDesktopPaper,
+            }
+          }
           variant="permanent"
-          classes={{
-            root: classes.drawerDesktopRoot,
-            paper: classes.drawerDesktopPaper
-          }}
         >
           {content}
         </Drawer>
       </Hidden>
       <Hidden mdUp>
         <Drawer
-          variant="temporary"
-          open={isSidebarOpen}
-          onClose={handleCloseSidebar}
-          classes={{
-            paper: classes.drawerMobilePaper
-          }}
-          style={{ position: 'absolute', zIndex: 1200 }}
           BackdropProps={{ classes: { root: classes.drawerMobileBackdrop } }}
+          classes={
+            {
+              paper: classes.drawerMobilePaper,
+            }
+          }
           ModalProps={{ container: () => containerRef.current }}
+          onClose={handleCloseSidebar}
+          open={isSidebarOpen}
+          style={{ position: 'absolute', zIndex: 1200 }}
+          variant="temporary"
         >
           {content}
         </Drawer>
@@ -117,7 +123,7 @@ const Sidebar = ({ containerRef }) => {
 };
 
 Sidebar.propTypes = {
-  containerRef: PropTypes.any.isRequired
+  containerRef: PropTypes.any.isRequired,
 };
 
 export default Sidebar;

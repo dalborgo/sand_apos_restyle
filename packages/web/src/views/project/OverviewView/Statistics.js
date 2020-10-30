@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useState,
-  useEffect
+  useEffect,
 } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -11,7 +11,7 @@ import {
   Card,
   Grid,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -24,21 +24,21 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     [theme.breakpoints.up('md')]: {
       '&:not(:last-of-type)': {
-        borderRight: `1px solid ${theme.palette.divider}`
-      }
+        borderRight: `1px solid ${theme.palette.divider}`,
+      },
     },
     [theme.breakpoints.down('sm')]: {
       '&:not(:last-of-type)': {
-        borderBottom: `1px solid ${theme.palette.divider}`
-      }
-    }
+        borderBottom: `1px solid ${theme.palette.divider}`,
+      },
+    },
   },
   label: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   overline: {
-    marginTop: theme.spacing(1)
-  }
+    marginTop: theme.spacing(1),
+  },
 }));
 
 const Statistics = ({ className, ...rest }) => {
@@ -54,7 +54,7 @@ const Statistics = ({ className, ...rest }) => {
         setStatistics(response.data.statistics);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -84,15 +84,15 @@ const Statistics = ({ className, ...rest }) => {
           xs={12}
         >
           <Typography
-            variant="h2"
             color="textPrimary"
+            variant="h2"
           >
             {numeral(statistics.nextPayout).format('$0,0.00')}
           </Typography>
           <Typography
             className={classes.overline}
-            variant="overline"
             color="textSecondary"
+            variant="overline"
           >
             Next payout
           </Typography>
@@ -105,15 +105,15 @@ const Statistics = ({ className, ...rest }) => {
           xs={12}
         >
           <Typography
-            variant="h2"
             color="textPrimary"
+            variant="h2"
           >
             {numeral(statistics.totalIncome).format('$0,0.00')}
           </Typography>
           <Typography
             className={classes.overline}
-            variant="overline"
             color="textSecondary"
+            variant="overline"
           >
             Total income
           </Typography>
@@ -126,15 +126,15 @@ const Statistics = ({ className, ...rest }) => {
           xs={12}
         >
           <Typography
-            variant="h2"
             color="textPrimary"
+            variant="h2"
           >
             {statistics.visitorsToday}
           </Typography>
           <Typography
             className={classes.overline}
-            variant="overline"
             color="textSecondary"
+            variant="overline"
           >
             Today&apos;s Visitors
           </Typography>
@@ -147,14 +147,14 @@ const Statistics = ({ className, ...rest }) => {
           xs={12}
         >
           <Box
-            display="flex"
             alignItems="center"
+            display="flex"
             justifyContent="center"
           >
             <Typography
+              color="textPrimary"
               component="span"
               variant="h2"
-              color="textPrimary"
             >
               {statistics.watchingNow}
             </Typography>
@@ -167,8 +167,8 @@ const Statistics = ({ className, ...rest }) => {
           </Box>
           <Typography
             className={classes.overline}
-            variant="overline"
             color="textSecondary"
+            variant="overline"
           >
             Watching now
           </Typography>
@@ -179,7 +179,7 @@ const Statistics = ({ className, ...rest }) => {
 };
 
 Statistics.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Statistics;

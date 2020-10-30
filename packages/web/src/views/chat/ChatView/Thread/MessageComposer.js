@@ -12,20 +12,20 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     backgroundColor: theme.palette.background.default,
     display: 'flex',
-    padding: theme.spacing(1, 2)
+    padding: theme.spacing(1, 2),
   },
   inputContainer: {
     flexGrow: 1,
     marginLeft: theme.spacing(2),
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
   },
   divider: {
     height: 24,
-    width: 1
+    width: 1,
   },
   fileInput: {
-    display: 'none'
-  }
+    display: 'none',
+  },
 }));
 
 const MessageComposer = ({
@@ -76,17 +76,17 @@ const MessageComposer = ({
         src={user.avatar}
       />
       <Paper
-        variant="outlined"
         className={classes.inputContainer}
+        variant="outlined"
       >
         <Input
+          disabled={disabled}
           disableUnderline
           fullWidth
-          value={body}
           onChange={handleChange}
           onKeyUp={handleKeyUp}
           placeholder="Leave a message"
-          disabled={disabled}
+          value={body}
         />
       </Paper>
       <Tooltip title="Send">
@@ -106,9 +106,9 @@ const MessageComposer = ({
       <Tooltip title="Attach photo">
         <span>
           <IconButton
+            disabled={disabled}
             edge="end"
             onClick={handleAttach}
-            disabled={disabled}
           >
             <AddPhotoIcon />
           </IconButton>
@@ -117,9 +117,9 @@ const MessageComposer = ({
       <Tooltip title="Attach file">
         <span>
           <IconButton
+            disabled={disabled}
             edge="end"
             onClick={handleAttach}
-            disabled={disabled}
           >
             <AttachFileIcon />
           </IconButton>
@@ -137,12 +137,12 @@ const MessageComposer = ({
 MessageComposer.propTypes = {
   className: PropTypes.string,
   disabled: PropTypes.bool,
-  onSend: PropTypes.func
+  onSend: PropTypes.func,
 };
 
 MessageComposer.defaultProps = {
   disabled: false,
-  onSend: () => {}
+  onSend: () => {},
 };
 
 export default MessageComposer;

@@ -14,12 +14,12 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import Logo from 'src/components/Logo';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const InvoicePreview = ({ 
@@ -46,8 +46,8 @@ const InvoicePreview = ({
             <Grid item>
               <Logo />
               <Typography
-                variant="h5"
                 color="textPrimary"
+                variant="h5"
               >
                 www.devias.io
               </Typography>
@@ -55,15 +55,15 @@ const InvoicePreview = ({
             <Grid item>
               <Typography
                 align="right"
-                variant="h1"
                 color="textPrimary"
+                variant="h1"
               >
                 {invoice.status}
               </Typography>
               <Typography
                 align="right"
-                variant="h5"
                 color="textPrimary"
+                variant="h5"
               >
                 Invoice #
                 {invoice.id}
@@ -77,8 +77,8 @@ const InvoicePreview = ({
             >
               <Grid item>
                 <Typography
-                  variant="body1"
                   color="textPrimary"
+                  variant="body1"
                 >
                   Street King William, 123
                   {' '}
@@ -91,8 +91,8 @@ const InvoicePreview = ({
               </Grid>
               <Grid item>
                 <Typography
-                  variant="body1"
                   color="textPrimary"
+                  variant="body1"
                 >
                   Company No. 4675933
                   {' '}
@@ -105,8 +105,8 @@ const InvoicePreview = ({
               <Grid item>
                 <Typography
                   align="right"
-                  variant="body1"
                   color="textPrimary"
+                  variant="body1"
                 >
                   Email: accounts@devias.io
                   {' '}
@@ -123,45 +123,45 @@ const InvoicePreview = ({
             >
               <Grid item>
                 <Typography
+                  color="textPrimary"
                   gutterBottom
                   variant="h5"
-                  color="textPrimary"
                 >
                   Due date
                 </Typography>
                 <Typography
-                  variant="body1"
                   color="textPrimary"
+                  variant="body1"
                 >
                   {moment(invoice.dueDate).format('DD MMM YYYY')}
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography
+                  color="textPrimary"
                   gutterBottom
                   variant="h5"
-                  color="textPrimary"
                 >
                   Date of issue
                 </Typography>
                 <Typography
-                  variant="body1"
                   color="textPrimary"
+                  variant="body1"
                 >
                   {moment(invoice.issueDate).format('DD MMM YYYY')}
                 </Typography>
               </Grid>
               <Grid item>
                 <Typography
+                  color="textPrimary"
                   gutterBottom
                   variant="h5"
-                  color="textPrimary"
                 >
                   Number
                 </Typography>
                 <Typography
-                  variant="body1"
                   color="textPrimary"
+                  variant="body1"
                 >
                   {invoice.number}
                 </Typography>
@@ -170,9 +170,9 @@ const InvoicePreview = ({
           </Box>
           <Box my={4}>
             <Typography
+              color="textPrimary"
               gutterBottom
               variant="h5"
-              color="textPrimary"
             >
               Billed to
             </Typography>
@@ -204,17 +204,19 @@ const InvoicePreview = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {invoice.items.map((items) => (
-                <TableRow key={items.id}>
-                  <TableCell>
-                    {items.description}
-                  </TableCell>
-                  <TableCell />
-                  <TableCell align="right">
-                    {numeral(items.unitAmount).format(`${items.currency}0,0.00`)}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {
+                invoice.items.map((items) => (
+                  <TableRow key={items.id}>
+                    <TableCell>
+                      {items.description}
+                    </TableCell>
+                    <TableCell />
+                    <TableCell align="right">
+                      {numeral(items.unitAmount).format(`${items.currency}0,0.00`)}
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
               <TableRow>
                 <TableCell />
                 <TableCell>
@@ -246,15 +248,15 @@ const InvoicePreview = ({
           </Table>
           <Box mt={2}>
             <Typography
+              color="textPrimary"
               gutterBottom
               variant="h5"
-              color="textPrimary"
             >
               Notes
             </Typography>
             <Typography
-              variant="body1"
               color="textSecondary"
+              variant="body1"
             >
               Please make sure you have the right bank registration number as I
               had issues before and make sure you guys cover transfer expenses.
@@ -268,7 +270,7 @@ const InvoicePreview = ({
 
 InvoicePreview.propTypes = {
   className: PropTypes.string,
-  invoice: PropTypes.object.isRequired
+  invoice: PropTypes.object.isRequired,
 };
 
 export default InvoicePreview;

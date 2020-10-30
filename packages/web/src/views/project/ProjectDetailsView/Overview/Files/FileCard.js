@@ -1,6 +1,6 @@
 import React, {
   useRef,
-  useState
+  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -19,7 +19,7 @@ import {
   Tooltip,
   Typography,
   colors,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFileOutlined';
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -32,31 +32,31 @@ import bytesToSize from 'src/utils/bytesToSize';
 const useStyles = makeStyles((theme) => ({
   root: {},
   media: {
-    height: 140
+    height: 140,
   },
   placeholder: {
     height: 140,
     backgroundColor: colors.blueGrey[50],
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   insertDriveFileIcon: {
     height: theme.spacing(6),
     width: theme.spacing(6),
-    fontSize: theme.spacing(6)
+    fontSize: theme.spacing(6),
   },
   content: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   getAppIcon: {
-    marignRight: theme.spacing(1)
+    marignRight: theme.spacing(1),
   },
   menu: {
     width: 250,
-    maxWidth: '100%'
-  }
+    maxWidth: '100%',
+  },
 }));
 
 const FileCard = ({ className, file, ...rest }) => {
@@ -77,27 +77,29 @@ const FileCard = ({ className, file, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      {file.mimeType.includes('image/') ? (
-        <CardMedia
-          className={classes.media}
-          image={file.url}
-        />
-      ) : (
-        <div className={classes.placeholder}>
-          <InsertDriveFileIcon className={classes.insertDriveFileIcon} />
-        </div>
-      )}
+      {
+        file.mimeType.includes('image/') ? (
+          <CardMedia
+            className={classes.media}
+            image={file.url}
+          />
+        ) : (
+          <div className={classes.placeholder}>
+            <InsertDriveFileIcon className={classes.insertDriveFileIcon} />
+          </div>
+        )
+      }
       <CardContent className={classes.content}>
         <div>
           <Typography
-            variant="h5"
             color="textPrimary"
+            variant="h5"
           >
             {file.name}
           </Typography>
           <Typography
-            variant="subtitle2"
             color="textPrimary"
+            variant="subtitle2"
           >
             {bytesToSize(file.size)}
           </Typography>
@@ -124,18 +126,22 @@ const FileCard = ({ className, file, ...rest }) => {
       </CardActions>
       <Menu
         anchorEl={moreRef.current}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
+        anchorOrigin={
+          {
+            vertical: 'top',
+            horizontal: 'left',
+          }
+        }
         classes={{ paper: classes.menu }}
-        onClose={handleMenuClose}
         elevation={1}
+        onClose={handleMenuClose}
         open={openMenu}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
+        transformOrigin={
+          {
+            vertical: 'top',
+            horizontal: 'left',
+          }
+        }
       >
         <MenuItem divider>
           <ListItemIcon>
@@ -162,7 +168,7 @@ const FileCard = ({ className, file, ...rest }) => {
 
 FileCard.propTypes = {
   className: PropTypes.string,
-  file: PropTypes.object.isRequired
+  file: PropTypes.object.isRequired,
 };
 
 export default FileCard;

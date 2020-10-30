@@ -1,23 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {
-  Box,
-  Button,
-  Container,
-  Typography,
-  makeStyles
-} from '@material-ui/core';
+import React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { Box, Button, Container, makeStyles, Typography, } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     paddingTop: 128,
-    paddingBottom: 128
+    paddingBottom: 128,
   },
   browseButton: {
-    marginLeft: theme.spacing(2)
-  }
+    marginLeft: theme.spacing(2),
+  },
 }));
 
 const CTA = ({ className, ...rest }) => {
@@ -30,24 +24,24 @@ const CTA = ({ className, ...rest }) => {
     >
       <Container maxWidth="lg">
         <Typography
-          variant="h1"
           align="center"
           color="textPrimary"
+          variant="h1"
         >
           Ready to start building?
         </Typography>
         <Typography
-          variant="h1"
           align="center"
           color="secondary"
+          variant="h1"
         >
           Download Devias Material Kit today.
         </Typography>
         <Box
-          mt={6}
+          alignItems="center"
           display="flex"
           justifyContent="center"
-          alignItems="center"
+          mt={6}
         >
           <Button
             color="secondary"
@@ -64,7 +58,7 @@ const CTA = ({ className, ...rest }) => {
 };
 
 CTA.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default CTA;

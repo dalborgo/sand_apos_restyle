@@ -48,7 +48,10 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine, setOu
                             history.push('/app/reports/browser')
                             setText('')
                             setOutput('')
-                            document.getElementById('browserDisplayArea').value = ''
+                            const elem = document.getElementById('browserDisplayArea')
+                            if(elem){
+                              elem.value=''
+                            }
                           } else {
                             browserSearchBox.focus()
                           }
@@ -86,7 +89,10 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine, setOu
                     history.push('/app/reports/browser')
                     setText(filter)
                     setOutput('')
-                    document.getElementById('browserDisplayArea').value = ''
+                    const elem = document.getElementById('browserDisplayArea')
+                    if(elem){
+                      elem.value = ''
+                    }
                   }
                 }
               }

@@ -5,7 +5,7 @@ import {
   Card,
   Grid,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import Label from 'src/components/Label';
 
@@ -16,23 +16,23 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     [theme.breakpoints.up('md')]: {
       '&:not(:last-of-type)': {
-        borderRight: `1px solid ${theme.palette.divider}`
-      }
+        borderRight: `1px solid ${theme.palette.divider}`,
+      },
     },
     [theme.breakpoints.down('sm')]: {
       '&:not(:last-of-type)': {
-        borderBottom: `1px solid ${theme.palette.divider}`
-      }
-    }
+        borderBottom: `1px solid ${theme.palette.divider}`,
+      },
+    },
   },
   valueContainer: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   label: {
-    marginLeft: theme.spacing(1)
-  }
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const Overview = ({ className, ...rest }) => {
@@ -41,7 +41,7 @@ const Overview = ({ className, ...rest }) => {
     income: '854,355.00',
     expanses: '373,250.50',
     profit: '123,532.00',
-    subscriptions: '26,000'
+    subscriptions: '26,000',
   };
 
   return (
@@ -62,17 +62,17 @@ const Overview = ({ className, ...rest }) => {
           xs={12}
         >
           <Typography
+            color="textSecondary"
             component="h2"
             gutterBottom
             variant="overline"
-            color="textSecondary"
           >
             Total Income
           </Typography>
           <div className={classes.valueContainer}>
             <Typography
-              variant="h3"
               color="textPrimary"
+              variant="h3"
             >
               $
               {overview.income}
@@ -93,17 +93,17 @@ const Overview = ({ className, ...rest }) => {
           xs={12}
         >
           <Typography
+            color="textSecondary"
             component="h2"
             gutterBottom
             variant="overline"
-            color="textSecondary"
           >
             Total Expanses
           </Typography>
           <div className={classes.valueContainer}>
             <Typography
-              variant="h3"
               color="textPrimary"
+              variant="h3"
             >
               $
               {overview.expanses}
@@ -124,17 +124,17 @@ const Overview = ({ className, ...rest }) => {
           xs={12}
         >
           <Typography
+            color="textSecondary"
             component="h2"
             gutterBottom
             variant="overline"
-            color="textSecondary"
           >
             Net Profit
           </Typography>
           <div className={classes.valueContainer}>
             <Typography
-              variant="h3"
               color="textPrimary"
+              variant="h3"
             >
               {overview.profit}
             </Typography>
@@ -154,17 +154,17 @@ const Overview = ({ className, ...rest }) => {
           xs={12}
         >
           <Typography
+            color="textSecondary"
             component="h2"
             gutterBottom
             variant="overline"
-            color="textSecondary"
           >
             Active Subscriptions
           </Typography>
           <div className={classes.valueContainer}>
             <Typography
-              variant="h3"
               color="textPrimary"
+              variant="h3"
             >
               {overview.subscriptions}
             </Typography>
@@ -176,7 +176,7 @@ const Overview = ({ className, ...rest }) => {
 };
 
 Overview.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Overview;

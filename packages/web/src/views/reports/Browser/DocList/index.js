@@ -59,6 +59,7 @@ const ListElem = ({ text, value, remove }) => {
     }
   }, [history])
   const handleRemove = useCallback(async event => {
+    event.stopPropagation()
     event.persist()
     await remove(event.currentTarget.name)
   }, [remove])

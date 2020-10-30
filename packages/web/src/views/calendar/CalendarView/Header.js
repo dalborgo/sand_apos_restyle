@@ -11,9 +11,9 @@ const useStyles = makeStyles((theme) => ({
   action: {
     marginBottom: theme.spacing(1),
     '& + &': {
-      marginLeft: theme.spacing(1)
-    }
-  }
+      marginLeft: theme.spacing(1),
+    },
+  },
 }));
 
 const Header = ({
@@ -33,42 +33,42 @@ const Header = ({
     >
       <Grid item>
         <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
+          separator={<NavigateNextIcon fontSize="small" />}
         >
           <Link
-            variant="body1"
             color="inherit"
-            to="/app"
             component={RouterLink}
+            to="/app"
+            variant="body1"
           >
             Dashboard
           </Link>
           <Typography
-            variant="body1"
             color="textPrimary"
+            variant="body1"
           >
             Calendar
           </Typography>
         </Breadcrumbs>
         <Typography
-          variant="h3"
           color="textPrimary"
+          variant="h3"
         >
           Here&apos;s what you planned
         </Typography>
       </Grid>
       <Grid item>
         <Button
-          color="secondary"
-          variant="contained"
-          onClick={onAddClick}
           className={classes.action}
+          color="secondary"
+          onClick={onAddClick}
           startIcon={
             <SvgIcon fontSize="small">
               <PlusCircleIcon />
             </SvgIcon>
           }
+          variant="contained"
         >
           New Event
         </Button>
@@ -79,11 +79,11 @@ const Header = ({
 
 Header.propTypes = {
   className: PropTypes.string,
-  onAddClick: PropTypes.func
+  onAddClick: PropTypes.func,
 };
 
 Header.defaultProps = {
-  onAddClick: () => {}
+  onAddClick: () => {},
 };
 
 export default Header;

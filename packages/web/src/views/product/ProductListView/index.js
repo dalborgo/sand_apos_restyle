@@ -1,12 +1,12 @@
 import React, {
   useState,
   useEffect,
-  useCallback
+  useCallback,
 } from 'react';
 import {
   Box,
   Container,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import Page from 'src/components/Page';
@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: 100
-  }
+    paddingBottom: 100,
+  },
 }));
 
 const ProductListView = () => {
@@ -36,7 +36,7 @@ const ProductListView = () => {
         setProducts(response.data.products);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -51,11 +51,13 @@ const ProductListView = () => {
     >
       <Container maxWidth={false}>
         <Header />
-        {products && (
-          <Box mt={3}>
-            <Results products={products} />
-          </Box>
-        )}
+        {
+          products && (
+            <Box mt={3}>
+              <Results products={products} />
+            </Box>
+          )
+        }
       </Container>
     </Page>
   );

@@ -8,7 +8,7 @@ import {
   Grid,
   Paper,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '100%',
     height: '100%',
     paddingTop: 120,
-    paddingBottom: 120
+    paddingBottom: 120,
   },
   product: {
     position: 'relative',
@@ -26,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     transition: theme.transitions.create('transform', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
     '&:hover': {
-      transform: 'scale(1.1)'
-    }
+      transform: 'scale(1.1)',
+    },
   },
   productImage: {
     borderRadius: theme.shape.borderRadius,
@@ -39,15 +39,15 @@ const useStyles = makeStyles((theme) => ({
     left: theme.spacing(3),
     height: 48,
     width: 48,
-    fontSize: 24
+    fontSize: 24,
   },
   recommendedProduct: {
     backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
   },
   chooseButton: {
-    backgroundColor: theme.palette.common.white
-  }
+    backgroundColor: theme.palette.common.white,
+  },
 }));
 
 const PricingView = () => {
@@ -61,16 +61,16 @@ const PricingView = () => {
       <Container maxWidth="sm">
         <Typography
           align="center"
-          variant="h1"
           color="textPrimary"
+          variant="h1"
         >
           Start today. Boost up your services!
         </Typography>
         <Box mt={3}>
           <Typography
             align="center"
-            variant="subtitle1"
             color="textSecondary"
+            variant="subtitle1"
           >
             Welcome to the first platform created for freelancers and agencies
             for showcasing and finding the best clinets in the market.
@@ -99,34 +99,34 @@ const PricingView = () => {
                   src="/static/images/products/product_standard.svg"
                 />
                 <Typography
+                  color="textSecondary"
                   component="h3"
                   gutterBottom
                   variant="overline"
-                  color="textSecondary"
                 >
                   Standard
                 </Typography>
                 <div>
                   <Typography
+                    color="textPrimary"
                     component="span"
                     display="inline"
                     variant="h3"
-                    color="textPrimary"
                   >
                     $5
                   </Typography>
                   <Typography
+                    color="textSecondary"
                     component="span"
                     display="inline"
                     variant="subtitle2"
-                    color="textSecondary"
                   >
                     /month
                   </Typography>
                 </div>
                 <Typography
-                  variant="overline"
                   color="textSecondary"
+                  variant="overline"
                 >
                   Max 1 user
                 </Typography>
@@ -134,8 +134,8 @@ const PricingView = () => {
                   <Divider />
                 </Box>
                 <Typography
-                  variant="body2"
                   color="textPrimary"
+                  variant="body2"
                 >
                   20 proposals/month
                   <br />
@@ -149,9 +149,9 @@ const PricingView = () => {
                   <Divider />
                 </Box>
                 <Button
-                  variant="contained"
-                  fullWidth
                   className={classes.chooseButton}
+                  fullWidth
+                  variant="contained"
                 >
                   Choose
                 </Button>
@@ -172,34 +172,34 @@ const PricingView = () => {
                   src="/static/images/products/product_premium--outlined.svg"
                 />
                 <Typography
+                  color="inherit"
                   component="h3"
                   gutterBottom
                   variant="overline"
-                  color="inherit"
                 >
                   Premium
                 </Typography>
                 <div>
                   <Typography
+                    color="inherit"
                     component="span"
                     display="inline"
                     variant="h3"
-                    color="inherit"
                   >
                     $29
                   </Typography>
                   <Typography
+                    color="inherit"
                     component="span"
                     display="inline"
                     variant="subtitle2"
-                    color="inherit"
                   >
                     /month
                   </Typography>
                 </div>
                 <Typography
-                  variant="overline"
                   color="inherit"
+                  variant="overline"
                 >
                   Max 3 user
                 </Typography>
@@ -207,8 +207,8 @@ const PricingView = () => {
                   <Divider />
                 </Box>
                 <Typography
-                  variant="body2"
                   color="inherit"
+                  variant="body2"
                 >
                   20 proposals/month
                   <br />
@@ -222,9 +222,9 @@ const PricingView = () => {
                   <Divider />
                 </Box>
                 <Button
-                  variant="contained"
-                  fullWidth
                   className={classes.chooseButton}
+                  fullWidth
+                  variant="contained"
                 >
                   Choose
                 </Button>
@@ -245,34 +245,34 @@ const PricingView = () => {
                   src="/static/images/products/product_extended.svg"
                 />
                 <Typography
+                  color="textSecondary"
                   component="h3"
                   gutterBottom
                   variant="overline"
-                  color="textSecondary"
                 >
                   Extended
                 </Typography>
                 <div>
                   <Typography
+                    color="textPrimary"
                     component="span"
                     display="inline"
                     variant="h3"
-                    color="textPrimary"
                   >
                     $259
                   </Typography>
                   <Typography
+                    color="textSecondary"
                     component="span"
                     display="inline"
                     variant="subtitle2"
-                    color="textSecondary"
                   >
                     /month
                   </Typography>
                 </div>
                 <Typography
-                  variant="overline"
                   color="textSecondary"
+                  variant="overline"
                 >
                   Unlimited
                 </Typography>
@@ -280,8 +280,8 @@ const PricingView = () => {
                   <Divider />
                 </Box>
                 <Typography
-                  variant="body2"
                   color="textPrimary"
+                  variant="body2"
                 >
                   All from above
                   <br />
@@ -295,9 +295,9 @@ const PricingView = () => {
                   <Divider />
                 </Box>
                 <Button
-                  variant="contained"
-                  fullWidth
                   className={classes.chooseButton}
+                  fullWidth
+                  variant="contained"
                 >
                   Choose
                 </Button>

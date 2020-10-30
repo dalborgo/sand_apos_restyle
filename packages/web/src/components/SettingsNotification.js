@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3),
     outline: 'none',
     zIndex: 2000,
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }));
 
 const SettingsNotification = () => {
@@ -52,31 +52,31 @@ const SettingsNotification = () => {
         elevation={3}
       >
         <Typography
-          variant="h4"
           color="textPrimary"
           gutterBottom
+          variant="h4"
         >
           Settings Updated
         </Typography>
         <Typography
-          variant="body2"
           color="textSecondary"
+          variant="body2"
         >
           We automatically updated your settings.
           You change the settings any time from your dashboard settings.
         </Typography>
         <Box
-          mt={2}
           display="flex"
           justifyContent="space-between"
+          mt={2}
         >
           <Button onClick={handleClose}>
             Close
           </Button>
           <Button
             color="secondary"
-            variant="contained"
             onClick={handleSwitch}
+            variant="contained"
           >
             Switch
           </Button>

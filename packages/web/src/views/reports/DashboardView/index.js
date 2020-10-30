@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Grid, makeStyles, } from '@material-ui/core'
+import { Container, Grid, makeStyles } from '@material-ui/core'
 import Page from 'src/components/Page'
 import Header from './Header'
 import LatestProjects from './LatestProjects'

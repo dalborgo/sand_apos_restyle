@@ -8,26 +8,26 @@ import {
   Hidden,
   SvgIcon,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import {
   Check as CheckIcon,
   X as XIcon,
-  Trash as TrashIcon
+  Trash as TrashIcon,
 } from 'react-feather';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   actions: {
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
     '& > * + *': {
-      marginLeft: theme.spacing(2)
-    }
-  }
+      marginLeft: theme.spacing(2),
+    },
+  },
 }));
 
 const BulkOperations = ({
@@ -122,14 +122,14 @@ BulkOperations.propTypes = {
   onMarkPaid: PropTypes.func,
   onMarkUnpaid: PropTypes.func,
   open: PropTypes.bool,
-  selected: PropTypes.array.isRequired
+  selected: PropTypes.array.isRequired,
 };
 
 BulkOperations.defaultProps = {
   onDelete: () => {},
   onMarkPaid: () => {},
   onMarkUnpaid: () => {},
-  open: false
+  open: false,
 };
 
 export default BulkOperations;

@@ -13,12 +13,12 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3),
     padding: theme.spacing(3),
     outline: 'none',
-    zIndex: 2000
+    zIndex: 2000,
   },
   action: {
     backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.black
-  }
+    color: theme.palette.common.black,
+  },
 }));
 
 const CookiesNotification = () => {
@@ -46,32 +46,32 @@ const CookiesNotification = () => {
     <Portal>
       <div className={classes.root}>
         <Typography
-          variant="body1"
           color="inherit"
+          variant="body1"
         >
           We use Cookies to ensure that we give you the best experience on our
           website. Read our
           {' '}
           <Link
-            component="a"
             color="inherit"
-            underline="always"
+            component="a"
             href="https://devias.io/privacy-policy"
             target="_blank"
+            underline="always"
           >
             Privacy Policy
           </Link>
           .
         </Typography>
         <Box
-          mt={2}
           display="flex"
           justifyContent="flex-end"
+          mt={2}
         >
           <Button
+            className={classes.action}
             onClick={handleClose}
             variant="contained"
-            className={classes.action}
           >
             I Agree
           </Button>

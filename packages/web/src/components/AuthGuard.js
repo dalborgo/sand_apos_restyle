@@ -18,7 +18,7 @@ const AuthGuard = ({ children }) => {
 };
 
 AuthGuard.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default AuthGuard;

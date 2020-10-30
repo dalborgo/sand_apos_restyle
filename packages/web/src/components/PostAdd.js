@@ -14,15 +14,15 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(0.5),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    paddingTop: theme.spacing(0.5)
+    paddingTop: theme.spacing(0.5),
   },
   divider: {
     height: 24,
-    width: 1
+    width: 1,
   },
   fileInput: {
-    display: 'none'
-  }
+    display: 'none',
+  },
 }));
 
 const PostAdd = ({ className, ...rest } ) => {
@@ -47,8 +47,8 @@ const PostAdd = ({ className, ...rest } ) => {
     >
       <CardContent>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
         >
           <Paper
             className={classes.inputContainer}
@@ -95,7 +95,7 @@ const PostAdd = ({ className, ...rest } ) => {
 };
 
 PostAdd.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default PostAdd;

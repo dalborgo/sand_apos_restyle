@@ -1,6 +1,6 @@
 import React, {
   useRef,
-  useState
+  useState,
 } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -14,7 +14,7 @@ import {
   MenuItem,
   SvgIcon,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { Calendar as CalendarIcon } from 'react-feather';
@@ -22,24 +22,24 @@ import { Calendar as CalendarIcon } from 'react-feather';
 const timeRanges = [
   {
     value: 'today',
-    text: 'Today'
+    text: 'Today',
   },
   {
     value: 'yesterday',
-    text: 'Yesterday'
+    text: 'Yesterday',
   },
   {
     value: 'last_30_days',
-    text: 'Last 30 days'
+    text: 'Last 30 days',
   },
   {
     value: 'last_year',
-    text: 'Last year'
-  }
+    text: 'Last year',
+  },
 ];
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Header = ({ className, ...rest }) => {
@@ -58,35 +58,35 @@ const Header = ({ className, ...rest }) => {
     >
       <Grid item>
         <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
+          separator={<NavigateNextIcon fontSize="small" />}
         >
           <Link
-            variant="body1"
             color="inherit"
-            to="/app"
             component={RouterLink}
+            to="/app"
+            variant="body1"
           >
             Dashboard
           </Link>
           <Typography
-            variant="body1"
             color="textPrimary"
+            variant="body1"
           >
             Reports
           </Typography>
         </Breadcrumbs>
         <Typography
-          variant="h3"
           color="textPrimary"
+          variant="h3"
         >
           Finance Overview
         </Typography>
       </Grid>
       <Grid item>
         <Button
-          ref={actionRef}
           onClick={() => setMenuOpen(true)}
+          ref={actionRef}
           startIcon={
             <SvgIcon fontSize="small">
               <CalendarIcon />
@@ -97,26 +97,32 @@ const Header = ({ className, ...rest }) => {
         </Button>
         <Menu
           anchorEl={actionRef.current}
+          anchorOrigin={
+            {
+              vertical: 'bottom',
+              horizontal: 'center',
+            }
+          }
+          getContentAnchorEl={null}
           onClose={() => setMenuOpen(false)}
           open={isMenuOpen}
-          getContentAnchorEl={null}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center'
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center'
-          }}
+          transformOrigin={
+            {
+              vertical: 'top',
+              horizontal: 'center',
+            }
+          }
         >
-          {timeRanges.map((_timeRange) => (
-            <MenuItem
-              key={_timeRange.value}
-              onClick={() => setTimeRange(_timeRange.text)}
-            >
-              {_timeRange.text}
-            </MenuItem>
-          ))}
+          {
+            timeRanges.map((_timeRange) => (
+              <MenuItem
+                key={_timeRange.value}
+                onClick={() => setTimeRange(_timeRange.text)}
+              >
+                {_timeRange.text}
+              </MenuItem>
+            ))
+          }
         </Menu>
       </Grid>
     </Grid>
@@ -124,7 +130,7 @@ const Header = ({ className, ...rest }) => {
 };
 
 Header.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 Header.defaultProps = {};

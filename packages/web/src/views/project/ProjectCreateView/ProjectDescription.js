@@ -7,20 +7,20 @@ import {
   FormHelperText,
   Paper,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import QuillEditor from 'src/components/QuillEditor';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   editorContainer: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
   editor: {
     '& .ql-editor': {
-      height: 400
-    }
-  }
+      height: 400,
+    },
+  },
 }));
 
 const ProjectDescription = ({
@@ -50,7 +50,7 @@ const ProjectDescription = ({
         onComplete();
       }
     } catch (err) {
-      console.error(err);
+      
       setError(err.message);
     } finally {
       setSubmitting(false);
@@ -59,20 +59,20 @@ const ProjectDescription = ({
 
   return (
     <form
-      onSubmit={handleSubmit}
       className={clsx(classes.root, className)}
+      onSubmit={handleSubmit}
       {...rest}
     >
       <Typography
-        variant="h3"
         color="textPrimary"
+        variant="h3"
       >
         Please select one option
       </Typography>
       <Box mt={2}>
         <Typography
-          variant="subtitle1"
           color="textSecondary"
+          variant="subtitle1"
         >
           Proin tincidunt lacus sed ante efficitur efficitur.
           Quisque aliquam fringilla velit sit amet euismod.
@@ -83,37 +83,41 @@ const ProjectDescription = ({
         variant="outlined"
       >
         <QuillEditor
+          className={classes.editor}
           handleChange={handleChange}
           value={content}
-          className={classes.editor}
         />
       </Paper>
-      {error && (
-        <Box mt={2}>
-          <FormHelperText error>
-            {FormHelperText}
-          </FormHelperText>
-        </Box>
-      )}
+      {
+        error && (
+          <Box mt={2}>
+            <FormHelperText error>
+              {FormHelperText}
+            </FormHelperText>
+          </Box>
+        )
+      }
       <Box
-        mt={6}
         display="flex"
+        mt={6}
       >
-        {onBack && (
-          <Button
-            onClick={onBack}
-            size="large"
-          >
+        {
+          onBack && (
+            <Button
+              onClick={onBack}
+              size="large"
+            >
             Previous
-          </Button>
-        )}
+            </Button>
+          )
+        }
         <Box flexGrow={1} />
         <Button
           color="secondary"
           disabled={isSubmitting}
+          size="large"
           type="submit"
           variant="contained"
-          size="large"
         >
           Complete
         </Button>
@@ -125,12 +129,12 @@ const ProjectDescription = ({
 ProjectDescription.propTypes = {
   className: PropTypes.string,
   onComplete: PropTypes.func,
-  onBack: PropTypes.func
+  onBack: PropTypes.func,
 };
 
 ProjectDescription.defaultProps = {
   onComplete: () => {},
-  onBack: () => {}
+  onBack: () => {},
 };
 
 export default ProjectDescription;

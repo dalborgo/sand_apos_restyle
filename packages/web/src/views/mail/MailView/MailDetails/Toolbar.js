@@ -9,7 +9,7 @@ import {
   Input,
   Paper,
   Tooltip,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexShrink: 0,
     height: 68,
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   searchContainer: {
     alignItems: 'center',
@@ -32,12 +32,12 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(0.5),
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
-    paddingTop: theme.spacing(0.5)
+    paddingTop: theme.spacing(0.5),
   },
   searchInput: {
     flexGrow: 1,
-    marginLeft: theme.spacing(2)
-  }
+    marginLeft: theme.spacing(2),
+  },
 }));
 
 const Toolbar = ({ className, ...rest }) => {
@@ -96,7 +96,7 @@ const Toolbar = ({ className, ...rest }) => {
 }
 
 Toolbar.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Toolbar;

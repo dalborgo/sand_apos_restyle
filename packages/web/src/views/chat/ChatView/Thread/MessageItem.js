@@ -10,18 +10,18 @@ import useAuth from 'src/hooks/useAuth'
 const useStyles = makeStyles((theme) => ({
   root: {
     marginBottom: theme.spacing(2),
-    display: 'flex'
+    display: 'flex',
   },
   avatar: {
     height: 32,
-    width: 32
+    width: 32,
   },
   image: {
     cursor: 'pointer',
     height: 'auto',
     maxWidth: '100%',
-    width: 380
-  }
+    width: 380,
+  },
 }));
 
 const MessageItem = ({
@@ -41,11 +41,11 @@ const MessageItem = ({
     ? {
       avatar: user.avatar,
       name: 'Me',
-      type: 'user'
+      type: 'user',
     } : {
       avatar: sender.avatar,
       name: sender.name,
-      type: 'contact'
+      type: 'contact',
     };
 
   return (
@@ -80,35 +80,37 @@ const MessageItem = ({
               {senderDetails.name}
             </Link>
             <Box mt={1}>
-              {message.contentType === 'image' ? (
-                <Box
-                  mt={2}
-                  onClick={() => setSelectedImage(message.body)}
-                >
-                  <img
-                    alt="Attachment"
-                    className={classes.image}
-                    src={message.body}
-                  />
-                </Box>
-              ) : (
+              {
+                message.contentType === 'image' ? (
+                  <Box
+                    mt={2}
+                    onClick={() => setSelectedImage(message.body)}
+                  >
+                    <img
+                      alt="Attachment"
+                      className={classes.image}
+                      src={message.body}
+                    />
+                  </Box>
+                ) : (
                   <Typography
                     color="inherit"
                     variant="body1"
                   >
                     {message.body}
                   </Typography>
-                )}
+                )
+              }
             </Box>
           </Box>
           <Box
-            mt={1}
             display="flex"
             justifyContent="flex-end"
+            mt={1}
           >
             <Typography
-              noWrap
               color="textSecondary"
+              noWrap
               variant="caption"
             >
               {moment(message.createdAt).fromNow()}
@@ -116,12 +118,14 @@ const MessageItem = ({
           </Box>
         </Box>
       </Box>
-      {selectedImage && (
-        <Lightbox
-          large={selectedImage}
-          onClose={() => setSelectedImage(null)}
-        />
-      )}
+      {
+        selectedImage && (
+          <Lightbox
+            large={selectedImage}
+            onClose={() => setSelectedImage(null)}
+          />
+        )
+      }
     </div>
   );
 };
@@ -129,7 +133,7 @@ const MessageItem = ({
 MessageItem.propTypes = {
   className: PropTypes.string,
   message: PropTypes.object.isRequired,
-  thread: PropTypes.object.isRequired
+  thread: PropTypes.object.isRequired,
 };
 
 export default MessageItem;

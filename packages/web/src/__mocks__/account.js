@@ -55,7 +55,6 @@ mock.onPost('/api/account/login').reply(async (config) => {
       },
     }]
   } catch (err) {
-    console.error(err)
     return [500, { message: 'Internal server error' }]
   }
 })
@@ -103,7 +102,6 @@ mock.onPost('/api/account/register').reply(async (config) => {
       },
     }]
   } catch (err) {
-    console.error(err)
     return [500, { message: 'Internal server error' }]
   }
 })
@@ -134,7 +132,6 @@ mock.onGet('/api/account/me').reply((config) => {
       },
     }]
   } catch (err) {
-    console.error(err)
     return [500, { message: 'Internal server error' }]
   }
 })

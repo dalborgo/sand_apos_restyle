@@ -12,17 +12,17 @@ const board = {
         '5e849c8708bd72683b454747',
         '5e849c90fabe1f1f4b3557f6',
         '5e849c977ef6265938bfd90b',
-        '5e849c9e34ee93bc7255c599'
-      ]
+        '5e849c9e34ee93bc7255c599',
+      ],
     },
     {
       id: '5e849c2b38d238c33e516755',
       name: 'In progress',
       cardIds: [
         '5e849ca7d063dc3830d4b49c',
-        '5e849cb5d0c6e8894451fdfa'
-      ]
-    }
+        '5e849cb5d0c6e8894451fdfa',
+      ],
+    },
   ],
   cards: [
     {
@@ -36,10 +36,10 @@ const board = {
             {
               id: '5e85af37da584c5e4bd8a06c',
               name: 'An item',
-              state: 'complete'
-            }
-          ]
-        }
+              state: 'complete',
+            },
+          ],
+        },
       ],
       comments: [
         {
@@ -50,8 +50,8 @@ const board = {
             .toDate()
             .getTime(),
           memberId: '5e887ac47eed253091be10cb',
-          message: 'This is a comment'
-        }
+          message: 'This is a comment',
+        },
       ],
       cover: '/static/images/projects/project_3.png',
       description: 'Duis condimentum lacus finibus felis pellentesque, ac auctor nibh fermentum. Duis sed dui ante. Phasellus id eros tincidunt, dictum lorem vitae, pellentesque sem. Aenean eu enim sit amet mauris rhoncus mollis. Sed enim turpis, porta a felis et, luctus faucibus nisi. Phasellus et metus fermentum, ultrices arcu aliquam, facilisis justo. Cras nunc nunc, elementum sed euismod ut, maximus eget nibh. Phasellus condimentum lorem neque. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce sagittis pharetra eleifend. Suspendisse potenti.',
@@ -62,7 +62,7 @@ const board = {
       isSubscribed: false,
       listId: '5e849c39325dc5ef58e5a5db',
       memberIds: ['5e86809283e28b96d2d38537'],
-      name: 'Call with sales of HubSpot'
+      name: 'Call with sales of HubSpot',
     },
     {
       id: '5e849c90fabe1f1f4b3557f6',
@@ -78,7 +78,7 @@ const board = {
       isSubscribed: true,
       listId: '5e849c39325dc5ef58e5a5db',
       memberIds: ['5e887b209c28ac3dd97f6db5', '5e887a62195cc5aef7e8ca5d'],
-      name: 'Interview for the Asis. Sales Manager'
+      name: 'Interview for the Asis. Sales Manager',
     },
     {
       id: '5e849c977ef6265938bfd90b',
@@ -104,7 +104,7 @@ const board = {
       isSubscribed: false,
       listId: '5e849c39325dc5ef58e5a5db',
       memberIds: ['5e887ac47eed253091be10cb', '5e86809283e28b96d2d38537'],
-      name: 'Integrate Stripe API'
+      name: 'Integrate Stripe API',
     },
     {
       id: '5e849ca7d063dc3830d4b49c',
@@ -117,7 +117,7 @@ const board = {
       isSubscribed: true,
       listId: '5e849c2b38d238c33e516755',
       memberIds: ['5e887a62195cc5aef7e8ca5d'],
-      name: 'Update the customer API for payments'
+      name: 'Update the customer API for payments',
     },
     {
       id: '5e849cb5d0c6e8894451fdfa',
@@ -130,8 +130,8 @@ const board = {
       isSubscribed: true,
       listId: '5e849c2b38d238c33e516755',
       memberIds: [],
-      name: 'Redesign the landing page'
-    }
+      name: 'Redesign the landing page',
+    },
   ],
   members: [
     {
@@ -142,24 +142,24 @@ const board = {
     {
       id: '5e887ac47eed253091be10cb',
       avatar: '/static/images/avatars/avatar_3.png',
-      name: 'Cao Yu'
+      name: 'Cao Yu',
     },
     {
       id: '5e887b209c28ac3dd97f6db5',
       avatar: '/static/images/avatars/avatar_4.png',
-      name: 'Alex Richardson'
+      name: 'Alex Richardson',
     },
     {
       id: '5e887b7602bdbc4dbb234b27',
       avatar: '/static/images/avatars/avatar_5.png',
-      name: 'Anje Keizer'
+      name: 'Anje Keizer',
     },
     {
       id: '5e86809283e28b96d2d38537',
       avatar: '/static/images/avatars/avatar_6.png',
-      name: 'Marco Dal Borgo'
-    }
-  ]
+      name: 'Marco Dal Borgo',
+    },
+  ],
 };
 
 mock.onGet('/api/kanban/board').reply(200, { board });
@@ -170,16 +170,15 @@ mock.onPost('/api/kanban/lists/new').reply((request) => {
     const list = {
       id: uuidv4(),
       name,
-      cardIds: []
+      cardIds: [],
     };
 
     _.assign(board, {
-      lists: [...board.lists, list]
+      lists: [...board.lists, list],
     });
 
     return [200, { list }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -193,7 +192,6 @@ mock.onPost('/api/kanban/list/update').reply((request) => {
 
     return [200, { list }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -206,18 +204,17 @@ mock.onPost('/api/kanban/lists/clear').reply((request) => {
       lists: _.map(board.lists, (list) => {
         if (list.id === listId) {
           _.assign(list, {
-            cardIds: []
+            cardIds: [],
           });
         }
 
         return list;
       }),
-      cards: board.cards.filter((card) => card.listId !== listId)
+      cards: board.cards.filter((card) => card.listId !== listId),
     });
 
     return [200, { listId }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -228,12 +225,11 @@ mock.onPost('/api/kanban/lists/remove').reply((request) => {
 
     _.assign(board, {
       lists: _.reject(board.lists, { id: listId }),
-      cards: board.cards.filter((card) => card.listId !== listId)
+      cards: board.cards.filter((card) => card.listId !== listId),
     });
 
     return [200, { listId }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -252,7 +248,7 @@ mock.onPost('/api/kanban/cards/new').reply((request) => {
       isSubscribed: false,
       listId,
       memberIds: [],
-      name
+      name,
     };
 
     _.assign(board, {
@@ -260,17 +256,16 @@ mock.onPost('/api/kanban/cards/new').reply((request) => {
       lists: _.map(board.lists, (list) => {
         if (list.id === listId) {
           _.assign(list, {
-            cardIds: [...list.cardIds, card.id]
+            cardIds: [...list.cardIds, card.id],
           });
         }
 
         return list;
-      })
+      }),
     });
 
     return [200, { card }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -284,7 +279,6 @@ mock.onPost('/api/kanban/cards/update').reply((request) => {
 
     return [200, { card }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -321,7 +315,7 @@ mock.onPost('/api/kanban/cards/move').reply((request) => {
 
     return [200, true];
   } catch (err) {
-    console.error(err);
+    
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -334,16 +328,16 @@ mock.onPost('/api/kanban/cards/remove').reply((request) => {
       cards: _.reject(board.cards, { id: cardId }),
       lists: _.map(board.lists, (list) => {
         _.assign(list, {
-          cardIds: list.cardIds.filter((_cardId) => _cardId !== cardId)
+          cardIds: list.cardIds.filter((_cardId) => _cardId !== cardId),
         });
 
         return list;
-      })
+      }),
     });
 
     return [200, { cardId }];
   } catch (err) {
-    console.error(err);
+    
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -358,24 +352,24 @@ mock.onPost('/api/kanban/comments/new').reply((request) => {
         .toDate()
         .getTime(),
       memberId: '5e86809283e28b96d2d38537', // On server get current user from request
-      message
+      message,
     };
 
     _.assign(board, {
       cards: _.map(board.cards, (card) => {
         if (card.id === cardId) {
           _.assign(card, {
-            comments: [...card.comments, comment]
+            comments: [...card.comments, comment],
           });
         }
 
         return card;
-      })
+      }),
     });
 
     return [200, { comment }];
   } catch (err) {
-    console.error(err);
+    
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -386,24 +380,24 @@ mock.onPost('/api/kanban/checklists/new').reply((request) => {
     const checklist = {
       id: uuidv4(),
       name,
-      checkItems: []
+      checkItems: [],
     };
 
     _.assign(board, {
       cards: _.map(board.cards, (card) => {
         if (card.id === cardId) {
           _.assign(card, {
-            checklists: [...card.checklists, checklist]
+            checklists: [...card.checklists, checklist],
           });
         }
 
         return card;
-      })
+      }),
     });
 
     return [200, { checklist }];
   } catch (err) {
-    console.error(err);
+    
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -427,12 +421,12 @@ mock.onPost('/api/kanban/checklists/update').reply((request) => {
         }
 
         return card;
-      })
+      }),
     });
 
     return [200, { checklist }];
   } catch (err) {
-    console.error(err);
+    
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -450,12 +444,12 @@ mock.onPost('/api/kanban/checklists/remove').reply((request) => {
         }
 
         return card;
-      })
+      }),
     });
 
     return [200, true];
   } catch (err) {
-    console.error(err);
+    
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -467,7 +461,7 @@ mock.onPost('/api/kanban/checkitems/new').reply((request) => {
       id: uuidv4(),
       checklistId,
       name,
-      state: 'incomplete'
+      state: 'incomplete',
     };
 
     _.assign(board, {
@@ -477,22 +471,22 @@ mock.onPost('/api/kanban/checkitems/new').reply((request) => {
             checklists: _.each(card.checklists, (checklist) => {
               if (checklist.id === checklistId) {
                 _.assign(checklist, {
-                  checkItems: [...checklist.checkItems, checkItem]
+                  checkItems: [...checklist.checkItems, checkItem],
                 });
               }
 
               return checklist;
-            })
+            }),
           });
         }
 
         return card;
-      })
+      }),
     });
 
     return [200, { checkItem }];
   } catch (err) {
-    console.error(err);
+    
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -503,7 +497,7 @@ mock.onPost('/api/kanban/checkitems/update').reply((request) => {
       cardId,
       checklistId,
       checkItemId,
-      update
+      update,
     } = JSON.parse(request.data);
     let checkItem = null;
 
@@ -521,22 +515,22 @@ mock.onPost('/api/kanban/checkitems/update').reply((request) => {
                     }
 
                     return _checkItem;
-                  })
+                  }),
                 });
               }
 
               return checklist;
-            })
+            }),
           });
         }
 
         return card;
-      })
+      }),
     });
 
     return [200, { checkItem }];
   } catch (err) {
-    console.error(err);
+    
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -552,22 +546,22 @@ mock.onPost('/api/kanban/checkitems/remove').reply((request) => {
             checklists: _.map(card.checklists, (checklist) => {
               if (checklist.id === checklistId) {
                 _.assign(checklist, {
-                  checkItems: _.reject(checklist.checkItems, { id: checkItemId })
+                  checkItems: _.reject(checklist.checkItems, { id: checkItemId }),
                 });
               }
 
               return checklist;
-            })
+            }),
           });
         }
 
         return card;
-      })
+      }),
     });
 
     return [200, true];
   } catch (err) {
-    console.error(err);
+    
     return [500, { message: 'Internal server error' }];
   }
 });

@@ -9,18 +9,18 @@ import {
   Dialog,
   TextField,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
   },
   helperText: {
     textAlign: 'right',
-    marginRight: 0
-  }
+    marginRight: 0,
+  },
 }));
 
 const ApplyModal = ({
@@ -42,7 +42,7 @@ const ApplyModal = ({
 
   const handleApply = () => {
     enqueueSnackbar('Request sent', {
-      variant: 'success'
+      variant: 'success',
     });
     onApply();
   };
@@ -59,16 +59,16 @@ const ApplyModal = ({
       >
         <Typography
           align="center"
+          color="textPrimary"
           gutterBottom
           variant="h3"
-          color="textPrimary"
         >
           The project requires an introduction
         </Typography>
         <Typography
           align="center"
-          variant="subtitle2"
           color="textSecondary"
+          variant="subtitle2"
         >
           Write down a short note with your application regarding why you
           think you&apos;d be a good fit for this position.
@@ -88,9 +88,9 @@ const ApplyModal = ({
             variant="outlined"
           />
           <Box
-            mt={6}
-            display="flex"
             alignItems="center"
+            display="flex"
+            mt={6}
           >
             <Avatar
               alt="Author"
@@ -100,14 +100,14 @@ const ApplyModal = ({
             </Avatar>
             <Box ml={2}>
               <Typography
-                variant="h3"
                 color="textPrimary"
+                variant="h3"
               >
                 {author.name}
               </Typography>
               <Typography
-                variant="subtitle2"
                 color="textPrimary"
+                variant="subtitle2"
               >
                 {/* {author.bio} */}
               </Typography>
@@ -119,10 +119,10 @@ const ApplyModal = ({
           p={3}
         >
           <Button
+            color="primary"
+            fullWidth
             onClick={handleApply}
             variant="contained"
-            fullWidth
-            color="primary"
           >
             Apply for a role
           </Button>
@@ -137,12 +137,12 @@ ApplyModal.propTypes = {
   className: PropTypes.string,
   onApply: PropTypes.func,
   onClose: PropTypes.func,
-  open: PropTypes.bool.isRequired
+  open: PropTypes.bool.isRequired,
 };
 
 ApplyModal.defaultProps = {
   onApply: () => {},
-  onClose: () => {}
+  onClose: () => {},
 };
 
 export default ApplyModal;

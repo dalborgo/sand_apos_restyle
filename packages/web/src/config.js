@@ -1,6 +1,6 @@
 export const auth0Config = {
   client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
-  domain: process.env.REACT_APP_AUTH0_DOMAIN
+  domain: process.env.REACT_APP_AUTH0_DOMAIN,
 };
 
 export const firebaseConfig = {
@@ -10,5 +10,5 @@ export const firebaseConfig = {
   databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
 };

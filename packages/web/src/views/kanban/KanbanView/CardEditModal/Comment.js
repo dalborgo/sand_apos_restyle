@@ -7,7 +7,7 @@ import {
   Box,
   Paper,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { useSelector } from 'src/store';
 
@@ -20,13 +20,13 @@ const memberSelector = (state, memberId) => {
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   messageContainer: {
     backgroundColor: theme.palette.background.dark,
     marginBottom: theme.spacing(1),
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }));
 
 const Comment = ({
@@ -47,13 +47,13 @@ const Comment = ({
         src={member.avatar}
       />
       <Box
-        ml={2}
         flexGrow={1}
+        ml={2}
       >
         <Typography
-          variant="h5"
           color="textPrimary"
           gutterBottom
+          variant="h5"
         >
           {member.name}
         </Typography>
@@ -62,15 +62,15 @@ const Comment = ({
           variant="outlined"
         >
           <Typography
-            variant="body2"
             color="textPrimary"
+            variant="body2"
           >
             {comment.message}
           </Typography>
         </Paper>
         <Typography
-          variant="caption"
           color="textSecondary"
+          variant="caption"
         >
           {moment(comment.createdAt).format('MMM DD, YYYY [at] hh:mm a')}
         </Typography>
@@ -81,7 +81,7 @@ const Comment = ({
 
 Comment.propTypes = {
   comment: PropTypes.object.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Comment;

@@ -14,7 +14,7 @@ import {
   ListItemText,
   makeStyles,
   Tooltip,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import MoreIcon from '@material-ui/icons/MoreVert'
@@ -33,30 +33,30 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
       opacity: 0.5,
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   dragActive: {
     backgroundColor: theme.palette.action.active,
-    opacity: 0.5
+    opacity: 0.5,
   },
   image: {
-    width: 130
+    width: 130,
   },
   info: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   list: {
-    maxHeight: 320
+    maxHeight: 320,
   },
   actions: {
     marginTop: theme.spacing(2),
     display: 'flex',
     justifyContent: 'flex-end',
     '& > * + *': {
-      marginLeft: theme.spacing(2)
-    }
-  }
+      marginLeft: theme.spacing(2),
+    },
+  },
 }));
 
 const FilesDropzone = ({ className, ...rest }) => {
@@ -72,7 +72,7 @@ const FilesDropzone = ({ className, ...rest }) => {
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: handleDrop
+    onDrop: handleDrop,
   });
 
   return (
@@ -81,10 +81,12 @@ const FilesDropzone = ({ className, ...rest }) => {
       {...rest}
     >
       <div
-        className={clsx({
-          [classes.dropZone]: true,
-          [classes.dragActive]: isDragActive
-        })}
+        className={
+          clsx({
+            [classes.dropZone]: true,
+            [classes.dragActive]: isDragActive,
+          })
+        }
         {...getRootProps()}
       >
         <input {...getInputProps()} />
@@ -116,55 +118,59 @@ const FilesDropzone = ({ className, ...rest }) => {
           </Box>
         </div>
       </div>
-      {files.length > 0 && (
-        <>
-          <PerfectScrollbar options={{ suppressScrollX: true }}>
-            <List className={classes.list}>
-              {files.map((file, i) => (
-                <ListItem
-                  divider={i < files.length - 1}
-                  key={i}
-                >
-                  <ListItemIcon>
-                    <FileCopyIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={file.name}
-                    primaryTypographyProps={{ variant: 'h5' }}
-                    secondary={bytesToSize(file.size)}
-                  />
-                  <Tooltip title="More options">
-                    <IconButton edge="end">
-                      <MoreIcon />
-                    </IconButton>
-                  </Tooltip>
-                </ListItem>
-              ))}
-            </List>
-          </PerfectScrollbar>
-          <div className={classes.actions}>
-            <Button
-              onClick={handleRemoveAll}
-              size="small"
-            >
+      {
+        files.length > 0 && (
+          <>
+            <PerfectScrollbar options={{ suppressScrollX: true }}>
+              <List className={classes.list}>
+                {
+                  files.map((file, i) => (
+                    <ListItem
+                      divider={i < files.length - 1}
+                      key={i}
+                    >
+                      <ListItemIcon>
+                        <FileCopyIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={file.name}
+                        primaryTypographyProps={{ variant: 'h5' }}
+                        secondary={bytesToSize(file.size)}
+                      />
+                      <Tooltip title="More options">
+                        <IconButton edge="end">
+                          <MoreIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </ListItem>
+                  ))
+                }
+              </List>
+            </PerfectScrollbar>
+            <div className={classes.actions}>
+              <Button
+                onClick={handleRemoveAll}
+                size="small"
+              >
               Remove all
-            </Button>
-            <Button
-              color="secondary"
-              size="small"
-              variant="contained"
-            >
+              </Button>
+              <Button
+                color="secondary"
+                size="small"
+                variant="contained"
+              >
               Upload files
-            </Button>
-          </div>
-        </>
-      )}
+              </Button>
+            </div>
+          </>
+        )
+      }
     </div>
   );
 };
 
 FilesDropzone.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default FilesDropzone;

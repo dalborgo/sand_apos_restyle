@@ -7,7 +7,7 @@ import { useSelector } from 'src/store'
 import ThreadItem from './ThreadItem'
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const ThreadList = ({ className, ...rest }) => {
@@ -37,20 +37,22 @@ const ThreadList = ({ className, ...rest }) => {
       className={clsx(classes.root, className)}
       {...rest}
     >
-      {threads.allIds.map((threadId) => (
-        <ThreadItem
-          active={activeThreadId === threadId}
-          key={threadId}
-          onSelect={() => handleSelect(threadId)}
-          thread={threads.byId[threadId]}
-        />
-      ))}
+      {
+        threads.allIds.map((threadId) => (
+          <ThreadItem
+            active={activeThreadId === threadId}
+            key={threadId}
+            onSelect={() => handleSelect(threadId)}
+            thread={threads.byId[threadId]}
+          />
+        ))
+      }
     </List>
   );
 };
 
 ThreadList.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default ThreadList;

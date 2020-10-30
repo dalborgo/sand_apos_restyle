@@ -8,7 +8,7 @@ import Invoices from './Invoices'
 import OtherActions from './OtherActions'
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Details = ({
@@ -67,7 +67,7 @@ const Details = ({
 
 Details.propTypes = {
   className: PropTypes.string,
-  customer: PropTypes.object.isRequired
+  customer: PropTypes.object.isRequired,
 };
 
 export default Details;

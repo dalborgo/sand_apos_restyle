@@ -5,7 +5,7 @@ import {
   ListItem,
   ButtonBase,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DraftsIcon from '@material-ui/icons/Drafts';
@@ -25,7 +25,7 @@ const systemLabelIcons = {
   spam: ReportIcon,
   sent: SendIcon,
   starred: StarIcon,
-  important: LabelImportantIcon
+  important: LabelImportantIcon,
 };
 
 const getIcon = (label) => {
@@ -60,7 +60,7 @@ const getColor = (label) => {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: 0
+    padding: 0,
   },
   content: {
     flexGrow: 1,
@@ -72,29 +72,29 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 32,
     fontWeight: theme.typography.fontWeightRegular,
     '&:hover': {
-      backgroundColor: theme.palette.action.hover
-    }
+      backgroundColor: theme.palette.action.hover,
+    },
   },
   active: {
     fontWeight: theme.typography.fontWeightMedium,
-    backgroundColor: theme.palette.action.selected
+    backgroundColor: theme.palette.action.selected,
   },
   label: {
     fontWeight: 'inherit',
-    color: 'inherit'
+    color: 'inherit',
   },
   labelRoot: {
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(1, 0)
+    padding: theme.spacing(1, 0),
   },
   icon: {
     marginRight: theme.spacing(1),
   },
   text: {
     fontWeight: 'inherit',
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 
 const LabelItem = ({ label, ...rest }) => {
@@ -112,9 +112,9 @@ const LabelItem = ({ label, ...rest }) => {
     >
       <ButtonBase
         activeClassName={classes.active}
+        className={classes.content}
         component={RouterLink}
         to={to}
-        className={classes.content}
       >
         <Icon
           className={classes.icon}
@@ -127,21 +127,23 @@ const LabelItem = ({ label, ...rest }) => {
         >
           {label.name}
         </Typography>
-        {displayUnreadCount && (
-          <Typography
-            color="inherit"
-            variant="caption"
-          >
-            {label.unreadCount}
-          </Typography>
-        )}
+        {
+          displayUnreadCount && (
+            <Typography
+              color="inherit"
+              variant="caption"
+            >
+              {label.unreadCount}
+            </Typography>
+          )
+        }
       </ButtonBase>
     </ListItem>
   );
 };
 
 LabelItem.propTypes = {
-  label: PropTypes.object.isRequired
+  label: PropTypes.object.isRequired,
 };
 
 export default LabelItem;

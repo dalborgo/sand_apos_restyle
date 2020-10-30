@@ -12,7 +12,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import LockOpenIcon from '@material-ui/icons/LockOpenOutlined'
 import PersonIcon from '@material-ui/icons/PersonOutline'
@@ -21,8 +21,8 @@ import Label from 'src/components/Label'
 const useStyles = makeStyles((theme) => ({
   root: {},
   fontWeightMedium: {
-    fontWeight: theme.typography.fontWeightMedium
-  }
+    fontWeight: theme.typography.fontWeightMedium,
+  },
 }));
 
 const CustomerInfo = ({
@@ -47,8 +47,8 @@ const CustomerInfo = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 {customer.email}
               </Typography>
@@ -63,8 +63,8 @@ const CustomerInfo = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 {customer.phone}
               </Typography>
@@ -76,8 +76,8 @@ const CustomerInfo = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 {customer.country}
               </Typography>
@@ -89,8 +89,8 @@ const CustomerInfo = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 {customer.state}
               </Typography>
@@ -102,8 +102,8 @@ const CustomerInfo = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 {customer.address1}
               </Typography>
@@ -115,8 +115,8 @@ const CustomerInfo = ({
             </TableCell>
             <TableCell>
               <Typography
-                variant="body2"
                 color="textSecondary"
+                variant="body2"
               >
                 {customer.address2}
               </Typography>
@@ -125,10 +125,10 @@ const CustomerInfo = ({
         </TableBody>
       </Table>
       <Box
-        p={1}
+        alignItems="flex-start"
         display="flex"
         flexDirection="column"
-        alignItems="flex-start"
+        p={1}
       >
         <Button startIcon={<LockOpenIcon />}>
           Reset &amp; Send Password
@@ -143,7 +143,7 @@ const CustomerInfo = ({
 
 CustomerInfo.propTypes = {
   className: PropTypes.string,
-  customer: PropTypes.object.isRequired
+  customer: PropTypes.object.isRequired,
 };
 
 export default CustomerInfo;

@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useEffect,
-  useState
+  useState,
 } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -23,7 +23,7 @@ import {
   TableRow,
   TableSortLabel,
   Tooltip,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import axios from 'src/utils/axios';
@@ -37,7 +37,7 @@ const technologyMap = {
   'vue-js': '/static/images/technologies/vue-js.svg',
   angular: '/static/images/technologies/angular.svg',
   figma: '/static/images/technologies/figma.svg',
-  sketch: '/static/images/technologies/sketch.svg'
+  sketch: '/static/images/technologies/sketch.svg',
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -45,9 +45,9 @@ const useStyles = makeStyles((theme) => ({
   technology: {
     height: 30,
     '& + &': {
-      marginLeft: theme.spacing(1)
-    }
-  }
+      marginLeft: theme.spacing(1),
+    },
+  },
 }));
 
 const LatestProjects = ({ className, ...rest }) => {
@@ -63,7 +63,7 @@ const LatestProjects = ({ className, ...rest }) => {
         setProjects(response.data.projects);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -117,62 +117,66 @@ const LatestProjects = ({ className, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {projects.map((project) => (
-                <TableRow
-                  hover
-                  key={project.id}
-                >
-                  <TableCell>
-                    {project.title}
-                  </TableCell>
-                  <TableCell>
-                    <Box
-                      display="flex"
-                      alignItems="center"
-                    >
-                      <Avatar
-                        alt="Author"
-                        src={project.author.avatar}
+              {
+                projects.map((project) => (
+                  <TableRow
+                    hover
+                    key={project.id}
+                  >
+                    <TableCell>
+                      {project.title}
+                    </TableCell>
+                    <TableCell>
+                      <Box
+                        alignItems="center"
+                        display="flex"
                       >
-                        {getInitials(project.author.name)}
-                      </Avatar>
-                      <Box ml={1}>
-                        {project.author.name}
+                        <Avatar
+                          alt="Author"
+                          src={project.author.avatar}
+                        >
+                          {getInitials(project.author.name)}
+                        </Avatar>
+                        <Box ml={1}>
+                          {project.author.name}
+                        </Box>
                       </Box>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    {numeral(project.budget).format(`${project.currency}0,0.00`)}
-                  </TableCell>
-                  <TableCell>
-                    {project.technologies.map((technology) => (
-                      <img
-                        alt="Tech"
-                        key={technology}
-                        className={classes.technology}
-                        src={technologyMap[technology]}
-                      />
-                    ))}
-                  </TableCell>
-                  <TableCell align="right">
-                    {moment(project.createdAt).format('DD MMM, YYYY')}
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell>
+                      {numeral(project.budget).format(`${project.currency}0,0.00`)}
+                    </TableCell>
+                    <TableCell>
+                      {
+                        project.technologies.map((technology) => (
+                          <img
+                            alt="Tech"
+                            className={classes.technology}
+                            key={technology}
+                            src={technologyMap[technology]}
+                          />
+                        ))
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {moment(project.createdAt).format('DD MMM, YYYY')}
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
       <Box
-        p={2}
         display="flex"
         justifyContent="flex-end"
+        p={2}
       >
         <Button
           component={RouterLink}
+          endIcon={<NavigateNextIcon />}
           size="small"
           to="/app/projects"
-          endIcon={<NavigateNextIcon />}
         >
           See all
         </Button>
@@ -182,7 +186,7 @@ const LatestProjects = ({ className, ...rest }) => {
 };
 
 LatestProjects.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default LatestProjects;

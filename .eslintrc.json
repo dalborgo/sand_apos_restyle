@@ -36,6 +36,7 @@
       2,
       "as-needed"
     ],
+    "import/no-anonymous-default-export": 0,
     "id-length": [
       "warn",
       {
@@ -43,6 +44,8 @@
           "_",
           "j",
           "i",
+          "x",
+          "y",
           "Q"
         ]
       }

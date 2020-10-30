@@ -12,7 +12,7 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Cooper Murray',
-    username: 'cooper.murray'
+    username: 'cooper.murray',
   },
   {
     id: '5e887a62195cc5aef7e8ca5d',
@@ -23,7 +23,7 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Ekaterina Tankova',
-    username: 'ekaterina.tankova'
+    username: 'ekaterina.tankova',
   },
   {
     id: '5e887ac47eed253091be10cb',
@@ -34,7 +34,7 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Cao Yu',
-    username: 'cao.yu'
+    username: 'cao.yu',
   },
   {
     id: '5e887b209c28ac3dd97f6db5',
@@ -44,7 +44,7 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Alex Richardson',
-    username: 'alex.richardson'
+    username: 'alex.richardson',
   },
   {
     id: '5e887b7602bdbc4dbb234b27',
@@ -54,7 +54,7 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Anje Keizer',
-    username: 'anje.keizer'
+    username: 'anje.keizer',
   },
   {
     id: '5e86805e2bafd54f66cc95c3',
@@ -65,7 +65,7 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Adam Denisov',
-    username: 'adam.denisov'
+    username: 'adam.denisov',
   },
   {
     id: '5e887a1fbefd7938eea9c981',
@@ -76,7 +76,7 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Miller Edwards',
-    username: 'miller.edwards'
+    username: 'miller.edwards',
   },
   {
     id: '5e887d0b3d090c1b8f162003',
@@ -96,7 +96,7 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Elliott Stone',
-    username: 'elliott.stone'
+    username: 'elliott.stone',
   },
   {
     id: '5e8877da9a65442b11551975',
@@ -106,7 +106,7 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Shen Zhi',
-    username: 'shen.zhi'
+    username: 'shen.zhi',
   },
   {
     id: '5e8680e60cba5019c5ca6fda',
@@ -116,8 +116,8 @@ let contacts = [
       .toDate()
       .getTime(),
     name: 'Merrile Burgett',
-    username: 'merrile.burgett'
-  }
+    username: 'merrile.burgett',
+  },
 ];
 
 let threads = [
@@ -133,7 +133,7 @@ let threads = [
           .subtract(10, 'hours')
           .toDate()
           .getTime(),
-        senderId: '5e86805e2bafd54f66cc95c3'
+        senderId: '5e86805e2bafd54f66cc95c3',
       },
       {
         id: '5e867f167d5f78109ae9f2a4',
@@ -144,7 +144,7 @@ let threads = [
           .subtract(2, 'hours')
           .toDate()
           .getTime(),
-        senderId: '5e86809283e28b96d2d38537'
+        senderId: '5e86809283e28b96d2d38537',
       },
       {
         id: '5e867f1c9ca72084693528f4',
@@ -155,7 +155,7 @@ let threads = [
           .subtract(5, 'minutes')
           .toDate()
           .getTime(),
-        senderId: '5e86805e2bafd54f66cc95c3'
+        senderId: '5e86805e2bafd54f66cc95c3',
       },
       {
         id: '5e867f22fd2e27a09849b4db',
@@ -166,7 +166,7 @@ let threads = [
           .subtract(3, 'minutes')
           .toDate()
           .getTime(),
-        senderId: '5e86809283e28b96d2d38537'
+        senderId: '5e86809283e28b96d2d38537',
       },
       {
         id: '5e867f28a34d45ac6eb5c41f',
@@ -177,7 +177,7 @@ let threads = [
           .subtract(1, 'minute')
           .toDate()
           .getTime(),
-        senderId: '5e86805e2bafd54f66cc95c3'
+        senderId: '5e86805e2bafd54f66cc95c3',
       },
       {
         id: '5e867f2dba984a3f78b33526',
@@ -188,25 +188,25 @@ let threads = [
           .subtract(1, 'minute')
           .toDate()
           .getTime(),
-        senderId: '5e86805e2bafd54f66cc95c3'
-      }
+        senderId: '5e86805e2bafd54f66cc95c3',
+      },
     ],
     participants: [
       {
         id: '5e86809283e28b96d2d38537',
         avatar: '/static/images/avatars/avatar_6.png',
         name: 'Marco Dal Borgo',
-        username: 'katarina.smith'
+        username: 'katarina.smith',
       },
       {
         id: '5e86805e2bafd54f66cc95c3',
         avatar: '/static/images/avatars/avatar_7.png',
         name: 'Adam Denisov',
-        username: 'adam.denisov'
-      }
+        username: 'adam.denisov',
+      },
     ],
     type: 'ONE_TO_ONE',
-    unreadCount: 2
+    unreadCount: 2,
   },
   {
     id: '5e867fa7082c3c5921403a26',
@@ -220,7 +220,7 @@ let threads = [
           .subtract(6, 'minutes')
           .toDate()
           .getTime(),
-        senderId: '5e8680e60cba5019c5ca6fda'
+        senderId: '5e8680e60cba5019c5ca6fda',
       },
       {
         id: '5e8d6fb695df7971237fc173',
@@ -231,7 +231,7 @@ let threads = [
           .subtract(5, 'minutes')
           .toDate()
           .getTime(),
-        senderId: '5e86809283e28b96d2d38537'
+        senderId: '5e86809283e28b96d2d38537',
       },
       {
         id: '58825a290eb4d4271a54f188',
@@ -242,32 +242,32 @@ let threads = [
           .subtract(2, 'minutes')
           .toDate()
           .getTime(),
-        senderId: '5e8891ab188cd2855e6029b7'
-      }
+        senderId: '5e8891ab188cd2855e6029b7',
+      },
     ],
     participants: [
       {
         id: '5e86809283e28b96d2d38537',
         avatar: '/static/images/avatars/avatar_6.png',
         name: 'Marco Dal Borgo',
-        username: 'katarina.smith'
+        username: 'katarina.smith',
       },
       {
         id: '5e8680e60cba5019c5ca6fda',
         avatar: '/static/images/avatars/avatar_12.png',
         name: 'Merrile Burgett',
-        username: 'merrile.burgett'
+        username: 'merrile.burgett',
       },
       {
         id: '5e8891ab188cd2855e6029b7',
         avatar: '/static/images/avatars/avatar_1.png',
         name: 'Cooper Murray',
-        username: 'cooper.murray'
-      }
+        username: 'cooper.murray',
+      },
     ],
     type: 'GROUP',
-    unreadCount: 0
-  }
+    unreadCount: 0,
+  },
 ];
 
 const findContactByUsername = (username) => {
@@ -335,7 +335,6 @@ mock.onGet('/api/chat/search').reply((config) => {
 
     return [200, { results }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -359,14 +358,13 @@ mock.onGet('/api/chat/participants').reply((config) => {
           id: contact.id,
           avatar: contact.avatar,
           name: contact.name,
-          username: contact.username
+          username: contact.username,
         });
       }
     }
 
     return [200, { participants }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -399,7 +397,6 @@ mock.onGet('/api/chat/thread').reply((config) => {
       return [200, { thread }];
     }
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -415,7 +412,6 @@ mock.onGet('/api/chat/thread/mark-as-seen').reply((config) => {
 
     return [200, true];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -433,7 +429,7 @@ mock.onPost('/api/chat/messages/new').reply((request) => {
       id: '5e86809283e28b96d2d38537',
       avatar: '/static/images/avatars/avatar_6.png',
       name: 'Marco Dal Borgo',
-      username: 'katarina.smith'
+      username: 'katarina.smith',
     };
 
     let thread = null;
@@ -460,7 +456,7 @@ mock.onPost('/api/chat/messages/new').reply((request) => {
       createdAt: moment()
         .toDate()
         .getTime(),
-      senderId: user.id
+      senderId: user.id,
     };
 
     if (thread) {
@@ -479,7 +475,7 @@ mock.onPost('/api/chat/messages/new').reply((request) => {
           id: contact.id,
           avatar: contact.avatar,
           name: contact.name,
-          username: contact.username
+          username: contact.username,
         });
       });
 
@@ -488,18 +484,17 @@ mock.onPost('/api/chat/messages/new').reply((request) => {
         messages: [message],
         participants,
         type: participants.length === 2 ? 'ONE_TO_ONE' : 'GROUP',
-        unreadCount: 0
+        unreadCount: 0,
       };
     }
 
     const responseData = {
       threadId: thread.id,
-      message
+      message,
     };
 
     return [200, responseData];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });

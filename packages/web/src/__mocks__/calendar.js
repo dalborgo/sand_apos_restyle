@@ -20,7 +20,7 @@ let events = [
       .hours(17)
       .minutes(30)
       .toDate(),
-    title: 'Call Samantha'
+    title: 'Call Samantha',
   },
   {
     id: '5e8882eb5f8ec686220ff131',
@@ -37,7 +37,7 @@ let events = [
       .hours(12)
       .minutes(0)
       .toDate(),
-    title: 'Meet with IBM'
+    title: 'Meet with IBM',
   },
   {
     id: '5e8882f1f0c9216396e05a9b',
@@ -54,7 +54,7 @@ let events = [
       .hours(8)
       .minutes(0)
       .toDate(),
-    title: 'SCRUM Planning'
+    title: 'SCRUM Planning',
   },
   {
     id: '5e8882f6daf81eccfa40dee2',
@@ -69,7 +69,7 @@ let events = [
       .subtract(12, 'days')
       .endOf('day')
       .toDate(),
-    title: 'Begin SEM'
+    title: 'Begin SEM',
   },
   {
     id: '5e8882fcd525e076b3c1542c',
@@ -86,7 +86,7 @@ let events = [
       .hours(7)
       .minutes(30)
       .toDate(),
-    title: 'Fire John'
+    title: 'Fire John',
   },
   {
     id: '5e888302e62149e4b49aa609',
@@ -103,7 +103,7 @@ let events = [
       .hours(9)
       .minutes(0)
       .toDate(),
-    title: 'Call Alex'
+    title: 'Call Alex',
   },
   {
     id: '5e88830672d089c53c46ece3',
@@ -118,8 +118,8 @@ let events = [
       .hours(15)
       .minutes(30)
       .toDate(),
-    title: 'Visit Samantha'
-  }
+    title: 'Visit Samantha',
+  },
 ];
 
 mock.onGet('/api/calendar/events').reply(200, { events });
@@ -133,14 +133,13 @@ mock.onPost('/api/calendar/events/new').reply((request) => {
       description,
       end,
       start,
-      title
+      title,
     };
 
     events = [...events, event];
 
     return [200, { event }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -161,7 +160,6 @@ mock.onPost('/api/calendar/events/update').reply((request) => {
 
     return [200, { event }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });
@@ -174,7 +172,6 @@ mock.onPost('/api/calendar/events/remove').reply((request) => {
 
     return [200, { eventId }];
   } catch (err) {
-    console.error(err);
     return [500, { message: 'Internal server error' }];
   }
 });

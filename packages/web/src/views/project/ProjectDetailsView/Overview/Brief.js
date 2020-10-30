@@ -9,7 +9,7 @@ import {
   CardContent,
   Grid,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,9 +17,9 @@ const useStyles = makeStyles((theme) => ({
   markdown: {
     fontFamily: theme.typography.fontFamily,
     '& p': {
-      marginBottom: theme.spacing(2)
-    }
-  }
+      marginBottom: theme.spacing(2),
+    },
+  },
 }));
 
 const Brief = ({ className, project, ...rest }) => {
@@ -37,50 +37,52 @@ const Brief = ({ className, project, ...rest }) => {
         >
           <Grid
             item
-            xs={12}
             md={6}
+            xs={12}
           >
             <Typography
-              variant="subtitle2"
               color="textSecondary"
+              variant="subtitle2"
             >
               Project Name
             </Typography>
             <Typography
-              variant="h6"
               color="textPrimary"
+              variant="h6"
             >
               {project.title}
             </Typography>
             <Box mt={3}>
               <Typography
-                variant="subtitle2"
                 color="textSecondary"
+                variant="subtitle2"
               >
                 Tags
               </Typography>
               <Box mt={1}>
-                {project.tags.map((tag) => (
-                  <Chip
-                    key={tag}
-                    variant="outlined"
-                    label={tag}
-                  />
-                ))}
+                {
+                  project.tags.map((tag) => (
+                    <Chip
+                      key={tag}
+                      label={tag}
+                      variant="outlined"
+                    />
+                  ))
+                }
               </Box>
             </Box>
           </Grid>
         </Grid>
         <Box mt={3}>
           <Typography
-            variant="subtitle2"
             color="textSecondary"
+            variant="subtitle2"
           >
             Description
           </Typography>
           <Markdown
-            source={project.description}
             className={classes.markdown}
+            source={project.description}
           />
         </Box>
       </CardContent>
@@ -90,7 +92,7 @@ const Brief = ({ className, project, ...rest }) => {
 
 Brief.propTypes = {
   className: PropTypes.string,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
 };
 
 export default Brief;

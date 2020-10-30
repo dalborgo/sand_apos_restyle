@@ -1,27 +1,19 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import {
-  Box,
-  Breadcrumbs,
-  Container,
-  Grid,
-  Link,
-  Typography,
-  makeStyles
-} from '@material-ui/core';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Page from 'src/components/Page';
-import AreaChart from './AreaChart';
-import LineChart from './LineChart';
-import RadialChart from './RadialChart';
+import React from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import { Box, Breadcrumbs, Container, Grid, Link, makeStyles, Typography, } from '@material-ui/core'
+import NavigateNextIcon from '@material-ui/icons/NavigateNext'
+import Page from 'src/components/Page'
+import AreaChart from './AreaChart'
+import LineChart from './LineChart'
+import RadialChart from './RadialChart'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const ApexChartsView = () => {
@@ -34,35 +26,35 @@ const ApexChartsView = () => {
     >
       <Container maxWidth="lg">
         <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
+          separator={<NavigateNextIcon fontSize="small" />}
         >
           <Link
-            variant="body1"
             color="inherit"
-            to="/app"
             component={RouterLink}
+            to="/app"
+            variant="body1"
           >
             Dashboard
           </Link>
           <Link
-            variant="body1"
             color="inherit"
-            to="/app/extra"
             component={RouterLink}
+            to="/app/extra"
+            variant="body1"
           >
             Extra
           </Link>
           <Typography
-            variant="body1"
             color="textPrimary"
+            variant="body1"
           >
             Charts
           </Typography>
         </Breadcrumbs>
         <Typography
-          variant="h3"
           color="textPrimary"
+          variant="h3"
         >
           ApexCharts
         </Typography>
@@ -79,15 +71,15 @@ const ApexChartsView = () => {
             </Grid>
             <Grid
               item
-              xs={12}
               md={8}
+              xs={12}
             >
               <AreaChart />
             </Grid>
             <Grid
               item
-              xs={12}
               md={4}
+              xs={12}
             >
               <RadialChart />
             </Grid>

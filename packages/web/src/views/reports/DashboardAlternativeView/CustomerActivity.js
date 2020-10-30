@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useEffect,
-  useState
+  useState,
 } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -19,7 +19,7 @@ import {
   ListItemAvatar,
   ListItemText,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import getInitials from 'src/utils/getInitials';
@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     flexGrow: 1,
     '&:first-of-type': {
-      borderRight: `1px solid ${theme.palette.divider}`
-    }
-  }
+      borderRight: `1px solid ${theme.palette.divider}`,
+    },
+  },
 }));
 
 const CustomerActivity = ({ className, ...rest }) => {
@@ -50,7 +50,7 @@ const CustomerActivity = ({ className, ...rest }) => {
         setActivities(response.data.activities);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -64,25 +64,25 @@ const CustomerActivity = ({ className, ...rest }) => {
       {...rest}
     >
       <CardHeader
-        title="Customer Activity"
         action={<GenericMoreButton />}
+        title="Customer Activity"
       />
       <Divider />
       <Box display="flex">
         <div className={classes.item}>
           <Typography
             align="center"
-            variant="h3"
             color="textPrimary"
+            variant="h3"
           >
             15,245
           </Typography>
           <Typography
             align="center"
+            color="textSecondary"
             component="h4"
             gutterBottom
             variant="overline"
-            color="textSecondary"
           >
             Registered
           </Typography>
@@ -91,17 +91,17 @@ const CustomerActivity = ({ className, ...rest }) => {
         <div className={classes.item}>
           <Typography
             align="center"
-            variant="h3"
             color="textPrimary"
+            variant="h3"
           >
             357
           </Typography>
           <Typography
             align="center"
+            color="textSecondary"
             component="h4"
             gutterBottom
             variant="overline"
-            color="textSecondary"
           >
             Online
           </Typography>
@@ -109,59 +109,65 @@ const CustomerActivity = ({ className, ...rest }) => {
       </Box>
       <Divider />
       <List disablePadding>
-        {activities.map((activity, i) => (
-          <ListItem
-            divider={i < activities.length - 1}
-            key={activity.id}
-          >
-            <ListItemAvatar>
-              <Avatar
-                alt="Customer"
-                component={RouterLink}
-                src={activity.customer.avatar}
-                to="#"
-              >
-                {getInitials(activity.customer.name)}
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              disableTypography
-              primary={(
-                <Link
-                  color="textPrimary"
-                  component={RouterLink}
-                  to="#"
-                  underline="none"
-                  variant="h6"
-                >
-                  {activity.customer.name}
-                </Link>
-              )}
-              secondary={(
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                >
-                  {activity.description}
-                </Typography>
-              )}
-            />
-            <Typography
-              color="textSecondary"
-              noWrap
-              variant="caption"
+        {
+          activities.map((activity, i) => (
+            <ListItem
+              divider={i < activities.length - 1}
+              key={activity.id}
             >
-              {moment(activity.createdAt).fromNow()}
-            </Typography>
-          </ListItem>
-        ))}
+              <ListItemAvatar>
+                <Avatar
+                  alt="Customer"
+                  component={RouterLink}
+                  src={activity.customer.avatar}
+                  to="#"
+                >
+                  {getInitials(activity.customer.name)}
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                disableTypography
+                primary={
+                  (
+                    <Link
+                      color="textPrimary"
+                      component={RouterLink}
+                      to="#"
+                      underline="none"
+                      variant="h6"
+                    >
+                      {activity.customer.name}
+                    </Link>
+                  )
+                }
+                secondary={
+                  (
+                    <Typography
+                      color="textSecondary"
+                      variant="body2"
+                    >
+                      {activity.description}
+                    </Typography>
+                  )
+                }
+              />
+              <Typography
+                color="textSecondary"
+                noWrap
+                variant="caption"
+              >
+                {moment(activity.createdAt).fromNow()}
+              </Typography>
+            </ListItem>
+          ))
+        }
       </List>
     </Card>
   );
 }
 
 CustomerActivity.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default CustomerActivity;

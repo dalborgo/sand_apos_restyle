@@ -17,15 +17,15 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 100,
     ...theme.name === THEMES.LIGHT ? {
       boxShadow: 'none',
-      backgroundColor: theme.palette.primary.main
+      backgroundColor: theme.palette.primary.main,
     } : {},
     ...theme.name === THEMES.ONE_DARK ? {
-      backgroundColor: theme.palette.background.default
-    } : {}
+      backgroundColor: theme.palette.background.default,
+    } : {},
   },
   toolbar: {
-    minHeight: 64
-  }
+    minHeight: 64,
+  },
 }));
 
 const TopBar = ({
@@ -57,8 +57,8 @@ const TopBar = ({
           </RouterLink>
         </Hidden>
         <Box
-          ml={2}
           flexGrow={1}
+          ml={2}
         />
         <Search />
         <Contacts />
@@ -74,11 +74,11 @@ const TopBar = ({
 
 TopBar.propTypes = {
   className: PropTypes.string,
-  onMobileNavOpen: PropTypes.func
+  onMobileNavOpen: PropTypes.func,
 };
 
 TopBar.defaultProps = {
-  onMobileNavOpen: () => {}
+  onMobileNavOpen: () => {},
 };
 
 export default TopBar;

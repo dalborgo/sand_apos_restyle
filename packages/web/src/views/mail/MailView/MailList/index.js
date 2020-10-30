@@ -1,6 +1,6 @@
 import React, {
   useState,
-  useEffect
+  useEffect,
 } from 'react';
 import { useParams } from 'react-router-dom';
 import { Divider, makeStyles } from '@material-ui/core';
@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.dark
-  }
+    backgroundColor: theme.palette.background.dark,
+  },
 }));
 
 const MailList = () => {
@@ -53,21 +53,23 @@ const MailList = () => {
   return (
     <div className={classes.root}>
       <Toolbar
+        mails={mails.allIds.length}
         onDeselectAll={handleDeselectAllMails}
         onSelectAll={handleSelectAllMails}
         selectedMails={selectedMails.length}
-        mails={mails.allIds.length}
       />
       <Divider />
-      {mails.allIds.map((mailId) => (
-        <MailItem
-          mail={mails.byId[mailId]}
-          key={mailId}
-          onDeselect={() => handleDeselectOneMail(mailId)}
-          onSelect={() => handleSelectOneMail(mailId)}
-          selected={selectedMails.includes(mailId)}
-        />
-      ))}
+      {
+        mails.allIds.map((mailId) => (
+          <MailItem
+            key={mailId}
+            mail={mails.byId[mailId]}
+            onDeselect={() => handleDeselectOneMail(mailId)}
+            onSelect={() => handleSelectOneMail(mailId)}
+            selected={selectedMails.includes(mailId)}
+          />
+        ))
+      }
     </div>
   );
 }

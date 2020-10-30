@@ -12,14 +12,14 @@ import {
   ListItemText,
   makeStyles,
   SvgIcon,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import { Search as SearchIcon } from 'react-feather'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1)
+    paddingRight: theme.spacing(1),
   },
   search: {
     display: 'flex',
@@ -28,16 +28,16 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 22,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    backgroundColor: theme.palette.background.dark
+    backgroundColor: theme.palette.background.dark,
   },
   searchInput: {
     flexGrow: 1,
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   avatar: {
     height: 32,
-    width: 32
-  }
+    width: 32,
+  },
 }));
 
 const Search = forwardRef(({
@@ -70,8 +70,8 @@ const Search = forwardRef(({
       >
         <div className={classes.search}>
           <SvgIcon
-            fontSize="small"
             color="action"
+            fontSize="small"
           >
             <SearchIcon />
           </SvgIcon>
@@ -84,42 +84,48 @@ const Search = forwardRef(({
             value={query}
           />
         </div>
-        {displayResults && (
-          <Box mt={2}>
-            <Typography
-              variant="h6"
-              color="textSecondary"
-            >
+        {
+          displayResults && (
+            <Box mt={2}>
+              <Typography
+                color="textSecondary"
+                variant="h6"
+              >
               Contacts
-            </Typography>
-            <List>
-              {results.map((result) => {
-                return (
-                  <ListItem
-                    button
-                    key={result.id}
-                    onClick={() => handleSelect(result)}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        src={result.avatar}
-                        className={classes.avatar}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={result.name}
-                      primaryTypographyProps={{
-                        noWrap: true,
-                        variant: 'h6',
-                        color: 'textPrimary'
-                      }}
-                    />
-                  </ListItem>
-                );
-              })}
-            </List>
-          </Box>
-        )}
+              </Typography>
+              <List>
+                {
+                  results.map((result) => {
+                    return (
+                      <ListItem
+                        button
+                        key={result.id}
+                        onClick={() => handleSelect(result)}
+                      >
+                        <ListItemAvatar>
+                          <Avatar
+                            className={classes.avatar}
+                            src={result.avatar}
+                          />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={result.name}
+                          primaryTypographyProps={
+                            {
+                              noWrap: true,
+                              variant: 'h6',
+                              color: 'textPrimary',
+                            }
+                          }
+                        />
+                      </ListItem>
+                    );
+                  })
+                }
+              </List>
+            </Box>
+          )
+        }
       </div>
     </ClickAwayListener>
   );
@@ -132,13 +138,13 @@ Search.propTypes = {
   onFocus: PropTypes.func,
   onSelect: PropTypes.func,
   query: PropTypes.string,
-  results: PropTypes.array
+  results: PropTypes.array,
 };
 
 Search.defaultProps = {
   isFocused: false,
   query: '',
-  results: []
+  results: [],
 };
 
 export default Search;

@@ -14,11 +14,11 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const OrderItems = ({ className, orderItems, ...rest }) => {
@@ -48,23 +48,25 @@ const OrderItems = ({ className, orderItems, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orderItems.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>
-                    {item.name}
-                    {' '}
+              {
+                orderItems.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell>
+                      {item.name}
+                      {' '}
                     x
-                    {' '}
-                    {item.quantity}
-                  </TableCell>
-                  <TableCell>
-                    {item.billingCycle}
-                  </TableCell>
-                  <TableCell>
-                    {numeral(item.unitAmount).format(`${item.currency}0,0.00`)}
-                  </TableCell>
-                </TableRow>
-              ))}
+                      {' '}
+                      {item.quantity}
+                    </TableCell>
+                    <TableCell>
+                      {item.billingCycle}
+                    </TableCell>
+                    <TableCell>
+                      {numeral(item.unitAmount).format(`${item.currency}0,0.00`)}
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </Box>
@@ -84,11 +86,11 @@ const OrderItems = ({ className, orderItems, ...rest }) => {
 
 OrderItems.propTypes = {
   className: PropTypes.string,
-  orderItems: PropTypes.array.isRequired
+  orderItems: PropTypes.array.isRequired,
 };
 
 OrderItems.defaultProps = {
-  orderItems: []
+  orderItems: [],
 };
 
 export default OrderItems;

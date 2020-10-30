@@ -1,7 +1,7 @@
 import React, {
   useState,
   useEffect,
-  useCallback
+  useCallback,
 } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -22,11 +22,11 @@ import {
   Paper,
   Typography,
   makeStyles,
-  SvgIcon
+  SvgIcon,
 } from '@material-ui/core';
 import {
   Search as SearchIcon,
-  MoreVertical as MoreIcon
+  MoreVertical as MoreIcon,
 } from 'react-feather';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -34,18 +34,18 @@ import useIsMountedRef from 'src/hooks/useIsMountedRef';
 const connectStatusMap = {
   connected: 'Connected',
   not_connected: 'Connect',
-  pending: 'Pending'
+  pending: 'Pending',
 };
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   searchInput: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   avatar: {
     height: 60,
-    width: 60
-  }
+    width: 60,
+  },
 }));
 
 const Connections = ({ className, ...rest }) => {
@@ -69,7 +69,7 @@ const Connections = ({ className, ...rest }) => {
 
           if (newConnection.status === 'pending') {
             enqueueSnackbar('Connection request sent', {
-              variant: 'success'
+              variant: 'success',
             });
           }
 
@@ -101,23 +101,23 @@ const Connections = ({ className, ...rest }) => {
       <CardHeader title="Connections" />
       <Divider />
       <Box
-        py={2}
-        px={3}
-        display="flex"
         alignItems="center"
+        display="flex"
+        px={3}
+        py={2}
       >
         <SvgIcon
-          fontSize="small"
           color="action"
+          fontSize="small"
         >
           <SearchIcon />
         </SvgIcon>
         <Input
           className={classes.searchInput}
           disableUnderline
-          value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search connections"
+          value={search}
         />
       </Box>
       <Divider />
@@ -126,68 +126,72 @@ const Connections = ({ className, ...rest }) => {
           container
           spacing={3}
         >
-          {connections
-            .filter((connection) => connection.name.toLowerCase().includes(search))
-            .map((connection) => (
-              <Grid
-                item
-                key={connection.id}
-                xs={12}
-                md={6}
-              >
-                <Paper variant="outlined">
-                  <Box
-                    p={2}
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <Avatar
-                      alt="Profile image"
-                      className={classes.avatar}
-                      component={RouterLink}
-                      src={connection.avatar}
-                      to="#"
-                    />
+          {
+            connections
+              .filter((connection) => connection.name.toLowerCase().includes(search))
+              .map((connection) => (
+                <Grid
+                  item
+                  key={connection.id}
+                  md={6}
+                  xs={12}
+                >
+                  <Paper variant="outlined">
                     <Box
-                      flexGrow={1}
-                      mx={2}
+                      alignItems="center"
+                      display="flex"
+                      p={2}
                     >
-                      <Link
-                        variant="h5"
-                        color="textPrimary"
+                      <Avatar
+                        alt="Profile image"
+                        className={classes.avatar}
                         component={RouterLink}
+                        src={connection.avatar}
                         to="#"
+                      />
+                      <Box
+                        flexGrow={1}
+                        mx={2}
                       >
-                        {connection.name}
-                      </Link>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        gutterBottom
-                      >
-                        {connection.commonConnections}
-                        {' '}
-                        connections in common
-                      </Typography>
-                      {connection.status !== 'rejected' && (
-                        <Button
-                          variant="outlined"
-                          size="small"
-                          onClick={() => handleConnectToggle(connection.id)}
+                        <Link
+                          color="textPrimary"
+                          component={RouterLink}
+                          to="#"
+                          variant="h5"
                         >
-                          {connectStatusMap[connection.status]}
-                        </Button>
-                      )}
+                          {connection.name}
+                        </Link>
+                        <Typography
+                          color="textSecondary"
+                          gutterBottom
+                          variant="body2"
+                        >
+                          {connection.commonConnections}
+                          {' '}
+                        connections in common
+                        </Typography>
+                        {
+                          connection.status !== 'rejected' && (
+                            <Button
+                              onClick={() => handleConnectToggle(connection.id)}
+                              size="small"
+                              variant="outlined"
+                            >
+                              {connectStatusMap[connection.status]}
+                            </Button>
+                          )
+                        }
+                      </Box>
+                      <IconButton>
+                        <SvgIcon fontSize="small">
+                          <MoreIcon />
+                        </SvgIcon>
+                      </IconButton>
                     </Box>
-                    <IconButton>
-                      <SvgIcon fontSize="small">
-                        <MoreIcon />
-                      </SvgIcon>
-                    </IconButton>
-                  </Box>
-                </Paper>
-              </Grid>
-            ))}
+                  </Paper>
+                </Grid>
+              ))
+          }
         </Grid>
       </Box>
     </Card>
@@ -195,7 +199,7 @@ const Connections = ({ className, ...rest }) => {
 };
 
 Connections.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Connections;

@@ -1,6 +1,6 @@
 import React, {
   useState,
-  useRef
+  useRef,
 } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -12,12 +12,12 @@ import {
   Menu,
   MenuItem,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import {
   ToggleButtonGroup,
   ToggleButton,
-  Pagination
+  Pagination,
 } from '@material-ui/lab';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
@@ -34,14 +34,14 @@ const useStyles = makeStyles((theme) => ({
       content: '" "',
       height: 3,
       width: 48,
-      backgroundColor: theme.palette.primary.main
-    }
+      backgroundColor: theme.palette.primary.main,
+    },
   },
   sortButton: {
     textTransform: 'none',
     letterSpacing: 0,
-    marginRight: theme.spacing(2)
-  }
+    marginRight: theme.spacing(2),
+  },
 }));
 
 const Results = ({ className, projects, ...rest }) => {
@@ -74,16 +74,16 @@ const Results = ({ className, projects, ...rest }) => {
       {...rest}
     >
       <Box
-        display="flex"
         alignItems="center"
-        justifyContent="space-between"
+        display="flex"
         flexWrap="wrap"
+        justifyContent="space-between"
         mb={2}
       >
         <Typography
           className={classes.title}
-          variant="h5"
           color="textPrimary"
+          variant="h5"
         >
           Showing
           {' '}
@@ -92,8 +92,8 @@ const Results = ({ className, projects, ...rest }) => {
           projects
         </Typography>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
         >
           <Button
             className={classes.sortButton}
@@ -119,41 +119,45 @@ const Results = ({ className, projects, ...rest }) => {
         container
         spacing={3}
       >
-        {projects.map((project) => (
-          <Grid
-            item
-            key={project.id}
-            md={mode === 'grid' ? 4 : 12}
-            sm={mode === 'grid' ? 6 : 12}
-            xs={12}
-          >
-            <ProjectCard project={project} />
-          </Grid>
-        ))}
+        {
+          projects.map((project) => (
+            <Grid
+              item
+              key={project.id}
+              md={mode === 'grid' ? 4 : 12}
+              sm={mode === 'grid' ? 6 : 12}
+              xs={12}
+            >
+              <ProjectCard project={project} />
+            </Grid>
+          ))
+        }
       </Grid>
       <Box
-        mt={6}
         display="flex"
         justifyContent="center"
+        mt={6}
       >
         <Pagination count={3} />
       </Box>
       <Menu
         anchorEl={sortRef.current}
+        elevation={1}
         onClose={handleSortClose}
         open={openSort}
-        elevation={1}
       >
-        {['Most recent', 'Popular', 'Price high', 'Price low', 'On sale'].map(
-          (option) => (
-            <MenuItem
-              key={option}
-              onClick={() => handleSortSelect(option)}
-            >
-              <ListItemText primary={option} />
-            </MenuItem>
+        {
+          ['Most recent', 'Popular', 'Price high', 'Price low', 'On sale'].map(
+            (option) => (
+              <MenuItem
+                key={option}
+                onClick={() => handleSortSelect(option)}
+              >
+                <ListItemText primary={option} />
+              </MenuItem>
+            )
           )
-        )}
+        }
       </Menu>
     </div>
   );
@@ -161,7 +165,7 @@ const Results = ({ className, projects, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  projects: PropTypes.array.isRequired
+  projects: PropTypes.array.isRequired,
 };
 
 export default Results;

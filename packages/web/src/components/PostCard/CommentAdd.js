@@ -10,7 +10,7 @@ import useAuth from 'src/hooks/useAuth'
 const useStyles = makeStyles((theme) => ({
   root: {
     alignItems: 'center',
-    display: 'flex'
+    display: 'flex',
   },
   inputContainer: {
     flexGrow: 1,
@@ -18,15 +18,15 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(0.5),
     paddingLeft: theme.spacing(0.5),
     paddingRight: theme.spacing(0.5),
-    paddingTop: theme.spacing(0.5)
+    paddingTop: theme.spacing(0.5),
   },
   divider: {
     height: 24,
-    width: 1
+    width: 1,
   },
   fileInput: {
-    display: 'none'
-  }
+    display: 'none',
+  },
 }));
 
 const CommentAdd = ({ className, ...rest }) => {
@@ -96,7 +96,7 @@ const CommentAdd = ({ className, ...rest }) => {
 };
 
 CommentAdd.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default CommentAdd;

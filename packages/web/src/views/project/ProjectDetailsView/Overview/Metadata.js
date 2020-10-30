@@ -13,22 +13,22 @@ import {
   List,
   ListItem,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import getInitials from 'src/utils/getInitials';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
   header: {
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   content: {
-    paddingTop: 0
+    paddingTop: 0,
   },
   listItem: {
     padding: theme.spacing(2, 0),
-    justifyContent: 'space-between'
-  }
+    justifyContent: 'space-between',
+  },
 }));
 
 const Metadata = ({ className, project, ...rest }) => {
@@ -40,38 +40,44 @@ const Metadata = ({ className, project, ...rest }) => {
       {...rest}
     >
       <CardHeader
-        avatar={(
-          <Avatar
-            alt="Author"
-            component={RouterLink}
-            src={project.author.avatar}
-            to="#"
-          >
-            {getInitials(project.author.name)}
-          </Avatar>
-        )}
+        avatar={
+          (
+            <Avatar
+              alt="Author"
+              component={RouterLink}
+              src={project.author.avatar}
+              to="#"
+            >
+              {getInitials(project.author.name)}
+            </Avatar>
+          )
+        }
         className={classes.header}
         disableTypography
-        subheader={(
-          <Link
-            color="textPrimary"
-            component={RouterLink}
-            to="#"
-            underline="none"
-            variant="h6"
-          >
-            {project.author.name}
-          </Link>
-        )}
-        title={(
-          <Typography
-            display="block"
-            variant="overline"
-            color="textSecondary"
-          >
+        subheader={
+          (
+            <Link
+              color="textPrimary"
+              component={RouterLink}
+              to="#"
+              underline="none"
+              variant="h6"
+            >
+              {project.author.name}
+            </Link>
+          )
+        }
+        title={
+          (
+            <Typography
+              color="textSecondary"
+              display="block"
+              variant="overline"
+            >
             Contest holder
-          </Typography>
-        )}
+            </Typography>
+          )
+        }
       />
       <CardContent className={classes.content}>
         <List>
@@ -81,14 +87,14 @@ const Metadata = ({ className, project, ...rest }) => {
             divider
           >
             <Typography
-              variant="subtitle2"
               color="textPrimary"
+              variant="subtitle2"
             >
               Deadline
             </Typography>
             <Typography
-              variant="h6"
               color="textSecondary"
+              variant="h6"
             >
               {moment(project.endDate).format('DD MMM YYYY')}
             </Typography>
@@ -99,14 +105,14 @@ const Metadata = ({ className, project, ...rest }) => {
             divider
           >
             <Typography
-              variant="subtitle2"
               color="textPrimary"
+              variant="subtitle2"
             >
               Budget
             </Typography>
             <Typography
-              variant="h6"
               color="textSecondary"
+              variant="h6"
             >
               {numeral(project.budget).format(`${project.currency}0,0.00`)}
             </Typography>
@@ -117,14 +123,14 @@ const Metadata = ({ className, project, ...rest }) => {
             divider
           >
             <Typography
-              variant="subtitle2"
               color="textPrimary"
+              variant="subtitle2"
             >
               Last Update
             </Typography>
             <Typography
-              variant="h6"
               color="textSecondary"
+              variant="h6"
             >
               {moment(project.updatedAt).format('DD MMM YYYY')}
             </Typography>
@@ -137,7 +143,7 @@ const Metadata = ({ className, project, ...rest }) => {
 
 Metadata.propTypes = {
   className: PropTypes.string,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
 };
 
 export default Metadata;

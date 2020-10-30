@@ -5,11 +5,11 @@ import objFromArray from 'src/utils/objFromArray'
 const initialState = {
   mails: {
     byId: {},
-    allIds: []
+    allIds: [],
   },
   labels: [],
   isSidebarOpen: false,
-  isComposeOpen: false
+  isComposeOpen: false,
 };
 
 const slice = createSlice({
@@ -47,8 +47,8 @@ const slice = createSlice({
     },
     closeCompose(state) {
       state.isComposeOpen = false;
-    }
-  }
+    },
+  },
 });
 
 export const reducer = slice.reducer;
@@ -61,7 +61,7 @@ export const getLabels = () => async (dispatch) => {
 
 export const getMails = (params) => async (dispatch) => {
   const response = await axios.get('/api/mail/mails', {
-    params
+    params,
   });
 
   dispatch(slice.actions.getMails(response.data));
@@ -70,8 +70,8 @@ export const getMails = (params) => async (dispatch) => {
 export const getMail = (mailId) => async (dispatch) => {
   const response = await axios.get('/api/mail/mail', {
     params: {
-      mailId
-    }
+      mailId,
+    },
   });
 
   dispatch(slice.actions.getMail(response.data));

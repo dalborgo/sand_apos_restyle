@@ -10,7 +10,7 @@ import {
   CardHeader,
   Link,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 import getInitials from 'src/utils/getInitials';
@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
   root: {},
   value: {
     marginLeft: theme.spacing(1),
-    fontWeight: theme.typography.fontWeightBold
-  }
+    fontWeight: theme.typography.fontWeightBold,
+  },
 }));
 
 const ReviewCard = ({ className, review, ...rest }) => {
@@ -32,74 +32,80 @@ const ReviewCard = ({ className, review, ...rest }) => {
       {...rest}
     >
       <CardHeader
-        avatar={(
-          <Avatar
-            alt="Reviewer"
-            src={review.author.avatar}
-          >
-            {getInitials(review.author.name)}
-          </Avatar>
-        )}
-        disableTypography
-        subheader={(
-          <Box
-            flexWrap="wrap"
-            display="flex"
-            alignItems="center"
-          >
-            <Box
-              display="flex"
-              alignItems="center"
-              mr={1}
+        avatar={
+          (
+            <Avatar
+              alt="Reviewer"
+              src={review.author.avatar}
             >
-              <Rating
-                readOnly
-                value={review.value}
-              />
-              <Typography
-                className={classes.value}
-                variant="h6"
+              {getInitials(review.author.name)}
+            </Avatar>
+          )
+        }
+        disableTypography
+        subheader={
+          (
+            <Box
+              alignItems="center"
+              display="flex"
+              flexWrap="wrap"
+            >
+              <Box
+                alignItems="center"
+                display="flex"
+                mr={1}
               >
-                {review.value}
+                <Rating
+                  readOnly
+                  value={review.value}
+                />
+                <Typography
+                  className={classes.value}
+                  variant="h6"
+                >
+                  {review.value}
+                </Typography>
+              </Box>
+              <Typography
+                color="textSecondary"
+                variant="body2"
+              >
+              | For
+                {' '}
+                <Link
+                  color="textPrimary"
+                  variant="h6"
+                >
+                Low Budget
+                </Link>
+                {' '}
+              |
+                {' '}
+                {moment(review.createdAt).fromNow()}
               </Typography>
             </Box>
-            <Typography
-              variant="body2"
-              color="textSecondary"
+          )
+        }
+        title={
+          (
+            <Link
+              color="textPrimary"
+              component={RouterLink}
+              to="#"
+              variant="h5"
             >
-              | For
-              {' '}
-              <Link
-                color="textPrimary"
-                variant="h6"
-              >
-                Low Budget
-              </Link>
-              {' '}
-              |
-              {' '}
-              {moment(review.createdAt).fromNow()}
-            </Typography>
-          </Box>
-        )}
-        title={(
-          <Link
-            color="textPrimary"
-            component={RouterLink}
-            to="#"
-            variant="h5"
-          >
-            {review.author.name}
-          </Link>
-        )}
+              {review.author.name}
+            </Link>
+          )
+        }
       />
       <Box
         pb={2}
         px={3}
       >
         <Typography
-          variant="body2"
           color="textSecondary"
+          variant="body2"
         >
           {review.comment}
         </Typography>
@@ -110,7 +116,7 @@ const ReviewCard = ({ className, review, ...rest }) => {
 
 ReviewCard.propTypes = {
   className: PropTypes.string,
-  review: PropTypes.object.isRequired
+  review: PropTypes.object.isRequired,
 };
 
 export default ReviewCard;

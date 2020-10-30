@@ -33,38 +33,38 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
+    paddingBottom: theme.spacing(3),
   },
   calendar: {
     marginTop: theme.spacing(3),
     padding: theme.spacing(2),
     '& .fc-unthemed .fc-head': {
-      backgroundColor: theme.palette.background.dark
+      backgroundColor: theme.palette.background.dark,
     },
     '& .fc-unthemed .fc-body': {
-      backgroundColor: theme.palette.background.default
+      backgroundColor: theme.palette.background.default,
     },
     '& .fc-unthemed .fc-row': {
-      borderColor: theme.palette.divider
+      borderColor: theme.palette.divider,
     },
     '& .fc-unthemed .fc-axis': {
-      ...theme.typography.body2
+      ...theme.typography.body2,
     },
     '& .fc-unthemed .fc-divider': {
       backgroundColor: theme.palette.background.dark,
-      borderColor: theme.palette.divider
+      borderColor: theme.palette.divider,
     },
     '& .fc-unthemed th': {
-      borderColor: theme.palette.divider
+      borderColor: theme.palette.divider,
     },
     '& .fc-unthemed td': {
-      borderColor: theme.palette.divider
+      borderColor: theme.palette.divider,
     },
     '& .fc-unthemed td.fc-today': {
-      backgroundColor: theme.palette.background.dark
+      backgroundColor: theme.palette.background.dark,
     },
     '& .fc-unthemed .fc-highlight': {
-      backgroundColor: theme.palette.background.dark
+      backgroundColor: theme.palette.background.dark,
     },
     '& .fc-unthemed .fc-event': {
       backgroundColor: theme.palette.secondary.main,
@@ -73,49 +73,49 @@ const useStyles = makeStyles((theme) => ({
       opacity: 0.9,
       '& .fc-time': {
         ...theme.typography.h6,
-        color: 'inherit'
+        color: 'inherit',
       },
       '& .fc-title': {
         ...theme.typography.body1,
-        color: 'inherit'
-      }
+        color: 'inherit',
+      },
     },
     '& .fc-unthemed .fc-day-top': {
-      ...theme.typography.body2
+      ...theme.typography.body2,
     },
     '& .fc-unthemed .fc-day-header': {
       ...theme.typography.subtitle2,
       fontWeight: theme.typography.fontWeightMedium,
       color: theme.palette.text.secondary,
       padding: theme.spacing(1),
-      backgroundColor: theme.palette.background.dark
+      backgroundColor: theme.palette.background.dark,
     },
     '& .fc-unthemed .fc-list-view': {
-      borderColor: theme.palette.divider
+      borderColor: theme.palette.divider,
     },
     '& .fc-unthemed .fc-list-empty': {
-      ...theme.typography.subtitle1
+      ...theme.typography.subtitle1,
     },
     '& .fc-unthemed .fc-list-heading td': {
       backgroundColor: theme.palette.background.dark,
-      borderColor: theme.palette.divider
+      borderColor: theme.palette.divider,
     },
     '& .fc-unthemed .fc-list-heading-main': {
-      ...theme.typography.h6
+      ...theme.typography.h6,
     },
     '& .fc-unthemed .fc-list-heading-alt': {
-      ...theme.typography.h6
+      ...theme.typography.h6,
     },
     '& .fc-unthemed .fc-list-item:hover td': {
       backgroundColor: theme.palette.background.dark,
     },
     '& .fc-unthemed .fc-list-item-title': {
-      ...theme.typography.body1
+      ...theme.typography.body1,
     },
     '& .fc-unthemed .fc-list-item-time': {
-      ...theme.typography.body2
-    }
-  }
+      ...theme.typography.body2,
+    },
+  },
 }));
 
 const CalendarView = () => {
@@ -198,10 +198,10 @@ const CalendarView = () => {
       await dispatch(updateEvent(event.id, {
         allDay: event.allDay,
         start: event.start,
-        end: event.end
+        end: event.end,
       }));
     } catch (err) {
-      console.error(err);
+    
     }
   };
 
@@ -210,10 +210,10 @@ const CalendarView = () => {
       await dispatch(updateEvent(event.id, {
         allDay: event.allDay,
         start: event.start,
-        end: event.end
+        end: event.end,
       }));
     } catch (err) {
-      console.error(err);
+    
     }
   };
 
@@ -267,37 +267,41 @@ const CalendarView = () => {
             events={events}
             header={false}
             height={800}
+            plugins={
+              [
+                dayGridPlugin,
+                timeGridPlugin,
+                interactionPlugin,
+                listPlugin,
+                timelinePlugin,
+              ]
+            }
             ref={calendarRef}
             rerenderDelay={10}
             select={handleRangeSelect}
             selectable
             weekends
-            plugins={[
-              dayGridPlugin,
-              timeGridPlugin,
-              interactionPlugin,
-              listPlugin,
-              timelinePlugin
-            ]}
           />
         </Paper>
         <Dialog
-          maxWidth="sm"
           fullWidth
+          maxWidth="sm"
           onClose={handleModalClose}
           open={isModalOpen}
         >
           {/* Dialog renders its body even if not open */}
-          {isModalOpen && (
-            <AddEditEventForm
-              event={selectedEvent}
-              range={selectedRange}
-              onAddComplete={handleModalClose}
-              onCancel={handleModalClose}
-              onDeleteComplete={handleModalClose}
-              onEditComplete={handleModalClose}
-            />
-          )}
+          {
+            isModalOpen && (
+              <AddEditEventForm
+                event={selectedEvent}
+                onAddComplete={handleModalClose}
+                onCancel={handleModalClose}
+                onDeleteComplete={handleModalClose}
+                onEditComplete={handleModalClose}
+                range={selectedRange}
+              />
+            )
+          }
         </Dialog>
       </Container>
     </Page>

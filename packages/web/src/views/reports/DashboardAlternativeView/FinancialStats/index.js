@@ -7,7 +7,7 @@ import {
   Card,
   CardHeader,
   Divider,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import GenericMoreButton from 'src/components/GenericMoreButton';
 import Chart from './Chart';
@@ -15,15 +15,15 @@ import Chart from './Chart';
 const useStyles = makeStyles(() => ({
   root: {},
   chart: {
-    height: 400
-  }
+    height: 400,
+  },
 }));
 
 const FinancialStats = ({ className, ...rest }) => {
   const classes = useStyles();
   const stats = {
     thisYear: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20],
-    lastYear: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13]
+    lastYear: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
   };
   const labels = [
     'Jan',
@@ -37,7 +37,7 @@ const FinancialStats = ({ className, ...rest }) => {
     'Sep',
     'Oct',
     'Nov',
-    'Dec'
+    'Dec',
   ];
 
   return (
@@ -53,9 +53,9 @@ const FinancialStats = ({ className, ...rest }) => {
       <PerfectScrollbar>
         <Box
           minWidth={700}
-          pt={4}
-          pr={2}
           pl={2}
+          pr={2}
+          pt={4}
         >
           <Chart
             className={classes.chart}
@@ -69,7 +69,7 @@ const FinancialStats = ({ className, ...rest }) => {
 };
 
 FinancialStats.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default FinancialStats;

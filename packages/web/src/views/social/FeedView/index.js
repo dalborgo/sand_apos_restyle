@@ -1,12 +1,12 @@
 import React, {
   useState,
   useEffect,
-  useCallback
+  useCallback,
 } from 'react';
 import {
   Box,
   Container,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const SocialFeedView = () => {
@@ -37,7 +37,7 @@ const SocialFeedView = () => {
         setPosts(response.data.posts);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -55,14 +55,16 @@ const SocialFeedView = () => {
         <Box mt={3}>
           <PostAdd />
         </Box>
-        {posts.map((post) => (
-          <Box
-            mt={3}
-            key={post.id}
-          >
-            <PostCard post={post} />
-          </Box>
-        ))}
+        {
+          posts.map((post) => (
+            <Box
+              key={post.id}
+              mt={3}
+            >
+              <PostCard post={post} />
+            </Box>
+          ))
+        }
       </Container>
     </Page>
   );

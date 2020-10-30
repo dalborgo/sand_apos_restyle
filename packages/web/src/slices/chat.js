@@ -6,14 +6,14 @@ const initialState = {
   activeThreadId: null,
   contacts: {
     byId: {},
-    allIds: []
+    allIds: [],
   },
   threads: {
     byId: {},
-    allIds: []
+    allIds: [],
   },
   participants: [],
-  recipients: []
+  recipients: [],
 };
 
 const slice = createSlice({
@@ -74,8 +74,8 @@ const slice = createSlice({
       const { recipientId } = action.payload;
 
       state.recipients = state.recipients.filter((recipient) => recipient.id !== recipientId);
-    }
-  }
+    },
+  },
 });
 
 export const reducer = slice.reducer;
@@ -95,8 +95,8 @@ export const getThreads = () => async (dispatch) => {
 export const getThread = (threadKey) => async (dispatch) => {
   const response = await axios.get('/api/chat/thread', {
     params: {
-      threadKey
-    }
+      threadKey,
+    },
   });
 
   dispatch(slice.actions.getThread(response.data));
@@ -105,8 +105,8 @@ export const getThread = (threadKey) => async (dispatch) => {
 export const markThreadAsSeen = (threadId) => async (dispatch) => {
   await axios.get('/api/chat/thread/mark-as-seen', {
     params: {
-      threadId
-    }
+      threadId,
+    },
   });
 
   dispatch(slice.actions.markThreadAsSeen({ threadId }));
@@ -119,8 +119,8 @@ export const resetActiveThread = () => (dispatch) => {
 export const getParticipants = (threadKey) => async (dispatch) => {
   const response = await axios.get('/api/chat/participants', {
     params: {
-      threadKey
-    }
+      threadKey,
+    },
   });
 
   dispatch(slice.actions.getParticipants(response.data));

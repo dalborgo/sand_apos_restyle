@@ -20,11 +20,11 @@ import {
   TablePagination,
   TableRow,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import {
   Edit as EditIcon,
-  ArrowRight as ArrowRightIcon
+  ArrowRight as ArrowRightIcon,
 } from 'react-feather';
 import Label from 'src/components/Label';
 import GenericMoreButton from 'src/components/GenericMoreButton';
@@ -34,20 +34,20 @@ const getStatusLabel = (paymentStatus) => {
   const map = {
     canceled: {
       text: 'Canceled',
-      color: 'error'
+      color: 'error',
     },
     completed: {
       text: 'Completed',
-      color: 'success'
+      color: 'success',
     },
     pending: {
       text: 'Pending',
-      color: 'warning'
+      color: 'warning',
     },
     rejected: {
       text: 'Rejected',
-      color: 'error'
-    }
+      color: 'error',
+    },
   };
 
   const { text, color } = map[paymentStatus];
@@ -64,7 +64,7 @@ const applyPagination = (orders, page, limit) => {
 };
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Results = ({ className, orders, ...rest }) => {
@@ -159,60 +159,62 @@ const Results = ({ className, orders, ...rest }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {paginatedOrders.map((order) => {
-                  const isOrderSelected = selectedOrders.includes(order.id);
+                {
+                  paginatedOrders.map((order) => {
+                    const isOrderSelected = selectedOrders.includes(order.id);
 
-                  return (
-                    <TableRow
-                      key={order.id}
-                      selected={selectedOrders.indexOf(order.id) !== -1}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isOrderSelected}
-                          onChange={(event) => handleSelectOneOrder(event, order.id)}
-                          value={isOrderSelected}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        {order.number}
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                        >
-                          {moment(order.createdAt).format('DD MMM YYYY | hh:mm')}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        {order.customer.name}
-                      </TableCell>
-                      <TableCell>
-                        {order.paymentMethod}
-                      </TableCell>
-                      <TableCell>
-                        {numeral(order.totalAmount).format(`${order.currency}0,0.00`)}
-                      </TableCell>
-                      <TableCell>
-                        {getStatusLabel(order.status)}
-                      </TableCell>
-                      <TableCell align="right">
-                        <IconButton>
-                          <SvgIcon fontSize="small">
-                            <EditIcon />
-                          </SvgIcon>
-                        </IconButton>
-                        <IconButton
-                          component={RouterLink}
-                          to="/app/management/orders/1"
-                        >
-                          <SvgIcon fontSize="small">
-                            <ArrowRightIcon />
-                          </SvgIcon>
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                    return (
+                      <TableRow
+                        key={order.id}
+                        selected={selectedOrders.indexOf(order.id) !== -1}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isOrderSelected}
+                            onChange={(event) => handleSelectOneOrder(event, order.id)}
+                            value={isOrderSelected}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {order.number}
+                          <Typography
+                            color="textSecondary"
+                            variant="body2"
+                          >
+                            {moment(order.createdAt).format('DD MMM YYYY | hh:mm')}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          {order.customer.name}
+                        </TableCell>
+                        <TableCell>
+                          {order.paymentMethod}
+                        </TableCell>
+                        <TableCell>
+                          {numeral(order.totalAmount).format(`${order.currency}0,0.00`)}
+                        </TableCell>
+                        <TableCell>
+                          {getStatusLabel(order.status)}
+                        </TableCell>
+                        <TableCell align="right">
+                          <IconButton>
+                            <SvgIcon fontSize="small">
+                              <EditIcon />
+                            </SvgIcon>
+                          </IconButton>
+                          <IconButton
+                            component={RouterLink}
+                            to="/app/management/orders/1"
+                          >
+                            <SvgIcon fontSize="small">
+                              <ArrowRightIcon />
+                            </SvgIcon>
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                }
               </TableBody>
             </Table>
           </Box>
@@ -237,11 +239,11 @@ const Results = ({ className, orders, ...rest }) => {
 
 Results.propTypes = {
   className: PropTypes.string,
-  orders: PropTypes.array.isRequired
+  orders: PropTypes.array.isRequired,
 };
 
 Results.defaultProps = {
-  orders: []
+  orders: [],
 };
 
 export default Results;

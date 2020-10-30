@@ -1,12 +1,12 @@
 import React, {
   useCallback,
   useState,
-  useEffect
+  useEffect,
 } from 'react';
 import {
   Box,
   Container,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import axios from 'src/utils/axios';
@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const ProjectBrowseView = () => {
@@ -37,7 +37,7 @@ const ProjectBrowseView = () => {
         setProjects(response.data.projects);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 

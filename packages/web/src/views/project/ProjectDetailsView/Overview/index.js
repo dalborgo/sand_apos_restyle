@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import {
   Box,
   Grid,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import Metadata from './Metadata';
 import Brief from './Brief';
@@ -12,7 +12,7 @@ import Members from './Members';
 import Files from './Files';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Overview = ({ className, project, ...rest }) => {
@@ -53,7 +53,7 @@ const Overview = ({ className, project, ...rest }) => {
 
 Overview.propTypes = {
   className: PropTypes.string,
-  project: PropTypes.object.isRequired
+  project: PropTypes.object.isRequired,
 };
 
 export default Overview;

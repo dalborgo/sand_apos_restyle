@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useEffect,
-  useState
+  useState,
 } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -22,7 +22,7 @@ import {
   TableRow,
   TableSortLabel,
   Tooltip,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Label from 'src/components/Label';
@@ -33,11 +33,11 @@ import useIsMountedRef from 'src/hooks/useIsMountedRef';
 const labelColors = {
   complete: 'success',
   pending: 'warning',
-  rejected: 'error'
+  rejected: 'error',
 };
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const LatestOrders = ({ className, ...rest }) => {
@@ -53,7 +53,7 @@ const LatestOrders = ({ className, ...rest }) => {
         setOrders(response.data.orders);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -107,41 +107,43 @@ const LatestOrders = ({ className, ...rest }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {orders.map((order) => (
-                <TableRow
-                  hover
-                  key={order.id}
-                >
-                  <TableCell>{order.number}</TableCell>
-                  <TableCell>{order.customer.name}</TableCell>
-                  <TableCell>{order.items}</TableCell>
-                  <TableCell>
-                    {numeral(order.totalAmount).format(`${order.currency}0,0.00`)}
-                  </TableCell>
-                  <TableCell>
-                    <Label color={labelColors[order.status]}>
-                      {order.status}
-                    </Label>
-                  </TableCell>
-                  <TableCell align="right">
-                    {moment(order.createdAt).format('DD MMM, YYYY hh:mm:ss')}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {
+                orders.map((order) => (
+                  <TableRow
+                    hover
+                    key={order.id}
+                  >
+                    <TableCell>{order.number}</TableCell>
+                    <TableCell>{order.customer.name}</TableCell>
+                    <TableCell>{order.items}</TableCell>
+                    <TableCell>
+                      {numeral(order.totalAmount).format(`${order.currency}0,0.00`)}
+                    </TableCell>
+                    <TableCell>
+                      <Label color={labelColors[order.status]}>
+                        {order.status}
+                      </Label>
+                    </TableCell>
+                    <TableCell align="right">
+                      {moment(order.createdAt).format('DD MMM, YYYY hh:mm:ss')}
+                    </TableCell>
+                  </TableRow>
+                ))
+              }
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
       <Box
-        p={2}
         display="flex"
         justifyContent="flex-end"
+        p={2}
       >
         <Button
           component={RouterLink}
+          endIcon={<NavigateNextIcon />}
           size="small"
           to="/app/management/orders"
-          endIcon={<NavigateNextIcon />}
         >
           See all
         </Button>
@@ -151,7 +153,7 @@ const LatestOrders = ({ className, ...rest }) => {
 };
 
 LatestOrders.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default LatestOrders;

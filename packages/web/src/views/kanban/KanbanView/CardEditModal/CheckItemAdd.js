@@ -6,13 +6,13 @@ import {
   Box,
   Button,
   makeStyles,
-  TextField
+  TextField,
 } from '@material-ui/core';
 import { useDispatch } from 'src/store';
 import { addCheckItem } from 'src/slices/kanban';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const CheckItemAdd = ({
@@ -51,12 +51,12 @@ const CheckItemAdd = ({
       setExpanded(false);
       setName('');
       enqueueSnackbar('Check item added', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -66,41 +66,43 @@ const CheckItemAdd = ({
       className={clsx(classes.root, className)}
       {...rest}
     >
-      {isExpanded ? (
-        <div>
-          <TextField
-            fullWidth
-            onChange={handleChange}
-            placeholder="Add an item"
-            value={name}
-            variant="outlined"
-          />
-          <Box mt={1}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={handleSave}
-            >
+      {
+        isExpanded ? (
+          <div>
+            <TextField
+              fullWidth
+              onChange={handleChange}
+              placeholder="Add an item"
+              value={name}
+              variant="outlined"
+            />
+            <Box mt={1}>
+              <Button
+                color="primary"
+                onClick={handleSave}
+                size="small"
+                variant="contained"
+              >
               Save
-            </Button>
-            <Button
-              size="small"
-              onClick={handleCancel}
-            >
+              </Button>
+              <Button
+                onClick={handleCancel}
+                size="small"
+              >
               Cancel
-            </Button>
-          </Box>
-        </div>
-      ) : (
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={handleAdd}
-        >
+              </Button>
+            </Box>
+          </div>
+        ) : (
+          <Button
+            onClick={handleAdd}
+            size="small"
+            variant="outlined"
+          >
           Add an item
-        </Button>
-      )}
+          </Button>
+        )
+      }
     </div>
   );
 };
@@ -108,7 +110,7 @@ const CheckItemAdd = ({
 CheckItemAdd.propTypes = {
   card: PropTypes.object.isRequired,
   checklist: PropTypes.object.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default CheckItemAdd;

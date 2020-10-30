@@ -9,7 +9,7 @@ import {
   Typography,
   Link,
   makeStyles,
-  colors
+  colors,
 } from '@material-ui/core';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import PersonAddIcon from '@material-ui/icons/PersonAddOutlined';
@@ -19,53 +19,53 @@ import DashboardIcon from '@material-ui/icons/DashboardOutlined';
 const avatarsMap = {
   upload_file: {
     icon: GetAppIcon,
-    className: 'avatarBlue'
+    className: 'avatarBlue',
   },
   join_team: {
     icon: PersonAddIcon,
-    className: 'avatarOrange'
+    className: 'avatarOrange',
   },
   price_change: {
     icon: AttachMoneyIcon,
-    className: 'avatarGreen'
+    className: 'avatarGreen',
   },
   contest_created: {
     icon: DashboardIcon,
-    className: 'avatarIndigo'
-  }
+    className: 'avatarIndigo',
+  },
 };
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   card: {
     marginLeft: theme.spacing(2),
     flexGrow: 1,
     display: 'flex',
     padding: theme.spacing(2),
-    alignItems: 'center'
+    alignItems: 'center',
   },
   date: {
     marginLeft: 'auto',
-    flexShrink: 0
+    flexShrink: 0,
   },
   avatar: {
-    color: colors.common.white
+    color: colors.common.white,
   },
   avatarBlue: {
-    backgroundColor: colors.blue[500]
+    backgroundColor: colors.blue[500],
   },
   avatarGreen: {
-    backgroundColor: colors.green[500]
+    backgroundColor: colors.green[500],
   },
   avatarOrange: {
-    backgroundColor: colors.orange[500]
+    backgroundColor: colors.orange[500],
   },
   avatarIndigo: {
-    backgroundColor: colors.indigo[500]
-  }
+    backgroundColor: colors.indigo[500],
+  },
 }));
 
 const Activity = ({ activity, className, ...rest }) => {
@@ -82,8 +82,8 @@ const Activity = ({ activity, className, ...rest }) => {
       </Avatar>
       <Card className={classes.card}>
         <Typography
-          variant="body1"
           color="textPrimary"
+          variant="body1"
         >
           <Link
             color="textPrimary"
@@ -109,7 +109,7 @@ const Activity = ({ activity, className, ...rest }) => {
 
 Activity.propTypes = {
   activity: PropTypes.object.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Activity;

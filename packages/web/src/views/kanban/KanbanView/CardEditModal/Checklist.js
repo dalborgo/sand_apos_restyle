@@ -9,13 +9,13 @@ import {
   Typography,
   TextField,
   SvgIcon,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { List as ListIcon } from 'react-feather';
 import { useDispatch } from 'src/store';
 import {
   updateChecklist,
-  deleteChecklist
+  deleteChecklist,
 } from 'src/slices/kanban';
 import CheckItem from './CheckItem';
 import CheckItemAdd from './CheckItemAdd';
@@ -23,8 +23,8 @@ import CheckItemAdd from './CheckItemAdd';
 const useStyles = makeStyles((theme) => ({
   root: {},
   listIcon: {
-    marginRight: theme.spacing(3)
-  }
+    marginRight: theme.spacing(3),
+  },
 }));
 
 const Checklist = ({
@@ -60,12 +60,12 @@ const Checklist = ({
       setEditingName(false);
       await dispatch(updateChecklist(card.id, checklist.id, { name }));
       enqueueSnackbar('Checklist updated', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -79,12 +79,12 @@ const Checklist = ({
     try {
       await dispatch(deleteChecklist(card.id, checklist.id));
       enqueueSnackbar('Checklist deleted', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -116,100 +116,104 @@ const Checklist = ({
         display="flex"
       >
         <SvgIcon
-          fontSize="small"
-          color="action"
           className={classes.listIcon}
+          color="action"
+          fontSize="small"
         >
           <ListIcon />
         </SvgIcon>
-        {editingName ? (
-          <Box flexGrow={1}>
-            <TextField
-              value={name}
-              fullWidth
-              variant="outlined"
-              onChange={handleNameChange}
-            />
-            <Box mt={1}>
-              <Button
-                color="primary"
-                size="small"
-                variant="contained"
-                onClick={handleNameSave}
-              >
+        {
+          editingName ? (
+            <Box flexGrow={1}>
+              <TextField
+                fullWidth
+                onChange={handleNameChange}
+                value={name}
+                variant="outlined"
+              />
+              <Box mt={1}>
+                <Button
+                  color="primary"
+                  onClick={handleNameSave}
+                  size="small"
+                  variant="contained"
+                >
                 Save
-              </Button>
-              <Button
-                size="small"
-                onClick={handleNameCancel}
-              >
+                </Button>
+                <Button
+                  onClick={handleNameCancel}
+                  size="small"
+                >
                 Cancel
+                </Button>
+              </Box>
+            </Box>
+          ) : (
+            <Box
+              alignItems="center"
+              display="flex"
+              flexGrow={1}
+            >
+              <Typography
+                color="textPrimary"
+                onClick={handleNameEdit}
+                variant="h4"
+              >
+                {checklist.name}
+              </Typography>
+              <Box flexGrow={1} />
+              <Button
+                onClick={handleDelete}
+                size="small"
+              >
+              Delete
               </Button>
             </Box>
-          </Box>
-        ) : (
-          <Box
-            display="flex"
-            alignItems="center"
-            flexGrow={1}
-          >
-            <Typography
-              variant="h4"
-              color="textPrimary"
-              onClick={handleNameEdit}
-            >
-              {checklist.name}
-            </Typography>
-            <Box flexGrow={1} />
-            <Button
-              size="small"
-              onClick={handleDelete}
-            >
-              Delete
-            </Button>
-          </Box>
-        )}
+          )
+        }
       </Box>
       <Box
-        mt={1}
-        display="flex"
         alignItems="center"
+        display="flex"
+        mt={1}
       >
         <Typography
-          variant="caption"
           color="textSecondary"
+          variant="caption"
         >
           {Math.round(completePercentage)}
           %
         </Typography>
         <Box
-          ml={2}
           flexGrow={1}
+          ml={2}
         >
           <LinearProgress
-            variant="determinate"
-            value={completePercentage}
             color="secondary"
+            value={completePercentage}
+            variant="determinate"
           />
         </Box>
       </Box>
       <Box mt={3}>
-        {checklist.checkItems.map((checkItem) => (
-          <CheckItem
-            editing={editingCheckItem === checkItem.id}
-            checkItem={checkItem}
-            card={card}
-            checklist={checklist}
-            key={checkItem.id}
-            onEditCancel={handleCheckItemEditCancel}
-            onEditComplete={handleCheckItemEditComplete}
-            onEditInit={() => handleCheckItemEditInit(checkItem.id)}
-          />
-        ))}
+        {
+          checklist.checkItems.map((checkItem) => (
+            <CheckItem
+              card={card}
+              checkItem={checkItem}
+              checklist={checklist}
+              editing={editingCheckItem === checkItem.id}
+              key={checkItem.id}
+              onEditCancel={handleCheckItemEditCancel}
+              onEditComplete={handleCheckItemEditComplete}
+              onEditInit={() => handleCheckItemEditInit(checkItem.id)}
+            />
+          ))
+        }
       </Box>
       <Box
-        mt={1}
         ml={6}
+        mt={1}
       >
         <CheckItemAdd
           card={card}
@@ -223,7 +227,7 @@ const Checklist = ({
 Checklist.propTypes = {
   className: PropTypes.string,
   card: PropTypes.object.isRequired,
-  checklist: PropTypes.object.isRequired
+  checklist: PropTypes.object.isRequired,
 };
 
 export default Checklist;

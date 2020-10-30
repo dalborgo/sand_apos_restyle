@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardContent,
   Divider,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import GenericMoreButton from 'src/components/GenericMoreButton';
 import Chart from './Chart';
@@ -16,8 +16,8 @@ import Chart from './Chart';
 const useStyles = makeStyles(() => ({
   root: {},
   chart: {
-    height: '100%'
-  }
+    height: '100%',
+  },
 }));
 
 const PerformanceOverTime = ({ className, ...rest }) => {
@@ -25,11 +25,11 @@ const PerformanceOverTime = ({ className, ...rest }) => {
   const performance = {
     thisWeek: {
       data: [],
-      labels: []
+      labels: [],
     },
     thisMonth: {
       data: [],
-      labels: []
+      labels: [],
     },
     thisYear: {
       data: [10, 5, 11, 20, 13, 28, 18, 4, 13, 12, 13, 5],
@@ -45,9 +45,9 @@ const PerformanceOverTime = ({ className, ...rest }) => {
         'Sep',
         'Oct',
         'Nov',
-        'Dec'
-      ]
-    }
+        'Dec',
+      ],
+    },
   };
 
   return (
@@ -79,7 +79,7 @@ const PerformanceOverTime = ({ className, ...rest }) => {
 };
 
 PerformanceOverTime.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default PerformanceOverTime;

@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useState,
-  useEffect
+  useEffect,
 } from 'react';
 import {
   Box,
@@ -9,7 +9,7 @@ import {
   Divider,
   Tabs,
   Tab,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const ProjectDetailsView = () => {
@@ -39,7 +39,7 @@ const ProjectDetailsView = () => {
     { value: 'overview', label: 'Overview' },
     { value: 'reviews', label: 'Reviews' },
     { value: 'activity', label: 'Activity' },
-    { value: 'applicants', label: 'Applicants' }
+    { value: 'applicants', label: 'Applicants' },
   ];
 
   const handleTabsChange = (event, value) => {
@@ -54,7 +54,7 @@ const ProjectDetailsView = () => {
         setProject(response.data.project);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -81,13 +81,15 @@ const ProjectDetailsView = () => {
             value={currentTab}
             variant="scrollable"
           >
-            {tabs.map((tab) => (
-              <Tab
-                key={tab.value}
-                label={tab.label}
-                value={tab.value}
-              />
-            ))}
+            {
+              tabs.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  label={tab.label}
+                  value={tab.value}
+                />
+              ))
+            }
           </Tabs>
         </Box>
         <Divider />

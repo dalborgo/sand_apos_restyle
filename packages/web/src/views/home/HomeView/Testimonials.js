@@ -6,18 +6,18 @@ import {
   Box,
   Container,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     paddingTop: 128,
-    paddingBottom: 128
+    paddingBottom: 128,
   },
   title: {
-    fontWeight: theme.typography.fontWeightRegular
-  }
+    fontWeight: theme.typography.fontWeightRegular,
+  },
 }));
 
 const Testimonials = ({ className, ...rest }) => {
@@ -30,32 +30,32 @@ const Testimonials = ({ className, ...rest }) => {
     >
       <Container maxWidth="md">
         <Typography
-          variant="h2"
           align="center"
-          color="textPrimary"
           className={classes.title}
+          color="textPrimary"
+          variant="h2"
         >
           &quot;Devias builds some of the best templates you can find for React.
           <br />
           They will save you time.&quot;
         </Typography>
         <Box
-          mt={6}
+          alignItems="center"
           display="flex"
           justifyContent="center"
-          alignItems="center"
+          mt={6}
         >
           <Avatar src="/static/home/olivier.png" />
           <Box ml={2}>
             <Typography
-              variant="body1"
               color="textPrimary"
+              variant="body1"
             >
               Olivier Tassinari
               <Typography
                 color="textSecondary"
-                display="inline"
                 component="span"
+                display="inline"
               >
                 , co-creator of @MaterialUI
               </Typography>
@@ -68,7 +68,7 @@ const Testimonials = ({ className, ...rest }) => {
 };
 
 Testimonials.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Testimonials;

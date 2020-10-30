@@ -5,13 +5,13 @@ import { Bar } from 'react-chartjs-2';
 import {
   fade,
   makeStyles,
-  useTheme
+  useTheme,
 } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   root: {
-    position: 'relative'
-  }
+    position: 'relative',
+  },
 }));
 
 const Chart = ({
@@ -32,7 +32,7 @@ const Chart = ({
         barThickness: 12,
         maxBarThickness: 10,
         barPercentage: 0.5,
-        categoryPercentage: 0.5
+        categoryPercentage: 0.5,
       },
       {
         label: 'Last year',
@@ -41,10 +41,10 @@ const Chart = ({
         barThickness: 12,
         maxBarThickness: 10,
         barPercentage: 0.5,
-        categoryPercentage: 0.5
-      }
+        categoryPercentage: 0.5,
+      },
     ],
-    labels
+    labels,
   };
 
   const options = {
@@ -53,23 +53,23 @@ const Chart = ({
     animation: false,
     cornerRadius: 20,
     legend: {
-      display: false
+      display: false,
     },
     layout: {
-      padding: 0
+      padding: 0,
     },
     scales: {
       xAxes: [
         {
           gridLines: {
             display: false,
-            drawBorder: false
+            drawBorder: false,
           },
           ticks: {
             padding: 20,
-            fontColor: theme.palette.text.secondary
-          }
-        }
+            fontColor: theme.palette.text.secondary,
+          },
+        },
       ],
       yAxes: [
         {
@@ -80,7 +80,7 @@ const Chart = ({
             drawBorder: false,
             zeroLineBorderDash: [2],
             zeroLineBorderDashOffset: [2],
-            zeroLineColor: theme.palette.divider
+            zeroLineColor: theme.palette.divider,
           },
           ticks: {
             padding: 20,
@@ -88,10 +88,10 @@ const Chart = ({
             beginAtZero: true,
             min: 0,
             maxTicksLimit: 5,
-            callback: (value) => (value > 0 ? `${value}K` : value)
-          }
-        }
-      ]
+            callback: (value) => (value > 0 ? `${value}K` : value),
+          },
+        },
+      ],
     },
     tooltips: {
       enabled: true,
@@ -116,9 +116,9 @@ const Chart = ({
           }
 
           return label;
-        }
-      }
-    }
+        },
+      },
+    },
   };
 
   return (
@@ -137,7 +137,7 @@ const Chart = ({
 Chart.propTypes = {
   className: PropTypes.string,
   data: PropTypes.object.isRequired,
-  labels: PropTypes.array.isRequired
+  labels: PropTypes.array.isRequired,
 };
 
 export default Chart;

@@ -1,14 +1,14 @@
 import React, {
   useState,
   useEffect,
-  useCallback
+  useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
   Box,
   Grid,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -17,7 +17,7 @@ import PostCard from 'src/components/PostCard';
 import About from './About';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Timeline = ({ className, profile, ...rest }) => {
@@ -33,7 +33,7 @@ const Timeline = ({ className, profile, ...rest }) => {
         setPosts(response.data.posts);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -52,27 +52,29 @@ const Timeline = ({ className, profile, ...rest }) => {
       >
         <Grid
           item
-          xs={12}
-          md={6}
           lg={4}
+          md={6}
+          xs={12}
         >
           <About profile={profile} />
         </Grid>
         <Grid
           item
-          xs={12}
-          md={6}
           lg={8}
+          md={6}
+          xs={12}
         >
           <PostAdd />
-          {posts.map((post) => (
-            <Box
-              mt={3}
-              key={post.id}
-            >
-              <PostCard post={post} />
-            </Box>
-          ))}
+          {
+            posts.map((post) => (
+              <Box
+                key={post.id}
+                mt={3}
+              >
+                <PostCard post={post} />
+              </Box>
+            ))
+          }
         </Grid>
       </Grid>
     </div>
@@ -81,7 +83,7 @@ const Timeline = ({ className, profile, ...rest }) => {
 
 Timeline.propTypes = {
   className: PropTypes.string,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 
 export default Timeline;

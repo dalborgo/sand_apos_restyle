@@ -11,17 +11,17 @@ const useStyles = makeStyles(() => createStyles({
       '-webkit-font-smoothing': 'antialiased',
       '-moz-osx-font-smoothing': 'grayscale',
       height: '100%',
-      width: '100%'
+      width: '100%',
     },
     body: {
       height: '100%',
-      width: '100%'
+      width: '100%',
     },
     '#root': {
       height: '100%',
-      width: '100%'
-    }
-  }
+      width: '100%',
+    },
+  },
 }));
 
 const GlobalStyles = () => {

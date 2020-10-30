@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import numeral from 'numeral';
-import PropTypes from 'prop-types';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import React, { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import clsx from 'clsx'
+import numeral from 'numeral'
+import PropTypes from 'prop-types'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import {
   Avatar,
   Box,
@@ -14,6 +14,7 @@ import {
   IconButton,
   InputAdornment,
   Link,
+  makeStyles,
   SvgIcon,
   Tab,
   Table,
@@ -25,51 +26,46 @@ import {
   Tabs,
   TextField,
   Typography,
-  makeStyles
-} from '@material-ui/core';
-import {
-  Edit as EditIcon,
-  ArrowRight as ArrowRightIcon,
-  Search as SearchIcon
-} from 'react-feather';
-import getInitials from 'src/utils/getInitials';
+} from '@material-ui/core'
+import { ArrowRight as ArrowRightIcon, Edit as EditIcon, Search as SearchIcon, } from 'react-feather'
+import getInitials from 'src/utils/getInitials'
 
 const tabs = [
   {
     value: 'all',
-    label: 'All'
+    label: 'All',
   },
   {
     value: 'hasAcceptedMarketing',
-    label: 'Accepts Marketing'
+    label: 'Accepts Marketing',
   },
   {
     value: 'isProspect',
-    label: 'Prospect'
+    label: 'Prospect',
   },
   {
     value: 'isReturning',
-    label: 'Returning'
-  }
+    label: 'Returning',
+  },
 ];
 
 const sortOptions = [
   {
     value: 'updatedAt|desc',
-    label: 'Last update (newest first)'
+    label: 'Last update (newest first)',
   },
   {
     value: 'updatedAt|asc',
-    label: 'Last update (oldest first)'
+    label: 'Last update (oldest first)',
   },
   {
     value: 'orders|desc',
-    label: 'Total orders (high to low)'
+    label: 'Total orders (high to low)',
   },
   {
     value: 'orders|asc',
-    label: 'Total orders (low to high)'
-  }
+    label: 'Total orders (low to high)',
+  },
 ];
 
 const applyFilters = (customers, query, filters) => {
@@ -106,7 +102,7 @@ const applyFilters = (customers, query, filters) => {
 const applyPagination = (customers, page, limit) => {
   return customers.slice(page * limit, page * limit + limit);
 };
-
+/*eslint-disable id-length*/
 const descendingComparator = (a, b, orderBy) => {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -118,6 +114,7 @@ const descendingComparator = (a, b, orderBy) => {
 
   return 0;
 };
+
 
 const getComparator = (order, orderBy) => {
   return order === 'desc'
@@ -133,7 +130,7 @@ const applySort = (customers, sort) => {
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
 
-    if (order !== 0) return order;
+    if (order !== 0) {return order;}
 
     return a[1] - b[1];
   });
@@ -144,10 +141,10 @@ const applySort = (customers, sort) => {
 const useStyles = makeStyles((theme) => ({
   root: {},
   queryField: {
-    width: 500
+    width: 500,
   },
   bulkOperations: {
-    position: 'relative'
+    position: 'relative',
   },
   bulkActions: {
     paddingLeft: 4,
@@ -156,16 +153,16 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: '100%',
     zIndex: 2,
-    backgroundColor: theme.palette.background.default
+    backgroundColor: theme.palette.background.default,
   },
   bulkAction: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   avatar: {
     height: 42,
     width: 42,
-    marginRight: theme.spacing(1)
-  }
+    marginRight: theme.spacing(1),
+  },
 }));
 
 const Results = ({
@@ -183,7 +180,7 @@ const Results = ({
   const [filters, setFilters] = useState({
     hasAcceptedMarketing: null,
     isProspect: null,
-    isReturning: null
+    isReturning: null,
   });
 
   const handleTabsChange = (event, value) => {
@@ -191,7 +188,7 @@ const Results = ({
       ...filters,
       hasAcceptedMarketing: null,
       isProspect: null,
-      isReturning: null
+      isReturning: null,
     };
 
     if (value !== 'all') {
@@ -254,35 +251,39 @@ const Results = ({
         value={currentTab}
         variant="scrollable"
       >
-        {tabs.map((tab) => (
-          <Tab
-            key={tab.value}
-            value={tab.value}
-            label={tab.label}
-          />
-        ))}
+        {
+          tabs.map((tab) => (
+            <Tab
+              key={tab.value}
+              label={tab.label}
+              value={tab.value}
+            />
+          ))
+        }
       </Tabs>
       <Divider />
       <Box
-        p={2}
-        minHeight={56}
-        display="flex"
         alignItems="center"
+        display="flex"
+        minHeight={56}
+        p={2}
       >
         <TextField
           className={classes.queryField}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SvgIcon
-                  fontSize="small"
-                  color="action"
-                >
-                  <SearchIcon />
-                </SvgIcon>
-              </InputAdornment>
-            )
-          }}
+          InputProps={
+            {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SvgIcon
+                    color="action"
+                    fontSize="small"
+                  >
+                    <SearchIcon />
+                  </SvgIcon>
+                </InputAdornment>
+              ),
+            }
+          }
           onChange={handleQueryChange}
           placeholder="Search customers"
           value={query}
@@ -298,39 +299,43 @@ const Results = ({
           value={sort}
           variant="outlined"
         >
-          {sortOptions.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-            >
-              {option.label}
-            </option>
-          ))}
+          {
+            sortOptions.map((option) => (
+              <option
+                key={option.value}
+                value={option.value}
+              >
+                {option.label}
+              </option>
+            ))
+          }
         </TextField>
       </Box>
-      {enableBulkOperations && (
-        <div className={classes.bulkOperations}>
-          <div className={classes.bulkActions}>
-            <Checkbox
-              checked={selectedAllCustomers}
-              indeterminate={selectedSomeCustomers}
-              onChange={handleSelectAllCustomers}
-            />
-            <Button
-              variant="outlined"
-              className={classes.bulkAction}
-            >
+      {
+        enableBulkOperations && (
+          <div className={classes.bulkOperations}>
+            <div className={classes.bulkActions}>
+              <Checkbox
+                checked={selectedAllCustomers}
+                indeterminate={selectedSomeCustomers}
+                onChange={handleSelectAllCustomers}
+              />
+              <Button
+                className={classes.bulkAction}
+                variant="outlined"
+              >
               Delete
-            </Button>
-            <Button
-              variant="outlined"
-              className={classes.bulkAction}
-            >
+              </Button>
+              <Button
+                className={classes.bulkAction}
+                variant="outlined"
+              >
               Edit
-            </Button>
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
       <PerfectScrollbar>
         <Box minWidth={700}>
           <Table>
@@ -361,81 +366,83 @@ const Results = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedCustomers.map((customer) => {
-                const isCustomerSelected = selectedCustomers.includes(customer.id);
+              {
+                paginatedCustomers.map((customer) => {
+                  const isCustomerSelected = selectedCustomers.includes(customer.id);
 
-                return (
-                  <TableRow
-                    hover
-                    key={customer.id}
-                    selected={isCustomerSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isCustomerSelected}
-                        onChange={(event) => handleSelectOneCustomer(event, customer.id)}
-                        value={isCustomerSelected}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                      >
-                        <Avatar
-                          className={classes.avatar}
-                          src={customer.avatar}
+                  return (
+                    <TableRow
+                      hover
+                      key={customer.id}
+                      selected={isCustomerSelected}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isCustomerSelected}
+                          onChange={(event) => handleSelectOneCustomer(event, customer.id)}
+                          value={isCustomerSelected}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          alignItems="center"
+                          display="flex"
                         >
-                          {getInitials(customer.name)}
-                        </Avatar>
-                        <div>
-                          <Link
-                            color="inherit"
-                            component={RouterLink}
-                            to="/app/management/customers/1"
-                            variant="h6"
+                          <Avatar
+                            className={classes.avatar}
+                            src={customer.avatar}
                           >
-                            {customer.name}
-                          </Link>
-                          <Typography
-                            variant="body2"
-                            color="textSecondary"
-                          >
-                            {customer.email}
-                          </Typography>
-                        </div>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      {`${customer.city}, ${customer.state}, ${customer.country}`}
-                    </TableCell>
-                    <TableCell>
-                      {customer.totalOrders}
-                    </TableCell>
-                    <TableCell>
-                      {numeral(customer.totalAmountSpent).format(`${customer.currency}0,0.00`)}
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        component={RouterLink}
-                        to="/app/management/customers/1/edit"
-                      >
-                        <SvgIcon fontSize="small">
-                          <EditIcon />
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton
-                        component={RouterLink}
-                        to="/app/management/customers/1"
-                      >
-                        <SvgIcon fontSize="small">
-                          <ArrowRightIcon />
-                        </SvgIcon>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                            {getInitials(customer.name)}
+                          </Avatar>
+                          <div>
+                            <Link
+                              color="inherit"
+                              component={RouterLink}
+                              to="/app/management/customers/1"
+                              variant="h6"
+                            >
+                              {customer.name}
+                            </Link>
+                            <Typography
+                              color="textSecondary"
+                              variant="body2"
+                            >
+                              {customer.email}
+                            </Typography>
+                          </div>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        {`${customer.city}, ${customer.state}, ${customer.country}`}
+                      </TableCell>
+                      <TableCell>
+                        {customer.totalOrders}
+                      </TableCell>
+                      <TableCell>
+                        {numeral(customer.totalAmountSpent).format(`${customer.currency}0,0.00`)}
+                      </TableCell>
+                      <TableCell align="right">
+                        <IconButton
+                          component={RouterLink}
+                          to="/app/management/customers/1/edit"
+                        >
+                          <SvgIcon fontSize="small">
+                            <EditIcon />
+                          </SvgIcon>
+                        </IconButton>
+                        <IconButton
+                          component={RouterLink}
+                          to="/app/management/customers/1"
+                        >
+                          <SvgIcon fontSize="small">
+                            <ArrowRightIcon />
+                          </SvgIcon>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              }
             </TableBody>
           </Table>
         </Box>
@@ -455,11 +462,11 @@ const Results = ({
 
 Results.propTypes = {
   className: PropTypes.string,
-  customers: PropTypes.array.isRequired
+  customers: PropTypes.array.isRequired,
 };
 
 Results.defaultProps = {
-  customers: []
+  customers: [],
 };
 
 export default Results;

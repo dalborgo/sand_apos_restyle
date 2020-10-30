@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react'
-import { Box, makeStyles, Paper } from '@material-ui/core'
+import { Box, makeStyles, Paper, useMediaQuery } from '@material-ui/core'
 import { useInfiniteQuery, useMutation, useQuery, useQueryCache } from 'react-query'
 import Page from 'src/components/Page'
 import Header from './Header'
@@ -151,6 +151,7 @@ DisplayComponent.displayName = 'DisplayComponent'
 
 const BrowserView = () => {
   console.log('%cRENDER_BASE', 'color: purple')
+  const matches = useMediaQuery(theme => theme.breakpoints.up('sm'))
   const queryCache = useQueryCache()
   const classes = useStyles()
   const [text, setText] = useState('')
@@ -158,9 +159,11 @@ const BrowserView = () => {
   const { docId } = useParams()
   useEffect(() => {
     const browserSearchBox = document.getElementById('browserSearchBox')
-    browserSearchBox.select()
+    browserSearchBox && browserSearchBox.select()
     const browserPanel = document.getElementById('browserPanel')
-    browserPanel.scrollTop = 0
+    if (browserPanel) {
+      browserPanel.scrollTop = 0
+    }
   }, [text])
   const respList = useInfiniteQuery(['docs/browser', text], fetchList, {
     getFetchMore: (lastGroup, allGroups) => {
@@ -195,9 +198,12 @@ const BrowserView = () => {
           if (first.error) {
             setOutput({ error: true, text: `${first.error}: ${first.reason} (${first.status})` })
           } else {
-            const outObj = Object.assign(variables, { _rev: first.rev })
+            const isNewDoc = variables._id !== docId
+            let outObj = variables
+            if (!isNewDoc) {
+              outObj = Object.assign(outObj, { _rev: first.rev })
+            }
             document.getElementById('browserDisplayArea').value = JSON.stringify(outObj, null, 2)
-            const isNewDoc = first.rev.startsWith('1-')
             setOutput({ error: false, text: `${isNewDoc ? '[CREATED]' : '[UPDATED]'} rev. ${first.rev}` })
           }
         }
@@ -236,17 +242,29 @@ const BrowserView = () => {
       <div className={classes.content}>
         <div className={classes.innerFirst}>
           <Grid container spacing={2}>
-            <Grid className={classes.gridItem} item sm={5} xs={12}>
-              <SearchComponent
-                classes={classes}
-                setText={setText}
-                text={text}
-                {...searchBody}
-              />
-            </Grid>
-            <Grid className={classes.gridItem} item sm={7} xs={12}>
-              <DisplayComponent classes={classes} docId={docId} mutate={mutate} output={output} setOutput={setOutput}/>
-            </Grid>
+            {
+              (!docId || matches) &&
+              <Grid className={classes.gridItem} item sm={5} xs={12}>
+                <SearchComponent
+                  classes={classes}
+                  setText={setText}
+                  text={text}
+                  {...searchBody}
+                />
+              </Grid>
+            }
+            {
+              (docId || matches) &&
+              <Grid className={classes.gridItem} item sm={7} xs={12}>
+                <DisplayComponent
+                  classes={classes}
+                  docId={docId}
+                  mutate={mutate}
+                  output={output}
+                  setOutput={setOutput}
+                />
+              </Grid>
+            }
           </Grid>
         </div>
       </div>

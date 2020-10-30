@@ -10,12 +10,12 @@ import {
   Link,
   SvgIcon,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import {
   PlusCircle as PlusCircleIcon,
   Download as DownloadIcon,
-  Upload as UploadIcon
+  Upload as UploadIcon,
 } from 'react-feather';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
   action: {
     marginBottom: theme.spacing(1),
     '& + &': {
-      marginLeft: theme.spacing(1)
-    }
-  }
+      marginLeft: theme.spacing(1),
+    },
+  },
 }));
 
 const Header = ({ className, ...rest }) => {
@@ -34,43 +34,43 @@ const Header = ({ className, ...rest }) => {
 
   return (
     <Grid
-      container
-      spacing={3}
-      justify="space-between"
       className={clsx(classes.root, className)}
+      container
+      justify="space-between"
+      spacing={3}
       {...rest}
     >
       <Grid item>
         <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
+          separator={<NavigateNextIcon fontSize="small" />}
         >
           <Link
-            variant="body1"
             color="inherit"
-            to="/app"
             component={RouterLink}
+            to="/app"
+            variant="body1"
           >
             Dashboard
           </Link>
           <Link
-            variant="body1"
             color="inherit"
-            to="/app/management"
             component={RouterLink}
+            to="/app/management"
+            variant="body1"
           >
             Management
           </Link>
           <Typography
-            variant="body1"
             color="textPrimary"
+            variant="body1"
           >
             Products
           </Typography>
         </Breadcrumbs>
         <Typography
-          variant="h3"
           color="textPrimary"
+          variant="h3"
         >
           All Products
         </Typography>
@@ -99,16 +99,16 @@ const Header = ({ className, ...rest }) => {
       </Grid>
       <Grid item>
         <Button
-          color="secondary"
-          variant="contained"
           className={classes.action}
+          color="secondary"
           component={RouterLink}
-          to="/app/management/products/create"
           startIcon={
             <SvgIcon fontSize="small">
               <PlusCircleIcon />
             </SvgIcon>
           }
+          to="/app/management/products/create"
+          variant="contained"
         >
           New Product
         </Button>
@@ -118,7 +118,7 @@ const Header = ({ className, ...rest }) => {
 };
 
 Header.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Header;

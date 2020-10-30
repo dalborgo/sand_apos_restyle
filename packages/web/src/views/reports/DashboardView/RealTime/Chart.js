@@ -6,8 +6,8 @@ import { makeStyles, useTheme } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   root: {
-    position: 'relative'
-  }
+    position: 'relative',
+  },
 }));
 
 const Chart = ({
@@ -27,10 +27,10 @@ const Chart = ({
         barThickness: 12,
         maxBarThickness: 10,
         barPercentage: 0.9,
-        categoryPercentage: 1
-      }
+        categoryPercentage: 1,
+      },
     ],
-    labels
+    labels,
   };
 
   const options = {
@@ -39,10 +39,10 @@ const Chart = ({
     animation: false,
     cornerRadius: 20,
     legend: {
-      display: false
+      display: false,
     },
     layout: {
-      padding: 0
+      padding: 0,
     },
     scales: {
       xAxes: [
@@ -50,26 +50,26 @@ const Chart = ({
           stacked: false,
           gridLines: {
             display: false,
-            drawBorder: false
+            drawBorder: false,
           },
           ticks: {
-            display: false
-          }
-        }
+            display: false,
+          },
+        },
       ],
       yAxes: [
         {
           stacked: true,
           gridLines: {
             display: false,
-            drawBorder: false
+            drawBorder: false,
           },
           ticks: {
             beginAtZero: true,
-            display: false
-          }
-        }
-      ]
+            display: false,
+          },
+        },
+      ],
     },
     tooltips: {
       enabled: true,
@@ -91,9 +91,9 @@ const Chart = ({
           const label = `Views: ${tooltipItem.yLabel}`;
 
           return label;
-        }
-      }
-    }
+        },
+      },
+    },
   };
 
   return (
@@ -112,7 +112,7 @@ const Chart = ({
 Chart.propTypes = {
   className: PropTypes.string,
   data: PropTypes.array.isRequired,
-  labels: PropTypes.array.isRequired
+  labels: PropTypes.array.isRequired,
 };
 
 export default Chart;

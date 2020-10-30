@@ -1,5 +1,5 @@
 import React, {
-  useState
+  useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -8,13 +8,13 @@ import {
   Box,
   Button,
   TextField,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { useDispatch } from 'src/store';
 import { createCard } from 'src/slices/kanban';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const CardAdd = ({
@@ -48,12 +48,12 @@ const CardAdd = ({
       setExpanded(false);
       setName('');
       enqueueSnackbar('Card created', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -63,53 +63,55 @@ const CardAdd = ({
       className={clsx(classes.root, className)}
       {...rest}
     >
-      {isExpanded ? (
-        <>
-          <TextField
-            fullWidth
-            label="Card Title"
-            name="cardName"
-            onChange={handleChange}
-            value={name}
-            variant="outlined"
-          />
-          <Box
-            mt={2}
-            display="flex"
-            justifyContent="space-between"
-          >
-            <Button
-              onClick={handleAddCancel}
-              variant="text"
+      {
+        isExpanded ? (
+          <>
+            <TextField
+              fullWidth
+              label="Card Title"
+              name="cardName"
+              onChange={handleChange}
+              value={name}
+              variant="outlined"
+            />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              mt={2}
             >
+              <Button
+                onClick={handleAddCancel}
+                variant="text"
+              >
               Cancel
-            </Button>
-            <Button
-              onClick={handleAddConfirm}
-              variant="contained"
-              color="secondary"
-            >
+              </Button>
+              <Button
+                color="secondary"
+                onClick={handleAddConfirm}
+                variant="contained"
+              >
               Add
+              </Button>
+            </Box>
+          </>
+        ) : (
+          <Box
+            display="flex"
+            justifyContent="center"
+          >
+            <Button onClick={handleAddInit}>
+            Add another card
             </Button>
           </Box>
-        </>
-      ) : (
-        <Box
-          display="flex"
-          justifyContent="center"
-        >
-          <Button onClick={handleAddInit}>
-            Add another card
-          </Button>
-        </Box>
-      )}
+        )
+      }
     </div>
   );
 };
 
 CardAdd.propTypes = {
   className: PropTypes.string,
-  listId: PropTypes.string.isRequired
+  listId: PropTypes.string.isRequired,
 };
 
 export default CardAdd;

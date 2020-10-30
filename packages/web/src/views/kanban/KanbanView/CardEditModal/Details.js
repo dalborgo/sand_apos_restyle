@@ -7,13 +7,13 @@ import {
   Box,
   TextField,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import { useDispatch } from 'src/store';
 import { updateCard } from 'src/slices/kanban';
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Details = ({
@@ -30,12 +30,12 @@ const Details = ({
     try {
       await dispatch(updateCard(card.id, update));
       enqueueSnackbar('Card updated', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   }, 1000);
@@ -47,29 +47,29 @@ const Details = ({
     >
       <Box mt={3}>
         <TextField
-          variant="outlined"
-          fullWidth
           defaultValue={card.name}
-          onChange={(event) => handleUpdate({ name: event.target.value })}
+          fullWidth
           label="Card Title"
+          onChange={(event) => handleUpdate({ name: event.target.value })}
+          variant="outlined"
         />
       </Box>
       <Box mt={3}>
         <Typography
-          variant="h4"
           color="textPrimary"
+          variant="h4"
         >
           Description
         </Typography>
         <Box mt={2}>
           <TextField
-            multiline
-            rows={6}
+            defaultValue={card.description}
             fullWidth
-            variant="outlined"
+            multiline
             onChange={(event) => handleUpdate({ description: event.target.value })}
             placeholder="Leave a message"
-            defaultValue={card.description}
+            rows={6}
+            variant="outlined"
           />
         </Box>
       </Box>
@@ -80,7 +80,7 @@ const Details = ({
 Details.propTypes = {
   card: PropTypes.object.isRequired,
   className: PropTypes.string,
-  list: PropTypes.object.isRequired
+  list: PropTypes.object.isRequired,
 };
 
 export default Details;

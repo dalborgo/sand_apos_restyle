@@ -20,14 +20,14 @@ import {
   Typography,
   colors,
   makeStyles,
-  withStyles
+  withStyles,
 } from '@material-ui/core';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import {
   User as UserIcon,
   Star as StarIcon,
   Briefcase as BriefcaseIcon,
-  File as FileIcon
+  File as FileIcon,
 } from 'react-feather';
 import Page from 'src/components/Page';
 import UserDetails from './UserDetails';
@@ -37,16 +37,16 @@ import ProjectDescription from './ProjectDescription';
 const steps = [
   {
     label: 'User Details',
-    icon: UserIcon
+    icon: UserIcon,
   },
   {
     label: 'Project Details',
-    icon: BriefcaseIcon
+    icon: BriefcaseIcon,
   },
   {
     label: 'Project Description',
-    icon: FileIcon
-  }
+    icon: FileIcon,
+  },
 ];
 
 const CustomStepConnector = withStyles((theme) => ({
@@ -55,8 +55,8 @@ const CustomStepConnector = withStyles((theme) => ({
     padding: 0,
   },
   line: {
-    borderColor: theme.palette.divider
-  }
+    borderColor: theme.palette.divider,
+  },
 }))(StepConnector);
 
 const useCustomStepIconStyles = makeStyles((theme) => ({
@@ -64,12 +64,12 @@ const useCustomStepIconStyles = makeStyles((theme) => ({
   active: {
     backgroundColor: theme.palette.secondary.main,
     boxShadow: theme.shadows[10],
-    color: theme.palette.secondary.contrastText
+    color: theme.palette.secondary.contrastText,
   },
   completed: {
     backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText
-  }
+    color: theme.palette.secondary.contrastText,
+  },
 }));
 
 const CustomStepIcon = ({ active, completed, icon }) => {
@@ -79,10 +79,12 @@ const CustomStepIcon = ({ active, completed, icon }) => {
 
   return (
     <Avatar
-      className={clsx(classes.root, {
-        [classes.active]: active,
-        [classes.completed]: completed
-      })}
+      className={
+        clsx(classes.root, {
+          [classes.active]: active,
+          [classes.completed]: completed,
+        })
+      }
     >
       <Icon size="20" />
     </Avatar>
@@ -92,7 +94,7 @@ const CustomStepIcon = ({ active, completed, icon }) => {
 CustomStepIcon.propTypes = {
   active: PropTypes.bool,
   completed: PropTypes.bool,
-  icon: PropTypes.number.isRequired
+  icon: PropTypes.number.isRequired,
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -100,14 +102,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
+    paddingBottom: theme.spacing(3),
   },
   avatar: {
-    backgroundColor: colors.red[600]
+    backgroundColor: colors.red[600],
   },
   stepper: {
-    backgroundColor: 'transparent'
-  }
+    backgroundColor: 'transparent',
+  },
 }));
 
 const ProjectCreateView  = () => {
@@ -135,131 +137,141 @@ const ProjectCreateView  = () => {
       <Container maxWidth="lg">
         <Box mb={3}>
           <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
             aria-label="breadcrumb"
+            separator={<NavigateNextIcon fontSize="small" />}
           >
             <Link
-              variant="body1"
               color="inherit"
-              to="/app"
               component={RouterLink}
+              to="/app"
+              variant="body1"
             >
               Dashboard
             </Link>
             <Typography
-              variant="body1"
               color="textPrimary"
+              variant="body1"
             >
               Projects
             </Typography>
           </Breadcrumbs>
           <Typography
-            variant="h3"
             color="textPrimary"
+            variant="h3"
           >
             Create Wizard &amp; Process
           </Typography>
         </Box>
-        {!completed ? (
-          <Paper>
-            <Grid container>
-              <Grid
-                item
-                xs={12}
-                md={3}
-              >
-                <Stepper
-                  activeStep={activeStep}
-                  className={classes.stepper}
-                  connector={<CustomStepConnector />}
-                  orientation="vertical"
+        {
+          !completed ? (
+            <Paper>
+              <Grid container>
+                <Grid
+                  item
+                  md={3}
+                  xs={12}
                 >
-                  {steps.map((step) => (
-                    <Step key={step.label}>
-                      <StepLabel StepIconComponent={CustomStepIcon}>
-                        {step.label}
-                      </StepLabel>
-                    </Step>
-                  ))}
-                </Stepper>
+                  <Stepper
+                    activeStep={activeStep}
+                    className={classes.stepper}
+                    connector={<CustomStepConnector />}
+                    orientation="vertical"
+                  >
+                    {
+                      steps.map((step) => (
+                        <Step key={step.label}>
+                          <StepLabel StepIconComponent={CustomStepIcon}>
+                            {step.label}
+                          </StepLabel>
+                        </Step>
+                      ))
+                    }
+                  </Stepper>
+                </Grid>
+                <Grid
+                  item
+                  md={9}
+                  xs={12}
+                >
+                  <Box p={3}>
+                    {
+                      activeStep === 0 && (
+                        <UserDetails onNext={handleNext} />
+                      )
+                    }
+                    {
+                      activeStep === 1 && (
+                        <ProjectDetails
+                          onBack={handleBack}
+                          onNext={handleNext}
+                        />
+                      )
+                    }
+                    {
+                      activeStep === 2 && (
+                        <ProjectDescription
+                          onBack={handleBack}
+                          onComplete={handleComplete}
+                        />
+                      )
+                    }
+                  </Box>
+                </Grid>
               </Grid>
-              <Grid
-                item
-                xs={12}
-                md={9}
-              >
-                <Box p={3}>
-                  {activeStep === 0 && (
-                    <UserDetails onNext={handleNext} />
-                  )}
-                  {activeStep === 1 && (
-                    <ProjectDetails
-                      onBack={handleBack}
-                      onNext={handleNext}
-                    />
-                  )}
-                  {activeStep === 2 && (
-                    <ProjectDescription
-                      onBack={handleBack}
-                      onComplete={handleComplete}
-                    />
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </Paper>
-        ) : (
-          <Card>
-            <CardContent>
-              <Box
-                maxWidth={450}
-                mx="auto"
-              >
+            </Paper>
+          ) : (
+            <Card>
+              <CardContent>
                 <Box
-                  display="flex"
-                  justifyContent="center"
+                  maxWidth={450}
+                  mx="auto"
                 >
-                  <Avatar className={classes.avatar}>
-                    <StarIcon />
-                  </Avatar>
-                </Box>
-                <Box mt={2}>
-                  <Typography
-                    variant="h3"
-                    color="textPrimary"
-                    align="center"
+                  <Box
+                    display="flex"
+                    justifyContent="center"
                   >
+                    <Avatar className={classes.avatar}>
+                      <StarIcon />
+                    </Avatar>
+                  </Box>
+                  <Box mt={2}>
+                    <Typography
+                      align="center"
+                      color="textPrimary"
+                      variant="h3"
+                    >
                     You are all done!
-                  </Typography>
-                </Box>
-                <Box mt={2}>
-                  <Typography
-                    variant="subtitle1"
-                    color="textSecondary"
-                    align="center"
-                  >
+                    </Typography>
+                  </Box>
+                  <Box mt={2}>
+                    <Typography
+                      align="center"
+                      color="textSecondary"
+                      variant="subtitle1"
+                    >
                     Donec ut augue sed nisi ullamcorper posuere sit amet eu mauris.
                     Ut eget mauris scelerisque.
-                  </Typography>
-                </Box>
-                <Box
-                  mt={2}
-                  display="flex"
-                  justifyContent="center"
-                >
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    component={RouterLink}
-                    to="/app/projects/1"
+                    </Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    mt={2}
                   >
+                    <Button
+                      color="secondary"
+                      component={RouterLink}
+                      to="/app/projects/1"
+                      variant="contained"
+                    >
                     View your project
-                  </Button>
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        )}
+              </CardContent>
+            </Card>
+          )
+        }
       </Container>
     </Page>
   );

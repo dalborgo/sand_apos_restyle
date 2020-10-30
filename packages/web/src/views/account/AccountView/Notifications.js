@@ -12,12 +12,12 @@ import {
   FormControlLabel,
   Grid,
   makeStyles,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import wait from 'src/utils/wait'
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const Notifications = ({ className, ...rest }) => {
@@ -50,16 +50,16 @@ const Notifications = ({ className, ...rest }) => {
               xs={12}
             >
               <Typography
+                color="textPrimary"
                 gutterBottom
                 variant="h6"
-                color="textPrimary"
               >
                 System
               </Typography>
               <Typography
+                color="textSecondary"
                 gutterBottom
                 variant="body2"
-                color="textSecondary"
               >
                 You will recieve emails in your business email address
               </Typography>
@@ -90,19 +90,21 @@ const Notifications = ({ className, ...rest }) => {
                   control={(
                     <Checkbox defaultChecked />
                   )}
-                  label={(
-                    <>
-                      <Typography
-                        variant="body1"
-                        color="textPrimary"
-                      >
+                  label={
+                    (
+                      <>
+                        <Typography
+                          color="textPrimary"
+                          variant="body1"
+                        >
                         Phone calls
-                      </Typography>
-                      <Typography variant="caption">
+                        </Typography>
+                        <Typography variant="caption">
                         Short voice phone updating you
-                      </Typography>
-                    </>
-                  )}
+                        </Typography>
+                      </>
+                    )
+                  }
                 />
               </div>
             </Grid>
@@ -113,16 +115,16 @@ const Notifications = ({ className, ...rest }) => {
               xs={12}
             >
               <Typography
+                color="textPrimary"
                 gutterBottom
                 variant="h6"
-                color="textPrimary"
               >
                 Chat App
               </Typography>
               <Typography
+                color="textSecondary"
                 gutterBottom
                 variant="body2"
-                color="textSecondary"
               >
                 You will recieve emails in your business email address
               </Typography>
@@ -147,9 +149,9 @@ const Notifications = ({ className, ...rest }) => {
         </CardContent>
         <Divider />
         <Box
-          p={2}
           display="flex"
           justifyContent="flex-end"
+          p={2}
         >
           <Button
             color="secondary"
@@ -165,7 +167,7 @@ const Notifications = ({ className, ...rest }) => {
 };
 
 Notifications.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Notifications;

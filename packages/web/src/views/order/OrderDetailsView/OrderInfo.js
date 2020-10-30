@@ -16,14 +16,14 @@ import {
   TableCell,
   TableRow,
   TextField,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import ReceiptIcon from '@material-ui/icons/ReceiptOutlined';
 
 const statusOptions = ['Canceled', 'Completed', 'Rejected'];
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {},
 }));
 
 const OrderInfo = ({ className, order, ...rest }) => {
@@ -115,14 +115,16 @@ const OrderInfo = ({ className, order, ...rest }) => {
                 value={status}
                 variant="outlined"
               >
-                {statusOptions.map((option) => (
-                  <option
-                    key={option}
-                    value={option}
-                  >
-                    {option}
-                  </option>
-                ))}
+                {
+                  statusOptions.map((option) => (
+                    <option
+                      key={option}
+                      value={option}
+                    >
+                      {option}
+                    </option>
+                  ))
+                }
               </TextField>
             </TableCell>
           </TableRow>
@@ -139,7 +141,7 @@ const OrderInfo = ({ className, order, ...rest }) => {
 
 OrderInfo.propTypes = {
   className: PropTypes.string,
-  order: PropTypes.object.isRequired
+  order: PropTypes.object.isRequired,
 };
 
 export default OrderInfo;

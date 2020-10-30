@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import {
   Button,
   SvgIcon,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     justifyContent: 'flex-start',
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1)
-  }
+    marginBottom: theme.spacing(1),
+  },
 }));
 
 const ActionButton = ({
@@ -31,9 +31,9 @@ const ActionButton = ({
     <Button
       className={classes.root}
       fullWidth
-      variant="contained"
       size="small"
       startIcon={Icon}
+      variant="contained"
       {...rest}
     >
       {children}
@@ -43,7 +43,7 @@ const ActionButton = ({
 
 ActionButton.propTypes = {
   icon: PropTypes.element,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default ActionButton;

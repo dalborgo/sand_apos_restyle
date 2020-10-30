@@ -1,26 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {
-  Avatar,
-  Button,
-  Box,
-  Container,
-  Grid,
-  Typography,
-  makeStyles
-} from '@material-ui/core';
+import React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { Avatar, Box, Button, Container, Grid, makeStyles, Typography, } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.default,
     paddingTop: 128,
-    paddingBottom: 128
+    paddingBottom: 128,
   },
   avatar: {
     backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText
-  }
+    color: theme.palette.secondary.contrastText,
+  },
 }));
 
 const Features = ({ className, ...rest }) => {
@@ -33,17 +25,17 @@ const Features = ({ className, ...rest }) => {
     >
       <Container maxWidth="lg">
         <Typography
+          align="center"
+          color="secondary"
           component="p"
           variant="overline"
-          color="secondary"
-          align="center"
         >
           Explore Devias Kit Pro
         </Typography>
         <Typography
-          variant="h1"
           align="center"
           color="textPrimary"
+          variant="h1"
         >
           Not just a pretty face
         </Typography>
@@ -54,8 +46,8 @@ const Features = ({ className, ...rest }) => {
           >
             <Grid
               item
-              xs={12}
               md={4}
+              xs={12}
             >
               <Box display="flex">
                 <Avatar className={classes.avatar}>
@@ -63,15 +55,15 @@ const Features = ({ className, ...rest }) => {
                 </Avatar>
                 <Box ml={2}>
                   <Typography
-                    variant="h4"
-                    gutterBottom
                     color="textPrimary"
+                    gutterBottom
+                    variant="h4"
                   >
                     Complete User Flows
                   </Typography>
                   <Typography
-                    variant="body1"
                     color="textPrimary"
+                    variant="body1"
                   >
                     Not just a set of tools, the package includes the most common use cases of
                     user flows like User Management, Second Level Layout.
@@ -81,8 +73,8 @@ const Features = ({ className, ...rest }) => {
             </Grid>
             <Grid
               item
-              xs={12}
               md={4}
+              xs={12}
             >
               <Box display="flex">
                 <Avatar className={classes.avatar}>
@@ -90,15 +82,15 @@ const Features = ({ className, ...rest }) => {
                 </Avatar>
                 <Box ml={2}>
                   <Typography
-                    variant="h4"
-                    gutterBottom
                     color="textPrimary"
+                    gutterBottom
+                    variant="h4"
                   >
                     Support for Plugins
                   </Typography>
                   <Typography
-                    variant="body1"
                     color="textPrimary"
+                    variant="body1"
                   >
                     The kit provides support for multiple third-party plugins right out of the box
                     like Chart.js, Dropzone.js, Kanban Plugin and many more.
@@ -108,8 +100,8 @@ const Features = ({ className, ...rest }) => {
             </Grid>
             <Grid
               item
-              xs={12}
               md={4}
+              xs={12}
             >
               <Box display="flex">
                 <Avatar className={classes.avatar}>
@@ -117,25 +109,25 @@ const Features = ({ className, ...rest }) => {
                 </Avatar>
                 <Box ml={2}>
                   <Typography
-                    variant="h4"
-                    gutterBottom
                     color="textPrimary"
+                    gutterBottom
+                    variant="h4"
                   >
                     Designers, we got you
                   </Typography>
                   <Typography
-                    variant="body1"
                     color="textPrimary"
                     gutterBottom
+                    variant="body1"
                   >
                     We&apos;ve included the source Sketch &amp; Figma files to Plus &amp;
                     Extended licenses so you can get creative! Build layouts with confidence.
                   </Typography>
                   <Button
-                    variant="outlined"
                     component="a"
                     href="https://sketch.cloud/s/q4a8e"
                     target="_blank"
+                    variant="outlined"
                   >
                     Preview Design
                   </Button>
@@ -150,7 +142,7 @@ const Features = ({ className, ...rest }) => {
 };
 
 Features.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Features;

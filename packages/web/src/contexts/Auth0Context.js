@@ -8,7 +8,7 @@ let auth0Client = null;
 const initialAuthState = {
   isAuthenticated: false,
   isInitialised: false,
-  user: null
+  user: null,
 };
 
 const reducer = (state, action) => {
@@ -20,7 +20,7 @@ const reducer = (state, action) => {
         ...state,
         isAuthenticated,
         isInitialised: true,
-        user
+        user,
       };
     }
     case 'LOGIN': {
@@ -29,14 +29,14 @@ const reducer = (state, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        user
+        user,
       };
     }
     case 'LOGOUT': {
       return {
         ...state,
         isAuthenticated: false,
-        user: null
+        user: null,
       };
     }
     default: {
@@ -49,7 +49,7 @@ const AuthContext = createContext({
   ...initialAuthState,
   method: 'Auth0',
   loginWithPopup: () => Promise.resolve(),
-  logout: () => { }
+  logout: () => { },
 });
 
 export const AuthProvider = ({ children }) => {
@@ -74,9 +74,9 @@ export const AuthProvider = ({ children }) => {
             avatar: user.picture,
             email: user.email,
             name: user.name,
-            tier: 'Premium'
-          }
-        }
+            tier: 'Premium',
+          },
+        },
       });
     }
   };
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
     auth0Client.logout();
 
     dispatch({
-      type: 'LOGOUT'
+      type: 'LOGOUT',
     });
   };
 
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
       try {
         auth0Client = new Auth0Client({
           redirect_uri: window.location.origin,
-          ...auth0Config
+          ...auth0Config,
         });
 
         await auth0Client.checkSession();
@@ -116,27 +116,27 @@ export const AuthProvider = ({ children }) => {
                 avatar: user.picture,
                 email: user.email,
                 name: user.name,
-                tier: 'Premium'
-              }
-            }
+                tier: 'Premium',
+              },
+            },
           });
         } else {
           dispatch({
             type: 'INITIALISE',
             payload: {
               isAuthenticated,
-              user: null
-            }
+              user: null,
+            },
           });
         }
       } catch (err) {
-        console.error(err);
+        
         dispatch({
           type: 'INITIALISE',
           payload: {
             isAuthenticated: false,
-            user: null
-          }
+            user: null,
+          },
         });
       }
     };
@@ -150,12 +150,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{
-        ...state,
-        method: 'Auth0',
-        loginWithPopup,
-        logout
-      }}
+      value={
+        {
+          ...state,
+          method: 'Auth0',
+          loginWithPopup,
+          logout,
+        }
+      }
     >
       {children}
     </AuthContext.Provider>

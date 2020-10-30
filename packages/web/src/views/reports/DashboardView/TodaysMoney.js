@@ -6,7 +6,7 @@ import {
   Box,
   Card,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 import Label from 'src/components/Label';
@@ -16,17 +16,17 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   label: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   avatar: {
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
     height: 48,
-    width: 48
-  }
+    width: 48,
+  },
 }));
 
 const TodaysMoney = ({ className, ...rest }) => {
@@ -34,7 +34,7 @@ const TodaysMoney = ({ className, ...rest }) => {
   const data = {
     value: '24,000',
     currency: '$',
-    difference: 4
+    difference: 4,
   };
 
   return (
@@ -44,21 +44,21 @@ const TodaysMoney = ({ className, ...rest }) => {
     >
       <Box flexGrow={1}>
         <Typography
+          color="textSecondary"
           component="h3"
           gutterBottom
           variant="overline"
-          color="textSecondary"
         >
           Todays money
         </Typography>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
           flexWrap="wrap"
         >
           <Typography
-            variant="h3"
             color="textPrimary"
+            variant="h3"
           >
             {data.currency}
             {data.value}
@@ -81,7 +81,7 @@ const TodaysMoney = ({ className, ...rest }) => {
 };
 
 TodaysMoney.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default TodaysMoney;

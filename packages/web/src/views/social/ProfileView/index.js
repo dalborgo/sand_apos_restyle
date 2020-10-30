@@ -1,7 +1,7 @@
 import React, {
   useCallback,
   useState,
-  useEffect
+  useEffect,
 } from 'react';
 import {
   Box,
@@ -9,7 +9,7 @@ import {
   Divider,
   Tab,
   Tabs,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import axios from 'src/utils/axios';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -21,8 +21,8 @@ import Connections from './Connections';
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
-    minHeight: '100%'
-  }
+    minHeight: '100%',
+  },
 }));
 
 const ProfileView = () => {
@@ -48,7 +48,7 @@ const ProfileView = () => {
         setProfile(response.data.profile);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -71,23 +71,25 @@ const ProfileView = () => {
           <Tabs
             onChange={handleTabsChange}
             scrollButtons="auto"
-            value={currentTab}
             textColor="secondary"
+            value={currentTab}
             variant="scrollable"
           >
-            {tabs.map((tab) => (
-              <Tab
-                key={tab.value}
-                label={tab.label}
-                value={tab.value}
-              />
-            ))}
+            {
+              tabs.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  label={tab.label}
+                  value={tab.value}
+                />
+              ))
+            }
           </Tabs>
         </Box>
         <Divider />
         <Box
-          py={3}
           pb={6}
+          py={3}
         >
           {currentTab === 'timeline' && <Timeline profile={profile} />}
           {currentTab === 'connections' && <Connections />}

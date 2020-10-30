@@ -22,7 +22,7 @@ let products = [
       .subtract(6, 'hours')
       .toDate()
       .getTime(),
-    variants: 2
+    variants: 2,
   },
   {
     id: '5ece2c0d16f70bff2cf86cd8',
@@ -45,7 +45,7 @@ let products = [
       .subtract(8, 'hours')
       .toDate()
       .getTime(),
-    variants: 1
+    variants: 1,
   },
   {
     id: '5ece2c123fad30cbbff8d060',
@@ -68,7 +68,7 @@ let products = [
       .subtract(2, 'hours')
       .toDate()
       .getTime(),
-    variants: 5
+    variants: 5,
   },
   {
     id: '5ece2c1be7996d1549d94e34',
@@ -91,8 +91,8 @@ let products = [
       .subtract(7, 'hours')
       .toDate()
       .getTime(),
-    variants: 1
-  }
+    variants: 1,
+  },
 ];
 
 mock.onGet('/api/products').reply(200, { products });

@@ -9,7 +9,7 @@ import {
   Typography,
   makeStyles,
   IconButton,
-  SvgIcon
+  SvgIcon,
 } from '@material-ui/core';
 import {
   XCircle as CloseIcon,
@@ -21,13 +21,13 @@ import {
   Copy as CopyIcon,
   Users as UsersIcon,
   File as FileIcon,
-  Layout as LayoutIcon
+  Layout as LayoutIcon,
 } from 'react-feather';
 import { useDispatch } from 'src/store';
 import {
   deleteCard,
   updateCard,
-  addChecklist
+  addChecklist,
 } from 'src/slices/kanban';
 import Details from './Details';
 import Checklist from './Checklist';
@@ -37,16 +37,16 @@ import ActionButton from './ActionButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
   },
   listName: {
-    fontWeight: theme.typography.fontWeightMedium
+    fontWeight: theme.typography.fontWeightMedium,
   },
   checklist: {
     '& + &': {
-      marginTop: theme.spacing(3)
-    }
-  }
+      marginTop: theme.spacing(3),
+    },
+  },
 }));
 
 const CardEditModal = ({
@@ -65,12 +65,12 @@ const CardEditModal = ({
     try {
       await dispatch(updateCard(card.id, { isSubscribed: true }));
       enqueueSnackbar('Unsubscribed', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -79,12 +79,12 @@ const CardEditModal = ({
     try {
       await dispatch(updateCard(card.id, { isSubscribed: false }));
       enqueueSnackbar('Subscribed', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -93,12 +93,12 @@ const CardEditModal = ({
     try {
       await dispatch(deleteCard(card.id));
       enqueueSnackbar('Card archived', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
@@ -107,22 +107,22 @@ const CardEditModal = ({
     try {
       await dispatch(addChecklist(card.id, 'Untitled Checklist'));
       enqueueSnackbar('Checklist added', {
-        variant: 'success'
+        variant: 'success',
       });
     } catch (err) {
-      console.error(err);
+      
       enqueueSnackbar('Something went wrong', {
-        variant: 'error'
+        variant: 'error',
       });
     }
   };
 
   return (
     <Dialog
+      fullWidth
+      maxWidth="md"
       onClose={onClose}
       open={open}
-      maxWidth="md"
-      fullWidth
       {...rest}
     >
       <div className={classes.root}>
@@ -131,8 +131,8 @@ const CardEditModal = ({
           justifyContent="space-between"
         >
           <Typography
-            variant="body2"
             color="textSecondary"
+            variant="body2"
           >
             in list
             {' '}
@@ -152,55 +152,63 @@ const CardEditModal = ({
         >
           <Grid
             item
-            xs={12}
             sm={8}
+            xs={12}
           >
             <Details
               card={card}
               list={list}
             />
-            {card.checklists.length > 0 && (
-              <Box mt={5}>
-                {card.checklists.map((checklist) => (
-                  <Checklist
-                    key={checklist.id}
-                    card={card}
-                    checklist={checklist}
-                    className={classes.checklist}
-                  />
-                ))}
-              </Box>
-            )}
+            {
+              card.checklists.length > 0 && (
+                <Box mt={5}>
+                  {
+                    card.checklists.map((checklist) => (
+                      <Checklist
+                        card={card}
+                        checklist={checklist}
+                        className={classes.checklist}
+                        key={checklist.id}
+                      />
+                    ))
+                  }
+                </Box>
+              )
+            }
             <Box mt={3}>
               <Typography
-                variant="h4"
                 color="textPrimary"
+                variant="h4"
               >
                 Activity
               </Typography>
               <Box mt={2}>
                 <CommentAdd cardId={card.id} />
-                {card.comments.length > 0 && (
-                  <Box mt={3}>
-                    {card.comments.map((comment) => (
-                      <Comment
-                        key={comment.id}
-                        comment={comment}
-                      />
-                    ))}
-                  </Box>
-                )}
+                {
+                  card.comments.length > 0 && (
+                    <Box mt={3}>
+                      {
+                        card.comments.map((comment) => (
+                          <Comment
+                            comment={comment}
+                            key={comment.id}
+                          />
+                        ))
+                      }
+                    </Box>
+                  )
+                }
               </Box>
             </Box>
           </Grid>
           <Grid
             item
-            xs={12}
             sm={4}
+            xs={12}
           >
             <Typography
-              variant="overline"
               color="textSecondary"
+              variant="overline"
             >
               Add to card
             </Typography>
@@ -211,63 +219,65 @@ const CardEditModal = ({
               Checklist
             </ActionButton>
             <ActionButton
-              icon={<UsersIcon />}
               disabled
+              icon={<UsersIcon />}
             >
               Members
             </ActionButton>
             <ActionButton
-              icon={<UsersIcon />}
               disabled
+              icon={<UsersIcon />}
             >
               Labels
             </ActionButton>
             <ActionButton
-              icon={<FileIcon />}
               disabled
+              icon={<FileIcon />}
             >
               Attachments
             </ActionButton>
             <Box mt={3}>
               <Typography
-                variant="overline"
                 color="textSecondary"
+                variant="overline"
               >
                 Actions
               </Typography>
               <ActionButton
-                icon={<ArrowRightIcon />}
                 disabled
+                icon={<ArrowRightIcon />}
               >
                 Move
               </ActionButton>
               <ActionButton
-                icon={<CopyIcon />}
                 disabled
+                icon={<CopyIcon />}
               >
                 Copy
               </ActionButton>
               <ActionButton
-                icon={<LayoutIcon />}
                 disabled
+                icon={<LayoutIcon />}
               >
                 Make Template
               </ActionButton>
-              {card.isSubscribed ? (
-                <ActionButton
-                  icon={<EyeOffIcon />}
-                  onClick={handleUnsubscribe}
-                >
+              {
+                card.isSubscribed ? (
+                  <ActionButton
+                    icon={<EyeOffIcon />}
+                    onClick={handleUnsubscribe}
+                  >
                   Unwatch
-                </ActionButton>
-              ) : (
-                <ActionButton
-                  icon={<EyeIcon />}
-                  onClick={handleSubscribe}
-                >
+                  </ActionButton>
+                ) : (
+                  <ActionButton
+                    icon={<EyeIcon />}
+                    onClick={handleSubscribe}
+                  >
                   Watch
-                </ActionButton>
-              )}
+                  </ActionButton>
+                )
+              }
               <Divider />
               <ActionButton
                 icon={<ArchiveIcon />}
@@ -288,12 +298,12 @@ CardEditModal.propTypes = {
   className: PropTypes.string,
   list: PropTypes.object.isRequired,
   onClose: PropTypes.func,
-  open: PropTypes.bool.isRequired
+  open: PropTypes.bool.isRequired,
 };
 
 CardEditModal.defaultProps = {
   open: false,
-  onClose: () => {}
+  onClose: () => {},
 };
 
 export default CardEditModal;

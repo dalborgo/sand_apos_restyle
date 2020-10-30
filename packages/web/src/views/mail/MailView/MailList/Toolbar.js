@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
   makeStyles,
-  SvgIcon
+  SvgIcon,
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -19,7 +19,7 @@ import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import {
   Search as SearchIcon,
-  Menu as MenuIcon
+  Menu as MenuIcon,
 } from 'react-feather';
 import { useDispatch } from 'src/store';
 import { openSidebar } from 'src/slices/mail';
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     height: 68,
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   searchContainer: {
     alignItems: 'center',
@@ -39,12 +39,12 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(0.5),
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
-    paddingTop: theme.spacing(0.5)
+    paddingTop: theme.spacing(0.5),
   },
   searchInput: {
     marginLeft: theme.spacing(2),
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 
 const Toolbar = ({
@@ -81,8 +81,8 @@ const Toolbar = ({
       </Hidden>
       <Hidden smDown>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
         >
           <Checkbox
             checked={selectedAllMails}
@@ -90,8 +90,8 @@ const Toolbar = ({
             onChange={handleCheckboxChange}
           />
           <Typography
-            variant="h6"
             color="textPrimary"
+            variant="h6"
           >
             Select all
           </Typography>
@@ -124,36 +124,38 @@ const Toolbar = ({
           </IconButton>
         </Tooltip>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
         >
           <Tooltip title="Next page">
             <IconButton>
               <KeyboardArrowLeftIcon fontSize="small" />
             </IconButton>
           </Tooltip>
-          {mails > 0 && (
-            <>
-              <Typography
-                noWrap
-                variant="body2"
-                color="textSecondary"
-              >
+          {
+            mails > 0 && (
+              <>
+                <Typography
+                  color="textSecondary"
+                  noWrap
+                  variant="body2"
+                >
                 1 -
-                {' '}
-                {mails}
-                {' '}
+                  {' '}
+                  {mails}
+                  {' '}
                 of
-                {' '}
-                {mails}
-              </Typography>
-              <Tooltip title="Previous page">
-                <IconButton>
-                  <KeyboardArrowRightIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </>
-          )}
+                  {' '}
+                  {mails}
+                </Typography>
+                <Tooltip title="Previous page">
+                  <IconButton>
+                    <KeyboardArrowRightIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </>
+            )
+          }
         </Box>
       </Hidden>
     </div>
@@ -165,12 +167,12 @@ Toolbar.propTypes = {
   mails: PropTypes.number.isRequired,
   onDeselectAll: PropTypes.func,
   onSelectAll: PropTypes.func,
-  selectedMails: PropTypes.number.isRequired
+  selectedMails: PropTypes.number.isRequired,
 };
 
 Toolbar.defaultProps = {
   onDeselectAll: () => {},
-  onSelectAll: () => {}
+  onSelectAll: () => {},
 };
 
 export default Toolbar;

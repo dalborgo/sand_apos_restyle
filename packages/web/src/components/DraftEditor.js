@@ -14,12 +14,12 @@ const useStyles = makeStyles((theme) => ({
       padding: 6,
       '&:hover': {
         boxShadow: 'none',
-        backgroundColor: theme.palette.action.hover
-      }
+        backgroundColor: theme.palette.action.hover,
+      },
     },
     '& .rdw-option-active': {
       boxShadow: 'none',
-      backgroundColor: theme.palette.action.selected
+      backgroundColor: theme.palette.action.selected,
     },
     '& .rdw-dropdown-wrapper': {
       boxShadow: 'none',
@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
     '& .rdw-dropdown-optionwrapper': {
       overflowY: 'auto',
       boxShadow: theme.shadows[10],
-      padding: theme.spacing(1)
-    }
+      padding: theme.spacing(1),
+    },
   },
   toolbar: {
     marginBottom: 0,
@@ -37,12 +37,12 @@ const useStyles = makeStyles((theme) => ({
     borderTop: 'none',
     borderRight: 'none',
     borderBottom: `1px solid ${theme.palette.divider}`,
-    background: 'transparent'
+    background: 'transparent',
   },
   editor: {
     padding: theme.spacing(2),
-    color: theme.palette.text.primary
-  }
+    color: theme.palette.text.primary,
+  },
 }));
 
 const DraftEditor = ({ className, ...rest }) => {
@@ -50,16 +50,16 @@ const DraftEditor = ({ className, ...rest }) => {
 
   return (
     <Editor
-      wrapperClassName={clsx(classes.root, className)}
-      toolbarClassName={classes.toolbar}
       editorClassName={classes.editor}
+      toolbarClassName={classes.toolbar}
+      wrapperClassName={clsx(classes.root, className)}
       {...rest}
     />
   );
 };
 
 DraftEditor.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default DraftEditor;

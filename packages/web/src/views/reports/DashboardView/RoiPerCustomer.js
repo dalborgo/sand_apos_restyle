@@ -6,7 +6,7 @@ import {
   Box,
   Card,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
 
@@ -17,21 +17,21 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   avatar: {
     backgroundColor: theme.palette.secondary.contrastText,
     color: theme.palette.secondary.main,
     height: 48,
-    width: 48
-  }
+    width: 48,
+  },
 }));
 
 const RoiPerCustomer = ({ className, ...rest }) => {
   const classes = useStyles();
   const data = {
     value: '25.50',
-    currency: '$'
+    currency: '$',
   };
 
   return (
@@ -49,8 +49,8 @@ const RoiPerCustomer = ({ className, ...rest }) => {
           Roi per customer
         </Typography>
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
           flexWrap="wrap"
         >
           <Typography
@@ -73,7 +73,7 @@ const RoiPerCustomer = ({ className, ...rest }) => {
 };
 
 RoiPerCustomer.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default RoiPerCustomer;

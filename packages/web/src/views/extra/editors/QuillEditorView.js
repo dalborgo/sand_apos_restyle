@@ -1,25 +1,17 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import {
-  Box,
-  Breadcrumbs,
-  Container,
-  Link,
-  Paper,
-  Typography,
-  makeStyles
-} from '@material-ui/core';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Page from 'src/components/Page';
-import QuillEditor from 'src/components/QuillEditor';
+import React from 'react'
+import { Link as RouterLink } from 'react-router-dom'
+import { Box, Breadcrumbs, Container, Link, makeStyles, Paper, Typography, } from '@material-ui/core'
+import NavigateNextIcon from '@material-ui/icons/NavigateNext'
+import Page from 'src/components/Page'
+import QuillEditor from 'src/components/QuillEditor'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const QuillEditorView = () => {
@@ -32,35 +24,35 @@ const QuillEditorView = () => {
     >
       <Container maxWidth="lg">
         <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
+          separator={<NavigateNextIcon fontSize="small" />}
         >
           <Link
-            variant="body1"
             color="inherit"
-            to="/app"
             component={RouterLink}
+            to="/app"
+            variant="body1"
           >
             Dashboard
           </Link>
           <Link
-            variant="body1"
             color="inherit"
-            to="/app/extra"
             component={RouterLink}
+            to="/app/extra"
+            variant="body1"
           >
             Extra
           </Link>
           <Typography
-            variant="body1"
             color="textPrimary"
+            variant="body1"
           >
             Editors
           </Typography>
         </Breadcrumbs>
         <Typography
-          variant="h3"
           color="textPrimary"
+          variant="h3"
         >
           Quill
         </Typography>

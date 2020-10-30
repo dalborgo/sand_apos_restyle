@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     minHeight: '100%',
     paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3)
-  }
+    paddingBottom: theme.spacing(3),
+  },
 }));
 
 const CustomerDetailsView = () => {
@@ -26,7 +26,7 @@ const CustomerDetailsView = () => {
   const tabs = [
     { value: 'details', label: 'Details' },
     { value: 'invoices', label: 'Invoices' },
-    { value: 'logs', label: 'Logs' }
+    { value: 'logs', label: 'Logs' },
   ];
 
   const handleTabsChange = (event, value) => {
@@ -41,7 +41,7 @@ const CustomerDetailsView = () => {
         setCustomer(response.data.customer);
       }
     } catch (err) {
-      console.error(err);
+    
     }
   }, [isMountedRef]);
 
@@ -64,17 +64,19 @@ const CustomerDetailsView = () => {
           <Tabs
             onChange={handleTabsChange}
             scrollButtons="auto"
+            textColor="secondary"
             value={currentTab}
             variant="scrollable"
-            textColor="secondary"
           >
-            {tabs.map((tab) => (
-              <Tab
-                key={tab.value}
-                label={tab.label}
-                value={tab.value}
-              />
-            ))}
+            {
+              tabs.map((tab) => (
+                <Tab
+                  key={tab.value}
+                  label={tab.label}
+                  value={tab.value}
+                />
+              ))
+            }
           </Tabs>
         </Box>
         <Divider />

@@ -8,32 +8,32 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
     borderRadius: '50%',
     flexGrow: 0,
-    flexShrink: 0
+    flexShrink: 0,
   },
   small: {
     height: theme.spacing(1),
-    width: theme.spacing(1)
+    width: theme.spacing(1),
   },
   medium: {
     height: theme.spacing(2),
-    width: theme.spacing(2)
+    width: theme.spacing(2),
   },
   large: {
     height: theme.spacing(3),
-    width: theme.spacing(3)
+    width: theme.spacing(3),
   },
   offline: {
-    backgroundColor: colors.grey[50]
+    backgroundColor: colors.grey[50],
   },
   away: {
-    backgroundColor: colors.orange[600]
+    backgroundColor: colors.orange[600],
   },
   busy: {
-    backgroundColor: colors.red[600]
+    backgroundColor: colors.red[600],
   },
   online: {
-    backgroundColor: colors.green[600]
-  }
+    backgroundColor: colors.green[600],
+  },
 }));
 
 const OnlineIndicator = ({
@@ -46,14 +46,16 @@ const OnlineIndicator = ({
 
   return (
     <span
-      className={clsx(
-        {
-          [classes.root]: true,
-          [classes[size]]: size,
-          [classes[status]]: status
-        },
-        className
-      )}
+      className={
+        clsx(
+          {
+            [classes.root]: true,
+            [classes[size]]: size,
+            [classes[status]]: status,
+          },
+          className
+        )
+      }
       {...rest}
     />
   );
@@ -62,12 +64,12 @@ const OnlineIndicator = ({
 OnlineIndicator.propTypes = {
   className: PropTypes.string,
   size: PropTypes.oneOf(['small', 'medium', 'large']),
-  status: PropTypes.oneOf(['online', 'offline', 'away', 'busy'])
+  status: PropTypes.oneOf(['online', 'offline', 'away', 'busy']),
 };
 
 OnlineIndicator.defaultProps = {
   size: 'medium',
-  status: 'offline'
+  status: 'offline',
 };
 
 export default OnlineIndicator;

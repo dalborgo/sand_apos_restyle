@@ -11,7 +11,7 @@ import {
   ListItemText,
   Tooltip,
   Typography,
-  makeStyles
+  makeStyles,
 } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import NavigateNextIcon from '@material-ui/icons/NavigateNextOutlined';
@@ -23,27 +23,27 @@ const notifications = [
     id: '5e8883a4f7877f898c408c27',
     value: 6,
     type: 'invite',
-    message: 'to send service quotes'
+    message: 'to send service quotes',
   },
   {
     id: '5e8883aa34190e0457a6e2b9',
     value: 2,
     type: 'message',
-    message: 'from clients'
+    message: 'from clients',
   },
   {
     id: '5e8883af168cad3e1f4fe0ae',
     value: 1,
     type: 'payout',
-    message: 'that needs your confirmation'
-  }
+    message: 'that needs your confirmation',
+  },
 ];
 
 const getNotificationIcon = (notificationType) => {
   const iconsMap = {
     invite: <SendIcon />,
     message: <MailIcon />,
-    payout: <PaymentIcon />
+    payout: <PaymentIcon />,
   };
 
   return iconsMap[notificationType];
@@ -52,8 +52,8 @@ const getNotificationIcon = (notificationType) => {
 const useStyles = makeStyles((theme) => ({
   root: {},
   fontWeightMedium: {
-    fontWeight: theme.typography.fontWeightMedium
-  }
+    fontWeight: theme.typography.fontWeightMedium,
+  },
 }));
 
 const Notifications = ({ className, ...rest }) => {
@@ -65,50 +65,52 @@ const Notifications = ({ className, ...rest }) => {
       {...rest}
     >
       <List>
-        {notifications.map((notification, i) => (
-          <ListItem
-            divider={i < notifications.length - 1}
-            key={notification.id}
-          >
-            <ListItemIcon>
-              {getNotificationIcon(notification.type)}
-            </ListItemIcon>
-            <ListItemText>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-              >
-                <span className={classes.fontWeightMedium}>
-                  {notification.value}
-                </span>
-                {' '}
-                <span className={classes.fontWeightMedium}>
-                  {notification.type}
-                  s
-                </span>
-                {' '}
-                {notification.message}
-              </Typography>
-            </ListItemText>
-            <ListItemSecondaryAction>
-              <Tooltip title="View">
-                <IconButton
-                  edge="end"
-                  size="small"
+        {
+          notifications.map((notification, i) => (
+            <ListItem
+              divider={i < notifications.length - 1}
+              key={notification.id}
+            >
+              <ListItemIcon>
+                {getNotificationIcon(notification.type)}
+              </ListItemIcon>
+              <ListItemText>
+                <Typography
+                  color="textSecondary"
+                  variant="body2"
                 >
-                  <NavigateNextIcon />
-                </IconButton>
-              </Tooltip>
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
+                  <span className={classes.fontWeightMedium}>
+                    {notification.value}
+                  </span>
+                  {' '}
+                  <span className={classes.fontWeightMedium}>
+                    {notification.type}
+                  s
+                  </span>
+                  {' '}
+                  {notification.message}
+                </Typography>
+              </ListItemText>
+              <ListItemSecondaryAction>
+                <Tooltip title="View">
+                  <IconButton
+                    edge="end"
+                    size="small"
+                  >
+                    <NavigateNextIcon />
+                  </IconButton>
+                </Tooltip>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))
+        }
       </List>
     </Card>
   );
 };
 
 Notifications.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default Notifications;

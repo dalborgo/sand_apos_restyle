@@ -8,7 +8,7 @@ import {
   getThread,
   markThreadAsSeen,
   removeRecipient,
-  resetActiveThread
+  resetActiveThread,
 } from 'src/slices/chat'
 import ComposeHeader from './ComposeHeader'
 import DetailHeader from './DetailHeader'
@@ -27,7 +27,7 @@ const threadSelector = (state) => {
     id: null,
     messages: [],
     participants: [],
-    unreadMessages: 0
+    unreadMessages: 0,
   };
 };
 
@@ -36,8 +36,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     display: 'flex',
     flexDirection: 'column',
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 
 const Thread = () => {
@@ -65,7 +65,7 @@ const Thread = () => {
     try {
       // Handle send message
     } catch (err) {
-      console.error(err);
+    
     }
   };
 
@@ -79,7 +79,7 @@ const Thread = () => {
         // If thread key is not a valid key (thread id or username)
         // the server throws an error, this means that the user tried a shady route
         // and we redirect him on the compose route
-        console.error(err);
+        
         history.push('/app/chat/new');
       }
     };
@@ -109,16 +109,20 @@ const Thread = () => {
 
   return (
     <div className={classes.root}>
-      {mode === 'DETAIL' && (
-        <DetailHeader participants={participants} />
-      )}
-      {mode === 'COMPOSE' && (
-        <ComposeHeader
-          onAddRecipient={handleAddRecipient}
-          onRemoveRecipient={handleRemoveRecipient}
-          recipients={recipients}
-        />
-      )}
+      {
+        mode === 'DETAIL' && (
+          <DetailHeader participants={participants} />
+        )
+      }
+      {
+        mode === 'COMPOSE' && (
+          <ComposeHeader
+            onAddRecipient={handleAddRecipient}
+            onRemoveRecipient={handleRemoveRecipient}
+            recipients={recipients}
+          />
+        )
+      }
       <Box
         flexGrow={1}
         overflow="hidden"

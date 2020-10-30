@@ -17,7 +17,7 @@ import {
   makeStyles,
   SvgIcon,
   Tooltip,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import { Rating } from '@material-ui/lab'
 import FavoriteIcon from '@material-ui/icons/Favorite'
@@ -29,32 +29,32 @@ const useStyles = makeStyles((theme) => ({
   root: {},
   image: {
     height: 200,
-    backgroundColor: theme.palette.background.dark
+    backgroundColor: theme.palette.background.dark,
   },
   likedButton: {
-    color: colors.red[600]
+    color: colors.red[600],
   },
   membersIcon: {
     marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(1)
-  }
-}));
+    marginRight: theme.spacing(1),
+  },
+}))
 
 const ProjectCard = ({ className, project, ...rest }) => {
-  const classes = useStyles();
-  const [isLiked, setLiked] = useState(project.isLiked);
-  const [likesCount, setLikesCount] = useState(project.likesCount);
-
+  const classes = useStyles()
+  const [isLiked, setLiked] = useState(project.isLiked)
+  const [likesCount, setLikesCount] = useState(project.likesCount)
+  
   const handleLike = () => {
-    setLiked(true);
-    setLikesCount((prevLikes) => prevLikes + 1);
-  };
-
+    setLiked(true)
+    setLikesCount((prevLikes) => prevLikes + 1)
+  }
+  
   const handleUnlike = () => {
-    setLiked(false);
-    setLikesCount((prevLikes) => prevLikes - 1);
-  };
-
+    setLiked(false)
+    setLikesCount((prevLikes) => prevLikes - 1)
+  }
+  
   return (
     <Card
       className={clsx(classes.root, className)}
@@ -66,8 +66,8 @@ const ProjectCard = ({ className, project, ...rest }) => {
           image={project.image}
         />
         <Box
-          display="flex"
           alignItems="center"
+          display="flex"
           mt={2}
         >
           <Avatar
@@ -86,8 +86,8 @@ const ProjectCard = ({ className, project, ...rest }) => {
               {project.title}
             </Link>
             <Typography
-              variant="body2"
               color="textSecondary"
+              variant="body2"
             >
               by
               {' '}
@@ -119,8 +119,8 @@ const ProjectCard = ({ className, project, ...rest }) => {
         </Typography>
       </Box>
       <Box
-        py={2}
         px={3}
+        py={2}
       >
         <Grid
           alignItems="center"
@@ -130,105 +130,109 @@ const ProjectCard = ({ className, project, ...rest }) => {
         >
           <Grid item>
             <Typography
-              variant="h5"
               color="textPrimary"
+              variant="h5"
             >
               {numeral(project.budget).format(`${project.currency}0,0.00`)}
             </Typography>
             <Typography
-              variant="body2"
               color="textSecondary"
+              variant="body2"
             >
               Budget
             </Typography>
           </Grid>
           <Grid item>
             <Typography
-              variant="h5"
               color="textPrimary"
+              variant="h5"
             >
               {project.location}
             </Typography>
             <Typography
-              variant="body2"
               color="textSecondary"
+              variant="body2"
             >
               Location
             </Typography>
           </Grid>
           <Grid item>
             <Typography
-              variant="h5"
               color="textPrimary"
+              variant="h5"
             >
               {project.type}
             </Typography>
             <Typography
-              variant="body2"
               color="textSecondary"
+              variant="body2"
             >
               Type
             </Typography>
           </Grid>
         </Grid>
       </Box>
-      <Divider />
+      <Divider/>
       <Box
-        py={2}
+        alignItems="center"
+        display="flex"
         pl={2}
         pr={3}
-        display="flex"
-        alignItems="center"
+        py={2}
       >
-        {isLiked ? (
-          <Tooltip title="Unlike">
-            <IconButton
-              className={classes.likedButton}
-              onClick={handleUnlike}
-            >
-              <FavoriteIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Like">
-            <IconButton onClick={handleLike}>
-              <FavoriteBorderIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        )}
+        {
+          isLiked ?
+            (
+              <Tooltip title="Unlike">
+                <IconButton
+                  className={classes.likedButton}
+                  onClick={handleUnlike}
+                >
+                  <FavoriteIcon fontSize="small"/>
+                </IconButton>
+              </Tooltip>
+            ) :
+            (
+              <Tooltip title="Like">
+                <IconButton onClick={handleLike}>
+                  <FavoriteBorderIcon fontSize="small"/>
+                </IconButton>
+              </Tooltip>
+            )
+        }
         <Typography
-          variant="subtitle2"
           color="textSecondary"
+          variant="subtitle2"
         >
           {likesCount}
         </Typography>
         <SvgIcon
-          fontSize="small"
-          color="action"
           className={classes.membersIcon}
+          color="action"
+          fontSize="small"
         >
-          <UsersIcon />
+          <UsersIcon/>
         </SvgIcon>
         <Typography
-          variant="subtitle2"
           color="textSecondary"
+          variant="subtitle2"
         >
           {project.membersCount}
         </Typography>
-        <Box flexGrow={1} />
+        <Box flexGrow={1}/>
         <Rating
-          value={project.rating}
-          size="small"
           readOnly
+          size="small"
+          value={project.rating}
         />
       </Box>
     </Card>
-  );
-};
+  )
+}
 
 ProjectCard.propTypes = {
   className: PropTypes.string,
-  project: PropTypes.object.isRequired
-};
+  project: PropTypes.object.isRequired,
+}
 
-export default ProjectCard;
+export default ProjectCard
