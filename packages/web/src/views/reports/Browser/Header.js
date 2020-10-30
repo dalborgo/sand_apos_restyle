@@ -4,7 +4,7 @@ import { Breadcrumbs, Grid, Link, Typography } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { FormattedMessage } from 'react-intl'
 
-const Header = ({ className, ...rest }) => {
+const Header = () => {
   return (
     <Grid
       container
