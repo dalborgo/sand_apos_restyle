@@ -1,38 +1,27 @@
 import React, { useEffect } from 'react'
 import NProgress from 'nprogress'
-import { Box, LinearProgress, makeStyles } from '@material-ui/core'
+import { LinearProgress, makeStyles } from '@material-ui/core'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    alignItems: 'center',
-    backgroundColor: theme.palette.background.default,
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    justifyContent: 'center',
-    minHeight: '100%',
-    padding: theme.spacing(3),
-  },
-}));
+const useStyles = makeStyles(() => ({
+  root: {},
+}))
 
 const LoadingScreen = () => {
-  const classes = useStyles();
-
+  const classes = useStyles()
+  
   useEffect(() => {
-    NProgress.start();
-
+    NProgress.start()
+    
     return () => {
-      NProgress.done();
-    };
-  }, []);
-
+      NProgress.done()
+    }
+  }, [])
+  
   return (
     <div className={classes.root}>
-      <Box width={400}>
-        <LinearProgress />
-      </Box>
+        <LinearProgress/>
     </div>
-  );
-};
+  )
+}
 
-export default LoadingScreen;
+export default LoadingScreen

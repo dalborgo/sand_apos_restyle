@@ -36,6 +36,7 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => 
           <Box flexGrow={1} mr={2}>
             <FormControl fullWidth size="small">
               <Input
+                autoFocus
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton

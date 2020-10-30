@@ -16,18 +16,17 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     zIndex: 2000,
   },
-}));
+}))
 
 const SlashScreen = () => {
-  const classes = useStyles();
-
+  const classes = useStyles()
   return (
     <div className={classes.root}>
       <Box width={400}>
         <LinearProgress />
       </Box>
     </div>
-  );
+  )
 }
 
-export default SlashScreen;
+export default SlashScreen

@@ -42,14 +42,9 @@ const ListElem = ({ text, value, remove }) => {
   const classes = useStyles()
   const history = useHistory()
   const baseUrl = '/app/reports/browser'
-  
   const handleSelect = useCallback(event => {
     const docId = event.currentTarget.id
     const params = testParams(`${baseUrl}/:docId`)
-    if (params && params['docId'] !== docId) {
-      const elem = document.getElementById(params.docId)
-      if (elem) {elem.classList.remove('MuiBrowserElem-containerSelected')}
-    }
     if (!params || params['docId'] !== docId) {
       const elem = document.getElementById(docId)
       if (elem) {
@@ -66,7 +61,6 @@ const ListElem = ({ text, value, remove }) => {
   
   const params = testParams(`${baseUrl}/:docId`)
   let linkClasses = clsx(classes.link)
-  //let linkClasses = clsx(classes.link, { [classes.linkSelected]: params && params['docId'] === text })
   let containerClasses = clsx(classes.container, { [classes.containerSelected]: params && params['docId'] === text })
   if (value) {
     const [first] = value

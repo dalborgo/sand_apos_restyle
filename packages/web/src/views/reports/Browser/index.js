@@ -1,5 +1,5 @@
-import React, { memo, useCallback, useEffect, useState } from 'react'
-import { Box, Grid, makeStyles, Paper, useMediaQuery } from '@material-ui/core'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { Box, Grid, makeStyles, Paper } from '@material-ui/core'
 import { useInfiniteQuery, useMutation, useQuery, useQueryCache } from 'react-query'
 import Page from 'src/components/Page'
 import DocList from './DocList'
@@ -12,6 +12,8 @@ import Header from './Header'
 import { useSnackbar } from 'notistack'
 import SaveIcon from '@material-ui/icons/Save'
 import Fab from '@material-ui/core/Fab'
+import Hidden from '@material-ui/core/Hidden'
+import Dialog from '@material-ui/core/Dialog'
 
 const LIMIT = 40
 
@@ -185,12 +187,21 @@ DisplayComponent.displayName = 'DisplayComponent'
 
 const BrowserView = () => {
   console.log('%cRENDER_BASE', 'color: purple')
-  const matches = useMediaQuery(theme => theme.breakpoints.up('sm'))
   const queryCache = useQueryCache()
   const { enqueueSnackbar } = useSnackbar()
   const classes = useStyles()
   const [text, setText] = useState('')
   const { docId } = useParams()
+  const precDocID = useRef(null)
+  useEffect(() => {
+    if(docId && docId !== precDocID.current){
+      const elem = document.getElementById(precDocID?.current)
+      if (elem) {elem.classList.remove('MuiBrowserElem-containerSelected')}
+    }
+    if (docId) {
+      precDocID.current = docId
+    }
+  }, [docId])
   useEffect(() => {
     const browserSearchBox = document.getElementById('browserSearchBox')
     browserSearchBox && browserSearchBox.select()
@@ -198,7 +209,7 @@ const BrowserView = () => {
     if (browserPanel) {
       browserPanel.scrollTop = 0
     }
-  }, [])
+  }, [text])
   const respList = useInfiniteQuery(['docs/browser', text], fetchList, {
     getFetchMore: (lastGroup, allGroups) => {
       const { total_rows: totalRows, rows = [] } = lastGroup?.results
@@ -279,34 +290,52 @@ const BrowserView = () => {
       className={classes.root}
       title="Browser"
     >
-      {
-        matches &&
-        < Box p={3} pb={2}>
+      <Hidden xsDown>
+        <Box p={3} pb={2}>
           <Header/>
         </Box>
-      }
-      <div className={classes.content}>
-        <div className={classes.innerFirst}>
-          <Grid container spacing={matches ? 2 : 0}>
-            {
-              (!docId || matches) &&
-              <Grid className={classes.gridItem} item sm={5} xs={12}>
+        <div className={classes.content}>
+          <div className={classes.innerFirst}>
+            <Grid container spacing={2}>
+              <Grid className={classes.gridItem} item sm={5}>
                 <SearchComponent
                   {...searchBody}
                 />
               </Grid>
-            }
-            {
-              (docId || matches) &&
-              <Grid className={classes.gridItem} item sm={7} xs={12}>
+              <Grid className={classes.gridItem} item sm={7}>
                 <DisplayComponent
                   {...displayBody}
                 />
               </Grid>
-            }
-          </Grid>
+            </Grid>
+          </div>
         </div>
-      </div>
+      </Hidden>
+      <Hidden smUp>
+        <div className={classes.content}>
+          <div className={classes.innerFirst}>
+            <Grid container>
+              <Grid className={classes.gridItem} item xs={12}>
+                <SearchComponent
+                  {...searchBody}
+                />
+              </Grid>
+              <Grid className={classes.gridItem} item xs={12}>
+                <Dialog
+                  fullScreen
+                  keepMounted
+                  open={!!docId && !respDoc.isFetching}
+                  transitionDuration={0}
+                >
+                  <DisplayComponent
+                    {...displayBody}
+                  />
+                </Dialog>
+              </Grid>
+            </Grid>
+          </div>
+        </div>
+      </Hidden>
     </Page>
   )
 }
