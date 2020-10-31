@@ -53,9 +53,7 @@ const Checklist = ({
       })
     } catch (err) {
       
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      })
+      enqueueSnackbar('Something went wrong')
     }
   }
   
@@ -72,9 +70,7 @@ const Checklist = ({
       })
     } catch (err) {
       
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      })
+      enqueueSnackbar('Something went wrong')
     }
   }
   

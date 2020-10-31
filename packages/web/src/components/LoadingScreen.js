@@ -19,7 +19,7 @@ const LoadingScreen = () => {
   
   return (
     <div className={classes.root}>
-        <LinearProgress/>
+      <LinearProgress/>
     </div>
   )
 }

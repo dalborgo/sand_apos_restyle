@@ -20,6 +20,10 @@
     "defaultMessage": "Nome utente o password errati!"
   },
   {
+    "id": "general.network_error",
+    "defaultMessage": "Errore di rete!"
+  },
+  {
     "id": "reports.browser.save",
     "description": "Bottone Salva",
     "defaultMessage": "Salva"

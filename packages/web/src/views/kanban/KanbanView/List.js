@@ -105,9 +105,7 @@ const List = ({ className, listId, ...rest }) => {
       })
     } catch (err) {
       log.error(err)
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      })
+      enqueueSnackbar('Something went wrong')
     }
   }
   
@@ -120,9 +118,7 @@ const List = ({ className, listId, ...rest }) => {
       })
     } catch (err) {
       log.error(err)
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      })
+      enqueueSnackbar('Something went wrong')
     }
   }
   
@@ -135,9 +131,7 @@ const List = ({ className, listId, ...rest }) => {
       })
     } catch (err) {
       log.error(err)
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      })
+      enqueueSnackbar('Something went wrong')
     }
   }
   

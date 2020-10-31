@@ -50,10 +50,7 @@ const Search = () => {
       
       setResults(response.data.results)
     } catch (err) {
-      
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      })
+      enqueueSnackbar('Something went wrong')
     } finally {
       setLoading(false)
     }

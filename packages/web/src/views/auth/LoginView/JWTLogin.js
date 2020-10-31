@@ -3,23 +3,24 @@ import clsx from 'clsx'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 import { Formik } from 'formik'
-import { Box, Button, FormHelperText, makeStyles, TextField } from '@material-ui/core'
+import { Box, Button, makeStyles, TextField } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import useAuth from 'src/hooks/useAuth'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
-import log from '@adapter/common/src/log'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
+import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
+
 const useStyles = makeStyles(() => ({
   root: {},
 }))
-
 
 const JWTLogin = ({ className, ...rest }) => {
   const classes = useStyles()
   const { login } = useAuth()
   const isMountedRef = useIsMountedRef()
   const intl = useIntl()
+  const snackQueryError = useSnackQueryError()
   return (
     <Formik
       initialValues={
@@ -31,7 +32,6 @@ const JWTLogin = ({ className, ...rest }) => {
       }
       onSubmit={
         async (values, {
-          setErrors,
           setStatus,
           setSubmitting,
         }) => {
@@ -41,12 +41,10 @@ const JWTLogin = ({ className, ...rest }) => {
               setStatus({ success: true })
               setSubmitting(false)
             }
-          } catch ({ message, response }) {
-            log.error(message)
-            const { data } = response || {}
+          } catch (err) {
+            snackQueryError(err)
             if (isMountedRef.current) {
               setStatus({ success: false })
-              setErrors({ submit: data.message || intl.formatMessage(messages[data.messageCode]) })
               setSubmitting(false)
             }
           }
@@ -102,15 +100,6 @@ const JWTLogin = ({ className, ...rest }) => {
               value={values.password}
               variant="outlined"
             />
-            {
-              errors.submit && (
-                <Box mt={3}>
-                  <FormHelperText error>
-                    {errors.submit}
-                  </FormHelperText>
-                </Box>
-              )
-            }
             <Box mt={2}>
               <Button
                 color="secondary"

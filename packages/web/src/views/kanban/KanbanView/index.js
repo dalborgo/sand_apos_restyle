@@ -67,9 +67,7 @@ const KanbanView = () => {
       });
     } catch (err) {
       
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      });
+      enqueueSnackbar('Something went wrong');
     }
   };
 

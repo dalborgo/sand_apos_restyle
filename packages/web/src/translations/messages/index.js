@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  network_error: {
+    id: 'general.network_error',
+    defaultMessage: 'Errore di rete!',
+  },
   username_required: {
     id: 'auth.login.username_required',
     defaultMessage: 'Nome utente obbligatorio!',

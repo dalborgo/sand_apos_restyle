@@ -69,9 +69,7 @@ const CardEditModal = ({
       });
     } catch (err) {
       
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      });
+      enqueueSnackbar('Something went wrong');
     }
   };
 
@@ -83,9 +81,7 @@ const CardEditModal = ({
       });
     } catch (err) {
       
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      });
+      enqueueSnackbar('Something went wrong');
     }
   };
 
@@ -97,9 +93,7 @@ const CardEditModal = ({
       });
     } catch (err) {
       
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      });
+      enqueueSnackbar('Something went wrong');
     }
   };
 
@@ -111,9 +105,7 @@ const CardEditModal = ({
       });
     } catch (err) {
       
-      enqueueSnackbar('Something went wrong', {
-        variant: 'error',
-      });
+      enqueueSnackbar('Something went wrong');
     }
   };
 

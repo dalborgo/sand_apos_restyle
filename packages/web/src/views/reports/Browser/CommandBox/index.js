@@ -12,7 +12,7 @@ const CommandBox = memo(({ mutate, isDocId, output }) => {
       const docs = JSON.parse(textArea.value)
       await mutate(docs)
     } catch (err) {
-      enqueueSnackbar(err.message, { variant: 'error'})
+      enqueueSnackbar(err.message)
     }
   }, [enqueueSnackbar, mutate])
   return (

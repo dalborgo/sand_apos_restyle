@@ -38,9 +38,7 @@ const Account = () => {
       history.push('/')
     } catch (err) {
       log.error(err)
-      enqueueSnackbar('Unable to logout', {
-        variant: 'error',
-      })
+      enqueueSnackbar('Unable to logout')
     }
   }
   

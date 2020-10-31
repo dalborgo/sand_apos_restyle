@@ -74,7 +74,7 @@ const ListElem = ({ text, value, remove }) => {
         name={text}
         onClick={handleRemove}
         size="small"
-        style={{marginRight: 5}}
+        style={{ marginRight: 5 }}
       >
         <CloseIcon/>
       </IconButton>
@@ -100,44 +100,48 @@ const DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore, remove })
     onIntersect: fetchMore,
     enabled: canFetchMore,
   })
-  return (
-    <div>
-      {
-        (data) &&
-        data.map((page, i) => (
-          <React.Fragment key={i}>
-            {
-              !!page?.results?.rows?.length && page.results.rows.map(elem => (
-                <ListElem
-                  key={elem.id}
-                  remove={remove}
-                  text={elem.id}
-                  value={elem.value}
-                />
-              ))
+  if (data) {
+    return (
+      <div>
+        {
+          data.map((page, i) => (
+            <React.Fragment key={i}>
+              {
+                !!page?.results?.rows?.length && page.results.rows.map(elem => (
+                  <ListElem
+                    key={elem.id}
+                    remove={remove}
+                    text={elem.id}
+                    value={elem.value}
+                  />
+                ))
+              }
+            </React.Fragment>
+          ))
+        }
+        <div style={{ width: '100%', textAlign: 'center' }}>
+          <Button
+            color="primary"
+            disabled={!!isFetchingMore}
+            onClick={() => fetchMore()}
+            ref={loadMoreButtonRef}
+            size="small"
+            style={
+              {
+                marginTop: 8,
+                visibility: !canFetchMore ? 'hidden' : undefined,
+              }
             }
-          </React.Fragment>
-        ))
-      }
-      <div style={{ width: '100%', textAlign: 'center' }}>
-        <Button
-          color="primary"
-          disabled={!!isFetchingMore}
-          onClick={() => fetchMore()}
-          ref={loadMoreButtonRef}
-          size="small"
-          style={
-            {
-              marginTop: 8,
-              visibility: !canFetchMore ? 'hidden' : undefined,
-            }
-          }
-        >
-          <FormattedMessage defaultMessage="Mostra di più" id="reports.browser.showMore"/>
-        </Button>
+          >
+            <FormattedMessage defaultMessage="Mostra di più" id="reports.browser.showMore"/>
+          </Button>
+        </div>
       </div>
-    </div>
-  )
+    )
+    
+  } else {
+    return null
+  }
 })
 DocList.displayName = 'DocList'
 export default DocList

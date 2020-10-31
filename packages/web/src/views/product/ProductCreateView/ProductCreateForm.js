@@ -1,10 +1,10 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-import { useSnackbar } from 'notistack';
+import React from 'react'
+import { useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import * as Yup from 'yup'
+import { Formik } from 'formik'
+import { useSnackbar } from 'notistack'
 import {
   Box,
   Button,
@@ -20,9 +20,9 @@ import {
   TextField,
   Typography,
   makeStyles,
-} from '@material-ui/core';
-import QuillEditor from 'src/components/QuillEditor';
-import FilesDropzone from 'src/components/FilesDropzone';
+} from '@material-ui/core'
+import QuillEditor from 'src/components/QuillEditor'
+import FilesDropzone from 'src/components/FilesDropzone'
 
 const categories = [
   {
@@ -37,7 +37,7 @@ const categories = [
     id: 'cars',
     name: 'Cars',
   },
-];
+]
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -46,13 +46,13 @@ const useStyles = makeStyles(() => ({
       height: 400,
     },
   },
-}));
+}))
 
 const ProductCreateForm = ({ className, ...rest }) => {
-  const classes = useStyles();
-  const history = useHistory();
-  const { enqueueSnackbar } = useSnackbar();
-
+  const classes = useStyles()
+  const history = useHistory()
+  const { enqueueSnackbar } = useSnackbar()
+  
   return (
     <Formik
       initialValues={
@@ -77,18 +77,18 @@ const ProductCreateForm = ({ className, ...rest }) => {
           setSubmitting,
         }) => {
           try {
-          // NOTE: Make API request
-            setStatus({ success: true });
-            setSubmitting(false);
+            // NOTE: Make API request
+            setStatus({ success: true })
+            setSubmitting(false)
             enqueueSnackbar('Product Created', {
               variant: 'success',
-            });
-            history.push('/app/products');
+            })
+            history.push('/app/products')
           } catch (err) {
             
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
-            setSubmitting(false);
+            setStatus({ success: false })
+            setErrors({ submit: err.message })
+            setSubmitting(false)
           }
         }
       }
@@ -153,7 +153,7 @@ const ProductCreateForm = ({ className, ...rest }) => {
                         color="textSecondary"
                         variant="subtitle2"
                       >
-                      Description
+                        Description
                       </Typography>
                     </Box>
                     <Paper variant="outlined">
@@ -176,17 +176,17 @@ const ProductCreateForm = ({ className, ...rest }) => {
                 </Card>
                 <Box mt={3}>
                   <Card>
-                    <CardHeader title="Upload Images" />
-                    <Divider />
+                    <CardHeader title="Upload Images"/>
+                    <Divider/>
                     <CardContent>
-                      <FilesDropzone />
+                      <FilesDropzone/>
                     </CardContent>
                   </Card>
                 </Box>
                 <Box mt={3}>
                   <Card>
-                    <CardHeader title="Prices" />
-                    <Divider />
+                    <CardHeader title="Prices"/>
+                    <Divider/>
                     <CardContent>
                       <Grid
                         container
@@ -265,8 +265,8 @@ const ProductCreateForm = ({ className, ...rest }) => {
                 xs={12}
               >
                 <Card>
-                  <CardHeader title="Organize" />
-                  <Divider />
+                  <CardHeader title="Organize"/>
+                  <Divider/>
                   <CardContent>
                     <TextField
                       fullWidth
@@ -335,18 +335,18 @@ const ProductCreateForm = ({ className, ...rest }) => {
                 type="submit"
                 variant="contained"
               >
-              Create product
+                Create product
               </Button>
             </Box>
           </form>
         )
       }
     </Formik>
-  );
-};
+  )
+}
 
 ProductCreateForm.propTypes = {
   className: PropTypes.string,
-};
+}
 
-export default ProductCreateForm;
+export default ProductCreateForm

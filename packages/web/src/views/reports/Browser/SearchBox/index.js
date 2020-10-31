@@ -20,6 +20,58 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+const InputText = memo(({ text, setText }) => {
+  const history = useHistory()
+  return (
+    <FormControl fullWidth size="small">
+      <Input
+        autoFocus
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton
+              id="clearText"
+              onClick={
+                () => {
+                  const browserSearchBox = document.getElementById('browserSearchBox')
+                  browserSearchBox.value = ''
+                  if (text) {
+                    history.push('/app/reports/browser')
+                    setText('')
+                    const elem = document.getElementById('browserDisplayArea')
+                    if (elem) {
+                      elem.value = ''
+                    }
+                  } else {
+                    browserSearchBox.focus()
+                  }
+                }
+              }
+              style={{ padding: 8, visibility: text ? 'visible' : 'hidden' }}
+            >
+              <CloseIcon/>
+            </IconButton>
+          </InputAdornment>
+        }
+        id="browserSearchBox"
+        onChange={
+          event => {
+            const val = event.target.value
+            const clearText = document.getElementById('clearText')
+            if (!val && !text) {
+              clearText.style.visibility = 'hidden'
+            } else {
+              clearText.style.visibility = 'visible'
+            }
+          }
+        }
+        onFocus={focus}
+      />
+    </FormControl>
+  )
+})
+
+InputText.displayName = 'Browser InputText'
+
 const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => {
   console.log('%cRENDER_SEARCH', 'color: cyan')
   const classes = useStyles()
@@ -34,50 +86,7 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => 
       <form autoComplete="off" onSubmit={event => event.preventDefault()} style={{ width: '100%' }}>
         <Box alignItems="center" display="flex" mb={0}>
           <Box flexGrow={1} mr={2}>
-            <FormControl fullWidth size="small">
-              <Input
-                autoFocus
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      id="clearText"
-                      onClick={
-                        () => {
-                          const browserSearchBox = document.getElementById('browserSearchBox')
-                          browserSearchBox.value = ''
-                          if (text) {
-                            history.push('/app/reports/browser')
-                            setText('')
-                            const elem = document.getElementById('browserDisplayArea')
-                            if(elem){
-                              elem.value=''
-                            }
-                          } else {
-                            browserSearchBox.focus()
-                          }
-                        }
-                      }
-                      style={{ padding: 8, visibility: text ? 'visible' : 'hidden' }}
-                    >
-                      <CloseIcon/>
-                    </IconButton>
-                  </InputAdornment>
-                }
-                id="browserSearchBox"
-                onChange={
-                  event => {
-                    const val = event.target.value
-                    const clearText = document.getElementById('clearText')
-                    if (!val && !text) {
-                      clearText.style.visibility = 'hidden'
-                    } else {
-                      clearText.style.visibility = 'visible'
-                    }
-                  }
-                }
-                onFocus={focus}
-              />
-            </FormControl>
+            <InputText setText={setText} text={text}/>
           </Box>
           <Box display="flex">
             <IconButton
@@ -89,7 +98,7 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => 
                     history.push('/app/reports/browser')
                     setText(filter)
                     const elem = document.getElementById('browserDisplayArea')
-                    if(elem){
+                    if (elem) {
                       elem.value = ''
                     }
                   }

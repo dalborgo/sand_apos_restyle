@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import { Breadcrumbs, Grid, Link, Typography } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { FormattedMessage } from 'react-intl'
 
-const Header = () => {
+const Header = memo(() => {
   return (
     <Grid
       container
@@ -46,6 +46,7 @@ const Header = () => {
       </Grid>
     </Grid>
   )
-}
+})
+Header.displayName = 'Browser Header'
 
 export default Header

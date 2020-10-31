@@ -5,8 +5,7 @@ import Page from 'src/components/Page'
 import DocList from './DocList'
 import SearchBox from './SearchBox'
 import PerfectScrollbar from 'react-perfect-scrollbar'
-import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
-import log from '@adapter/common/src/log'
+import { axiosLocalInstance, useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import { useParams } from 'react-router'
 import Header from './Header'
 import { useSnackbar } from 'notistack'
@@ -158,7 +157,7 @@ const DisplayComponent = memo((props => {
       const docs = JSON.parse(textArea.value)
       await props.mutate(docs)
     } catch (err) {
-      enqueueSnackbar(err.message, { variant: 'error' })
+      enqueueSnackbar(err.message)
     }
   }, [enqueueSnackbar, props])
   return (
@@ -193,6 +192,7 @@ const BrowserView = () => {
   const [text, setText] = useState('')
   const { docId } = useParams()
   const precDocID = useRef(null)
+  const snackQueryError = useSnackQueryError()
   useEffect(() => {
     if(docId && docId !== precDocID.current){
       const elem = document.getElementById(precDocID?.current)
@@ -219,8 +219,8 @@ const BrowserView = () => {
       return isOver ? false : parseInt(cursor)
     },
     onError: err => {
-      log.error(err.message)
-      setText('')
+      snackQueryError(err)
+      text && setText('')
     },
   })
   const respDoc = useQuery(['docs/get_by_id', { docId }], {
@@ -235,13 +235,13 @@ const BrowserView = () => {
   const [mutate] = useMutation(saveMutation, {
     onSettled: (data, error, variables) => {
       if (error) {
-        enqueueSnackbar(error.message, { variant: 'error' })
+        enqueueSnackbar(error.message)
       } else {
         if (data?.results) {
           const [first] = data.results
           if (first.error) {
             const message = `${first.error}: ${first.reason} (${first.status})`
-            enqueueSnackbar(message, { variant: 'error' })
+            enqueueSnackbar(message)
           } else {
             const isNewDoc = variables._id !== docId
             let outObj = variables

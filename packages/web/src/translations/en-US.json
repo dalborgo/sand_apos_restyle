@@ -6,5 +6,6 @@
   "auth.login.password_required": "",
   "auth.login.username_required": "",
   "auth.login.wrong_credentials": "",
-  "reports.header.list_documents": ""
+  "reports.header.list_documents": "",
+  "general.network_error": ""
 }

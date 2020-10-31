@@ -60,6 +60,7 @@ const SnackMyProvider = ({ children }) => {
         }
       }
       ref={refSnack}
+      variant="error"
     >
       {children}
     </SnackbarProvider>
