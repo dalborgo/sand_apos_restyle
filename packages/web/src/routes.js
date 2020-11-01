@@ -46,7 +46,7 @@ const routes = [
   {
     exact: true,
     path: '/404',
-    component: lazy(() => import('src/views/errors/NotFoundView')),
+    component: lazy(() => import('src/views/errors/Error404')),
   },
   {
     exact: true,

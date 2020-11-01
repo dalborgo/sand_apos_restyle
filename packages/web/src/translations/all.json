@@ -20,6 +20,34 @@
     "defaultMessage": "Nome utente o password errati!"
   },
   {
+    "id": "error404.go_back_button",
+    "defaultMessage": "Torna alla pagina principale"
+  },
+  {
+    "id": "error404.goto_home_page_description",
+    "defaultMessage": "Se hai digitato un collegamento nella barra degli indirizzi, prova ad utilizzare il menu di navigazione a\n          sinistra."
+  },
+  {
+    "id": "error404.wrong_page",
+    "defaultMessage": "404: La pagina che stai cercando non è qui!"
+  },
+  {
+    "id": "error500.contact_vendors",
+    "defaultMessage": "Contatta i fornitori del programma."
+  },
+  {
+    "id": "error500.goto_home_page",
+    "defaultMessage": "Vai all home page"
+  },
+  {
+    "id": "error500.goto_home_page_button",
+    "defaultMessage": "Vai all'home page"
+  },
+  {
+    "id": "error500.something_wrong",
+    "defaultMessage": "500: Ooops, qualcosa è andato storto!"
+  },
+  {
     "id": "general.network_error",
     "defaultMessage": "Errore di rete!"
   },

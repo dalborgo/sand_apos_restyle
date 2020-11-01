@@ -22,12 +22,12 @@ const useStyles = makeStyles(() => createStyles({
       width: '100%',
     },
   },
-}));
+}))
 
 const GlobalStyles = () => {
-  useStyles();
+  useStyles()
+  
+  return null
+}
 
-  return null;
-};
-
-export default GlobalStyles;
+export default GlobalStyles

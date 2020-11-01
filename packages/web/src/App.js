@@ -13,6 +13,7 @@ import SettingsNotification from 'src/components/SettingsNotification'
 import { defaultQueryFn } from 'src/utils/reactQueryFunctions'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import { IntlProvider } from 'react-intl'
+import { ErrorBoundary } from 'react-error-boundary'
 import messages from 'src/translations/it-IT.json'
 import { AuthProvider } from 'src/contexts/JWTAuthContext'
 import useSettings from 'src/hooks/useSettings'
@@ -21,9 +22,15 @@ import routes, { renderRoutes } from 'src/routes'
 import { ReactQueryDevtools } from 'react-query-devtools'
 import { REACT_QUERY_DEV_TOOLS } from 'src/constants'
 import SnackMyProvider from 'src/components/Snack/SnackComponents'
-
+import Error500 from 'src/views/errors/Error500'
+import log from '@adapter/common/src/log'
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
+
+const myErrorHandler = (error, info) => {
+  log.error('Global error', error)
+  log.error('Global componentStack', info.componentStack)
+}
 
 const queryCache = new QueryCache({
   defaultConfig: {
@@ -46,27 +53,29 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <StylesProvider jss={jss}>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-          <SnackMyProvider>
-            <Router history={history}>
-              <AuthProvider>
-                <GlobalStyles/>
-                <ScrollReset/>
-                <CookiesNotification/>
-                <SettingsNotification/>
-                <IntlProvider defaultLocale="it" locale="it" messages={messages}>
-                  <ReactQueryCacheProvider queryCache={queryCache}>
-                    {renderRoutes(routes)}
-                    {
-                      REACT_QUERY_DEV_TOOLS &&
-                      <ReactQueryDevtools initialIsOpen/>
-                    }
-                  </ReactQueryCacheProvider>
-                </IntlProvider>
-              </AuthProvider>
-            </Router>
-          </SnackMyProvider>
-        </MuiPickersUtilsProvider>
+        <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler}>
+          <MuiPickersUtilsProvider utils={MomentUtils}>
+            <SnackMyProvider>
+              <Router history={history}>
+                <AuthProvider>
+                  <GlobalStyles/>
+                  <ScrollReset/>
+                  <CookiesNotification/>
+                  <SettingsNotification/>
+                  <IntlProvider defaultLocale="it" locale="it" messages={messages}>
+                    <ReactQueryCacheProvider queryCache={queryCache}>
+                      {renderRoutes(routes)}
+                      {
+                        REACT_QUERY_DEV_TOOLS &&
+                        <ReactQueryDevtools initialIsOpen/>
+                      }
+                    </ReactQueryCacheProvider>
+                  </IntlProvider>
+                </AuthProvider>
+              </Router>
+            </SnackMyProvider>
+          </MuiPickersUtilsProvider>
+        </ErrorBoundary>
       </StylesProvider>
     </ThemeProvider>
   )

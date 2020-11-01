@@ -7,5 +7,12 @@
   "auth.login.username_required": "",
   "auth.login.wrong_credentials": "",
   "reports.header.list_documents": "",
-  "general.network_error": ""
+  "general.network_error": "",
+  "error500.contact_vendors": "",
+  "error500.goto_home_page": "",
+  "error500.something_wrong": "",
+  "error500.goto_home_page_button": "",
+  "error404.go_back_button": "",
+  "error404.goto_home_page_description": "",
+  "error404.wrong_page": ""
 }
