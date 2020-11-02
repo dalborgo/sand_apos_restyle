@@ -77,17 +77,18 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   displayArea: {
-    color: theme.palette.text.primary,
     backgroundColor: 'transparent',
     border: 0,
-    whiteSpace: 'pre',
+    color: theme.palette.text.primary,
     fontFamily: 'monospace',
+    height: '100%',
+    outline: 'none',
     overflow: 'auto',
-    scrollbarWidth: 'thin',
     padding: 10,
     resize: 'none',
+    scrollbarWidth: 'thin',
+    whiteSpace: 'pre',
     width: '100%',
-    height: '100%',
   },
 }))
 
@@ -117,7 +118,7 @@ const deleteMutation = async (docId) => {
   return data
 }
 
-const SearchComponent = memo((props => {
+const SearchComponent = memo((function SearchComponent (props) {
   console.log('%cRENDER_SearchComponent', 'color: green')
   return (
     <Paper className={props.classes.docList} elevation={2}>
@@ -146,9 +147,7 @@ const SearchComponent = memo((props => {
   )
 }))
 
-SearchComponent.displayName = 'SearchComponent'
-
-const DisplayComponent = memo((props => {
+const DisplayComponent = memo((function DisplayComponent (props) {
   console.log('%cRENDER_DisplayComponent', 'color: silver')
   const { enqueueSnackbar } = useSnackbar()
   const save = useCallback(async () => {
@@ -182,8 +181,6 @@ const DisplayComponent = memo((props => {
   )
 }))
 
-DisplayComponent.displayName = 'DisplayComponent'
-
 const BrowserView = () => {
   console.log('%cRENDER_BASE', 'color: purple')
   const queryCache = useQueryCache()
@@ -191,15 +188,15 @@ const BrowserView = () => {
   const classes = useStyles()
   const [text, setText] = useState('')
   const { docId } = useParams()
-  const precDocID = useRef(null)
+  const prevDocID = useRef(null)
   const snackQueryError = useSnackQueryError()
   useEffect(() => {
-    if(docId && docId !== precDocID.current){
-      const elem = document.getElementById(precDocID?.current)
+    if (docId && docId !== prevDocID.current) {
+      const elem = document.getElementById(prevDocID?.current)
       if (elem) {elem.classList.remove('MuiBrowserElem-containerSelected')}
     }
     if (docId) {
-      precDocID.current = docId
+      prevDocID.current = docId
     }
   }, [docId])
   useEffect(() => {

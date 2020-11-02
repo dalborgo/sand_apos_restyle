@@ -62,6 +62,7 @@ const NavItem = ({
   children,
   className,
   depth,
+  exact = true,
   href,
   icon: Icon,
   info: Info,
@@ -128,7 +129,7 @@ const NavItem = ({
         activeClassName={classes.active}
         className={clsx(classes.buttonLeaf, `depth-${depth}`)}
         component={RouterLink}
-        exact
+        exact={exact}
         style={style}
         to={href}
       >

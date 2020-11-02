@@ -4,21 +4,21 @@ import PropTypes from 'prop-types'
 import useAuth from '../hooks/useAuth'
 
 const GuestGuard = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-
+  const { isAuthenticated } = useAuth()
+  
   if (isAuthenticated) {
-    return <Redirect to="/app/account" />;
+    return <Redirect to="/app/account"/>
   }
-
+  
   return (
     <>
       {children}
     </>
-  );
-};
+  )
+}
 
 GuestGuard.propTypes = {
   children: PropTypes.node,
-};
+}
 
-export default GuestGuard;
+export default GuestGuard

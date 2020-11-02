@@ -11,15 +11,14 @@ export const renderRoutes = (routes = []) => (
   <Suspense fallback={<LoadingScreen/>}>
     <Switch>
       {
-        routes.map((route, i) => {
+        routes.map((route, index) => {
           const Guard = route.guard || Fragment
           const Layout = route.layout || Fragment
           const Component = route.component
-          
           return (
             <Route
               exact={route.exact}
-              key={i}
+              key={index}
               path={route.path}
               render={
                 (props) => (

@@ -92,7 +92,7 @@ const ListElem = ({ text, value, remove }) => {
   )
 }
 
-const DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore, remove }) => {
+const DocList = memo(function DocList({ data, fetchMore, canFetchMore, isFetchingMore, remove }) {
   console.log('%c****EXPENSIVE_RENDER_LIST', 'color: gold')
   const loadMoreButtonRef = React.useRef()
   useIntersectionObserver({
@@ -143,5 +143,5 @@ const DocList = memo(({ data, fetchMore, canFetchMore, isFetchingMore, remove })
     return null
   }
 })
-DocList.displayName = 'DocList'
+
 export default DocList

@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const InputText = memo(({ text, setText }) => {
+const InputText = memo(function BrowserInputText ({ text, setText }) {
   const history = useHistory()
   return (
     <FormControl fullWidth size="small">
@@ -70,9 +70,7 @@ const InputText = memo(({ text, setText }) => {
   )
 })
 
-InputText.displayName = 'Browser InputText'
-
-const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => {
+const SearchBox = memo(function SearchBox ({ isFetching, text, setText, refetch, refetchLine }) {
   console.log('%cRENDER_SEARCH', 'color: cyan')
   const classes = useStyles()
   const history = useHistory()
@@ -129,6 +127,5 @@ const SearchBox = memo(({ isFetching, text, setText, refetch, refetchLine }) => 
   )
 })
 
-SearchBox.displayName = 'SearchBox'
 
 export default SearchBox

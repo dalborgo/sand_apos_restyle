@@ -38,10 +38,10 @@ const DashboardLayout = ({ children }) => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false)
   return (
     <div className={classes.root}>
-      <TopBar onMobileNavOpen={() => setMobileNavOpen(true)}/>
+      <TopBar setMobileNavOpen={setMobileNavOpen}/>
       <NavBar
-        onMobileClose={() => setMobileNavOpen(false)}
         openMobile={isMobileNavOpen}
+        setMobileNavOpen={setMobileNavOpen}
       />
       <div className={classes.wrapper}>
         <div className={classes.contentContainer}>

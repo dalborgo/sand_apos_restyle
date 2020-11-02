@@ -1,10 +1,6 @@
-import React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
+import React, { memo } from 'react'
 import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, Toolbar } from '@material-ui/core'
 import { Menu as MenuIcon } from 'react-feather'
-import Logo from 'src/components/Logo'
 import { THEMES } from 'src/constants'
 import Account from './Account'
 import Contacts from './Contacts'
@@ -33,32 +29,23 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const TopBar = ({
-  className,
-  onMobileNavOpen,
-  ...rest
+  setMobileNavOpen,
 }) => {
   const classes = useStyles()
-  
   return (
     <AppBar
-      className={clsx(classes.root, className)}
-      {...rest}
+      className={classes.root}
     >
       <Toolbar className={classes.toolbar}>
         <Hidden lgUp>
           <IconButton
             color="inherit"
-            onClick={onMobileNavOpen}
+            onClick={() => setMobileNavOpen(true)}
           >
             <SvgIcon fontSize="small">
               <MenuIcon/>
             </SvgIcon>
           </IconButton>
-        </Hidden>
-        <Hidden mdDown>
-          <RouterLink to="/">
-            <Logo/>
-          </RouterLink>
         </Hidden>
         <Box
           flexGrow={1}
@@ -76,13 +63,4 @@ const TopBar = ({
   )
 }
 
-TopBar.propTypes = {
-  className: PropTypes.string,
-  onMobileNavOpen: PropTypes.func,
-}
-
-TopBar.defaultProps = {
-  onMobileNavOpen: () => {},
-}
-
-export default TopBar
+export default memo(TopBar)

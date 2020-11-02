@@ -8,8 +8,6 @@ import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/core'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import GlobalStyles from 'src/components/GlobalStyles'
 import ScrollReset from 'src/components/ScrollReset'
-import CookiesNotification from 'src/components/CookiesNotification'
-import SettingsNotification from 'src/components/SettingsNotification'
 import { defaultQueryFn } from 'src/utils/reactQueryFunctions'
 import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import { IntlProvider } from 'react-intl'
@@ -60,8 +58,6 @@ const App = () => {
                 <AuthProvider>
                   <GlobalStyles/>
                   <ScrollReset/>
-                  <CookiesNotification/>
-                  <SettingsNotification/>
                   <IntlProvider defaultLocale="it" locale="it" messages={messages}>
                     <ReactQueryCacheProvider queryCache={queryCache}>
                       {renderRoutes(routes)}

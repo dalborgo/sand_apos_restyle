@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
 
 const TopBar = ({ className, ...rest }) => {
   const classes = useStyles();
-
   return (
     <AppBar
       className={clsx(classes.root, className)}

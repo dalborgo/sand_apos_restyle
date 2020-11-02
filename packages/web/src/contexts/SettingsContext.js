@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react'
 import merge from 'lodash/merge'
 import { THEMES } from 'src/constants'
-
+import log from '@adapter/common/src/log'
 const defaultSettings = {
   direction: 'ltr',
   responsiveFontSizes: true,
@@ -18,7 +18,7 @@ export const restoreSettings = () => {
       settings = JSON.parse(storedData)
     }
   } catch (err) {
-    
+    log.error('restoreSettings', err.message)
     // If stored data is not a stringified JSON this will fail,
     // that's why we catch the error
   }

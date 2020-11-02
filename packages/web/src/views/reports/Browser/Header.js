@@ -4,7 +4,7 @@ import { Breadcrumbs, Grid, Link, Typography } from '@material-ui/core'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext'
 import { FormattedMessage } from 'react-intl'
 
-const Header = memo(() => {
+const Header = memo(function BrowserHeader () {
   return (
     <Grid
       container
@@ -47,6 +47,5 @@ const Header = memo(() => {
     </Grid>
   )
 })
-Header.displayName = 'Browser Header'
 
 export default Header

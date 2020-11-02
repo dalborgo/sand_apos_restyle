@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@material-ui/core'
 import { FormattedMessage } from 'react-intl'
 import { useSnackbar } from 'notistack';
 
-const CommandBox = memo(({ mutate, isDocId, output }) => {
+const CommandBox = memo(function CommandBox ({ mutate, isDocId, output }) {
   console.log('%cRENDER_COMMAND_BOX', 'color: cyan')
   const { enqueueSnackbar } = useSnackbar()
   const save = useCallback(async () => {
@@ -33,7 +33,5 @@ const CommandBox = memo(({ mutate, isDocId, output }) => {
     </Box>
   )
 })
-
-CommandBox.displayName = 'SearchBox'
 
 export default CommandBox

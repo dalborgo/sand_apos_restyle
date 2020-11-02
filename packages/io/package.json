@@ -10,6 +10,6 @@
     "couchbase": "^3.0.6",
     "get-stream": "^6.0.0",
     "http-message-parser": "^0.0.34",
-    "swagger-client": "^3.11.1"
+    "swagger-client": "^3.12.0"
   }
 }
