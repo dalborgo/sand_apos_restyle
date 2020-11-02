@@ -17,7 +17,7 @@ export const renderRoutes = (routes = [], priority) => {
             const Layout = route.layout || Fragment
             const Component = route.component
             const isPrivate = Array.isArray(route.private)
-            if (!route.hidden && (!isPrivate || route.private.includes(priority))) {
+            if (!isPrivate || route.private.includes(priority)) {
               acc.push(
                 <Route
                   exact={route.exact}

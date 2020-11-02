@@ -32,7 +32,7 @@ function renderNavItems ({
         items.reduce(
           (acc, item) => {
             const isPrivate = Array.isArray(item.private)
-            if (!item.hidden && (!isPrivate || item.private.includes(priority))) {
+            if (!isPrivate || item.private.includes(priority)) {
               return reduceChildRoutes({ acc, item, pathname, depth })
             }
             return acc
