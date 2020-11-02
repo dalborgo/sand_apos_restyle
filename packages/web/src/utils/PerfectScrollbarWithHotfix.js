@@ -15,9 +15,7 @@ export const WrappedPerfectScrollbar = PerfectScrollbarWithHotfix =>
         }
       }
     })
-    return < PerfectScrollbarWithHotfix {...props} ref={ref}/>
+    return <PerfectScrollbarWithHotfix {...props} ref={ref}/>
   })
 
-export const PerfectScrollbarWithHotfix = WrappedPerfectScrollbar(
-  PerfectScrollbar
-)
+export const PerfectScrollbarWithHotfix = WrappedPerfectScrollbar(PerfectScrollbar)

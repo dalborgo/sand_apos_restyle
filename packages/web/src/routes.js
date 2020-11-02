@@ -7,39 +7,45 @@ import LoadingScreen from 'src/components/LoadingScreen'
 import AuthGuard from 'src/components/AuthGuard'
 import GuestGuard from 'src/components/GuestGuard'
 
-export const renderRoutes = (routes = []) => (
-  <Suspense fallback={<LoadingScreen/>}>
-    <Switch>
-      {
-        routes.map((route, index) => {
-          const Guard = route.guard || Fragment
-          const Layout = route.layout || Fragment
-          const Component = route.component
-          return (
-            <Route
-              exact={route.exact}
-              key={index}
-              path={route.path}
-              render={
-                (props) => (
-                  <Guard>
-                    <Layout>
-                      {
-                        route.routes
-                          ? renderRoutes(route.routes)
-                          : <Component {...props} />
-                      }
-                    </Layout>
-                  </Guard>
-                )
-              }
-            />
-          )
-        })
-      }
-    </Switch>
-  </Suspense>
-)
+export const renderRoutes = (routes = [], priority) => {
+  return (
+    <Suspense fallback={<LoadingScreen/>}>
+      <Switch>
+        {
+          routes.reduce((acc, route, index) => {
+            const Guard = route.guard || Fragment
+            const Layout = route.layout || Fragment
+            const Component = route.component
+            const isPrivate = Array.isArray(route.private)
+            if (!route.hidden && (!isPrivate || route.private.includes(priority))) {
+              acc.push(
+                <Route
+                  exact={route.exact}
+                  key={index}
+                  path={route.path}
+                  render={
+                    props => (
+                      <Guard>
+                        <Layout>
+                          {
+                            route.routes
+                              ? renderRoutes(route.routes, priority)
+                              : <Component {...props} />
+                          }
+                        </Layout>
+                      </Guard>
+                    )
+                  }
+                />
+              )
+            }
+            return acc
+          }, [])
+        }
+      </Switch>
+    </Suspense>
+  )
+}
 /* eslint-disable react/display-name */
 const routes = [
   {
@@ -217,6 +223,7 @@ const routes = [
       },
       {
         exact: true,
+        private: [3],
         path: [
           '/app/reports/browser',
           '/app/reports/browser/:docId',

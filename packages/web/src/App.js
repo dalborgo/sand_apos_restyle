@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Router } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import { create } from 'jss'
@@ -22,6 +22,7 @@ import { REACT_QUERY_DEV_TOOLS } from 'src/constants'
 import SnackMyProvider from 'src/components/Snack/SnackComponents'
 import Error500 from 'src/views/errors/Error500'
 import log from '@adapter/common/src/log'
+import useAuth from './hooks/useAuth'
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
 
@@ -39,6 +40,14 @@ const queryCache = new QueryCache({
     },
   },
 })
+
+const RouteList = () => {
+  const { user } = useAuth()
+  return useMemo(() => {
+    return renderRoutes(routes, user?.priority)
+  }, [user])
+}
+
 const App = () => {
   const { settings } = useSettings()
   
@@ -60,7 +69,7 @@ const App = () => {
                   <ScrollReset/>
                   <IntlProvider defaultLocale="it" locale="it" messages={messages}>
                     <ReactQueryCacheProvider queryCache={queryCache}>
-                      {renderRoutes(routes)}
+                      <RouteList/>
                       {
                         REACT_QUERY_DEV_TOOLS &&
                         <ReactQueryDevtools initialIsOpen/>

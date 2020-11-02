@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Link as RouterLink, matchPath, useLocation } from 'react-router-dom'
 import { PerfectScrollbarWithHotfix as PerfectScrollbar } from 'src/utils/PerfectScrollbarWithHotfix'
 import PropTypes from 'prop-types'
@@ -21,16 +21,18 @@ import useAuth from 'src/hooks/useAuth'
 import NavItem from './NavItem'
 
 function renderNavItems ({
+  depth = 0,
   items,
   pathname,
-  depth = 0,
+  priority,
 }) {
   return (
     <List disablePadding>
       {
         items.reduce(
           (acc, item) => {
-            if (!item.hidden) {
+            const isPrivate = Array.isArray(item.private)
+            if (!item.hidden && (!isPrivate || item.private.includes(priority))) {
               return reduceChildRoutes({ acc, item, pathname, depth })
             }
             return acc
@@ -112,7 +114,6 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
   const location = useLocation()
   const { user } = useAuth()
   const PerfectScrollbarRef = useRef(null)
-  const sectionList = useMemo(() => sections(user.priority), [user.priority])
   
   useEffect(() => {
     if (openMobile && setMobileNavOpen) {
@@ -172,7 +173,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
         <Divider/>
         <Box p={2}>
           {
-            sectionList.map(section => (
+            sections.map(section => (
               <List
                 key={section.subheader}
                 subheader={
@@ -190,6 +191,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
                   renderNavItems({
                     items: section.items,
                     pathname: location.pathname,
+                    priority: user.priority,
                   })
                 }
               </List>

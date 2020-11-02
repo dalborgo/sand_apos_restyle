@@ -12,7 +12,6 @@ import {
   Typography,
 } from '@material-ui/core'
 import Page from 'src/components/Page'
-import Logo from 'src/components/Logo'
 import useAuth from 'src/hooks/useAuth'
 import Auth0Login from './Auth0Login'
 import FirebaseAuthLogin from './FirebaseAuthLogin'
@@ -30,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.dark,
     display: 'flex',
     flexDirection: 'column',
-    minHeight: '100vh',
+    height: '100%',
   },
   banner: {
     backgroundColor: theme.palette.background.paper,
@@ -49,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     paddingBottom: 80,
     paddingTop: 80,
+    height: '100%',
   },
   cardContent: {
     padding: theme.spacing(4),
@@ -136,54 +136,51 @@ const LoginView = () => {
         maxWidth="sm"
       >
         <Box
+          alignItems="center"
+          css={{ height: '100%' }}
           display="flex"
-          justifyContent="center"
-          mb={8}
         >
-          <RouterLink to="/">
-            <Logo/>
-          </RouterLink>
+          <Card>
+            <CardContent className={classes.cardContent}>
+              <Box
+                alignItems="center"
+                display="flex"
+                justifyContent="space-between"
+                mb={3}
+              >
+                <div>
+                  <Typography
+                    color="textPrimary"
+                    gutterBottom
+                    variant="h2"
+                  >
+                    <FormattedMessage defaultMessage="Entra" id="auth.login.enter"/>
+                  </Typography>
+                  <Typography
+                    color="textSecondary"
+                    variant="body2"
+                  >
+                    <FormattedMessage defaultMessage="Collegati alla piattaforma" id="auth.connect"/>
+                  </Typography>
+                </div>
+                <div className={classes.currentMethodIcon}>
+                  <img
+                    alt="Auth method"
+                    src={methodIcons[method]}
+                  />
+                </div>
+              </Box>
+              <Box
+                flexGrow={1}
+                mt={3}
+              >
+                {method === 'Auth0' && <Auth0Login/>}
+                {method === 'FirebaseAuth' && <FirebaseAuthLogin/>}
+                {method === 'JWT' && <JWTLogin/>}
+              </Box>
+            </CardContent>
+          </Card>
         </Box>
-        <Card>
-          <CardContent className={classes.cardContent}>
-            <Box
-              alignItems="center"
-              display="flex"
-              justifyContent="space-between"
-              mb={3}
-            >
-              <div>
-                <Typography
-                  color="textPrimary"
-                  gutterBottom
-                  variant="h2"
-                >
-                  <FormattedMessage defaultMessage="Entra" id="auth.login.enter"/>
-                </Typography>
-                <Typography
-                  color="textSecondary"
-                  variant="body2"
-                >
-                  <FormattedMessage defaultMessage="Collegati alla piattaforma" id="auth.connect"/>
-                </Typography>
-              </div>
-              <div className={classes.currentMethodIcon}>
-                <img
-                  alt="Auth method"
-                  src={methodIcons[method]}
-                />
-              </div>
-            </Box>
-            <Box
-              flexGrow={1}
-              mt={3}
-            >
-              {method === 'Auth0' && <Auth0Login/>}
-              {method === 'FirebaseAuth' && <FirebaseAuthLogin/>}
-              {method === 'JWT' && <JWTLogin/>}
-            </Box>
-          </CardContent>
-        </Card>
       </Container>
     </Page>
   )

@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.secondary.main,
     },
   },
-}));
+}))
 
 const NavItem = ({
   children,
@@ -70,21 +70,21 @@ const NavItem = ({
   title,
   ...rest
 }) => {
-  const classes = useStyles();
-  const [open, setOpen] = useState(openProp);
-
+  const classes = useStyles()
+  const [open, setOpen] = useState(openProp)
+  
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  let paddingLeft = 8;
-
-  if (depth > 0) {
-    paddingLeft = 32 + 8 * depth;
+    setOpen((prevOpen) => !prevOpen)
   }
-
-  const style = { paddingLeft };
-
+  
+  let paddingLeft = 8
+  
+  if (depth > 0) {
+    paddingLeft = 32 + 8 * depth
+  }
+  
+  const style = { paddingLeft }
+  
   if (children) {
     return (
       <ListItem
@@ -109,15 +109,15 @@ const NavItem = ({
           <span className={classes.title}>
             {title}
           </span>
-          {open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          {open ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
         </Button>
         <Collapse in={open}>
           {children}
         </Collapse>
       </ListItem>
-    );
+    )
   }
-
+  
   return (
     <ListItem
       className={clsx(classes.itemLeaf, className)}
@@ -144,11 +144,11 @@ const NavItem = ({
         <span className={classes.title}>
           {title}
         </span>
-        {Info && <Info />}
+        {Info && <Info/>}
       </Button>
     </ListItem>
-  );
-};
+  )
+}
 
 NavItem.propTypes = {
   children: PropTypes.node,
@@ -159,10 +159,10 @@ NavItem.propTypes = {
   info: PropTypes.elementType,
   open: PropTypes.bool,
   title: PropTypes.string.isRequired,
-};
+}
 
 NavItem.defaultProps = {
   open: false,
-};
+}
 
-export default NavItem;
+export default NavItem
