@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react'
 import useIntersectionObserver from 'src/utils/useIntersectionObserver'
 import { useHistory } from 'react-router'
-import { Button, Link, makeStyles } from '@material-ui/core'
+import { Box, Button, Link, makeStyles } from '@material-ui/core'
 import clsx from 'clsx'
 import { testParams } from 'src/utils/urlFunctions'
 import { FormattedMessage } from 'react-intl'
@@ -13,6 +13,8 @@ const BG_COLOR = '#c0efdd'
 const useStyles = makeStyles((theme) => ({
   container: {
     cursor: 'pointer',
+    height: 30,
+    whiteSpace: 'nowrap',
     '&:hover': {
       backgroundColor: theme.palette.grey[200],
     },
@@ -24,8 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   link: {
-    display: 'inline-block',
-    margin: 3,
+    lineHeight: 0,
   },
   linkPhone: {
     color: theme.palette.secondary.main,
@@ -70,7 +71,7 @@ const ListElem = ({ text, value, remove, locked }) => {
     linkClasses += ` ${clsx(classes.linkStandard)}`
   }
   return (
-    <div className={containerClasses} id={text} onClick={handleSelect} style={{ whiteSpace: 'nowrap' }}>
+    <Box alignItems="center" className={containerClasses} display="flex" id={text} onClick={handleSelect}>
       {
         !locked &&
         <IconButton
@@ -79,20 +80,20 @@ const ListElem = ({ text, value, remove, locked }) => {
           size="small"
           style={{ marginRight: 5 }}
         >
-          <CloseIcon style={{fontSize: '15pt'}}/>
+          <CloseIcon style={{ fontSize: '15pt' }}/>
         </IconButton>
       }
       <Link
         className={linkClasses}
-        component={'div'}
+        component="div"
         href="#"
-        underline={'none'}
+        underline="none"
         variant="body2"
       >
         {text}
       </Link>
       <br/>
-    </div>
+    </Box>
   )
 }
 

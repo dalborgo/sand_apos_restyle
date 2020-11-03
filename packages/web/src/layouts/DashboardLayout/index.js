@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('lg')]: {
       paddingLeft: 256,
     },
+    [theme.breakpoints.down('sm')]: {
+      paddingTop: 48,
+    },
   },
   contentContainer: {
     display: 'flex',

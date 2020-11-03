@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     minHeight: 64,
+    [theme.breakpoints.down('sm')]: {
+      minHeight: 32,
+    },
   },
 }))
 
