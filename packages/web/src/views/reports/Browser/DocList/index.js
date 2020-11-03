@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     display: 'inline-block',
+    margin: 3,
   },
   linkPhone: {
     color: theme.palette.secondary.main,
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }), { name: 'MuiBrowserElem' })
 
-const ListElem = ({ text, value, remove }) => {
+const ListElem = ({ text, value, remove, locked }) => {
   console.log('%cRENDER_SEC', 'color: pink')
   const classes = useStyles()
   const history = useHistory()
@@ -70,14 +71,17 @@ const ListElem = ({ text, value, remove }) => {
   }
   return (
     <div className={containerClasses} id={text} onClick={handleSelect} style={{ whiteSpace: 'nowrap' }}>
-      <IconButton
-        name={text}
-        onClick={handleRemove}
-        size="small"
-        style={{ marginRight: 5 }}
-      >
-        <CloseIcon/>
-      </IconButton>
+      {
+        !locked &&
+        <IconButton
+          name={text}
+          onClick={handleRemove}
+          size="small"
+          style={{ marginRight: 5 }}
+        >
+          <CloseIcon style={{fontSize: '15pt'}}/>
+        </IconButton>
+      }
       <Link
         className={linkClasses}
         component={'div'}
@@ -92,7 +96,7 @@ const ListElem = ({ text, value, remove }) => {
   )
 }
 
-const DocList = memo(function DocList({ data, fetchMore, canFetchMore, isFetchingMore, remove }) {
+const DocList = memo(function DocList ({ data, fetchMore, canFetchMore, isFetchingMore, remove, locked }) {
   console.log('%c****EXPENSIVE_RENDER_LIST', 'color: gold')
   const loadMoreButtonRef = React.useRef()
   useIntersectionObserver({
@@ -110,6 +114,7 @@ const DocList = memo(function DocList({ data, fetchMore, canFetchMore, isFetchin
                 !!page?.results?.rows?.length && page.results.rows.map(elem => (
                   <ListElem
                     key={elem.id}
+                    locked={locked}
                     remove={remove}
                     text={elem.id}
                     value={elem.value}

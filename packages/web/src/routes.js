@@ -6,6 +6,7 @@ import HomeView from 'src/views/home/HomeView'
 import LoadingScreen from 'src/components/LoadingScreen'
 import AuthGuard from 'src/components/AuthGuard'
 import GuestGuard from 'src/components/GuestGuard'
+import { isMenuLinkToShow } from './utils/logics'
 
 export const renderRoutes = (routes = [], priority) => {
   return (
@@ -16,8 +17,7 @@ export const renderRoutes = (routes = [], priority) => {
             const Guard = route.guard || Fragment
             const Layout = route.layout || Fragment
             const Component = route.component
-            const isPrivate = Array.isArray(route.private)
-            if (!isPrivate || route.private.includes(priority)) {
+            if (isMenuLinkToShow(route, {priority})) {
               acc.push(
                 <Route
                   exact={route.exact}

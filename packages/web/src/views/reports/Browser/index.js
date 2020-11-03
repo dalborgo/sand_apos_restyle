@@ -124,8 +124,10 @@ const SearchComponent = memo((function SearchComponent (props) {
     <Paper className={props.classes.docList} elevation={2}>
       <SearchBox
         isFetching={props.isFetching}
+        locked={props.locked}
         refetch={props.refetch}
         refetchLine={props.refetchLine}
+        setLocked={props.setLocked}
         setText={props.setText}
         text={props.text}
       />
@@ -138,6 +140,7 @@ const SearchComponent = memo((function SearchComponent (props) {
               data={props.data}
               fetchMore={props.fetchMore}
               isFetchingMore={props.isFetchingMore}
+              locked={props.locked}
               remove={props.remove}
             />
           </PerfectScrollbar>
@@ -187,6 +190,7 @@ const BrowserView = () => {
   const { enqueueSnackbar } = useSnackbar()
   const classes = useStyles()
   const [text, setText] = useState('')
+  const [locked, setLocked] = useState(true)
   const { docId } = useParams()
   const prevDocID = useRef(null)
   const snackQueryError = useSnackQueryError()
@@ -276,6 +280,8 @@ const BrowserView = () => {
     remove,
     setText,
     text,
+    locked,
+    setLocked,
   }
   const displayBody = {
     classes,

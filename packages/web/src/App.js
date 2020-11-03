@@ -23,6 +23,7 @@ import SnackMyProvider from 'src/components/Snack/SnackComponents'
 import Error500 from 'src/views/errors/Error500'
 import log from '@adapter/common/src/log'
 import useAuth from './hooks/useAuth'
+
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
 

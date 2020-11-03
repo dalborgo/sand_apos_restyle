@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import React, { useEffect, useRef } from 'react'
 import { Link as RouterLink, matchPath, useLocation } from 'react-router-dom'
 import { PerfectScrollbarWithHotfix as PerfectScrollbar } from 'src/utils/PerfectScrollbarWithHotfix'
@@ -19,6 +18,7 @@ import {
 } from '@material-ui/core'
 import useAuth from 'src/hooks/useAuth'
 import NavItem from './NavItem'
+import { isMenuLinkToShow } from 'src/utils/logics'
 
 function renderNavItems ({
   depth = 0,
@@ -31,8 +31,7 @@ function renderNavItems ({
       {
         items.reduce(
           (acc, item) => {
-            const isPrivate = Array.isArray(item.private)
-            if (!isPrivate || item.private.includes(priority)) {
+            if (isMenuLinkToShow(item, {priority})) {
               return reduceChildRoutes({ acc, item, pathname, depth })
             }
             return acc

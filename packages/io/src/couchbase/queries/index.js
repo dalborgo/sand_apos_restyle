@@ -1,20 +1,21 @@
 import log from '@adapter/common/src/winston'
 import couchbase from 'couchbase'
+import axios from 'axios'
+import { cFunctions } from '@adapter/common'
+import get from 'lodash/get'
 
-const CONSISTENCY = {
+const COUCH_CONSISTENCY = {
   RequestPlus: couchbase.QueryScanConsistency.RequestPlus,
 }
 
 /**
- * @param options: es. { parameters: { type: 'USER' } } or ARRAY
+ * @options_ es. { parameters: { type: 'USER' }, scanConsistency: ... }
  */
-async function exec (query, cluster, options_ = {}) {
-  const options = Object.assign({
-    scanConsistency: CONSISTENCY.RequestPlus,
-  }, options_)
+async function exec (statement, cluster, options_ = {}) {
+  const options = Object.assign({}, options_)
   try {
-    log.debug('query', query)
-    const { meta, rows } = await cluster.query(query, options)
+    log.debug('query', statement)
+    const { meta, rows } = await cluster.query(statement, options)
     log.debug('executionTime', `${meta.metrics.executionTime} ms`)
     return { ok: true, results: rows }
   } catch (err) {
@@ -22,7 +23,36 @@ async function exec (query, cluster, options_ = {}) {
     return { ok: false, message: err.message, err }
   }
 }
+/**
+ * @options es. { args: [ "smith", 45 ], scan_consistency: ... }
+ * doc: https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html
+ */
+async function execByService (statement, connection = {}, options = {}) {
+  const { HOST, PASSWORD, BUCKET_NAME } = connection
+  const auth = cFunctions.getAuth(BUCKET_NAME, PASSWORD)
+  try {
+    const params = {
+      data: {
+        ...options,
+        statement,
+      },
+      headers: { Authorization: auth },
+      method: 'POST',
+      url: `http://${HOST}:8093/query/service`,
+    }
+    log.verbose('query service', statement)
+    const { data: { results } } = await axios(params)
+    log.verbose('end query service execution') //metrics non attendibili
+    return { ok: true, results }
+  } catch (err) {
+    const info = get(err, 'response.data.errors')
+    log.error('Query service error', err)
+    return { ok: false, message: err.message, info }
+  }
+}
 
 export default {
+  COUCH_CONSISTENCY,
   exec,
+  execByService,
 }
