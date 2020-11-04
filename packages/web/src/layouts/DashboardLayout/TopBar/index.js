@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, Toolbar } from '@material-ui/core'
+import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, Toolbar, Typography } from '@material-ui/core'
 import { Menu as MenuIcon } from 'react-feather'
 import { THEMES } from 'src/constants'
 import Account from './Account'
@@ -50,6 +50,9 @@ const TopBar = ({
             </SvgIcon>
           </IconButton>
         </Hidden>
+        <Typography variant={'h3'}>
+          Asten Demo
+        </Typography>
         <Box
           flexGrow={1}
           ml={2}
