@@ -13,6 +13,7 @@ import SaveIcon from '@material-ui/icons/Save'
 import Fab from '@material-ui/core/Fab'
 import Hidden from '@material-ui/core/Hidden'
 import Dialog from '@material-ui/core/Dialog'
+import { FormattedMessage } from 'react-intl'
 
 const LIMIT = 40
 
@@ -91,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
 }))
-
+export let responseTimeInMilli
 const fetchList = async (key, text, cursor) => {
   const { data, config } = await axiosLocalInstance(`/api/${key}`, {
     params: {
@@ -100,7 +101,8 @@ const fetchList = async (key, text, cursor) => {
       text: text || undefined,
     },
   })
-  return { ...data, durationInMilli: config?.timeData?.duration._milliseconds }
+  responseTimeInMilli = config?.timeData?.responseTimeInMilli
+  return data
 }
 
 const saveMutation = async (docs) => {
@@ -118,40 +120,31 @@ const deleteMutation = async (docId) => {
   return data
 }
 
-const statsPropsAreEqual = (prevStats, nextStats) => prevStats.isSuccess === nextStats.isSuccess
+const timePropsAreEqual = (prevStats, nextStats) => prevStats.isSuccess === nextStats.isSuccess
 
-const BrowserStats = memo(function BrowserStats (props) {
+const TimeStats = memo(function TimeStats (props) {
   if (props.isSuccess) {
     return (
-      <Box display={'flex'}>
-        <Box flexGrow={1}>
-          <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
-            {'Righe totali: '}
-          </Typography>
-          <Typography display="inline" variant="h6">
-            {props.total}
-          </Typography>
-        </Box>
-        <Box>
-          <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
-            {'Tempo query: '}
-          </Typography>
-          <Typography display="inline" variant="h6">
-            {props.duration}
-          </Typography>
-        </Box>
+      <Box>
+        <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
+          <FormattedMessage defaultMessage="Tempo query" id="reports.browser.response_time"/>{': '}
+        </Typography>
+        <Typography display="inline" variant="h6">
+          <span id="BrowserSpan">{`${props.duration || 0} ms`}</span>
+        </Typography>
       </Box>
     )
   } else {
     return null
   }
-}, statsPropsAreEqual)
+}, timePropsAreEqual)
 
 const SearchComponent = memo((function SearchComponent (props) {
   console.log('%cRENDER_SearchComponent', 'color: green')
   return (
     <Paper className={props.classes.docList} elevation={2}>
       <SearchBox
+        isFetchedAfterMountList={props.isFetchedAfterMountList}
         isFetchingDoc={props.isFetchingDoc}
         isFetchingList={props.isFetchingList}
         isSuccessDoc={props.isSuccessDoc}
@@ -166,12 +159,20 @@ const SearchComponent = memo((function SearchComponent (props) {
       <Box pb={0.5} px={1.5} style={{ minHeight: 25 }}>
         {
           props.data &&
-          <BrowserStats
-            duration={props.data[0].durationInMilli}
-            isFetchingList={props.isFetchingList}
-            isSuccess={props.isSuccessList}
-            total={props.data[0].results.total_rows}
-          />
+          <Box display="flex">
+            <Box flexGrow={1}>
+              <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
+                <FormattedMessage defaultMessage="Righe totali" id="reports.browser.total_rows"/>{': '}
+              </Typography>
+              <Typography display="inline" variant="h6">
+                {props.data[0].results.total_rows}
+              </Typography>
+            </Box>
+            <TimeStats
+              duration={props.responseTimeInMilli}
+              isSuccess={props.isSuccessList}
+            />
+          </Box>
         }
       </Box>
       <Divider/>
@@ -323,13 +324,17 @@ const BrowserView = () => {
       queryCache.invalidateQueries('docs/browser').then()
     },
   })
+  console.log('restList:', respList)
+  console.log('respDoc:', respDoc)
   const searchBody = {
     canFetchMore: respList.canFetchMore,
     classes,
     data: respList.data,
+    responseTimeInMilli,
     fetchMore: respList.fetchMore,
     isFetchingList: respList.isFetching,
     isFetchingDoc: respDoc.isFetching,
+    isFetchedAfterMountList: respList.isFetchedAfterMount,
     isFetching: respList.isFetching || respDoc.isFetching,
     isFetchingMore: respList.isFetchingMore,
     isLoading: respList.isLoading,
@@ -343,6 +348,7 @@ const BrowserView = () => {
     locked,
     setLocked,
   }
+  
   const displayBody = {
     classes,
     docId,

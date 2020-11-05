@@ -7,6 +7,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 import ReplayIcon from '@material-ui/icons/Replay'
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
 import { useHistory } from 'react-router'
+import { responseTimeInMilli } from '../index'
 
 const focus = event => event.target.select()
 
@@ -79,6 +80,7 @@ const InputText = memo(function BrowserInputText ({ text, setText }) {
 })
 
 const SearchBox = memo(function SearchBox ({
+  isFetchedAfterMountList,
   isFetchingDoc,
   isFetchingList,
   text,
@@ -93,7 +95,7 @@ const SearchBox = memo(function SearchBox ({
   console.log('%cRENDER_SEARCH', 'color: cyan')
   const classes = useStyles()
   const history = useHistory()
-  const checkLoading = (isFetchingDoc && !isSuccessDoc) || (isFetchingList && !isSuccessList)
+  const checkLoading = (isFetchingDoc && !isSuccessDoc) || (isFetchingList && (!isSuccessList || isFetchedAfterMountList))
   return (
     <Box
       alignItems="center"
@@ -137,15 +139,17 @@ const SearchBox = memo(function SearchBox ({
               <IconButton
                 color="primary"
                 onClick={
-                  () => {
-                    refetch()
+                  async () => {
                     refetchLine()
+                    await refetch()
+                    const elem = document.getElementById('BrowserSpan')
+                    if (elem) {elem.innerText = `${responseTimeInMilli} ms`}
                   }
                 }
               >
                 {checkLoading ? <HourglassEmptyIcon/> : <ReplayIcon/>}
               </IconButton>
-              {(checkLoading) && <CircularProgress className={classes.progress} size={40} thickness={2}/>}
+              {checkLoading && <CircularProgress className={classes.progress} size={40} thickness={2}/>}
             </div>
           </Box>
         </Box>

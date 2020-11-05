@@ -89,6 +89,7 @@
     "uuid": "^7.0.3"
   },
   "devDependencies": {
+    "@welldone-software/why-did-you-render": "^5.0.0",
     "babel-plugin-react-intl-extractor": "^1.0.8",
     "customize-cra": "^1.0.0",
     "customize-cra-react-refresh": "1.1.0",

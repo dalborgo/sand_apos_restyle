@@ -14,5 +14,7 @@
   "error500.goto_home_page_button": "",
   "error404.go_back_button": "",
   "error404.goto_home_page_description": "",
-  "error404.wrong_page": ""
+  "error404.wrong_page": "",
+  "reports.browser.response_time": "",
+  "reports.browser.total_rows": ""
 }

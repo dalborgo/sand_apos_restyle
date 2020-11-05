@@ -25,17 +25,18 @@ axiosLocalInstance.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 axiosLocalInstance.interceptors.response.use(function (response) {
-  response.config['timeData'].duration = moment.duration(moment().diff(moment(response.config['timeData'].start)))
+  const duration = moment.duration(moment().diff(moment(response.config['timeData'].start)))
+  response.config['timeData'].responseTimeInMilli = duration.asMilliseconds()
   return response
 }, function (error) {
   return Promise.reject(error)
 })
 
 export const defaultQueryFn = async (key, params) => {
-  const { data, config } = await axiosLocalInstance(`/api/${key}`, {
+  const { data } = await axiosLocalInstance(`/api/${key}`, {
     params,
   })
-  return { ...data, durationInMilli: config?.timeData?.duration.milliseconds }
+  return data
 }
 
 export function useSnackQueryError () {

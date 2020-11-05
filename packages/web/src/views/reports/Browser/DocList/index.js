@@ -98,6 +98,7 @@ const ListElem = ({ text, value, remove, locked }) => {
 }
 
 const DocList = memo(function DocList ({ data, fetchMore, canFetchMore, isFetchingMore, remove, locked }) {
+  console.log('data:', data)
   console.log('%c****EXPENSIVE_RENDER_LIST', 'color: gold')
   const loadMoreButtonRef = React.useRef()
   useIntersectionObserver({
@@ -150,4 +151,5 @@ const DocList = memo(function DocList ({ data, fetchMore, canFetchMore, isFetchi
   }
 })
 
+DocList.whyDidYouRender = true
 export default DocList

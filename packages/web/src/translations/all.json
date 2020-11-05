@@ -52,6 +52,10 @@
     "defaultMessage": "Errore di rete!"
   },
   {
+    "id": "reports.browser.response_time",
+    "defaultMessage": "Tempo query"
+  },
+  {
     "id": "reports.browser.save",
     "description": "Bottone Salva",
     "defaultMessage": "Salva"
@@ -59,6 +63,10 @@
   {
     "id": "reports.browser.showMore",
     "defaultMessage": "Mostra di più"
+  },
+  {
+    "id": "reports.browser.total_rows",
+    "defaultMessage": "Righe totali"
   },
   {
     "id": "reports.header.list_documents",

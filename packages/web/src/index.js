@@ -16,6 +16,7 @@ import 'fontsource-roboto/300.css'
 import 'fontsource-roboto/400.css'
 import 'fontsource-roboto/500.css'
 import 'fontsource-roboto/700.css'
+import 'src/utils/wdyr'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -23,7 +24,6 @@ import { enableES5 } from 'immer'
 import store from 'src/store'
 import { SettingsProvider } from 'src/contexts/SettingsContext'
 import App from 'src/App'
-
 enableES5()
 
 ReactDOM.render(
