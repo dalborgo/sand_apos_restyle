@@ -130,7 +130,7 @@ const TimeStats = memo(function TimeStats (props) {
           <FormattedMessage defaultMessage="Tempo query" id="reports.browser.response_time"/>{': '}
         </Typography>
         <Typography display="inline" variant="h6">
-          <span id="BrowserSpan">{`${props.duration || 0} ms`}</span>
+          <span id="BrowserSpan">{`${responseTimeInMilli || 0} ms`}</span>
         </Typography>
       </Box>
     )
@@ -169,7 +169,6 @@ const SearchComponent = memo((function SearchComponent (props) {
               </Typography>
             </Box>
             <TimeStats
-              duration={props.responseTimeInMilli}
               isSuccess={props.isSuccessList}
             />
           </Box>
@@ -324,13 +323,10 @@ const BrowserView = () => {
       queryCache.invalidateQueries('docs/browser').then()
     },
   })
-  console.log('restList:', respList)
-  console.log('respDoc:', respDoc)
   const searchBody = {
     canFetchMore: respList.canFetchMore,
     classes,
     data: respList.data,
-    responseTimeInMilli,
     fetchMore: respList.fetchMore,
     isFetchingList: respList.isFetching,
     isFetchingDoc: respDoc.isFetching,
