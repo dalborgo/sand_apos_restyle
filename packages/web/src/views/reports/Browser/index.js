@@ -118,9 +118,7 @@ const deleteMutation = async (docId) => {
   return data
 }
 
-function moviePropsAreEqual (prevMovie, nextMovie) {
-  return prevMovie.isSuccess === nextMovie.isSuccess
-}
+const statsPropsAreEqual = (prevStats, nextStats) => prevStats.isSuccess === nextStats.isSuccess
 
 const BrowserStats = memo(function BrowserStats (props) {
   if (props.isSuccess) {
@@ -147,7 +145,7 @@ const BrowserStats = memo(function BrowserStats (props) {
   } else {
     return null
   }
-}, moviePropsAreEqual)
+}, statsPropsAreEqual)
 
 const SearchComponent = memo((function SearchComponent (props) {
   console.log('%cRENDER_SearchComponent', 'color: green')

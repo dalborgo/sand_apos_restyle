@@ -94,8 +94,6 @@ const SearchBox = memo(function SearchBox ({
   const classes = useStyles()
   const history = useHistory()
   const checkLoading = (isFetchingDoc && !isSuccessDoc) || (isFetchingList && !isSuccessList)
-  console.log('isFetchingDoc:', isFetchingDoc)
-  console.log('isSuccessDoc:', isSuccessDoc)
   return (
     <Box
       alignItems="center"
