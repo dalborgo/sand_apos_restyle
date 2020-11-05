@@ -4,8 +4,10 @@ import { useSnackbar } from 'notistack'
 import { useIntl } from 'react-intl'
 import { useState } from 'react'
 import log from '@adapter/common/src/log'
+import moment from 'moment'
 
 const wlh = window.location.hostname
+
 export const axiosLocalInstance = axios.create({
   baseURL: `http://${wlh}:7000`,
   params: {
@@ -16,11 +18,24 @@ export const axiosLocalInstance = axios.create({
   },
 })
 
+axiosLocalInstance.interceptors.request.use(function (config) {
+  config.timeData = { start: moment().toISOString() }
+  return config
+}, function (error) {
+  return Promise.reject(error)
+})
+axiosLocalInstance.interceptors.response.use(function (response) {
+  response.config['timeData'].duration = moment.duration(moment().diff(moment(response.config['timeData'].start)))
+  return response
+}, function (error) {
+  return Promise.reject(error)
+})
+
 export const defaultQueryFn = async (key, params) => {
-  const { data } = await axiosLocalInstance(`/api/${key}`, {
+  const { data, config } = await axiosLocalInstance(`/api/${key}`, {
     params,
   })
-  return data
+  return { ...data, durationInMilli: config?.timeData?.duration.milliseconds }
 }
 
 export function useSnackQueryError () {

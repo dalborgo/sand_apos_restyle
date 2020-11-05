@@ -1,12 +1,12 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { Box, Grid, makeStyles, Paper } from '@material-ui/core'
+import { Box, Divider, Grid, makeStyles, Paper, Typography } from '@material-ui/core'
 import { useInfiniteQuery, useMutation, useQuery, useQueryCache } from 'react-query'
 import Page from 'src/components/Page'
 import DocList from './DocList'
 import SearchBox from './SearchBox'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { axiosLocalInstance, useSnackQueryError } from 'src/utils/reactQueryFunctions'
-import { useParams } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import Header from './Header'
 import { useSnackbar } from 'notistack'
 import SaveIcon from '@material-ui/icons/Save'
@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     overflowY: 'auto',
     overflowX: 'hidden',
-    paddingTop: theme.spacing(0),
+    paddingTop: theme.spacing(0.5),
     paddingBottom: theme.spacing(1.5),
     paddingLeft: theme.spacing(1.5),
     paddingRight: theme.spacing(1.5),
@@ -93,14 +93,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const fetchList = async (key, text, cursor) => {
-  const { data } = await axiosLocalInstance(`/api/${key}`, {
+  const { data, config } = await axiosLocalInstance(`/api/${key}`, {
     params: {
       limit: LIMIT,
       startkey: cursor,
       text: text || undefined,
     },
   })
-  return data
+  return { ...data, durationInMilli: config?.timeData?.duration._milliseconds }
 }
 
 const saveMutation = async (docs) => {
@@ -118,12 +118,46 @@ const deleteMutation = async (docId) => {
   return data
 }
 
+function moviePropsAreEqual (prevMovie, nextMovie) {
+  return prevMovie.isSuccess === nextMovie.isSuccess
+}
+
+const BrowserStats = memo(function BrowserStats (props) {
+  if (props.isSuccess) {
+    return (
+      <Box display={'flex'}>
+        <Box flexGrow={1}>
+          <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
+            {'Righe totali: '}
+          </Typography>
+          <Typography display="inline" variant="h6">
+            {props.total}
+          </Typography>
+        </Box>
+        <Box>
+          <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
+            {'Tempo query: '}
+          </Typography>
+          <Typography display="inline" variant="h6">
+            {props.duration}
+          </Typography>
+        </Box>
+      </Box>
+    )
+  } else {
+    return null
+  }
+}, moviePropsAreEqual)
+
 const SearchComponent = memo((function SearchComponent (props) {
   console.log('%cRENDER_SearchComponent', 'color: green')
   return (
     <Paper className={props.classes.docList} elevation={2}>
       <SearchBox
-        isFetching={props.isFetching}
+        isFetchingDoc={props.isFetchingDoc}
+        isFetchingList={props.isFetchingList}
+        isSuccessDoc={props.isSuccessDoc}
+        isSuccessList={props.isSuccessList}
         locked={props.locked}
         refetch={props.refetch}
         refetchLine={props.refetchLine}
@@ -131,6 +165,18 @@ const SearchComponent = memo((function SearchComponent (props) {
         setText={props.setText}
         text={props.text}
       />
+      <Box pb={0.5} px={1.5} style={{ minHeight: 25 }}>
+        {
+          props.data &&
+          <BrowserStats
+            duration={props.data[0].durationInMilli}
+            isFetchingList={props.isFetchingList}
+            isSuccess={props.isSuccessList}
+            total={props.data[0].results.total_rows}
+          />
+        }
+      </Box>
+      <Divider/>
       <div className={props.classes.browserArea} id="browserPanel">
         {
           !props.isLoading &&
@@ -191,6 +237,7 @@ const BrowserView = () => {
   const classes = useStyles()
   const [text, setText] = useState('')
   const [locked, setLocked] = useState(true)
+  const history = useHistory()
   const { docId } = useParams()
   const prevDocID = useRef(null)
   const snackQueryError = useSnackQueryError()
@@ -218,6 +265,17 @@ const BrowserView = () => {
       const rowsFetched = allGroups.length * LIMIT
       const isOver = !LIMIT || rowsFetched === totalRows || rows.length < LIMIT
       return isOver ? false : parseInt(cursor)
+    },
+    onSettled: data => {
+      if (Array.isArray(data) && data.length === 1) {
+        const [row] = data
+        if (row.results.total_rows === 1) { //auto select if unique result
+          if (row.ok) {
+            const id = row.results.rows[0].id
+            history.push(`/app/reports/browser/${id}`)
+          }
+        }
+      }
     },
     onError: err => {
       snackQueryError(err)
@@ -272,9 +330,13 @@ const BrowserView = () => {
     classes,
     data: respList.data,
     fetchMore: respList.fetchMore,
+    isFetchingList: respList.isFetching,
+    isFetchingDoc: respDoc.isFetching,
     isFetching: respList.isFetching || respDoc.isFetching,
     isFetchingMore: respList.isFetchingMore,
     isLoading: respList.isLoading,
+    isSuccessList: respList.isSuccess,
+    isSuccessDoc: respDoc.isSuccess,
     refetch: respList.refetch,
     refetchLine: respDoc.refetch,
     remove,

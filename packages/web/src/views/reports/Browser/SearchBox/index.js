@@ -23,8 +23,8 @@ const useStyles = makeStyles(theme => ({
   progress: {
     color: theme.palette.primary.main,
     position: 'absolute',
-    top: 1,
-    left: 1,
+    top: 4,
+    left: 4,
   },
 }))
 
@@ -78,16 +78,30 @@ const InputText = memo(function BrowserInputText ({ text, setText }) {
   )
 })
 
-const SearchBox = memo(function SearchBox ({ isFetching, text, setText, refetch, refetchLine, locked, setLocked }) {
+const SearchBox = memo(function SearchBox ({
+  isFetchingDoc,
+  isFetchingList,
+  text,
+  setText,
+  refetch,
+  refetchLine,
+  locked,
+  setLocked,
+  isSuccessDoc,
+  isSuccessList,
+}) {
   console.log('%cRENDER_SEARCH', 'color: cyan')
   const classes = useStyles()
   const history = useHistory()
+  const checkLoading = (isFetchingDoc && !isSuccessDoc) || (isFetchingList && !isSuccessList)
+  console.log('isFetchingDoc:', isFetchingDoc)
+  console.log('isSuccessDoc:', isSuccessDoc)
   return (
     <Box
       alignItems="center"
       display="flex"
+      pt={1}
       px={2}
-      py={1}
     >
       <form autoComplete="off" onSubmit={event => event.preventDefault()} style={{ width: '100%' }}>
         <Box alignItems="center" display="flex" mb={0}>
@@ -131,9 +145,9 @@ const SearchBox = memo(function SearchBox ({ isFetching, text, setText, refetch,
                   }
                 }
               >
-                {isFetching ? <HourglassEmptyIcon/> : <ReplayIcon/>}
+                {checkLoading ? <HourglassEmptyIcon/> : <ReplayIcon/>}
               </IconButton>
-              {isFetching && <CircularProgress className={classes.progress} size={46} thickness={2}/>}
+              {(checkLoading) && <CircularProgress className={classes.progress} size={40} thickness={2}/>}
             </div>
           </Box>
         </Box>

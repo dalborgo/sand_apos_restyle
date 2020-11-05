@@ -23,6 +23,7 @@ import SnackMyProvider from 'src/components/Snack/SnackComponents'
 import Error500 from 'src/views/errors/Error500'
 import log from '@adapter/common/src/log'
 import useAuth from './hooks/useAuth'
+import { RecoilRoot } from 'recoil'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -51,13 +52,11 @@ const RouteList = () => {
 
 const App = () => {
   const { settings } = useSettings()
-  
   const theme = createTheme({
     direction: settings.direction,
     responsiveFontSizes: settings.responsiveFontSizes,
     theme: settings.theme,
   })
-  
   return (
     <ThemeProvider theme={theme}>
       <StylesProvider jss={jss}>
@@ -70,7 +69,9 @@ const App = () => {
                   <ScrollReset/>
                   <IntlProvider defaultLocale="it" locale="it" messages={messages}>
                     <ReactQueryCacheProvider queryCache={queryCache}>
-                      <RouteList/>
+                      <RecoilRoot>
+                        <RouteList/>
+                      </RecoilRoot>
                       {
                         REACT_QUERY_DEV_TOOLS &&
                         <ReactQueryDevtools initialIsOpen/>
