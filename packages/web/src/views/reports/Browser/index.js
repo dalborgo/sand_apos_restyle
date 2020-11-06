@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { Box, Divider, Grid, makeStyles, Paper, Typography } from '@material-ui/core'
+import { Box, Divider, Grid, makeStyles, Paper, Typography, useMediaQuery } from '@material-ui/core'
 import { useInfiniteQuery, useMutation, useQuery, useQueryCache } from 'react-query'
 import Page from 'src/components/Page'
 import DocList from './DocList'
@@ -120,27 +120,24 @@ const deleteMutation = async (docId) => {
   return data
 }
 
-const timePropsAreEqual = (prevStats, nextStats) => prevStats.isSuccess === nextStats.isSuccess
-
-const TimeStats = memo(function TimeStats (props) {
-  if (props.isSuccess) {
-    return (
-      <Box>
+const TimeStats = memo(function TimeStats ({ hasData }) {
+  return (
+    <>
+      <Box style={{ width: '25%', textAlign: 'right'}}>
         <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
           <FormattedMessage defaultMessage="Tempo query" id="reports.browser.response_time"/>{': '}
         </Typography>
+      </Box>
+      <Box style={{ width: '25%', marginLeft: 3 }}>
         <Typography display="inline" variant="h6">
-          <span id="BrowserSpan">{`${responseTimeInMilli || 0} ms`}</span>
+          <span id="BrowserSpan">{hasData ? `${responseTimeInMilli || 0} ms` : '--'}</span>
         </Typography>
       </Box>
-    )
-  } else {
-    return null
-  }
-}, timePropsAreEqual)
+    </>
+  )
+})
 
 const SearchComponent = memo((function SearchComponent (props) {
-  console.log('%cRENDER_SearchComponent', 'color: green')
   return (
     <Paper className={props.classes.docList} elevation={2}>
       <SearchBox
@@ -156,20 +153,22 @@ const SearchComponent = memo((function SearchComponent (props) {
         setText={props.setText}
         text={props.text}
       />
+      
       <Box pb={0.5} px={1.5} style={{ minHeight: 25 }}>
         {
-          props.data &&
           <Box display="flex">
-            <Box flexGrow={1}>
+            <Box style={{width: '25%', textAlign: 'right' }}>
               <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
                 <FormattedMessage defaultMessage="Righe totali" id="reports.browser.total_rows"/>{': '}
               </Typography>
+            </Box>
+            <Box style={{ width: '25%', marginLeft: 3 }}>
               <Typography display="inline" variant="h6">
-                {props.data[0].results.total_rows}
+                {props?.data?.[0].results.total_rows ?? '--'}
               </Typography>
             </Box>
             <TimeStats
-              isSuccess={props.isSuccessList}
+              hasData={!!props?.data}
             />
           </Box>
         }
@@ -195,7 +194,6 @@ const SearchComponent = memo((function SearchComponent (props) {
 }))
 
 const DisplayComponent = memo((function DisplayComponent (props) {
-  console.log('%cRENDER_DisplayComponent', 'color: silver')
   const { enqueueSnackbar } = useSnackbar()
   const save = useCallback(async () => {
     try {
@@ -229,7 +227,6 @@ const DisplayComponent = memo((function DisplayComponent (props) {
 }))
 
 const BrowserView = () => {
-  console.log('%cRENDER_BASE', 'color: purple')
   const queryCache = useQueryCache()
   const { enqueueSnackbar } = useSnackbar()
   const classes = useStyles()
@@ -238,6 +235,7 @@ const BrowserView = () => {
   const history = useHistory()
   const { docId } = useParams()
   const prevDocID = useRef(null)
+  const xsDown = useMediaQuery(theme => theme.breakpoints.down('xs'))
   const snackQueryError = useSnackQueryError()
   useEffect(() => {
     if (docId && docId !== prevDocID.current) {
@@ -268,7 +266,7 @@ const BrowserView = () => {
       if (Array.isArray(data) && data.length === 1) {
         const [row] = data
         if (row.results.total_rows === 1) { //auto select if unique result
-          if (row.ok) {
+          if (row.ok && !xsDown) {
             const id = row.results.rows[0].id
             history.push(`/app/reports/browser/${id}`)
           }

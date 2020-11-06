@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl'
 import { useSnackbar } from 'notistack';
 
 const CommandBox = memo(function CommandBox ({ mutate, isDocId, output }) {
-  console.log('%cRENDER_COMMAND_BOX', 'color: cyan')
   const { enqueueSnackbar } = useSnackbar()
   const save = useCallback(async () => {
     try {

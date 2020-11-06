@@ -92,7 +92,6 @@ const SearchBox = memo(function SearchBox ({
   isSuccessDoc,
   isSuccessList,
 }) {
-  console.log('%cRENDER_SEARCH', 'color: cyan')
   const classes = useStyles()
   const history = useHistory()
   const checkLoading = (isFetchingDoc && !isSuccessDoc) || (isFetchingList && (!isSuccessList || isFetchedAfterMountList))
@@ -139,11 +138,12 @@ const SearchBox = memo(function SearchBox ({
               <IconButton
                 color="primary"
                 onClick={
-                  async () => {
+                  () => {
                     refetchLine()
-                    await refetch()
-                    const elem = document.getElementById('BrowserSpan')
-                    if (elem) {elem.innerText = `${responseTimeInMilli} ms`}
+                    refetch().then(() => {
+                      const elem = document.getElementById('BrowserSpan')
+                      if (elem) {elem.innerText = `${responseTimeInMilli} ms`}
+                    })
                   }
                 }
               >
