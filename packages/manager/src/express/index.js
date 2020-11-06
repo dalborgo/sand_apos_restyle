@@ -1,4 +1,4 @@
-import { cDate, cFunctions, numeric } from '@adapter/common'
+import { cDate, numeric } from '@adapter/common'
 import log from '@adapter/common/src/winston'
 import indexRouter from './routes'
 import appRouter from './routes/main'
@@ -79,11 +79,7 @@ app.use(`/${NAMESPACE}`, appRouter)
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   log.error(err)
-  if (cFunctions.isProd()) {
-    res.status(err.status || 500)
-  } else {
-    res.status(412 || err.status || 500)
-  }
+  res.status(err.status || 500)
   res.send({ ok: false, message: err.message, err })
 })
 

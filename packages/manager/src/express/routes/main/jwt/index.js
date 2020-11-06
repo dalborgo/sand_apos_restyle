@@ -34,7 +34,7 @@ function addRouters (router) {
     const { ok, results, message } = await couchQueries.exec(query, connClass.cluster, { parameters: [username.toLowerCase(), password] })
     if (!ok) {return res.send({ message: `${path} - error query: ${message}` })}
     if (!results.length) {
-      return res.status(400).send({ messageCode: 'LOGIN_WRONG_CREDENTIALS' })
+      return res.status(400).send({ code: 'LOGIN_WRONG_CREDENTIALS' })
     }
     const [identity] = results
     const accessToken = jwt.sign(

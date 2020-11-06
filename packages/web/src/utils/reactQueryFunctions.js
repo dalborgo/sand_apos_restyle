@@ -49,7 +49,7 @@ export function useSnackQueryError () {
       const { data: responseData } = response
       const isNetworkError = status === 0
       if (responseData) {
-        enqueueSnackbar(responseData.message || intl.formatMessage(messages[responseData.messageCode]))
+        enqueueSnackbar(responseData.message || intl.formatMessage(messages[responseData.code]))
       } else if (isNetworkError) {
         enqueueSnackbar(intl.formatMessage(messages['network_error']), { variant: 'default' })
       } else {
