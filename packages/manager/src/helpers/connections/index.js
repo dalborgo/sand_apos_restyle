@@ -30,7 +30,7 @@ async function getDatabase (key) {
       logFunc,
     }
     const queryString = cFunctions.objToQueryString({ config_total_timeout: CONFIG_TOTAL_TIMEOUT }, true)
-    const connStr = `couchbase://${results.couchbaseUrl}${queryString}` //timeout for idea debug
+    const connStr = `couchbase://${results.couchbaseUrl}${queryString}`
     log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const archive_ = new couchbase.Cluster(connStr, optionsArchive)

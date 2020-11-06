@@ -24,7 +24,7 @@ void (async () => {
       logFunc: connections_.logFunc,
     }
     const queryString = cFunctions.objToQueryString({ config_total_timeout: CONFIG_TOTAL_TIMEOUT }, true)
-    const connStr = `couchbase://${connection.server}${queryString}` //timeout for idea debug
+    const connStr = `couchbase://${connection.server}${queryString}`
     log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const archive_ = new couchbase.Cluster(connStr, optionsArchive)

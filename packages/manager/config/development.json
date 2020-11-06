@@ -1,6 +1,5 @@
 {
   "couchbase": {
-    "CONFIG_TOTAL_TIMEOUT": 250, //timeout utile per debug con breakpoint
     "connections": {
       "astenposServer": {
         "server": "10.0.0.183"
