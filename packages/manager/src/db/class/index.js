@@ -83,10 +83,14 @@ export default class Couchbase {
   
   connHost () {
     const base = get(this._astenpos, '_cluster._connStr', HOST_DEFAULT) //suppose the same form archive
-    const regex = /couchbase:\/\/(.*)\?/
+    const regex = /couchbase:\/\/([a-z\d.]+)\??/
     const match = regex.exec(base)
-    const [_, group] = match
-    return group
+    if (match) {
+      const [_, group] = match
+      return group
+    } else {
+      return HOST_DEFAULT
+    }
   }
   
   astenposBucketPassword () {

@@ -3,10 +3,7 @@ import log from '@adapter/common/src/winston'
 import app from './express'
 import config from 'config'
 import http from 'http'
-import { cFunctions } from '@adapter/common'
 
-const fs = require('fs')
-const getStream = require('get-stream')
 const { PORT } = config.get('express')
 const port = normalizePort(PORT || 7000)
 app.set('port', port)
@@ -53,9 +50,5 @@ async function onListening () {
   const bind = typeof addr === 'string'
     ? `pipe ${addr}`
     : `port ${addr.port}`
-  if (cFunctions.isProd()) {
-    const stream = fs.createReadStream('mdb.txt')
-    log.hint(await getStream(stream))
-  }
   log.info(`Backend listening on ${bind}`)
 }

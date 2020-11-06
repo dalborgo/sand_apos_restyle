@@ -130,7 +130,7 @@ const TimeStats = memo(function TimeStats ({ hasData }) {
       </Box>
       <Box style={{ width: '25%', marginLeft: 3 }}>
         <Typography display="inline" variant="h6">
-          <span id="BrowserSpan">{hasData ? `${responseTimeInMilli || 0} ms` : '--'}</span>
+          <span id="BrowserSpan">{hasData ? `${responseTimeInMilli || 0} ms` : '---'}</span>
         </Typography>
       </Box>
     </>
@@ -164,7 +164,7 @@ const SearchComponent = memo((function SearchComponent (props) {
             </Box>
             <Box style={{ width: '25%', marginLeft: 3 }}>
               <Typography display="inline" variant="h6">
-                {props?.data?.[0].results.total_rows ?? '--'}
+                {props?.data?.[0].results.total_rows ?? '---'}
               </Typography>
             </Box>
             <TimeStats
