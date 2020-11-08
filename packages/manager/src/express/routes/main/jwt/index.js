@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { couchQueries } from '@adapter/io'
 import config from 'config'
+import get from 'lodash/get'
 
 const { MAXAGE_MINUTES = 30, AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
@@ -14,11 +15,20 @@ const setPriority = type => {
       return 3
   }
 }
+
 function selectUserFields (identity) {
   return {
     display: identity.user,
     id: identity._id,
     priority: setPriority(identity.type),
+  }
+}
+
+async function getInitialData (connClass) {
+  const collection = connClass.astenposBucketCollection
+  const { content } = await collection.get('general_configuration')
+  return {
+    companyName: get(content, 'company_data.name'),
   }
 }
 
@@ -42,8 +52,10 @@ function addRouters (router) {
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     )
+    const initialData = await getInitialData(connClass)
     res.send({
       accessToken,
+      initialData,
       user: {
         ...selectUserFields(identity),
       },
@@ -61,8 +73,10 @@ function addRouters (router) {
       return res.status(400).send({ message: 'Wrong authentication code!' })
     }
     const [identity] = results
+    const initialData = await getInitialData(connClass)
     res.send({
       accessToken,
+      initialData,
       user: {
         ...selectUserFields(identity),
       },

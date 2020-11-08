@@ -4,6 +4,7 @@ import SplashScreen from 'src/components/SplashScreen'
 import {axiosLocalInstance} from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
 const initialAuthState = {
+  initialData: null,
   isAuthenticated: false,
   isInitialised: false,
   user: null,
@@ -34,19 +35,21 @@ const setSession = (accessToken) => {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'INITIALISE': {
-      const { isAuthenticated, user } = action.payload
+      const { isAuthenticated, user, initialData } = action.payload
       return {
         ...state,
+        initialData,
         isAuthenticated,
         isInitialised: true,
         user,
       }
     }
     case 'LOGIN': {
-      const { user } = action.payload
+      const { user, initialData } = action.payload
       
       return {
         ...state,
+        initialData,
         isAuthenticated: true,
         user,
       }
@@ -54,6 +57,7 @@ const reducer = (state, action) => {
     case 'LOGOUT': {
       return {
         ...state,
+        initialData: null,
         isAuthenticated: false,
         user: null,
       }
@@ -76,12 +80,13 @@ export const AuthProvider = ({ children }) => {
   
   const login = async (username, password) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password })
-    const { accessToken, user } = response.data
+    const { accessToken, user, initialData } = response.data
     
     setSession(accessToken)
     dispatch({
       type: 'LOGIN',
       payload: {
+        initialData,
         user,
       },
     })
@@ -101,11 +106,12 @@ export const AuthProvider = ({ children }) => {
           setSession(accessToken)
           
           const response = await axiosLocalInstance.get('/api/jwt/me')
-          const { user } = response.data
+          const { user, initialData } = response.data
           
           dispatch({
             type: 'INITIALISE',
             payload: {
+              initialData,
               isAuthenticated: true,
               user,
             },
@@ -114,6 +120,7 @@ export const AuthProvider = ({ children }) => {
           dispatch({
             type: 'INITIALISE',
             payload: {
+              initialData: null,
               isAuthenticated: false,
               user: null,
             },
@@ -124,6 +131,7 @@ export const AuthProvider = ({ children }) => {
         dispatch({
           type: 'INITIALISE',
           payload: {
+            initialData: null,
             isAuthenticated: false,
             user: null,
           },

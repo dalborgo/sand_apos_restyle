@@ -7,6 +7,7 @@ import Contacts from './Contacts'
 import Notifications from './Notifications'
 import Search from './Search'
 import Settings from './Settings'
+import useAuth from 'src/hooks/useAuth'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const TopBar = ({
   setMobileNavOpen,
 }) => {
+  const { initialData: { companyName } } = useAuth()
   const classes = useStyles()
   return (
     <AppBar
@@ -51,7 +53,7 @@ const TopBar = ({
           </IconButton>
         </Hidden>
         <Typography variant={'h3'}>
-          Asten Demo
+          {companyName}
         </Typography>
         <Box
           flexGrow={1}
