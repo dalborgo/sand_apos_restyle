@@ -5,11 +5,10 @@ import { useIntl } from 'react-intl'
 import { useState } from 'react'
 import log from '@adapter/common/src/log'
 import moment from 'moment'
-
-const wlh = window.location.hostname
+import { envConfig } from 'src/init'
 
 export const axiosLocalInstance = axios.create({
-  baseURL: `http://${wlh}:7000`,
+  baseURL: envConfig.BACKEND_HOST,
   params: {
     _key: 'astenposServer',
   },

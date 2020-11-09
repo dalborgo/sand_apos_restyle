@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import { couchQueries } from '@adapter/io'
 import config from 'config'
 import get from 'lodash/get'
-
+import log from '@adapter/common/src/winston'
 const { MAXAGE_MINUTES = 30, AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
 const JWT_EXPIRES_IN = `${MAXAGE_MINUTES} minutes`
@@ -36,13 +36,16 @@ function addRouters (router) {
   router.post('/jwt/login', async function (req, res) {
     const { connClass, route: { path } } = req
     const { username, password } = req.body
-    const query = 'SELECT ast.*, meta(ast).id _id '
-                  + 'FROM ' + connClass.astenposBucketName + ' ast '
-                  + 'WHERE (type = "USER_ADMIN" OR type = "USER") '
+    const query = 'SELECT man.*, meta(man).id _id '
+                  + 'FROM ' + connClass.managerBucketName + ' man '
+                  + 'WHERE type = "USER_MANAGER" '
                   + 'AND LOWER(`user`) = $1 '
                   + 'AND `password` = $2'
-    const { ok, results, message } = await couchQueries.exec(query, connClass.cluster, { parameters: [username.toLowerCase(), password] })
-    if (!ok) {return res.send({ message: `${path} - error query: ${message}` })}
+    const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster, { parameters: [username.toLowerCase(), password] })
+    if (!ok) {
+      log.error('path', path)
+      throw Error(err.context ? err.context.first_error_message : message)
+    }
     if (!results.length) {
       return res.status(400).send({ code: 'LOGIN_WRONG_CREDENTIALS' })
     }
@@ -52,10 +55,9 @@ function addRouters (router) {
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     )
-    const initialData = await getInitialData(connClass)
     res.send({
       accessToken,
-      initialData,
+      codes: identity.codes,
       user: {
         ...selectUserFields(identity),
       },
@@ -66,17 +68,20 @@ function addRouters (router) {
     const { authorization } = req.headers
     const accessToken = authorization.split(' ')[1]
     const { userId } = jwt.verify(accessToken, JWT_SECRET)
-    const query = `SELECT ast.* from ${connClass.astenposBucketName} ast USE KEYS "${userId}"`
-    const { ok, results, message } = await couchQueries.exec(query, connClass.cluster)
-    if (!ok) {return res.send({ message: `${path} - error query: ${message}` })}
+    const query = `SELECT man.* from ${connClass.managerBucketName} man USE KEYS "${userId}"`
+    const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
+    if (!ok) {
+      log.error('path', path)
+      throw Error(err.context ? err.context.first_error_message : message)
+    }
     if (!results.length) {
       return res.status(400).send({ message: 'Wrong authentication code!' })
     }
     const [identity] = results
-    const initialData = await getInitialData(connClass)
+    
     res.send({
       accessToken,
-      initialData,
+      codes: identity.codes,
       user: {
         ...selectUserFields(identity),
       },

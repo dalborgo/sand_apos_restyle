@@ -25,8 +25,8 @@ const JWTLogin = ({ className, ...rest }) => {
     <Formik
       initialValues={
         {
-          username: 'asten',
-          password: '90210',
+          username: 'rino',
+          password: 'rino',
           submit: null,
         }
       }

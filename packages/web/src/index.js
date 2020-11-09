@@ -24,6 +24,7 @@ import { enableES5 } from 'immer'
 import store from 'src/store'
 import { SettingsProvider } from 'src/contexts/SettingsContext'
 import App from 'src/App'
+import './init'
 enableES5()
 
 ReactDOM.render(

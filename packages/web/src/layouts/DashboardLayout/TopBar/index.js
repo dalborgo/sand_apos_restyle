@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, TextField, Toolbar } from '@material-ui/core'
 import { Menu as MenuIcon } from 'react-feather'
 import { THEMES } from 'src/constants'
 import Account from './Account'
@@ -8,8 +8,11 @@ import Notifications from './Notifications'
 import Search from './Search'
 import Settings from './Settings'
 import useAuth from 'src/hooks/useAuth'
+import useSettings from 'src/hooks/useSettings'
+import { capitalCase } from 'change-case'
+import { FormattedMessage } from 'react-intl'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     zIndex: theme.zIndex.drawer + 100,
     ...theme.name === THEMES.LIGHT ?
@@ -24,6 +27,14 @@ const useStyles = makeStyles((theme) => ({
       }
       : {},
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  inputRoot: {
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.secondary.contrastText,
+  },
   toolbar: {
     minHeight: 64,
     [theme.breakpoints.down('sm')]: {
@@ -32,11 +43,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const optionBg = {
+  backgroundColor: '#7973EF',
+}
+
 const TopBar = ({
   setMobileNavOpen,
 }) => {
-  const { initialData: { companyName } } = useAuth()
+  const { codes, selectedCode, changeCode } = useAuth()
   const classes = useStyles()
+  const { settings } = useSettings()
+  const isLight = settings.theme === 'LIGHT'
   return (
     <AppBar
       className={classes.root}
@@ -52,9 +69,44 @@ const TopBar = ({
             </SvgIcon>
           </IconButton>
         </Hidden>
-        <Typography variant={'h3'}>
-          {companyName}
-        </Typography>
+        <TextField
+          InputProps={
+            {
+              classes: {
+                root: isLight ? classes.inputRoot : undefined,
+              },
+            }
+          }
+          name="code"
+          onChange={
+            event => {
+              const value = event.target.value
+              changeCode(value)
+            }
+          }
+          select
+          SelectProps={
+            {
+              native: true,
+            }
+          }
+          size="small"
+          value={selectedCode}
+          variant="outlined"
+        >
+          <option style={isLight ? optionBg: undefined} value="All"><FormattedMessage defaultMessage="Tutti" id="common.all"/></option>
+          {
+            codes.map(code => (
+              <option
+                key={code}
+                style={isLight ? optionBg: undefined}
+                value={code}
+              >
+                {capitalCase(code)}
+              </option>
+            ))
+          }
+        </TextField>
         <Box
           flexGrow={1}
           ml={2}

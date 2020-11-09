@@ -2,13 +2,20 @@ import get from 'lodash/get'
 import config from 'config'
 
 const { connections } = config.get('couchbase')
-const { server: HOST_DEFAULT, backend: BACKEND_HOST_DEFAULT, _bucket: AST_DEFAULT, _archivio: ARC_DEFAULT } = connections['astenposServer']
+const {
+  _archivio: ARC_DEFAULT,
+  _bucket: AST_DEFAULT,
+  _manager: MAN_DEFAULT,
+  backend: BACKEND_HOST_DEFAULT,
+  server: HOST_DEFAULT,
+} = connections['astenposServer']
 
 export default class Couchbase {
-  constructor (cluster, astenpos, archive, backendHost = BACKEND_HOST_DEFAULT) {
+  constructor (cluster, astenpos, archive, manager, backendHost = BACKEND_HOST_DEFAULT) {
     this._cluster = cluster
     this._astenpos = astenpos
     this._archive = archive
+    this._manager = manager
     this._backendHost = backendHost || ''
   }
   
@@ -39,12 +46,20 @@ export default class Couchbase {
     return this._archive.name || ARC_DEFAULT
   }
   
+  get managerBucketName () {
+    return this._manager.name || MAN_DEFAULT
+  }
+  
   get astenposBucketCollection () {
     return this._astenpos.defaultCollection()
   }
   
   get archiveBucketCollection () {
     return this._archive.defaultCollection()
+  }
+  
+  get managerBucketCollection () {
+    return this._manager.defaultCollection()
   }
   
   get astConnection () {
@@ -64,6 +79,16 @@ export default class Couchbase {
       COLLECTION: this.archiveBucketCollection,
       HOST: this.host,
       PASSWORD: this.archiveBucketPassword(),
+    }
+  }
+  
+  get manConnection () {
+    return {
+      BUCKET_NAME: this.managerBucketName,
+      CLUSTER: this.cluster,
+      COLLECTION: this.managerBucketCollection,
+      HOST: this.host,
+      PASSWORD: this.managerBucketPassword(),
     }
   }
   
@@ -100,6 +125,11 @@ export default class Couchbase {
   
   archiveBucketPassword () {
     const base = get(this._archive, '_cluster._auth')
+    return base.password
+  }
+  
+  managerBucketPassword () {
+    const base = get(this._manager, '_cluster._auth')
     return base.password
   }
   

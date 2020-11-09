@@ -1,10 +1,12 @@
 import React, { createContext, useEffect, useReducer } from 'react'
 import jwtDecode from 'jwt-decode'
 import SplashScreen from 'src/components/SplashScreen'
-import {axiosLocalInstance} from 'src/utils/reactQueryFunctions'
+import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
+
 const initialAuthState = {
-  initialData: null,
+  codes: [],
+  selectedCode: 'All',
   isAuthenticated: false,
   isInitialised: false,
   user: null,
@@ -35,29 +37,37 @@ const setSession = (accessToken) => {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'INITIALISE': {
-      const { isAuthenticated, user, initialData } = action.payload
+      const { isAuthenticated, user, codes } = action.payload
       return {
         ...state,
-        initialData,
+        codes,
         isAuthenticated,
         isInitialised: true,
         user,
       }
     }
     case 'LOGIN': {
-      const { user, initialData } = action.payload
+      const { user, codes } = action.payload
       
       return {
         ...state,
-        initialData,
+        codes,
         isAuthenticated: true,
         user,
+      }
+    }
+    case 'CHANGE_CODE': {
+      const { code } = action.payload
+      
+      return {
+        ...state,
+        code,
       }
     }
     case 'LOGOUT': {
       return {
         ...state,
-        initialData: null,
+        codes: [],
         isAuthenticated: false,
         user: null,
       }
@@ -73,6 +83,7 @@ const AuthContext = createContext({
   method: 'JWT',
   login: () => Promise.resolve(),
   logout: () => { },
+  changeCode: () => { },
 })
 
 export const AuthProvider = ({ children }) => {
@@ -80,13 +91,13 @@ export const AuthProvider = ({ children }) => {
   
   const login = async (username, password) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password })
-    const { accessToken, user, initialData } = response.data
+    const { accessToken, user, codes } = response.data
     
     setSession(accessToken)
     dispatch({
       type: 'LOGIN',
       payload: {
-        initialData,
+        codes,
         user,
       },
     })
@@ -95,6 +106,15 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setSession(null)
     dispatch({ type: 'LOGOUT' })
+  }
+  const changeCode = code => {
+    console.log('code:', code)
+    /*dispatch({
+      type: 'CHANGE_CODE',
+      payload: {
+        code,
+      },
+    })*/
   }
   
   useEffect(() => {
@@ -106,12 +126,12 @@ export const AuthProvider = ({ children }) => {
           setSession(accessToken)
           
           const response = await axiosLocalInstance.get('/api/jwt/me')
-          const { user, initialData } = response.data
+          const { user, codes } = response.data
           
           dispatch({
             type: 'INITIALISE',
             payload: {
-              initialData,
+              codes,
               isAuthenticated: true,
               user,
             },
@@ -120,7 +140,7 @@ export const AuthProvider = ({ children }) => {
           dispatch({
             type: 'INITIALISE',
             payload: {
-              initialData: null,
+              codes: [],
               isAuthenticated: false,
               user: null,
             },
@@ -131,7 +151,7 @@ export const AuthProvider = ({ children }) => {
         dispatch({
           type: 'INITIALISE',
           payload: {
-            initialData: null,
+            initialData: [],
             isAuthenticated: false,
             user: null,
           },

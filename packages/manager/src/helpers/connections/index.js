@@ -6,7 +6,7 @@ import { cFunctions } from '@adapter/common'
 
 const Couchbase = require(`${__db}/class`)
 const DEBUG = process.env.DEBUG
-const fullLog = DEBUG === 'couchnode*'
+const fullLog = DEBUG !== 'couchnode'
 const logFunc = !fullLog ? log_ => (log_.subsys === 'cccp' && log_.severity > 3) && log.warn('warn', JSON.stringify(log_, ['severity', 'message'], 2)) : undefined
 const { utility, CONFIG_TOTAL_TIMEOUT } = config.get('couchbase')
 
@@ -29,14 +29,21 @@ async function getDatabase (key) {
       password: results.key,
       logFunc,
     }
+    const optionsManager = {
+      username: results.key,
+      password: results.key,
+      logFunc,
+    }
     const queryString = cFunctions.objToQueryString({ config_total_timeout: CONFIG_TOTAL_TIMEOUT }, true)
     const connStr = `couchbase://${results.couchbaseUrl}${queryString}`
     log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const archive_ = new couchbase.Cluster(connStr, optionsArchive)
+    const manager_ = new couchbase.Cluster(connStr, optionsManager)
     const astenpos = astenpos_.bucket(results.key)
     const archive = archive_.bucket(results.key)
-    __buckets[key] = new Couchbase(astenpos_, astenpos, archive, results.backendUrl) //first parameter for cluster
+    const manager = manager_.bucket(results.key)
+    __buckets[key] = new Couchbase(astenpos_, astenpos, archive, manager, results.backendUrl) //first parameter for cluster
     return __buckets[key]
   } catch (err) {
     log.error(err)
