@@ -6,7 +6,6 @@ import log from '@adapter/common/src/log'
 
 const initialAuthState = {
   codes: [],
-  selectedCode: 'All',
   isAuthenticated: false,
   isInitialised: false,
   user: null,
@@ -21,15 +20,19 @@ const isValidToken = (accessToken) => {
   return decoded.exp > currentTime
 }
 
-const setSession = (accessToken) => {
-  if (accessToken) {
-    localStorage.setItem('accessToken', accessToken)
-    axiosLocalInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`
+const setSession = ({ accessToken, selectedCode }) => {
+  if (accessToken || selectedCode) {
+    accessToken && localStorage.setItem('accessToken', accessToken)
+    accessToken && (axiosLocalInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`)
+    selectedCode && localStorage.setItem('selectedCode', selectedCode)
+    const selectedCode_ = selectedCode || localStorage.getItem('selectedCode')
     axiosLocalInstance.defaults.params = {
       _key: 'astenposServer',
+      selectedCode: selectedCode_ !== 'All' ? selectedCode_ : undefined,
     }
   } else {
     localStorage.removeItem('accessToken')
+    localStorage.removeItem('selectedCode')
     delete axiosLocalInstance.defaults.headers.common.Authorization
     axiosLocalInstance.defaults.params = { //reset to default
       _key: 'astenposServer',
@@ -40,31 +43,31 @@ const setSession = (accessToken) => {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'INITIALISE': {
-      const { isAuthenticated, user, codes } = action.payload
+      const { isAuthenticated, user, codes, selectedCode } = action.payload
       return {
         ...state,
         codes,
         isAuthenticated,
         isInitialised: true,
+        selectedCode,
         user,
       }
     }
     case 'LOGIN': {
-      const { user, codes } = action.payload
-      
+      const { user, codes, selectedCode } = action.payload
       return {
         ...state,
         codes,
         isAuthenticated: true,
+        selectedCode,
         user,
       }
     }
     case 'CHANGE_CODE': {
-      const { code } = action.payload
-      
+      const { selectedCode } = action.payload
       return {
         ...state,
-        code,
+        selectedCode,
       }
     }
     case 'LOGOUT': {
@@ -72,6 +75,7 @@ const reducer = (state, action) => {
         ...state,
         codes: [],
         isAuthenticated: false,
+        selectedCode: '',
         user: null,
       }
     }
@@ -95,29 +99,30 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password })
     const { accessToken, user, codes } = response.data
-    
-    setSession(accessToken)
+    const selectedCode = codes?.length === 1 ? codes[0] : 'All'
+    setSession({ accessToken })
     dispatch({
       type: 'LOGIN',
       payload: {
         codes,
+        selectedCode,
         user,
       },
     })
   }
   
   const logout = () => {
-    setSession(null)
+    setSession({})
     dispatch({ type: 'LOGOUT' })
   }
-  const changeCode = code => {
-    console.log('code:', code)
-    /*dispatch({
+  const changeCode = selectedCode => {
+    setSession({ selectedCode })
+    dispatch({
       type: 'CHANGE_CODE',
       payload: {
-        code,
+        selectedCode,
       },
-    })*/
+    })
   }
   
   useEffect(() => {
@@ -126,16 +131,20 @@ export const AuthProvider = ({ children }) => {
         const accessToken = window.localStorage.getItem('accessToken')
         
         if (accessToken && isValidToken(accessToken)) {
-          setSession(accessToken)
-          
+          setSession({ accessToken })
           const response = await axiosLocalInstance.get('/api/jwt/me')
           const { user, codes } = response.data
-          
+          let selectedCode = window.localStorage.getItem('selectedCode')
+          if (!codes.includes(selectedCode)) {
+            selectedCode = codes?.length === 1 ? codes[0] : 'All'
+            setSession({ selectedCode })
+          }
           dispatch({
             type: 'INITIALISE',
             payload: {
               codes,
               isAuthenticated: true,
+              selectedCode,
               user,
             },
           })
@@ -145,7 +154,7 @@ export const AuthProvider = ({ children }) => {
             payload: {
               codes: [],
               isAuthenticated: false,
-              selectedCode: 'All',
+              selectedCode: '',
               user: null,
             },
           })
@@ -157,7 +166,7 @@ export const AuthProvider = ({ children }) => {
           payload: {
             initialData: [],
             isAuthenticated: false,
-            selectedCode: 'All',
+            selectedCode: '',
             user: null,
           },
         })

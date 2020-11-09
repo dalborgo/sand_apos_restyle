@@ -10,7 +10,8 @@ import Settings from './Settings'
 import useAuth from 'src/hooks/useAuth'
 import useSettings from 'src/hooks/useSettings'
 import { capitalCase } from 'change-case'
-import { FormattedMessage } from 'react-intl'
+import { useIntl } from 'react-intl'
+import { messages } from 'src/translations/messages'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,8 +51,9 @@ const optionBg = {
 const TopBar = ({
   setMobileNavOpen,
 }) => {
-  const { codes, selectedCode, changeCode } = useAuth()
+  const { codes, selectedCode = 'All', changeCode } = useAuth()
   const classes = useStyles()
+  const intl = useIntl()
   const { settings } = useSettings()
   const isLight = settings.theme === 'LIGHT'
   return (
@@ -94,12 +96,20 @@ const TopBar = ({
           value={selectedCode}
           variant="outlined"
         >
-          <option style={isLight ? optionBg: undefined} value="All"><FormattedMessage defaultMessage="Tutti" id="common.all"/></option>
+          {
+            codes.length > 1 &&
+            <option 
+              style={isLight ? optionBg : undefined}
+              value="All"
+            >
+              {intl.formatMessage(messages.common_all)}
+            </option>
+          }
           {
             codes.map(code => (
               <option
                 key={code}
-                style={isLight ? optionBg: undefined}
+                style={isLight ? optionBg : undefined}
                 value={code}
               >
                 {capitalCase(code)}
