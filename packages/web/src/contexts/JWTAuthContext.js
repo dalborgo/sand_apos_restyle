@@ -31,6 +31,9 @@ const setSession = (accessToken) => {
   } else {
     localStorage.removeItem('accessToken')
     delete axiosLocalInstance.defaults.headers.common.Authorization
+    axiosLocalInstance.defaults.params = { //reset to default
+      _key: 'astenposServer',
+    }
   }
 }
 
@@ -142,6 +145,7 @@ export const AuthProvider = ({ children }) => {
             payload: {
               codes: [],
               isAuthenticated: false,
+              selectedCode: 'All',
               user: null,
             },
           })
@@ -153,6 +157,7 @@ export const AuthProvider = ({ children }) => {
           payload: {
             initialData: [],
             isAuthenticated: false,
+            selectedCode: 'All',
             user: null,
           },
         })
@@ -173,6 +178,7 @@ export const AuthProvider = ({ children }) => {
           method: 'JWT',
           login,
           logout,
+          changeCode,
         }
       }
     >

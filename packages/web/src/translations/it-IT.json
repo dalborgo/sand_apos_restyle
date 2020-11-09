@@ -16,5 +16,6 @@
   "error404.goto_home_page_description": "Se hai digitato un collegamento nella barra degli indirizzi, prova ad utilizzare il menu di navigazione a\n          sinistra.",
   "error404.wrong_page": "404: La pagina che stai cercando non è qui!",
   "reports.browser.response_time": "Tempo query",
-  "reports.browser.total_rows": "Righe totali"
+  "reports.browser.total_rows": "Righe totali",
+  "common.all": "Tutti"
 }
