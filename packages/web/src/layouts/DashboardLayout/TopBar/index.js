@@ -12,6 +12,7 @@ import useSettings from 'src/hooks/useSettings'
 import { capitalCase } from 'change-case'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
+import { NO_SELECTED_CODE } from 'src/contexts/JWTAuthContext'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -51,7 +52,7 @@ const optionBg = {
 const TopBar = ({
   setMobileNavOpen,
 }) => {
-  const { codes, selectedCode = 'All', changeCode } = useAuth()
+  const { codes, selectedCode = NO_SELECTED_CODE, changeCode } = useAuth()
   const classes = useStyles()
   const intl = useIntl()
   const { settings } = useSettings()
@@ -100,7 +101,7 @@ const TopBar = ({
             codes.length > 1 &&
             <option 
               style={isLight ? optionBg : undefined}
-              value="All"
+              value={NO_SELECTED_CODE}
             >
               {intl.formatMessage(messages.common_all)}
             </option>

@@ -20,6 +20,8 @@ const isValidToken = (accessToken) => {
   return decoded.exp > currentTime
 }
 
+export const NO_SELECTED_CODE = 'All'
+
 const setSession = ({ accessToken, selectedCode }) => {
   if (accessToken || selectedCode) {
     accessToken && localStorage.setItem('accessToken', accessToken)
@@ -28,7 +30,7 @@ const setSession = ({ accessToken, selectedCode }) => {
     const selectedCode_ = selectedCode || localStorage.getItem('selectedCode')
     axiosLocalInstance.defaults.params = {
       _key: 'astenposServer',
-      selectedCode: selectedCode_ !== 'All' ? selectedCode_ : undefined,
+      selectedCode: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : undefined,
     }
   } else {
     localStorage.removeItem('accessToken')
@@ -99,7 +101,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password })
     const { accessToken, user, codes } = response.data
-    const selectedCode = codes?.length === 1 ? codes[0] : 'All'
+    const selectedCode = codes?.length === 1 ? codes[0] : NO_SELECTED_CODE
     setSession({ accessToken })
     dispatch({
       type: 'LOGIN',
@@ -136,7 +138,7 @@ export const AuthProvider = ({ children }) => {
           const { user, codes } = response.data
           let selectedCode = window.localStorage.getItem('selectedCode')
           if (!codes.includes(selectedCode)) {
-            selectedCode = codes?.length === 1 ? codes[0] : 'All'
+            selectedCode = codes?.length === 1 ? codes[0] : NO_SELECTED_CODE
             setSession({ selectedCode })
           }
           dispatch({
