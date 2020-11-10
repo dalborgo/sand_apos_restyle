@@ -37,9 +37,14 @@ function addRouters (router) {
       res.send({ ok: true, results: data })
     } else {
       const params = { view: 'list_docs_all2', ...query }
-      const data = await couchViews.execViewService(params, connClass.astConnection)
+      const data = await couchViews.execService(params, connClass.astConnection)
       res.send(data)
     }
+  })
+  router.get('/docs/browser2', async function (req, res) {
+    const { connClass } = req
+    const data = await couchViews.exec(connClass.astenposBucketName, 'list_docs_all2', connClass.astenposBucket)
+    res.send(data)
   })
   router.get('/docs/get_by_id', async function (req, res) {
     const { connClass, query } = req

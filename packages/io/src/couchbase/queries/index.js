@@ -4,7 +4,8 @@ import axios from 'axios'
 import { cFunctions } from '@adapter/common'
 import get from 'lodash/get'
 
-const COUCH_CONSISTENCY = {
+const QUERY_SCAN_CONSISTENCY = {
+  NotBounded: couchbase.QueryScanConsistency.NotBounded,
   RequestPlus: couchbase.QueryScanConsistency.RequestPlus,
 }
 
@@ -52,7 +53,7 @@ async function execByService (statement, connection = {}, options = {}) {
 }
 
 export default {
-  COUCH_CONSISTENCY,
+  QUERY_SCAN_CONSISTENCY,
   exec,
   execByService,
 }

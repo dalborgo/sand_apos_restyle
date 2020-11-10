@@ -62,8 +62,21 @@ export default class Couchbase {
     return this._manager.defaultCollection()
   }
   
+  get astenposBucket () {
+    return this._astenpos
+  }
+  
+  get archiveBucket () {
+    return this._archive
+  }
+  
+  get managerBucket () {
+    return this._manager
+  }
+  
   get astConnection () {
     return {
+      BUCKET: this.astenposBucket,
       BUCKET_NAME: this.astenposBucketName,
       CLUSTER: this.cluster,
       COLLECTION: this.astenposBucketCollection,
@@ -74,6 +87,7 @@ export default class Couchbase {
   
   get arcConnection () {
     return {
+      BUCKET: this.archiveBucket,
       BUCKET_NAME: this.archiveBucketName,
       CLUSTER: this.cluster,
       COLLECTION: this.archiveBucketCollection,
@@ -84,6 +98,7 @@ export default class Couchbase {
   
   get manConnection () {
     return {
+      BUCKET: this.managerBucket,
       BUCKET_NAME: this.managerBucketName,
       CLUSTER: this.cluster,
       COLLECTION: this.managerBucketCollection,
