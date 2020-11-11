@@ -14,6 +14,7 @@ import Fab from '@material-ui/core/Fab'
 import Hidden from '@material-ui/core/Hidden'
 import Dialog from '@material-ui/core/Dialog'
 import { FormattedMessage } from 'react-intl'
+import useAuth from 'src/hooks/useAuth'
 
 const LIMIT = 40
 
@@ -229,12 +230,14 @@ const DisplayComponent = memo((function DisplayComponent (props) {
 const BrowserView = () => {
   const queryCache = useQueryCache()
   const { enqueueSnackbar } = useSnackbar()
+  const { selectedCode } = useAuth()
   const classes = useStyles()
   const [text, setText] = useState('')
   const [locked, setLocked] = useState(true)
   const history = useHistory()
   const { docId } = useParams()
   const prevDocID = useRef(null)
+  const prevSelectedCode = useRef(selectedCode)
   const xsDown = useMediaQuery(theme => theme.breakpoints.down('xs'))
   const snackQueryError = useSnackQueryError()
   useEffect(() => {
@@ -246,6 +249,12 @@ const BrowserView = () => {
       prevDocID.current = docId
     }
   }, [docId])
+  useEffect(() => {
+    if (prevSelectedCode !== selectedCode) {
+      console.log('RESET____')
+      prevSelectedCode.current = selectedCode
+    }
+  }, [selectedCode])
   useEffect(() => {
     const browserSearchBox = document.getElementById('browserSearchBox')
     browserSearchBox && browserSearchBox.select()

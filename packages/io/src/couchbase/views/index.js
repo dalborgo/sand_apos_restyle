@@ -45,7 +45,7 @@ async function execService (params, connection = {}) {
 
 
 async function exec (designDoc, viewName, bucket, options_ = {}) {
-  const options = Object.assign({ scanConsistency: VIEW_SCAN_CONSISTENCY.RequestPlus, limit: 1 }, options_)
+  const options = Object.assign({ scanConsistency: VIEW_SCAN_CONSISTENCY.RequestPlus }, options_)
   try {
     log.verbose('start exec view')
     const results = await bucket.viewQuery(designDoc, viewName, options)

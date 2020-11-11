@@ -30,7 +30,7 @@ const setSession = ({ accessToken, selectedCode }) => {
     const selectedCode_ = selectedCode || localStorage.getItem('selectedCode')
     axiosLocalInstance.defaults.params = {
       _key: 'astenposServer',
-      selectedCode: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : undefined,
+      owner: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : undefined,
     }
   } else {
     localStorage.removeItem('accessToken')

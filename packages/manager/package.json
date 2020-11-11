@@ -8,7 +8,7 @@
     "start prod": "set NODE_ENV=production&&node -r esm src",
     "test": "mocha test/test",
     "plop": "plop -- --project manager",
-    "start dev (full cb log)": "set DEBUG=couchnode:lcb:error&&set Q_DEBUG=1&&nodemon -r esm src"
+    "start dev (lcb)": "set DEBUG=couchnode:lcb:error&&set Q_DEBUG=1&&nodemon -r esm src"
   },
   "license": "MIT",
   "dependencies": {
