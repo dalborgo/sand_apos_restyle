@@ -30,7 +30,7 @@ const sections = [
       {
         title: 'Browser',
         exact: false,
-        private: [3],
+        private: [4, 3],
         icon: ListIcon,
         href: '/app/reports/browser',
       },

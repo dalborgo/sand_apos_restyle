@@ -8,13 +8,12 @@ export const NO_SELECTED_CODE = 'All'
 
 const initialAuthState = {
   codes: [],
-  selectedCode: NO_SELECTED_CODE,
   isAuthenticated: false,
   isInitialised: false,
   user: null,
 }
 
-const isValidToken = (accessToken) => {
+const isValidToken = accessToken => {
   if (!accessToken) {
     return false
   }
@@ -32,7 +31,7 @@ const setSession = ({ codes, accessToken, selectedCode }) => {
     const selectedCode_ = selectedCode || localStorage.getItem('selectedCode')
     axiosLocalInstance.defaults.params = {
       _key: 'astenposServer',
-      owner: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : codes.join('|'),
+      owner: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : codes?.join('|'),
     }
   } else {
     localStorage.removeItem('accessToken')
@@ -99,7 +98,6 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState)
-  
   const login = async (username, password) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password })
     const { accessToken, user, codes } = response.data
@@ -120,7 +118,7 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' })
   }
   const changeCode = selectedCode => {
-    setSession({ codes: state.codes , selectedCode })
+    setSession({ codes: state.codes, selectedCode })
     dispatch({
       type: 'CHANGE_CODE',
       payload: {
@@ -135,7 +133,7 @@ export const AuthProvider = ({ children }) => {
         const accessToken = window.localStorage.getItem('accessToken')
         
         if (accessToken && isValidToken(accessToken)) {
-          setSession({ codes: state.codes, accessToken })
+          setSession({ accessToken })
           const response = await axiosLocalInstance.get('/api/jwt/me')
           const { user, codes } = response.data
           let selectedCode = window.localStorage.getItem('selectedCode')
@@ -177,7 +175,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
     initialise().then()
-  }, [state.codes])
+  }, [])
   
   if (!state.isInitialised) {
     return <SplashScreen/>

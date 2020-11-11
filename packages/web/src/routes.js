@@ -17,7 +17,7 @@ export const renderRoutes = (routes = [], priority) => {
             const Guard = route.guard || Fragment
             const Layout = route.layout || Fragment
             const Component = route.component
-            if (isMenuLinkToShow(route, {priority})) {
+            if (isMenuLinkToShow(route, { priority })) {
               acc.push(
                 <Route
                   exact={route.exact}
@@ -223,7 +223,7 @@ const routes = [
       },
       {
         exact: true,
-        private: [3],
+        private: [4, 3],
         path: [
           '/app/reports/browser',
           '/app/reports/browser/:docId',

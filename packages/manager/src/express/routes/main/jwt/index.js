@@ -9,10 +9,12 @@ const JWT_EXPIRES_IN = `${MAXAGE_MINUTES} minutes`
 
 const setPriority = type => {
   switch (type) {
-    case 'USER':
-      return 2
-    default:
+    case 'USER_MANAGER':
       return 3
+    case 'USER_ADMIN':
+      return 4
+    default:
+      return 2
   }
 }
 
@@ -38,10 +40,10 @@ function addRouters (router) {
     const { username, password } = req.body
     const query = 'SELECT man.*, meta(man).id _id '
                   + 'FROM ' + connClass.managerBucketName + ' man '
-                  + 'WHERE type = "USER_MANAGER" '
+                  + 'WHERE (type = "USER_MANAGER" OR type = "USER_ADMIN") '
                   + 'AND LOWER(`user`) = $1 '
                   + 'AND `password` = $2'
-    const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster, { parameters: [username.toLowerCase(), password] })
+    const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster, { parameters: [username.toLowerCase().trim(), String(password).trim()] })
     if (!ok) {
       log.error('path', path)
       throw Error(err.context ? err.context.first_error_message : message)
