@@ -72,52 +72,55 @@ const TopBar = ({
             </SvgIcon>
           </IconButton>
         </Hidden>
-        <TextField
-          InputProps={
+        {
+          codes?.length &&
+          <TextField
+            InputProps={
+              {
+                classes: {
+                  root: isLight ? classes.inputRoot : undefined,
+                },
+              }
+            }
+            name="code"
+            onChange={
+              event => {
+                const value = event.target.value
+                changeCode(value)
+              }
+            }
+            select
+            SelectProps={
+              {
+                native: true,
+              }
+            }
+            size="small"
+            value={selectedCode}
+            variant="outlined"
+          >
             {
-              classes: {
-                root: isLight ? classes.inputRoot : undefined,
-              },
-            }
-          }
-          name="code"
-          onChange={
-            event => {
-              const value = event.target.value
-              changeCode(value)
-            }
-          }
-          select
-          SelectProps={
-            {
-              native: true,
-            }
-          }
-          size="small"
-          value={selectedCode}
-          variant="outlined"
-        >
-          {
-            codes.length > 1 &&
-            <option 
-              style={isLight ? optionBg : undefined}
-              value={NO_SELECTED_CODE}
-            >
-              {intl.formatMessage(messages.common_all)}
-            </option>
-          }
-          {
-            codes.map(code => (
+              codes.length > 1 &&
               <option
-                key={code}
                 style={isLight ? optionBg : undefined}
-                value={code}
+                value={NO_SELECTED_CODE}
               >
-                {capitalCase(code)}
+                {intl.formatMessage(messages.common_all)}
               </option>
-            ))
-          }
-        </TextField>
+            }
+            {
+              codes.map(code => (
+                <option
+                  key={code}
+                  style={isLight ? optionBg : undefined}
+                  value={code}
+                >
+                  {capitalCase(code)}
+                </option>
+              ))
+            }
+          </TextField>
+        }
         <Box
           flexGrow={1}
           ml={2}

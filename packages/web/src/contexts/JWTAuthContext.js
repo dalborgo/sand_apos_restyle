@@ -137,7 +137,7 @@ export const AuthProvider = ({ children }) => {
           const response = await axiosLocalInstance.get('/api/jwt/me')
           const { user, codes } = response.data
           let selectedCode = window.localStorage.getItem('selectedCode')
-          if (!codes.includes(selectedCode)) {
+          if (!codes?.includes(selectedCode)) {
             selectedCode = codes?.length === 1 ? codes[0] : NO_SELECTED_CODE
             setSession({ codes, selectedCode })
           }
