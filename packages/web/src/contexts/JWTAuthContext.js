@@ -4,8 +4,11 @@ import SplashScreen from 'src/components/SplashScreen'
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
 
+export const NO_SELECTED_CODE = 'All'
+
 const initialAuthState = {
   codes: [],
+  selectedCode: NO_SELECTED_CODE,
   isAuthenticated: false,
   isInitialised: false,
   user: null,
@@ -20,9 +23,8 @@ const isValidToken = (accessToken) => {
   return decoded.exp > currentTime
 }
 
-export const NO_SELECTED_CODE = 'All'
 
-const setSession = ({ accessToken, selectedCode }) => {
+const setSession = ({ codes, accessToken, selectedCode }) => {
   if (accessToken || selectedCode) {
     accessToken && localStorage.setItem('accessToken', accessToken)
     accessToken && (axiosLocalInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`)
@@ -30,7 +32,7 @@ const setSession = ({ accessToken, selectedCode }) => {
     const selectedCode_ = selectedCode || localStorage.getItem('selectedCode')
     axiosLocalInstance.defaults.params = {
       _key: 'astenposServer',
-      owner: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : undefined,
+      owner: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : codes.join('|'),
     }
   } else {
     localStorage.removeItem('accessToken')
@@ -102,7 +104,7 @@ export const AuthProvider = ({ children }) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password })
     const { accessToken, user, codes } = response.data
     const selectedCode = codes?.length === 1 ? codes[0] : NO_SELECTED_CODE
-    setSession({ accessToken })
+    setSession({ codes, accessToken })
     dispatch({
       type: 'LOGIN',
       payload: {
@@ -118,7 +120,7 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' })
   }
   const changeCode = selectedCode => {
-    setSession({ selectedCode })
+    setSession({ codes: state.codes , selectedCode })
     dispatch({
       type: 'CHANGE_CODE',
       payload: {
@@ -133,13 +135,13 @@ export const AuthProvider = ({ children }) => {
         const accessToken = window.localStorage.getItem('accessToken')
         
         if (accessToken && isValidToken(accessToken)) {
-          setSession({ accessToken })
+          setSession({ codes: state.codes, accessToken })
           const response = await axiosLocalInstance.get('/api/jwt/me')
           const { user, codes } = response.data
           let selectedCode = window.localStorage.getItem('selectedCode')
           if (!codes.includes(selectedCode)) {
             selectedCode = codes?.length === 1 ? codes[0] : NO_SELECTED_CODE
-            setSession({ selectedCode })
+            setSession({ codes, selectedCode })
           }
           dispatch({
             type: 'INITIALISE',
@@ -175,7 +177,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
     initialise().then()
-  }, [])
+  }, [state.codes])
   
   if (!state.isInitialised) {
     return <SplashScreen/>

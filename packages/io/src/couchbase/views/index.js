@@ -42,8 +42,6 @@ async function execService (params, connection = {}) {
  * https://docs.couchbase.com/nodejs-sdk/current/howtos/view-queries-with-sdk.html
  * https://docs.couchbase.com/sdk-api/couchbase-node-client-3.0.6/Bucket.html#viewQuery
  */
-
-
 async function exec (designDoc, viewName, bucket, options_ = {}) {
   const options = Object.assign({ scanConsistency: VIEW_SCAN_CONSISTENCY.RequestPlus }, options_)
   try {
