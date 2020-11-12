@@ -2,7 +2,9 @@ import React, { createContext, useEffect, useReducer } from 'react'
 import jwtDecode from 'jwt-decode'
 import SplashScreen from 'src/components/SplashScreen'
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
+import manageQueryCache from 'src/utils/cache'
 import log from '@adapter/common/src/log'
+import { useQueryCache } from 'react-query'
 
 export const NO_SELECTED_CODE = 'All'
 
@@ -10,6 +12,7 @@ const initialAuthState = {
   codes: [],
   isAuthenticated: false,
   isInitialised: false,
+  selectedCode: null,
   user: null,
 }
 
@@ -31,7 +34,7 @@ const setSession = ({ codes, accessToken, selectedCode }) => {
     const selectedCode_ = selectedCode || localStorage.getItem('selectedCode')
     axiosLocalInstance.defaults.params = {
       _key: 'astenposServer',
-      owner: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : codes?.join('|'),
+      owner: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : codes,
     }
   } else {
     localStorage.removeItem('accessToken')
@@ -98,11 +101,12 @@ const AuthContext = createContext({
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState)
+  const queryCache = useQueryCache()
   const login = async (username, password) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password })
     const { accessToken, user, codes } = response.data
     const selectedCode = codes?.length === 1 ? codes[0] : NO_SELECTED_CODE
-    setSession({ codes, accessToken })
+    setSession({ codes, accessToken, selectedCode })
     dispatch({
       type: 'LOGIN',
       payload: {
@@ -115,9 +119,11 @@ export const AuthProvider = ({ children }) => {
   
   const logout = () => {
     setSession({})
+    queryCache.clear()
     dispatch({ type: 'LOGOUT' })
   }
   const changeCode = selectedCode => {
+    manageQueryCache(queryCache)
     setSession({ codes: state.codes, selectedCode })
     dispatch({
       type: 'CHANGE_CODE',
@@ -156,7 +162,7 @@ export const AuthProvider = ({ children }) => {
             payload: {
               codes: [],
               isAuthenticated: false,
-              selectedCode: '',
+              selectedCode: null,
               user: null,
             },
           })
@@ -168,7 +174,7 @@ export const AuthProvider = ({ children }) => {
           payload: {
             initialData: [],
             isAuthenticated: false,
-            selectedCode: '',
+            selectedCode: null,
             user: null,
           },
         })

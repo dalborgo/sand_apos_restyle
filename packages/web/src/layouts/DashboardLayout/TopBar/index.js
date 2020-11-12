@@ -3,9 +3,9 @@ import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, TextField, Toolba
 import { Menu as MenuIcon } from 'react-feather'
 import { THEMES } from 'src/constants'
 import Account from './Account'
-import Contacts from './Contacts'
+/*import Contacts from './Contacts'
 import Notifications from './Notifications'
-import Search from './Search'
+import Search from './Search'*/
 import Settings from './Settings'
 import useAuth from 'src/hooks/useAuth'
 import useSettings from 'src/hooks/useSettings'
@@ -85,6 +85,7 @@ const TopBar = ({
             name="code"
             onChange={
               event => {
+                event.persist()
                 const value = event.target.value
                 changeCode(value)
               }
@@ -125,9 +126,9 @@ const TopBar = ({
           flexGrow={1}
           ml={2}
         />
-        <Search/>
+        {/*<Search/>
         <Contacts/>
-        <Notifications/>
+        <Notifications/>*/}
         <Settings/>
         <Box ml={2}>
           <Account/>

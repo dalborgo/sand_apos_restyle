@@ -23,7 +23,6 @@ import SnackMyProvider from 'src/components/Snack/SnackComponents'
 import Error500 from 'src/views/errors/Error500'
 import log from '@adapter/common/src/log'
 import useAuth from './hooks/useAuth'
-import { RecoilRoot } from 'recoil'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -64,21 +63,19 @@ const App = () => {
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <SnackMyProvider>
               <Router history={history}>
-                <AuthProvider>
-                  <GlobalStyles/>
-                  <ScrollReset/>
-                  <IntlProvider defaultLocale="it" locale="it" messages={messages}>
-                    <ReactQueryCacheProvider queryCache={queryCache}>
-                      <RecoilRoot>
-                        <RouteList/>
-                      </RecoilRoot>
+                <ReactQueryCacheProvider queryCache={queryCache}>
+                  <AuthProvider>
+                    <GlobalStyles/>
+                    <ScrollReset/>
+                    <IntlProvider defaultLocale="it" locale="it" messages={messages}>
+                      <RouteList/>
                       {
                         REACT_QUERY_DEV_TOOLS &&
                         <ReactQueryDevtools initialIsOpen/>
                       }
-                    </ReactQueryCacheProvider>
-                  </IntlProvider>
-                </AuthProvider>
+                    </IntlProvider>
+                  </AuthProvider>
+                </ReactQueryCacheProvider>
               </Router>
             </SnackMyProvider>
           </MuiPickersUtilsProvider>

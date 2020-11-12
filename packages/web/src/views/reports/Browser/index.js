@@ -124,12 +124,12 @@ const deleteMutation = async (docId) => {
 const TimeStats = memo(function TimeStats ({ hasData }) {
   return (
     <>
-      <Box style={{ width: '25%', textAlign: 'right'}}>
+      <Box style={{  textAlign: 'right' }}>
         <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
           <FormattedMessage defaultMessage="Tempo query" id="reports.browser.response_time"/>{': '}
         </Typography>
       </Box>
-      <Box style={{ width: '25%', marginLeft: 3 }}>
+      <Box style={{ width: 60, marginLeft: 3 }}>
         <Typography display="inline" variant="h6">
           <span id="BrowserSpan">{hasData ? `${responseTimeInMilli || 0} ms` : '---'}</span>
         </Typography>
@@ -158,12 +158,12 @@ const SearchComponent = memo((function SearchComponent (props) {
       <Box pb={0.5} px={1.5} style={{ minHeight: 25 }}>
         {
           <Box display="flex">
-            <Box style={{width: '25%', textAlign: 'right' }}>
+            <Box style={{ textAlign: 'right' }}>
               <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
                 <FormattedMessage defaultMessage="Righe totali" id="reports.browser.total_rows"/>{': '}
               </Typography>
             </Box>
-            <Box style={{ width: '25%', marginLeft: 3 }}>
+            <Box style={{ width: 55, marginLeft: 3 }}>
               <Typography display="inline" variant="h6">
                 {props?.data?.[0].results.total_rows ?? '---'}
               </Typography>
@@ -240,29 +240,6 @@ const BrowserView = () => {
   const prevSelectedCode = useRef(selectedCode)
   const xsDown = useMediaQuery(theme => theme.breakpoints.down('xs'))
   const snackQueryError = useSnackQueryError()
-  useEffect(() => {
-    if (docId && docId !== prevDocID.current) {
-      const elem = document.getElementById(prevDocID?.current)
-      if (elem) {elem.classList.remove('MuiBrowserElem-containerSelected')}
-    }
-    if (docId) {
-      prevDocID.current = docId
-    }
-  }, [docId])
-  useEffect(() => {
-    if (prevSelectedCode !== selectedCode) {
-      console.log('RESET____')
-      prevSelectedCode.current = selectedCode
-    }
-  }, [selectedCode])
-  useEffect(() => {
-    const browserSearchBox = document.getElementById('browserSearchBox')
-    browserSearchBox && browserSearchBox.select()
-    const browserPanel = document.getElementById('browserPanel')
-    if (browserPanel) {
-      browserPanel.scrollTop = 0
-    }
-  }, [text])
   const respList = useInfiniteQuery(['docs/browser', text], fetchList, {
     getFetchMore: (lastGroup, allGroups) => {
       const { total_rows: totalRows, rows = [] } = lastGroup?.results
@@ -287,13 +264,53 @@ const BrowserView = () => {
       text && setText('')
     },
   })
+  useEffect(() => {
+    if (docId && docId !== prevDocID.current) {
+      const elem = document.getElementById(prevDocID?.current)
+      if (elem) {elem.classList.remove('MuiBrowserElem-containerSelected')}
+    }
+    if (docId) {
+      prevDocID.current = docId
+    }
+  }, [docId])
+  useEffect(() => {
+    if (prevSelectedCode.current !== selectedCode) {
+      prevSelectedCode.current = selectedCode
+      const elem = document.getElementById('browserDisplayArea')
+      if (elem) {elem.value = ''}
+      if (text) {
+        const browserSearchBox = document.getElementById('browserSearchBox')
+        browserSearchBox.value = ''
+        queryCache.removeQueries('docs/browser')
+        setText('')
+      }else{
+        respList.refetch().then(() => {
+          const elem = document.getElementById('BrowserSpan')
+          if (elem) {elem.innerText = `${responseTimeInMilli} ms`}
+        })
+      }
+      history.push('/app/reports/browser')
+    }
+  }, [history, queryCache, respList, selectedCode, text])
+  useEffect(() => {
+    const browserSearchBox = document.getElementById('browserSearchBox')
+    browserSearchBox && browserSearchBox.select()
+    const browserPanel = document.getElementById('browserPanel')
+    if (browserPanel) {
+      browserPanel.scrollTop = 0
+    }
+  }, [text])
   const respDoc = useQuery(['docs/get_by_id', { docId }], {
     enabled: docId,
     onSuccess: ({ results }) => {
       const docObj = results
-      const defaultValue = docObj ? JSON.stringify(docObj, null, 2) : ''
-      const elem = document.getElementById('browserDisplayArea')
-      if (elem) {elem.value = defaultValue}
+      if(docObj){
+        const defaultValue = docObj ? JSON.stringify(docObj, null, 2) : ''
+        const elem = document.getElementById('browserDisplayArea')
+        if (elem) {elem.value = defaultValue}
+      } else {
+        history.push('/app/reports/browser')
+      }
     },
   })
   const [mutate] = useMutation(saveMutation, {
