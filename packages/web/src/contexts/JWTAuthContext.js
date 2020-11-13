@@ -2,7 +2,6 @@ import React, { createContext, useEffect, useReducer } from 'react'
 import jwtDecode from 'jwt-decode'
 import SplashScreen from 'src/components/SplashScreen'
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
-import manageQueryCache from 'src/utils/cache'
 import log from '@adapter/common/src/log'
 import { useQueryCache } from 'react-query'
 
@@ -123,7 +122,6 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' })
   }
   const changeCode = selectedCode => {
-    manageQueryCache(queryCache)
     setSession({ codes: state.codes, selectedCode })
     dispatch({
       type: 'CHANGE_CODE',

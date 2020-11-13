@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
-import { Box, Divider, Grid, makeStyles, Paper, Typography, useMediaQuery } from '@material-ui/core'
+import { Box, Divider, Grid, makeStyles, Paper, Typography } from '@material-ui/core'
 import { useInfiniteQuery, useMutation, useQuery, useQueryCache } from 'react-query'
 import Page from 'src/components/Page'
 import DocList from './DocList'
@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 export let responseTimeInMilli
-const fetchList = async (key, text, cursor) => {
+const fetchList = async (key, text, _, cursor) => {
   const { data, config } = await axiosLocalInstance(`/api/${key}`, {
     params: {
       limit: LIMIT,
@@ -124,7 +124,7 @@ const deleteMutation = async (docId) => {
 const TimeStats = memo(function TimeStats ({ hasData }) {
   return (
     <>
-      <Box style={{  textAlign: 'right' }}>
+      <Box style={{ textAlign: 'right' }}>
         <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
           <FormattedMessage defaultMessage="Tempo query" id="reports.browser.response_time"/>{': '}
         </Typography>
@@ -237,27 +237,14 @@ const BrowserView = () => {
   const history = useHistory()
   const { docId } = useParams()
   const prevDocID = useRef(null)
-  const prevSelectedCode = useRef(selectedCode)
-  const xsDown = useMediaQuery(theme => theme.breakpoints.down('xs'))
   const snackQueryError = useSnackQueryError()
-  const respList = useInfiniteQuery(['docs/browser', text], fetchList, {
+  const respList = useInfiniteQuery(['docs/browser', text, selectedCode], fetchList, {
     getFetchMore: (lastGroup, allGroups) => {
       const { total_rows: totalRows, rows = [] } = lastGroup?.results
       const cursor = rows[rows.length - 1]?.key
       const rowsFetched = allGroups.length * LIMIT
       const isOver = !LIMIT || rowsFetched === totalRows || rows.length < LIMIT
       return isOver ? false : parseInt(cursor)
-    },
-    onSettled: data => {
-      if (Array.isArray(data) && data.length === 1) {
-        const [row] = data
-        if (row.results.total_rows === 1) { //auto select if unique result
-          if (row.ok && !xsDown) {
-            const id = row.results.rows[0].id
-            history.push(`/app/reports/browser/${id}`)
-          }
-        }
-      }
     },
     onError: err => {
       snackQueryError(err)
@@ -273,25 +260,7 @@ const BrowserView = () => {
       prevDocID.current = docId
     }
   }, [docId])
-  useEffect(() => {
-    if (prevSelectedCode.current !== selectedCode) {
-      prevSelectedCode.current = selectedCode
-      const elem = document.getElementById('browserDisplayArea')
-      if (elem) {elem.value = ''}
-      if (text) {
-        const browserSearchBox = document.getElementById('browserSearchBox')
-        browserSearchBox.value = ''
-        queryCache.removeQueries('docs/browser')
-        setText('')
-      }else{
-        respList.refetch().then(() => {
-          const elem = document.getElementById('BrowserSpan')
-          if (elem) {elem.innerText = `${responseTimeInMilli} ms`}
-        })
-      }
-      history.push('/app/reports/browser')
-    }
-  }, [history, queryCache, respList, selectedCode, text])
+  
   useEffect(() => {
     const browserSearchBox = document.getElementById('browserSearchBox')
     browserSearchBox && browserSearchBox.select()
@@ -304,7 +273,7 @@ const BrowserView = () => {
     enabled: docId,
     onSuccess: ({ results }) => {
       const docObj = results
-      if(docObj){
+      if (docObj) {
         const defaultValue = docObj ? JSON.stringify(docObj, null, 2) : ''
         const elem = document.getElementById('browserDisplayArea')
         if (elem) {elem.value = defaultValue}
