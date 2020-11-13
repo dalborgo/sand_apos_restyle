@@ -64,7 +64,11 @@ const JWTLogin = memo(({ className, ...rest }) => {
         Yup.object().shape({
           username: Yup.string().required(intl.formatMessage(messages.username_required)),
           password: Yup.string().required(intl.formatMessage(messages.password_required)),
-          code: Yup.object().nullable().required(intl.formatMessage(messages.installation_required)),
+          code: Yup.object().nullable()
+            .when('username', {
+              is: username => username === 'asten',
+              then: Yup.object().required(intl.formatMessage(messages.installation_required)),
+            }),
         })
       }
     >
@@ -119,13 +123,14 @@ const JWTLogin = memo(({ className, ...rest }) => {
             {
               values['username'] === 'asten' &&
               <React.Suspense fallback={<CircularProgress/>}>
-                <CodeAutocomplete errors={errors} setFieldTouched={setFieldTouched} setFieldValue={setFieldValue} touched={touched} value={values.code}/>
+                <CodeAutocomplete errors={errors} setFieldTouched={setFieldTouched} setFieldValue={setFieldValue}
+                                  touched={touched} value={values.code}/>
               </React.Suspense>
             }
             <Box mt={2}>
               <Button
                 color="secondary"
-                disabled={isSubmitting || !isValid || !dirty }
+                disabled={isSubmitting || !isValid || !dirty}
                 fullWidth
                 size="large"
                 type="submit"
