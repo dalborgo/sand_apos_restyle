@@ -87,11 +87,6 @@ const routes = [
       },
       {
         exact: true,
-        path: '/app/calendar',
-        component: lazy(() => import('src/views/calendar/CalendarView')),
-      },
-      {
-        exact: true,
         path: [
           '/app/chat/new',
           '/app/chat/:threadKey',

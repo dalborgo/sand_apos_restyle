@@ -1,23 +1,31 @@
-import React from 'react'
+import React, { memo, useEffect } from 'react'
 import clsx from 'clsx'
 import * as Yup from 'yup'
-import PropTypes from 'prop-types'
-import { Formik } from 'formik'
-import { Box, Button, makeStyles, TextField } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+import { FastField, Formik } from 'formik'
+import { Box, Button, makeStyles } from '@material-ui/core'
+import { TextField } from 'formik-material-ui'
 import useAuth from 'src/hooks/useAuth'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
+import CodeAutocomplete from './CodeAutocomplete'
+import { useQueryCache } from 'react-query'
 
 const useStyles = makeStyles(() => ({
   root: {},
 }))
 
-const JWTLogin = ({ className, ...rest }) => {
+const JWTLogin = memo(({ className, ...rest }) => {
   const classes = useStyles()
   const { login } = useAuth()
+  const queryCache = useQueryCache()
+  useEffect(() => {
+    async function fetchData () {
+      await queryCache.prefetchQuery('jwt/codes')
+    }
+    fetchData().then()
+  }, [queryCache])
   const isMountedRef = useIsMountedRef()
   const intl = useIntl()
   const snackQueryError = useSnackQueryError()
@@ -25,9 +33,10 @@ const JWTLogin = ({ className, ...rest }) => {
     <Formik
       initialValues={
         {
-          username: 'rino',
+          code: null,
           password: 'rino',
           submit: null,
+          username: 'rino',
         }
       }
       onSubmit={
@@ -36,7 +45,7 @@ const JWTLogin = ({ className, ...rest }) => {
           setSubmitting,
         }) => {
           try {
-            await login(values.username, values.password)
+            await login(values.username, values.password, values?.code)
             if (isMountedRef.current) {
               setStatus({ success: true })
               setSubmitting(false)
@@ -60,10 +69,10 @@ const JWTLogin = ({ className, ...rest }) => {
       {
         ({
           errors,
-          handleBlur,
           handleChange,
           handleSubmit,
           isSubmitting,
+          setFieldValue,
           touched,
           values,
         }) => (
@@ -73,33 +82,37 @@ const JWTLogin = ({ className, ...rest }) => {
             onSubmit={handleSubmit}
             {...rest}
           >
-            <TextField
+            <FastField
               autoFocus
+              component={TextField}
               error={Boolean(touched.username && errors.username)}
               fullWidth
               helperText={touched.username && errors.username}
               label="Nome Utente"
               margin="normal"
               name="username"
-              onBlur={handleBlur}
               onChange={handleChange}
               type="text"
               value={values.username}
               variant="outlined"
             />
-            <TextField
+            <FastField
+              component={TextField}
               error={Boolean(touched.password && errors.password)}
               fullWidth
               helperText={touched.password && errors.password}
               label="Password"
               margin="normal"
               name="password"
-              onBlur={handleBlur}
               onChange={handleChange}
               type="password"
               value={values.password}
               variant="outlined"
             />
+            {
+              values['username'] === 'asten' &&
+              <CodeAutocomplete setFieldValue={setFieldValue}/>
+            }
             <Box mt={2}>
               <Button
                 color="secondary"
@@ -112,30 +125,14 @@ const JWTLogin = ({ className, ...rest }) => {
                 <FormattedMessage defaultMessage="Entra" id="auth.login.enter"/>
               </Button>
             </Box>
-            <Box mt={2}>
-              <Alert
-                severity="info"
-              >
-                <div>
-                  Use
-                  {' '}
-                  <b>demo@devias.io</b>
-                  {' '}
-                  and password
-                  {' '}
-                  <b>Password123</b>
-                </div>
-              </Alert>
-            </Box>
           </form>
         )
       }
     </Formik>
   )
-}
+})
 
-JWTLogin.propTypes = {
-  className: PropTypes.string,
-}
+JWTLogin.whyDidYouRender = true
+JWTLogin.displayName = 'JWTLogin'
 
 export default JWTLogin

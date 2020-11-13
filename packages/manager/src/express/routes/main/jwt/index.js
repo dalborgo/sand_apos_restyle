@@ -3,6 +3,7 @@ import { couchQueries } from '@adapter/io'
 import config from 'config'
 import get from 'lodash/get'
 import log from '@adapter/common/src/winston'
+
 const { MAXAGE_MINUTES = 30, AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
 const JWT_EXPIRES_IN = `${MAXAGE_MINUTES} minutes`
@@ -37,12 +38,16 @@ async function getInitialData (connClass) {
 function addRouters (router) {
   router.post('/jwt/login', async function (req, res) {
     const { connClass, route: { path } } = req
-    const { username, password } = req.body
-    const query = 'SELECT man.*, meta(man).id _id '
-                  + 'FROM ' + connClass.managerBucketName + ' man '
-                  + 'WHERE (type = "USER_MANAGER" OR type = "USER_ADMIN") '
-                  + 'AND LOWER(`user`) = $1 '
-                  + 'AND `password` = $2'
+    const { username, password, code } = req.body
+    const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
+                  + '`user`.`user`, `user`.`type`, meta(`user`).id _id  '
+                  + 'FROM ' + connClass.managerBucketName + ' `user` '
+                  + 'LEFT NEST ' + connClass.managerBucketName + ' setups '
+                  + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) FOR code IN `user`.codes END '
+                  + 'WHERE `user`.type IN ["USER_MANAGER", "USER_ADMIN"] '
+                  + 'AND LOWER(`user`.`user`) = $1 '
+                  + 'AND `user`.`password` = $2'
+    
     const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster, { parameters: [username.toLowerCase().trim(), String(password).trim()] })
     if (!ok) {
       log.error('path', path)
@@ -59,7 +64,7 @@ function addRouters (router) {
     )
     res.send({
       accessToken,
-      codes: identity.codes,
+      codes: code ? [code] : identity.codes,
       user: {
         ...selectUserFields(identity),
       },
@@ -70,7 +75,10 @@ function addRouters (router) {
     const { authorization } = req.headers
     const accessToken = authorization.split(' ')[1]
     const { userId } = jwt.verify(accessToken, JWT_SECRET)
-    const query = `SELECT man.* from ${connClass.managerBucketName} man USE KEYS "${userId}"`
+    const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, `user`.`user`, `user`.`type` '
+                  + 'FROM ' + connClass.managerBucketName + ' `user` LEFT NEST ' + connClass.managerBucketName + ' setups '
+                  + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) '
+                  + 'FOR code IN `user`.codes END WHERE meta(`user`).id = "'+ userId +'" AND `user`.type'
     const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
     if (!ok) {
       log.error('path', path)
@@ -88,6 +96,16 @@ function addRouters (router) {
         ...selectUserFields(identity),
       },
     })
+  })
+  router.get('/jwt/codes', async function (req, res) {
+    const { connClass, route: { path } } = req
+    const query = `select RAW OBJECT_REMOVE(man, 'type') from ${connClass.managerBucketName} man where type = "INSTALLATION"`
+    const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
+    if (!ok) {
+      log.error('path', path)
+      throw Error(err.context ? err.context.first_error_message : message)
+    }
+    res.send(results)
   })
 }
 

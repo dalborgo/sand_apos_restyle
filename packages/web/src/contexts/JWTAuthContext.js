@@ -4,6 +4,7 @@ import SplashScreen from 'src/components/SplashScreen'
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
 import { useQueryCache } from 'react-query'
+import find from 'lodash/find'
 
 export const NO_SELECTED_CODE = 'All'
 
@@ -24,20 +25,23 @@ const isValidToken = accessToken => {
   return decoded.exp > currentTime
 }
 
-
 const setSession = ({ codes, accessToken, selectedCode }) => {
   if (accessToken || selectedCode) {
-    accessToken && localStorage.setItem('accessToken', accessToken)
+    accessToken && window.localStorage.setItem('accessToken', accessToken)
     accessToken && (axiosLocalInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`)
-    selectedCode && localStorage.setItem('selectedCode', selectedCode)
-    const selectedCode_ = selectedCode || localStorage.getItem('selectedCode')
+    selectedCode && window.localStorage.setItem('selectedCode', JSON.stringify(selectedCode))
+    let selectedCode_ = selectedCode
+    if (!selectedCode_) {
+      const jsonObj = window.localStorage.getItem('selectedCode')
+      if (jsonObj) {selectedCode_ = JSON.parse(jsonObj)}
+    }
     axiosLocalInstance.defaults.params = {
       _key: 'astenposServer',
-      owner: selectedCode_ !== NO_SELECTED_CODE ? selectedCode_ : codes,
+      owner: selectedCode_?.code !== NO_SELECTED_CODE ? selectedCode_.code : codes?.map(code => code.code),
     }
   } else {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('selectedCode')
+    window.localStorage.removeItem('accessToken')
+    window.localStorage.removeItem('selectedCode')
     delete axiosLocalInstance.defaults.headers.common.Authorization
     axiosLocalInstance.defaults.params = { //reset to default
       _key: 'astenposServer',
@@ -101,10 +105,10 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState)
   const queryCache = useQueryCache()
-  const login = async (username, password) => {
-    const response = await axiosLocalInstance.post('/api/jwt/login', { username, password })
+  const login = async (username, password, code) => {
+    const response = await axiosLocalInstance.post('/api/jwt/login', { username, password, code })
     const { accessToken, user, codes } = response.data
-    const selectedCode = codes?.length === 1 ? codes[0] : NO_SELECTED_CODE
+    const selectedCode = codes?.length === 1 ? codes[0] : { code: NO_SELECTED_CODE }
     setSession({ codes, accessToken, selectedCode })
     dispatch({
       type: 'LOGIN',
@@ -122,11 +126,13 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: 'LOGOUT' })
   }
   const changeCode = selectedCode => {
-    setSession({ codes: state.codes, selectedCode })
+    const code_ = find(state.codes, { code: selectedCode })
+    const code = code_ ? code_ : { code: NO_SELECTED_CODE }
+    setSession({ codes: state.codes, selectedCode: code })
     dispatch({
       type: 'CHANGE_CODE',
       payload: {
-        selectedCode,
+        selectedCode: code,
       },
     })
   }
@@ -139,10 +145,12 @@ export const AuthProvider = ({ children }) => {
         if (accessToken && isValidToken(accessToken)) {
           setSession({ accessToken })
           const response = await axiosLocalInstance.get('/api/jwt/me')
-          const { user, codes } = response.data
+          let { user, codes } = response.data
           let selectedCode = window.localStorage.getItem('selectedCode')
-          if (!codes?.includes(selectedCode)) {
-            selectedCode = codes?.length === 1 ? codes[0] : NO_SELECTED_CODE
+          if (selectedCode) {selectedCode = JSON.parse(selectedCode)}
+          codes = codes ? codes : [selectedCode]
+          if (!find(codes, { code: selectedCode?.code })) { //refresh with all code
+            selectedCode = codes?.length === 1 ? codes[0] : { code: NO_SELECTED_CODE }
             setSession({ codes, selectedCode })
           }
           dispatch({

@@ -52,7 +52,7 @@ const optionBg = {
 const TopBar = ({
   setMobileNavOpen,
 }) => {
-  const { codes, selectedCode = NO_SELECTED_CODE, changeCode } = useAuth()
+  const { codes, selectedCode = { code: NO_SELECTED_CODE }, changeCode } = useAuth()
   const classes = useStyles()
   const intl = useIntl()
   const { settings } = useSettings()
@@ -97,7 +97,7 @@ const TopBar = ({
               }
             }
             size="small"
-            value={selectedCode}
+            value={selectedCode.code}
             variant="outlined"
           >
             {
@@ -110,13 +110,13 @@ const TopBar = ({
               </option>
             }
             {
-              codes.map(code => (
+              codes.map(({code, name}) => (
                 <option
                   key={code}
                   style={isLight ? optionBg : undefined}
                   value={code}
                 >
-                  {capitalCase(code)}
+                  {capitalCase(name)}
                 </option>
               ))
             }

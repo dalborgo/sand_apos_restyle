@@ -3,7 +3,6 @@ import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
   Briefcase as BriefcaseIcon,
-  Calendar as CalendarIcon,
   DollarSign as DollarSignIcon,
   Edit as EditIcon,
   Folder as FolderIcon,
@@ -170,19 +169,6 @@ const sections = [
         title: 'Chat',
         href: '/app/chat',
         icon: MessageCircleIcon,
-        // eslint-disable-next-line react/display-name
-        info: () => (
-          <Chip
-            color="secondary"
-            label="Updated"
-            size="small"
-          />
-        ),
-      },
-      {
-        title: 'Calendar',
-        href: '/app/calendar',
-        icon: CalendarIcon,
         // eslint-disable-next-line react/display-name
         info: () => (
           <Chip
