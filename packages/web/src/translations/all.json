@@ -8,6 +8,14 @@
     "defaultMessage": "Entra"
   },
   {
+    "id": "auth.login.installation",
+    "defaultMessage": "Installazione"
+  },
+  {
+    "id": "auth.login.installation_required",
+    "defaultMessage": "Installazione obbligatoria!"
+  },
+  {
     "id": "auth.login.password_required",
     "defaultMessage": "Password obbligatoria!"
   },
@@ -75,5 +83,9 @@
   {
     "id": "reports.header.list_documents",
     "defaultMessage": "Lista Documenti"
+  },
+  {
+    "id": "views.login.installation",
+    "defaultMessage": "Installazione"
   }
 ]

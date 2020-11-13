@@ -2,7 +2,7 @@ import React, { memo, useEffect } from 'react'
 import clsx from 'clsx'
 import * as Yup from 'yup'
 import { FastField, Formik } from 'formik'
-import { Box, Button, makeStyles } from '@material-ui/core'
+import { Box, Button, CircularProgress, makeStyles } from '@material-ui/core'
 import { TextField } from 'formik-material-ui'
 import useAuth from 'src/hooks/useAuth'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
@@ -24,6 +24,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
     async function fetchData () {
       await queryCache.prefetchQuery('jwt/codes')
     }
+    
     fetchData().then()
   }, [queryCache])
   const isMountedRef = useIsMountedRef()
@@ -34,9 +35,9 @@ const JWTLogin = memo(({ className, ...rest }) => {
       initialValues={
         {
           code: null,
-          password: 'rino',
+          password: '',
           submit: null,
-          username: 'rino',
+          username: '',
         }
       }
       onSubmit={
@@ -63,15 +64,19 @@ const JWTLogin = memo(({ className, ...rest }) => {
         Yup.object().shape({
           username: Yup.string().required(intl.formatMessage(messages.username_required)),
           password: Yup.string().required(intl.formatMessage(messages.password_required)),
+          code: Yup.object().nullable().required(intl.formatMessage(messages.installation_required)),
         })
       }
     >
       {
         ({
+          dirty,
           errors,
           handleChange,
           handleSubmit,
           isSubmitting,
+          isValid,
+          setFieldTouched,
           setFieldValue,
           touched,
           values,
@@ -92,6 +97,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
               margin="normal"
               name="username"
               onChange={handleChange}
+              required
               type="text"
               value={values.username}
               variant="outlined"
@@ -105,18 +111,21 @@ const JWTLogin = memo(({ className, ...rest }) => {
               margin="normal"
               name="password"
               onChange={handleChange}
+              required
               type="password"
               value={values.password}
               variant="outlined"
             />
             {
               values['username'] === 'asten' &&
-              <CodeAutocomplete setFieldValue={setFieldValue}/>
+              <React.Suspense fallback={<CircularProgress/>}>
+                <CodeAutocomplete errors={errors} setFieldTouched={setFieldTouched} setFieldValue={setFieldValue} touched={touched} value={values.code}/>
+              </React.Suspense>
             }
             <Box mt={2}>
               <Button
                 color="secondary"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isValid || !dirty }
                 fullWidth
                 size="large"
                 type="submit"

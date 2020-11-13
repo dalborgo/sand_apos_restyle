@@ -17,5 +17,8 @@
   "error404.wrong_page": "",
   "reports.browser.response_time": "",
   "reports.browser.total_rows": "",
-  "common.all": ""
+  "common.all": "",
+  "views.login.installation": "",
+  "auth.login.installation": "",
+  "auth.login.installation_required": ""
 }

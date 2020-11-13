@@ -9,7 +9,7 @@
     "PORT": 7000
   },
   "couchbase": {
-    "CONFIG_TOTAL_TIMEOUT": 3000,
+    "CONFIG_TOTAL_TIMEOUT": 250,
     "connections": {
       "astenposServer": {
         "server": "127.0.0.1",

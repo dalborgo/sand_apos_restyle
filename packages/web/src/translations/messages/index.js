@@ -9,6 +9,10 @@ export const messages = defineMessages({
     id: 'general.network_error',
     defaultMessage: 'Errore di rete!',
   },
+  installation: {
+    id: 'auth.login.installation',
+    defaultMessage: 'Installazione',
+  },
   username_required: {
     id: 'auth.login.username_required',
     defaultMessage: 'Nome utente obbligatorio!',
@@ -16,6 +20,10 @@ export const messages = defineMessages({
   password_required: {
     id: 'auth.login.password_required',
     defaultMessage: 'Password obbligatoria!',
+  },
+  installation_required: {
+    id: 'auth.login.installation_required',
+    defaultMessage: 'Installazione obbligatoria!',
   },
   LOGIN_WRONG_CREDENTIALS: {
     id: 'auth.login.wrong_credentials',

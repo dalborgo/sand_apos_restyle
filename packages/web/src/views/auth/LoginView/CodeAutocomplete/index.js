@@ -6,17 +6,25 @@ import { Autocomplete } from 'material-ui-formik-components/Autocomplete'
 import parse from 'autosuggest-highlight/parse'
 import match from 'src/utils/matcher'
 import { useQuery } from 'react-query'
+import { useIntl } from 'react-intl'
+import { messages } from 'src/translations/messages'
+import FormHelperText from '@material-ui/core/FormHelperText'
 
 const useStyles = makeStyles(() => ({
   listBox: { overflowX: 'hidden' },
+  formHelperText: {
+    marginLeft: 14,
+    marginTop: -4,
+  },
 }))
 
-const CodeAutocomplete = memo(({ setFieldValue }) => {
+const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched, touched, errors }) => {
   const classes = useStyles()
   const theme = useTheme()
+  const intl = useIntl()
   const { data: codes } = useQuery('jwt/codes', { suspense: true })
   return (
-    <React.Suspense fallback={<div>loading...</div>}>
+    <>
       <FastField
         classes={
           {
@@ -28,6 +36,11 @@ const CodeAutocomplete = memo(({ setFieldValue }) => {
         getOptionSelected={(option, value) => option.code === value.code}
         name="code"
         noOptionsText="Nessuna opzione"
+        onBlur={
+          () => {
+            setFieldTouched('code', true)
+          }
+        }
         onChange={
           (_, value) => {
             setFieldValue('code', value)
@@ -78,14 +91,24 @@ const CodeAutocomplete = memo(({ setFieldValue }) => {
             )
           }
         }
+        required
         textFieldProps={
           {
-            label: 'Installazione',
+            label: intl.formatMessage(messages.installation),
             variant: 'outlined',
+            required: true,
+            error: Boolean(touched.code && errors.code),
           }
         }
       />
-    </React.Suspense>
+      {
+        touched['code'] &&
+        errors['code'] &&
+        <FormHelperText className={classes.formHelperText} error>
+          {errors['code']}
+        </FormHelperText>
+      }
+    </>
   )
 })
 

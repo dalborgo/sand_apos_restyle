@@ -8,14 +8,12 @@ const { MAXAGE_MINUTES = 30, AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
 const JWT_EXPIRES_IN = `${MAXAGE_MINUTES} minutes`
 
-const setPriority = type => {
-  switch (type) {
-    case 'USER_MANAGER':
-      return 3
-    case 'USER_ADMIN':
+const setPriority = role => {
+  switch (role) {
+    case 'admin':
       return 4
     default:
-      return 2
+      return 3
   }
 }
 
@@ -40,11 +38,11 @@ function addRouters (router) {
     const { connClass, route: { path } } = req
     const { username, password, code } = req.body
     const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
-                  + '`user`.`user`, `user`.`type`, meta(`user`).id _id  '
+                  + '`user`.`user`, `user`.`role`, `user`.`type`, meta(`user`).id _id  '
                   + 'FROM ' + connClass.managerBucketName + ' `user` '
                   + 'LEFT NEST ' + connClass.managerBucketName + ' setups '
                   + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) FOR code IN `user`.codes END '
-                  + 'WHERE `user`.type IN ["USER_MANAGER", "USER_ADMIN"] '
+                  + 'WHERE `user`.type = "USER_MANAGER" '
                   + 'AND LOWER(`user`.`user`) = $1 '
                   + 'AND `user`.`password` = $2'
     
@@ -75,7 +73,8 @@ function addRouters (router) {
     const { authorization } = req.headers
     const accessToken = authorization.split(' ')[1]
     const { userId } = jwt.verify(accessToken, JWT_SECRET)
-    const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, `user`.`user`, `user`.`type` '
+    const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
+                  + '`user`.`user`, `user`.`role`, `user`.`type` '
                   + 'FROM ' + connClass.managerBucketName + ' `user` LEFT NEST ' + connClass.managerBucketName + ' setups '
                   + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) '
                   + 'FOR code IN `user`.codes END WHERE meta(`user`).id = "'+ userId +'" AND `user`.type'

@@ -17,5 +17,8 @@
   "error404.wrong_page": "404: La pagina che stai cercando non è qui!",
   "reports.browser.response_time": "Tempo query",
   "reports.browser.total_rows": "Righe totali",
-  "common.all": "Tutti"
+  "common.all": "Tutti",
+  "views.login.installation": "Installazione",
+  "auth.login.installation": "Installazione",
+  "auth.login.installation_required": "Installazione obbligatoria!"
 }
