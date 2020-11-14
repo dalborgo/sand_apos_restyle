@@ -146,7 +146,6 @@ const LoginView = () => {
                 alignItems="center"
                 display="flex"
                 justifyContent="space-between"
-                mb={3}
               >
                 <div>
                   <Typography

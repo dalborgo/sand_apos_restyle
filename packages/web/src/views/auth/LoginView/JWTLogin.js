@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
   root: {},
 }))
 
-const isAsten = username => username.toLowerCase() === 'asten'
+const isAsten = username => username?.toLowerCase() === 'asten'
 
 const JWTLogin = memo(({ className, ...rest }) => {
   const classes = useStyles()
@@ -96,9 +96,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
             <FastField
               autoFocus
               component={TextField}
-              error={Boolean(touched.username && errors.username)}
               fullWidth
-              helperText={touched.username && errors.username}
               label="Nome Utente"
               margin="normal"
               name="username"
@@ -110,9 +108,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
             />
             <FastField
               component={TextField}
-              error={Boolean(touched.password && errors.password)}
               fullWidth
-              helperText={touched.password && errors.password}
               label="Password"
               margin="normal"
               name="password"

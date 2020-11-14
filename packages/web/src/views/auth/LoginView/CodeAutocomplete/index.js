@@ -96,7 +96,6 @@ const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched, touched, errors
             label: intl.formatMessage(messages.installation),
             variant: 'outlined',
             required: true,
-            error: Boolean(touched.code && errors.code),
           }
         }
       />
