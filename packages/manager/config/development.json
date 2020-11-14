@@ -2,11 +2,11 @@
   "couchbase": {
     "connections": {
       "astenposServer": {
-        "server": "localhost"
+        "server": "10.0.0.183"
       }
     },
     "utility": {
-      "couchbase": "localhost"
+      "couchbase": "10.0.0.183"
     }
   }
 }

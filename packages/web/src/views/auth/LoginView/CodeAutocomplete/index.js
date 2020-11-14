@@ -8,7 +8,6 @@ import match from 'src/utils/matcher'
 import { useQuery } from 'react-query'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
-import FormHelperText from '@material-ui/core/FormHelperText'
 
 const useStyles = makeStyles(() => ({
   listBox: { overflowX: 'hidden' },
@@ -101,13 +100,13 @@ const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched, touched, errors
           }
         }
       />
-      {
+      {/*{
         touched['code'] &&
         errors['code'] &&
         <FormHelperText className={classes.formHelperText} error>
           {errors['code']}
         </FormHelperText>
-      }
+      }*/}
     </>
   )
 })

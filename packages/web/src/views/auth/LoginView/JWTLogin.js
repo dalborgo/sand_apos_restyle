@@ -16,6 +16,8 @@ const useStyles = makeStyles(() => ({
   root: {},
 }))
 
+const isAsten = username => username.toLowerCase() === 'asten'
+
 const JWTLogin = memo(({ className, ...rest }) => {
   const classes = useStyles()
   const { login } = useAuth()
@@ -66,7 +68,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
           password: Yup.string().required(intl.formatMessage(messages.password_required)),
           code: Yup.object().nullable()
             .when('username', {
-              is: username => username === 'asten',
+              is: username => isAsten(username),
               then: Yup.object().required(intl.formatMessage(messages.installation_required)),
             }),
         })
@@ -121,10 +123,14 @@ const JWTLogin = memo(({ className, ...rest }) => {
               variant="outlined"
             />
             {
-              values['username'] === 'asten' &&
+              isAsten(values['username']) &&
               <React.Suspense fallback={<CircularProgress/>}>
-                <CodeAutocomplete errors={errors} setFieldTouched={setFieldTouched} setFieldValue={setFieldValue}
-                                  touched={touched} value={values.code}/>
+                <CodeAutocomplete
+                  errors={errors}
+                  setFieldTouched={setFieldTouched}
+                  setFieldValue={setFieldValue}
+                  touched={touched}
+                />
               </React.Suspense>
             }
             <Box mt={2}>
