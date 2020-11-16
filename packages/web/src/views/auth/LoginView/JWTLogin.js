@@ -12,10 +12,17 @@ import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import CodeAutocomplete from './CodeAutocomplete'
 import { useQueryCache } from 'react-query'
 
-const useStyles = makeStyles(() => ({
-  root: {},
+const useStyles = makeStyles(theme => ({
+  helperText: {
+    position: 'absolute',
+    bottom: -20,
+  },
+  field: {
+    marginBottom: theme.spacing(2),
+  },
 }))
 
+const focus = event => event.target.select()
 const isAsten = username => username?.toLowerCase() === 'asten'
 
 const JWTLogin = memo(({ className, ...rest }) => {
@@ -77,14 +84,12 @@ const JWTLogin = memo(({ className, ...rest }) => {
       {
         ({
           dirty,
-          errors,
           handleChange,
           handleSubmit,
           isSubmitting,
           isValid,
           setFieldTouched,
           setFieldValue,
-          touched,
           values,
         }) => (
           <form
@@ -95,24 +100,38 @@ const JWTLogin = memo(({ className, ...rest }) => {
           >
             <FastField
               autoFocus
+              className={classes.field}
               component={TextField}
+              FormHelperTextProps={
+                {
+                  classes: { root: classes.helperText },
+                }
+              }
               fullWidth
               label="Nome Utente"
               margin="normal"
               name="username"
               onChange={handleChange}
+              onFocus={focus}
               required
               type="text"
               value={values.username}
               variant="outlined"
             />
             <FastField
+              className={classes.field}
               component={TextField}
+              FormHelperTextProps={
+                {
+                  classes: { root: classes.helperText },
+                }
+              }
               fullWidth
               label="Password"
               margin="normal"
               name="password"
               onChange={handleChange}
+              onFocus={focus}
               required
               type="password"
               value={values.password}
@@ -120,12 +139,10 @@ const JWTLogin = memo(({ className, ...rest }) => {
             />
             {
               isAsten(values['username']) &&
-              <React.Suspense fallback={<CircularProgress/>}>
+              <React.Suspense fallback={<div style={{textAlign: 'center'}}><CircularProgress/></div>}>
                 <CodeAutocomplete
-                  errors={errors}
                   setFieldTouched={setFieldTouched}
                   setFieldValue={setFieldValue}
-                  touched={touched}
                 />
               </React.Suspense>
             }

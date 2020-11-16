@@ -59,27 +59,27 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <StylesProvider jss={jss}>
-        <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler}>
-          <MuiPickersUtilsProvider utils={MomentUtils}>
-            <SnackMyProvider>
-              <Router history={history}>
-                <ReactQueryCacheProvider queryCache={queryCache}>
-                  <AuthProvider>
-                    <GlobalStyles/>
-                    <ScrollReset/>
-                    <IntlProvider defaultLocale="it" locale="it" messages={messages}>
+        <IntlProvider defaultLocale="it" locale="it" messages={messages}>
+          <GlobalStyles/>
+          <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler}>
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+              <SnackMyProvider>
+                <Router history={history}>
+                  <ReactQueryCacheProvider queryCache={queryCache}>
+                    <AuthProvider>
+                      <ScrollReset/>
                       <RouteList/>
                       {
                         REACT_QUERY_DEV_TOOLS &&
                         <ReactQueryDevtools initialIsOpen/>
                       }
-                    </IntlProvider>
-                  </AuthProvider>
-                </ReactQueryCacheProvider>
-              </Router>
-            </SnackMyProvider>
-          </MuiPickersUtilsProvider>
-        </ErrorBoundary>
+                    </AuthProvider>
+                  </ReactQueryCacheProvider>
+                </Router>
+              </SnackMyProvider>
+            </MuiPickersUtilsProvider>
+          </ErrorBoundary>
+        </IntlProvider>
       </StylesProvider>
     </ThemeProvider>
   )

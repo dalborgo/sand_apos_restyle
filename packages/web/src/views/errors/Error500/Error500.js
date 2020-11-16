@@ -15,6 +15,9 @@ const useStyles = makeStyles(theme => ({
     paddingTop: 80,
     paddingBottom: 80,
   },
+  pre: {
+    backgroundColor: theme.palette.background.dark,
+  },
   imageContainer: {
     marginTop: theme.spacing(6),
     display: 'flex',
@@ -58,7 +61,7 @@ const Error500 = ({ error }) => {
         >
           
           <FormattedMessage defaultMessage="Contatta i fornitori del programma." id="error500.contact_vendors" />
-          {error && <pre>{error.toString()}</pre>}
+          {error && <pre className={classes.pre}>{error.toString()}</pre>}
         </Typography>
         <div className={classes.imageContainer}>
           <img
