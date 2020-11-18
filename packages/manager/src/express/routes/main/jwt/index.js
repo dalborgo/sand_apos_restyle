@@ -20,9 +20,12 @@ const setPriority = role => {
 function selectUserFields (identity) {
   return {
     display: identity.user,
-    id: identity._id,
-    priority: setPriority(identity.type),
+    morse: identity.morse,
+    priority: setPriority(identity.role),
   }
+}
+function getQueryUserField () {
+  return '`user`.`user`, `user`.`role`, `user`.`type`, `user`.`morse` '
 }
 
 async function getInitialData (connClass) {
@@ -38,7 +41,7 @@ function addRouters (router) {
     const { connClass, route: { path } } = req
     const { username, password, code } = req.body
     const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
-                  + '`user`.`user`, `user`.`role`, `user`.`type`, meta(`user`).id _id  '
+                  + getQueryUserField()+', meta(`user`).id _id '
                   + 'FROM ' + connClass.managerBucketName + ' `user` '
                   + 'LEFT NEST ' + connClass.managerBucketName + ' setups '
                   + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) FOR code IN `user`.codes END '
@@ -74,10 +77,10 @@ function addRouters (router) {
     const accessToken = authorization.split(' ')[1]
     const { userId } = jwt.verify(accessToken, JWT_SECRET)
     const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
-                  + '`user`.`user`, `user`.`role`, `user`.`type` '
+                  + getQueryUserField()
                   + 'FROM ' + connClass.managerBucketName + ' `user` LEFT NEST ' + connClass.managerBucketName + ' setups '
                   + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) '
-                  + 'FOR code IN `user`.codes END WHERE meta(`user`).id = "'+ userId +'" AND `user`.type'
+                  + 'FOR code IN `user`.codes END WHERE meta(`user`).id = "'+ userId +'" AND `user`.type = "USER_MANAGER"'
     const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
     if (!ok) {
       log.error('path', path)
@@ -87,7 +90,6 @@ function addRouters (router) {
       return res.status(400).send({ message: 'Wrong authentication code!' })
     }
     const [identity] = results
-    
     res.send({
       accessToken,
       codes: identity.codes,

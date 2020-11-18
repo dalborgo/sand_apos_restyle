@@ -76,10 +76,20 @@ if (SESSION_ENABLED) {
 app.use('/', indexRouter)
 app.use(`/${NAMESPACE}`, appRouter)
 
+function getInterceptedStatus (message) {
+  switch (message) {
+    case 'parent cluster object has been closed':
+      return 503
+    default:
+      return null
+  }
+}
+
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   log.error(err)
-  res.status(err.status || 500)
+  const interceptedStatus = getInterceptedStatus(err.message)
+  res.status(interceptedStatus || err.status || 500)
   res.send({ ok: false, message: err.message, err })
 })
 

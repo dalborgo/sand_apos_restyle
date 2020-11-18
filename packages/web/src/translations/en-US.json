@@ -20,5 +20,8 @@
   "common.all": "",
   "views.login.installation": "",
   "auth.login.installation": "",
-  "auth.login.installation_required": ""
+  "auth.login.installation_required": "",
+  "auth.login.no_prefetched_codes": "",
+  "error503.service_unavailable!": "",
+  "error500.retry": ""
 }

@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useCallback, useEffect, useRef } from 'react'
 import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, TextField, Toolbar } from '@material-ui/core'
 import { Menu as MenuIcon } from 'react-feather'
 import { THEMES } from 'src/constants'
@@ -13,6 +13,8 @@ import { capitalCase } from 'change-case'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { NO_SELECTED_CODE } from 'src/contexts/JWTAuthContext'
+import { useRecoilState } from 'recoil'
+import allIn from '../../../recoil/allIn'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,25 +45,100 @@ const useStyles = makeStyles(theme => ({
       minHeight: 32,
     },
   },
+  toolbarRed: {
+    backgroundColor: theme.palette.error.main,
+  },
 }))
 
 const optionBg = {
   backgroundColor: '#7973EF',
 }
 
+function extracted (morseState, user, switchAllIn, allin) {
+  let dt = new Date().getTime()
+  let { count: count_, serie: serie_, time: time_ } = morseState.current
+  const values = user.morse
+  if (!values) {
+    return
+  }
+  if (time_ === 0 || Math.abs(dt - time_) < 500) {
+    count_ = time_ === 0 ? 1 : count_ + 1
+    if (count_ === 2 && allin) { //rollback to blue
+      switchAllIn()
+      morseState.current = {
+        count: 0,
+        time: 0,
+        serie: 0,
+      }
+      return
+    } else {
+      time_ = dt
+    }
+    if (values[serie_] === count_ && serie_ === values.length - 1) {
+      switchAllIn()
+      serie_ = 0
+      time_ = 0
+      count_ = 0
+    }
+  } else {
+    if (values[serie_] !== count_) { //reset
+      count_ = 1
+      serie_ = 0
+      time_ = dt
+    } else {
+      serie_ = serie_ + 1
+      count_ = 1
+      if (values[serie_] === count_) {
+        switchAllIn()
+        serie_ = 0
+        time_ = 0
+        count_ = 0
+      } else {
+        time_ = dt
+      }
+    }
+  }
+  morseState.current = {
+    count: count_,
+    time: time_,
+    serie: serie_,
+  }
+}
+
 const TopBar = ({
   setMobileNavOpen,
 }) => {
-  const { codes, selectedCode = { code: NO_SELECTED_CODE }, changeCode } = useAuth()
+  const { codes, selectedCode = { code: NO_SELECTED_CODE }, changeCode, user } = useAuth()
   const classes = useStyles()
+  const [allIn_, setAllIn] = useRecoilState(allIn)
   const intl = useIntl()
+  const divRef = useRef(null)
+  const morseState = useRef({ count: 0, time: 0, serie: 0 })
   const { settings } = useSettings()
   const isLight = settings.theme === 'LIGHT'
+  const handleMorse = useCallback(() => {
+    const switchAllIn = () => setAllIn(!allIn_)
+    extracted(morseState, user, switchAllIn, allIn_)
+  }, [user, allIn_, setAllIn])
+  
+  useEffect(() => {
+    const elem = divRef.current
+    elem.addEventListener('click', handleMorse)
+    return () => elem.removeEventListener('click', handleMorse)
+  }, [handleMorse])
   return (
     <AppBar
       className={classes.root}
     >
-      <Toolbar className={classes.toolbar}>
+      <Toolbar
+        classes={
+          {
+            root: allIn_ ? classes.toolbarRed : undefined
+          }
+        }
+        className={classes.toolbar}
+        ref={divRef}
+      >
         <Hidden lgUp>
           <IconButton
             color="inherit"
@@ -110,7 +187,7 @@ const TopBar = ({
               </option>
             }
             {
-              codes.map(({code, name}) => (
+              codes.map(({ code, name }) => (
                 <option
                   key={code}
                   style={isLight ? optionBg : undefined}

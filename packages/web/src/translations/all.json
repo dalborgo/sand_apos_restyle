@@ -16,6 +16,10 @@
     "defaultMessage": "Installazione obbligatoria!"
   },
   {
+    "id": "auth.login.no_prefetched_codes",
+    "defaultMessage": "Impossibile pre-caricare i codici!"
+  },
+  {
     "id": "auth.login.password_required",
     "defaultMessage": "Password obbligatoria!"
   },
@@ -56,12 +60,20 @@
     "defaultMessage": "Vai all'home page"
   },
   {
+    "id": "error500.retry",
+    "defaultMessage": "Riprova"
+  },
+  {
     "id": "error500.something_wrong",
     "defaultMessage": "500: Ooops, qualcosa è andato storto!"
   },
   {
+    "id": "error503.service_unavailable!",
+    "defaultMessage": "503: Servizio non disponibile!"
+  },
+  {
     "id": "general.network_error",
-    "defaultMessage": "Errore di rete!"
+    "defaultMessage": "Errore di rete: servizio non raggiungibile!"
   },
   {
     "id": "reports.browser.response_time",

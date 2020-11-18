@@ -7,11 +7,15 @@ export const messages = defineMessages({
   },
   network_error: {
     id: 'general.network_error',
-    defaultMessage: 'Errore di rete!',
+    defaultMessage: 'Errore di rete: servizio non raggiungibile!',
   },
   installation: {
     id: 'auth.login.installation',
     defaultMessage: 'Installazione',
+  },
+  no_prefetched_codes: {
+    id: 'auth.login.no_prefetched_codes',
+    defaultMessage: 'Impossibile pre-caricare i codici!',
   },
   username_required: {
     id: 'auth.login.username_required',

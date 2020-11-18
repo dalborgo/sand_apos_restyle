@@ -9,7 +9,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import GlobalStyles from 'src/components/GlobalStyles'
 import ScrollReset from 'src/components/ScrollReset'
 import { defaultQueryFn } from 'src/utils/reactQueryFunctions'
-import { QueryCache, ReactQueryCacheProvider } from 'react-query'
+import { QueryCache, ReactQueryCacheProvider, useErrorResetBoundary } from 'react-query'
 import { IntlProvider } from 'react-intl'
 import { ErrorBoundary } from 'react-error-boundary'
 import messages from 'src/translations/it-IT.json'
@@ -23,6 +23,7 @@ import SnackMyProvider from 'src/components/Snack/SnackComponents'
 import Error500 from 'src/views/errors/Error500'
 import log from '@adapter/common/src/log'
 import useAuth from './hooks/useAuth'
+import { RecoilRoot } from 'recoil'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -51,6 +52,7 @@ const RouteList = () => {
 
 const App = () => {
   const { settings } = useSettings()
+  const { reset } = useErrorResetBoundary()
   const theme = createTheme({
     direction: settings.direction,
     responsiveFontSizes: settings.responsiveFontSizes,
@@ -61,19 +63,21 @@ const App = () => {
       <StylesProvider jss={jss}>
         <IntlProvider defaultLocale="it" locale="it" messages={messages}>
           <GlobalStyles/>
-          <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler}>
+          <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
             <MuiPickersUtilsProvider utils={MomentUtils}>
               <SnackMyProvider>
                 <Router history={history}>
                   <ReactQueryCacheProvider queryCache={queryCache}>
-                    <AuthProvider>
-                      <ScrollReset/>
-                      <RouteList/>
-                      {
-                        REACT_QUERY_DEV_TOOLS &&
-                        <ReactQueryDevtools initialIsOpen/>
-                      }
-                    </AuthProvider>
+                    <RecoilRoot>
+                      <AuthProvider>
+                        <ScrollReset/>
+                        <RouteList/>
+                        {
+                          REACT_QUERY_DEV_TOOLS &&
+                          <ReactQueryDevtools initialIsOpen/>
+                        }
+                      </AuthProvider>
+                    </RecoilRoot>
                   </ReactQueryCacheProvider>
                 </Router>
               </SnackMyProvider>

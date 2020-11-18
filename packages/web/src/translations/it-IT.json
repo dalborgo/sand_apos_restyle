@@ -7,7 +7,7 @@
   "auth.login.username_required": "Nome utente obbligatorio!",
   "auth.login.wrong_credentials": "Nome utente o password errati!",
   "reports.header.list_documents": "Lista Documenti",
-  "general.network_error": "Errore di rete!",
+  "general.network_error": "Errore di rete: servizio non raggiungibile!",
   "error500.contact_vendors": "Contatta i fornitori del programma.",
   "error500.goto_home_page": "Vai all home page",
   "error500.something_wrong": "500: Ooops, qualcosa è andato storto!",
@@ -20,5 +20,8 @@
   "common.all": "Tutti",
   "views.login.installation": "Installazione",
   "auth.login.installation": "Installazione",
-  "auth.login.installation_required": "Installazione obbligatoria!"
+  "auth.login.installation_required": "Installazione obbligatoria!",
+  "auth.login.no_prefetched_codes": "Impossibile pre-caricare i codici!",
+  "error503.service_unavailable!": "503: Servizio non disponibile!",
+  "error500.retry": "Riprova"
 }

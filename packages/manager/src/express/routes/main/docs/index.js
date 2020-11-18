@@ -41,7 +41,7 @@ function addRouters (router) {
       const { owner, ...rest } = query
       const filter = `AND ${parsedOwner.queryCondition}`
       const queryTotal = `SELECT RAW COUNT(*) total_row from ${connClass.astenposBucketName} WHERE type ${filter}`
-      const params = { view: 'list_docs_all2', ...rest, ...parsedOwner.limitsInView }
+      const params = { view: 'list_docs_all', ...rest, ...parsedOwner.limitsInView }
       const promises = [
         couchViews.execService(params, connClass.astConnection),
         couchQueries.exec(queryTotal, connClass.cluster),
@@ -55,7 +55,7 @@ function addRouters (router) {
   })
   router.get('/docs/browser2', async function (req, res) {
     const { connClass } = req
-    const data = await couchViews.exec(connClass.astenposBucketName, 'list_docs_all2', connClass.astenposBucket)
+    const data = await couchViews.exec(connClass.astenposBucketName, 'list_docs_all', connClass.astenposBucket)
     res.send(data)
   })
   router.get('/docs/get_by_id', async function (req, res) {

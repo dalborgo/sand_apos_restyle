@@ -3,7 +3,9 @@ import { makeStyles } from '@material-ui/styles'
 import { Button, Container, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import Page from 'src/components/Page'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { messages } from 'src/translations/messages'
+import { expandError } from 'src/utils/errors'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,11 +38,13 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const Error500 = ({ error }) => {
+const Error500 = ({ error, resetErrorBoundary }) => {
   const classes = useStyles()
   const theme = useTheme()
+  const intl = useIntl()
   const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'))
-  
+  const { isNetworkError } = expandError(error)
+  const message = isNetworkError ? intl.formatMessage(messages['network_error'])  : error.message
   return (
     <Page
       className={classes.root}
@@ -52,32 +56,48 @@ const Error500 = ({ error }) => {
           color="textPrimary"
           variant={mobileDevice ? 'h4' : 'h1'}
         >
-          <FormattedMessage defaultMessage="500: Ooops, qualcosa è andato storto!" id="error500.something_wrong" />
+          {
+            isNetworkError ?
+              <FormattedMessage defaultMessage="503: Servizio non disponibile!" id="error503.service_unavailable!"/>
+              :
+              <FormattedMessage defaultMessage="500: Ooops, qualcosa è andato storto!" id="error500.something_wrong"/>
+          }
         </Typography>
         <Typography
           align="center"
           color="textSecondary"
           variant="subtitle2"
         >
-          
-          <FormattedMessage defaultMessage="Contatta i fornitori del programma." id="error500.contact_vendors" />
-          {error && <pre className={classes.pre}>{error.toString()}</pre>}
+          {!isNetworkError && <FormattedMessage defaultMessage="Contatta i fornitori del programma." id="error500.contact_vendors"/>}
+          {error && <pre className={classes.pre}>{message}</pre>}
         </Typography>
         <div className={classes.imageContainer}>
-          <img
-            alt="Error 500"
-            className={classes.image}
-            src="static/images/undraw_something_wrong.svg"
-            title="undraw something wrong"
-          />
+          
+          {
+            isNetworkError ?
+              <img
+                alt="Error 503"
+                className={classes.image}
+                src="static/images/undraw_server_down_s4lk.svg"
+                title="undraw server down"
+              />
+              :
+              <img
+                alt="Error 500"
+                className={classes.image}
+                src="static/images/undraw_something_wrong.svg"
+                title="undraw something wrong"
+              />
+          }
         </div>
         <div className={classes.buttonContainer}>
           <Button
             color="secondary"
-            onClick={() => window.location.replace(window.location.origin)}
+            onClick={() => resetErrorBoundary()} //window.location.replace(window.location.origin)
             variant="outlined"
           >
-            <FormattedMessage defaultMessage="Vai all'home page" id="error500.goto_home_page_button" />
+            {/*<FormattedMessage defaultMessage="Vai all'home page" id="error500.goto_home_page_button" />*/}
+            <FormattedMessage defaultMessage="Riprova" id="error500.retry" />
           </Button>
         </div>
       </Container>

@@ -28,7 +28,9 @@ const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched }) => {
   const classes = useStyles()
   const theme = useTheme()
   const intl = useIntl()
-  const { data: codes } = useQuery('jwt/codes', { suspense: true })
+  const { data: codes = [] } = useQuery('jwt/codes', {
+    suspense: true,
+  })
   return (
     <FastField
       classes={
@@ -69,8 +71,8 @@ const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched }) => {
                       key={index}
                       style={{ fontWeight: part.highlight ? 700 : 400 }}
                     >
-                        {part.text}
-                      </span>
+                      {part.text}
+                    </span>
                   ))
                 }
               </Grid>
@@ -87,8 +89,8 @@ const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched }) => {
                         }
                       }
                     >
-                        {part.text}
-                      </span>
+                      {part.text}
+                    </span>
                   ))
                 }
               </Grid>

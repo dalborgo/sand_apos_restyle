@@ -3,10 +3,10 @@ import { messages } from 'src/translations/messages'
 import { useSnackbar } from 'notistack'
 import { useIntl } from 'react-intl'
 import { useState } from 'react'
-import log from '@adapter/common/src/log'
 import moment from 'moment'
 import { envConfig } from 'src/init'
 import qs from 'qs'
+import { expandError } from './errors'
 
 export const axiosLocalInstance = axios.create({
   baseURL: envConfig.BACKEND_HOST,
@@ -47,14 +47,11 @@ export function useSnackQueryError () {
   const intl = useIntl()
   const [snackQueryError] = useState(() => {
     return err => {
-      const { message, response = {}, request: { status } } = err
-      log.error(message)
-      const { data: responseData } = response
-      const isNetworkError = status === 0
-      if (responseData) {
-        enqueueSnackbar(responseData.message || intl.formatMessage(messages[responseData.code]))
-      } else if (isNetworkError) {
+      const { message, isNetworkError, responseData } = expandError(err)
+      if (isNetworkError) {
         enqueueSnackbar(intl.formatMessage(messages['network_error']), { variant: 'default' })
+      } else if (responseData) {
+        enqueueSnackbar(responseData.message || intl.formatMessage(messages[responseData.code]))
       } else {
         enqueueSnackbar(message)
       }

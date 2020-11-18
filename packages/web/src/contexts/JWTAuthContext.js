@@ -5,6 +5,8 @@ import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
 import { useQueryCache } from 'react-query'
 import find from 'lodash/find'
+import { useResetRecoilState } from 'recoil'
+import allIn from 'src/recoil/allIn'
 
 export const NO_SELECTED_CODE = 'All'
 
@@ -105,6 +107,7 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState)
   const queryCache = useQueryCache()
+  const resetAllIn = useResetRecoilState(allIn);
   const login = async (username, password, code) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password, code })
     const { accessToken, user, codes } = response.data
@@ -122,6 +125,7 @@ export const AuthProvider = ({ children }) => {
   
   const logout = () => {
     setSession({})
+    resetAllIn()
     queryCache.clear()
     dispatch({ type: 'LOGOUT' })
   }

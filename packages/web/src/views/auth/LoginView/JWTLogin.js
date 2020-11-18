@@ -11,6 +11,8 @@ import { messages } from 'src/translations/messages'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import CodeAutocomplete from './CodeAutocomplete'
 import { useQueryCache } from 'react-query'
+import { useSnackbar } from 'notistack'
+import { ErrorBoundary } from 'react-error-boundary'
 
 const useStyles = makeStyles(theme => ({
   helperText: {
@@ -29,15 +31,19 @@ const JWTLogin = memo(({ className, ...rest }) => {
   const classes = useStyles()
   const { login } = useAuth()
   const queryCache = useQueryCache()
+  const { enqueueSnackbar } = useSnackbar()
+  const intl = useIntl()
   useEffect(() => {
     async function fetchData () {
-      await queryCache.prefetchQuery('jwt/codes')
+      const response = await queryCache.prefetchQuery('jwt/codes')
+      if (!response) {
+        enqueueSnackbar(intl.formatMessage(messages['no_prefetched_codes']), { variant: 'default' })
+      }
     }
     
     fetchData().then()
-  }, [queryCache])
+  }, [enqueueSnackbar, intl, queryCache])
   const isMountedRef = useIsMountedRef()
-  const intl = useIntl()
   const snackQueryError = useSnackQueryError()
   return (
     <Formik
@@ -139,12 +145,14 @@ const JWTLogin = memo(({ className, ...rest }) => {
             />
             {
               isAsten(values['username']) &&
-              <React.Suspense fallback={<div style={{textAlign: 'center'}}><CircularProgress/></div>}>
-                <CodeAutocomplete
-                  setFieldTouched={setFieldTouched}
-                  setFieldValue={setFieldValue}
-                />
-              </React.Suspense>
+              <ErrorBoundary FallbackComponent={() => null} onError={error => snackQueryError(error)}>
+                <React.Suspense fallback={<div style={{ textAlign: 'center' }}><CircularProgress/></div>}>
+                  <CodeAutocomplete
+                    setFieldTouched={setFieldTouched}
+                    setFieldValue={setFieldValue}
+                  />
+                </React.Suspense>
+              </ErrorBoundary>
             }
             <Box mt={2}>
               <Button
