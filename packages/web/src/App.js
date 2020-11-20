@@ -23,7 +23,6 @@ import SnackMyProvider from 'src/components/Snack/SnackComponents'
 import Error500 from 'src/views/errors/Error500'
 import log from '@adapter/common/src/log'
 import useAuth from './hooks/useAuth'
-import { RecoilRoot } from 'recoil'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -68,16 +67,14 @@ const App = () => {
               <SnackMyProvider>
                 <Router history={history}>
                   <ReactQueryCacheProvider queryCache={queryCache}>
-                    <RecoilRoot>
-                      <AuthProvider>
-                        <ScrollReset/>
-                        <RouteList/>
-                        {
-                          REACT_QUERY_DEV_TOOLS &&
-                          <ReactQueryDevtools initialIsOpen/>
-                        }
-                      </AuthProvider>
-                    </RecoilRoot>
+                    <AuthProvider>
+                      <ScrollReset/>
+                      <RouteList/>
+                      {
+                        REACT_QUERY_DEV_TOOLS &&
+                        <ReactQueryDevtools initialIsOpen/>
+                      }
+                    </AuthProvider>
                   </ReactQueryCacheProvider>
                 </Router>
               </SnackMyProvider>

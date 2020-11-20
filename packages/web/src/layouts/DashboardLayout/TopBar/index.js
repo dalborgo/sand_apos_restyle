@@ -13,8 +13,7 @@ import { capitalCase } from 'change-case'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { NO_SELECTED_CODE } from 'src/contexts/JWTAuthContext'
-import { useRecoilState } from 'recoil'
-import allIn from '../../../recoil/allIn'
+import useGeneralStore from 'src/zustand/generalStore'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -110,16 +109,16 @@ const TopBar = ({
 }) => {
   const { codes, selectedCode = { code: NO_SELECTED_CODE }, changeCode, user } = useAuth()
   const classes = useStyles()
-  const [allIn_, setAllIn] = useRecoilState(allIn)
+  const allIn_ = useGeneralStore(state => state.allIn)
+  const switchAllIn = useGeneralStore(state => state.switchAllIn)
   const intl = useIntl()
   const divRef = useRef(null)
   const morseState = useRef({ count: 0, time: 0, serie: 0 })
   const { settings } = useSettings()
   const isLight = settings.theme === 'LIGHT'
   const handleMorse = useCallback(() => {
-    const switchAllIn = () => setAllIn(!allIn_)
     extracted(morseState, user, switchAllIn, allIn_)
-  }, [user, allIn_, setAllIn])
+  }, [user, switchAllIn, allIn_])
   
   useEffect(() => {
     const elem = divRef.current
@@ -133,10 +132,11 @@ const TopBar = ({
       <Toolbar
         classes={
           {
-            root: allIn_ ? classes.toolbarRed : undefined
+            root: allIn_ ? classes.toolbarRed : undefined,
           }
         }
         className={classes.toolbar}
+        id="dashboardTopBar"
         ref={divRef}
       >
         <Hidden lgUp>

@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import * as Yup from 'yup'
 import { FastField, Formik } from 'formik'
@@ -33,15 +33,13 @@ const JWTLogin = memo(({ className, ...rest }) => {
   const queryCache = useQueryCache()
   const { enqueueSnackbar } = useSnackbar()
   const intl = useIntl()
+  // eslint-disable-next-line no-unused-vars
+  const [_, setState] = useState()
   useEffect(() => {
     async function fetchData () {
-      const response = await queryCache.prefetchQuery('jwt/codes')
-      if (!response) {
-        enqueueSnackbar(intl.formatMessage(messages['no_prefetched_codes']), { variant: 'default' })
-      }
+      await queryCache.prefetchQuery('jwt/codes', { throwOnError: true })
     }
-    
-    fetchData().then()
+    fetchData().then().catch(error => {setState(() => {throw error})}) //trick to send error to boundaries
   }, [enqueueSnackbar, intl, queryCache])
   const isMountedRef = useIsMountedRef()
   const snackQueryError = useSnackQueryError()
@@ -145,7 +143,14 @@ const JWTLogin = memo(({ className, ...rest }) => {
             />
             {
               isAsten(values['username']) &&
-              <ErrorBoundary FallbackComponent={() => null} onError={error => snackQueryError(error)}>
+              <ErrorBoundary
+                FallbackComponent={() => null}
+                onError={
+                  () => {
+                    enqueueSnackbar(intl.formatMessage(messages['error_to_fetch_codes']), { variant: 'default' })
+                  }
+                }
+              >
                 <React.Suspense fallback={<div style={{ textAlign: 'center' }}><CircularProgress/></div>}>
                   <CodeAutocomplete
                     setFieldTouched={setFieldTouched}

@@ -23,5 +23,7 @@
   "auth.login.installation_required": "",
   "auth.login.no_prefetched_codes": "",
   "error503.service_unavailable!": "",
-  "error500.retry": ""
+  "error500.retry": "",
+  "auth.login.error_to_fetch_codes": "",
+  "error500.reload_current_page": ""
 }

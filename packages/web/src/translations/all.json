@@ -8,6 +8,10 @@
     "defaultMessage": "Entra"
   },
   {
+    "id": "auth.login.error_to_fetch_codes",
+    "defaultMessage": "Impossibile caricare i codici clienti!"
+  },
+  {
     "id": "auth.login.installation",
     "defaultMessage": "Installazione"
   },
@@ -58,6 +62,10 @@
   {
     "id": "error500.goto_home_page_button",
     "defaultMessage": "Vai all'home page"
+  },
+  {
+    "id": "error500.reload_current_page",
+    "defaultMessage": "Ricarica la pagina"
   },
   {
     "id": "error500.retry",

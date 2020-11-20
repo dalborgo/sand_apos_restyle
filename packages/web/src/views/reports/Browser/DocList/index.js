@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useLayoutEffect } from 'react'
 import useIntersectionObserver from 'src/utils/useIntersectionObserver'
 import { useHistory } from 'react-router'
-import { Box, Button, Link, makeStyles, useMediaQuery } from '@material-ui/core'
+import { Box, Button, Link, makeStyles, withWidth } from '@material-ui/core'
 import clsx from 'clsx'
 import { testParams } from 'src/utils/urlFunctions'
 import { FormattedMessage } from 'react-intl'
@@ -39,11 +39,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }), { name: 'MuiBrowserElem' })
 
-const ListElem = ({ text, value, remove, locked, isSingleRow }) => {
+const ListElem = withWidth()(({ text, value, remove, locked, isSingleRow, width }) => {
   const classes = useStyles()
   const history = useHistory()
   const baseUrl = '/app/reports/browser'
-  const xsDown = useMediaQuery(theme => theme.breakpoints.down('xs'))
   const handleSelect = useCallback(event => {
     const docId = event.currentTarget.id
     const params = testParams(`${baseUrl}/:docId`)
@@ -56,14 +55,14 @@ const ListElem = ({ text, value, remove, locked, isSingleRow }) => {
     }
   }, [history])
   useLayoutEffect(() => {
-    if(isSingleRow && !xsDown){ //autoselect single row, no mobile
+    if (isSingleRow && width !== 'xs') { //autoselect single row, no mobile
       const elem = document.getElementById(text)
       if (elem) {
         elem.classList.add('MuiBrowserElem-containerSelected')
         history.push(`${baseUrl}/${text}`)
       }
     }
-  }, [history, isSingleRow, text, xsDown])
+  }, [history, isSingleRow, text, width])
   
   const handleRemove = useCallback(async event => {
     event.stopPropagation()
@@ -105,7 +104,8 @@ const ListElem = ({ text, value, remove, locked, isSingleRow }) => {
       <br/>
     </Box>
   )
-}
+})
+
 
 const DocList = memo(function DocList ({ data, fetchMore, canFetchMore, isFetchingMore, remove, locked }) {
   console.log('%c****EXPENSIVE_RENDER_LIST', 'color: gold')

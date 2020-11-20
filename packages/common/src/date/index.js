@@ -3,7 +3,7 @@ import { extendMoment } from 'moment-range'
 import compose from 'lodash/fp/compose'
 import { validation } from '../index'
 
-Moment.locale('it')
+//Moment.locale('it')
 const moment = extendMoment(Moment)
 
 const inRange = (start, end, date) => {

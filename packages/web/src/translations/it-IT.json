@@ -23,5 +23,7 @@
   "auth.login.installation_required": "Installazione obbligatoria!",
   "auth.login.no_prefetched_codes": "Impossibile pre-caricare i codici!",
   "error503.service_unavailable!": "503: Servizio non disponibile!",
-  "error500.retry": "Riprova"
+  "error500.retry": "Riprova",
+  "auth.login.error_to_fetch_codes": "Impossibile caricare i codici clienti!",
+  "error500.reload_current_page": "Ricarica la pagina"
 }

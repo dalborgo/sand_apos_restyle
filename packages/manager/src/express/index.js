@@ -1,4 +1,4 @@
-import { cDate, numeric } from '@adapter/common'
+import { cDate, numeric, cFunctions } from '@adapter/common'
 import log from '@adapter/common/src/winston'
 import indexRouter from './routes'
 import appRouter from './routes/main'
@@ -76,20 +76,26 @@ if (SESSION_ENABLED) {
 app.use('/', indexRouter)
 app.use(`/${NAMESPACE}`, appRouter)
 
-function getInterceptedStatus (message) {
+function getInterceptedResponse (message) {
   switch (message) {
     case 'parent cluster object has been closed':
-      return 503
+      return { interceptedResponseStatus: 503, hasToRestartServer: true }
     default:
-      return null
+      return {}
   }
 }
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   log.error(err)
-  const interceptedStatus = getInterceptedStatus(err.message)
-  res.status(interceptedStatus || err.status || 500)
+  const { interceptedResponseStatus, hasToRestartServer } = getInterceptedResponse(err.message)
+  if (hasToRestartServer && cFunctions.isProd()) {
+    setTimeout(() => {
+      log.warn('RESTART SERVER DUE CONNECTION PROBLEM!')
+      process.exit(1)
+    }, 1000)
+  }
+  res.status(interceptedResponseStatus || err.status || 500)
   res.send({ ok: false, message: err.message, err })
 })
 

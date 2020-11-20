@@ -44,7 +44,7 @@ const Error500 = ({ error, resetErrorBoundary }) => {
   const intl = useIntl()
   const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'))
   const { isNetworkError } = expandError(error)
-  const message = isNetworkError ? intl.formatMessage(messages['network_error'])  : error.message
+  const message = isNetworkError ? intl.formatMessage(messages['network_error']) : error.message
   return (
     <Page
       className={classes.root}
@@ -68,11 +68,13 @@ const Error500 = ({ error, resetErrorBoundary }) => {
           color="textSecondary"
           variant="subtitle2"
         >
-          {!isNetworkError && <FormattedMessage defaultMessage="Contatta i fornitori del programma." id="error500.contact_vendors"/>}
+          {
+            !isNetworkError &&
+            <FormattedMessage defaultMessage="Contatta i fornitori del programma." id="error500.contact_vendors"/>
+          }
           {error && <pre className={classes.pre}>{message}</pre>}
         </Typography>
         <div className={classes.imageContainer}>
-          
           {
             isNetworkError ?
               <img
@@ -91,14 +93,25 @@ const Error500 = ({ error, resetErrorBoundary }) => {
           }
         </div>
         <div className={classes.buttonContainer}>
-          <Button
-            color="secondary"
-            onClick={() => resetErrorBoundary()} //window.location.replace(window.location.origin)
-            variant="outlined"
-          >
-            {/*<FormattedMessage defaultMessage="Vai all'home page" id="error500.goto_home_page_button" />*/}
-            <FormattedMessage defaultMessage="Riprova" id="error500.retry" />
-          </Button>
+          {
+            isNetworkError
+              ?
+              <Button
+                color="secondary"
+                onClick={() => window.location.reload()} //window.location.replace(window.location.origin)
+                variant="outlined"
+              >
+                <FormattedMessage defaultMessage="Ricarica la pagina" id="error500.reload_current_page"/>
+              </Button>
+              :
+              <Button
+                color="secondary"
+                onClick={() => resetErrorBoundary()}
+                variant="outlined"
+              >
+                <FormattedMessage defaultMessage="Riprova" id="error500.retry"/>
+              </Button>
+          }
         </div>
       </Container>
     </Page>

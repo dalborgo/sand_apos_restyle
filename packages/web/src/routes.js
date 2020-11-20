@@ -110,11 +110,6 @@ const routes = [
       },
       {
         exact: true,
-        path: '/app/extra/forms/redux',
-        component: lazy(() => import('src/views/extra/forms/ReduxFormView')),
-      },
-      {
-        exact: true,
         path: '/app/extra/editors/draft-js',
         component: lazy(() => import('src/views/extra/editors/DraftEditorView')),
       },

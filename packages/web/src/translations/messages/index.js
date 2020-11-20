@@ -13,9 +13,9 @@ export const messages = defineMessages({
     id: 'auth.login.installation',
     defaultMessage: 'Installazione',
   },
-  no_prefetched_codes: {
-    id: 'auth.login.no_prefetched_codes',
-    defaultMessage: 'Impossibile pre-caricare i codici!',
+  error_to_fetch_codes: {
+    id: 'auth.login.error_to_fetch_codes',
+    defaultMessage: 'Impossibile caricare i codici clienti!',
   },
   username_required: {
     id: 'auth.login.username_required',
