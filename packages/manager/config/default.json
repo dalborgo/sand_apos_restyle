@@ -9,7 +9,7 @@
     "PORT": 7000
   },
   "couchbase": {
-    "CONFIG_TOTAL_TIMEOUT": 250,
+    "CONFIG_TOTAL_TIMEOUT": 30000,
     "connections": {
       "astenposServer": {
         "server": "127.0.0.1",
@@ -18,16 +18,15 @@
         "_archivio": "archivio",
         "_manager": "manager",
         "_password_bucket": "astenpos",
-        "_password_archivio": "archivio",
-        "_password_manager": "manager"
+        "_password_archivio": "archivio"
       }
     },
     "utility": { //compatibilità con vecchio astenpos express
       "manager": "",
       "couchbase": "127.0.0.1",
-      "session": "archivio",
-      "user": "archivio",
-      "password": "archivio"
+      "session": "manager",
+      "user": "manager",
+      "password": "manager"
     }
   }
 }

@@ -3,6 +3,7 @@ import config from 'config'
 
 const { connections } = config.get('couchbase')
 const {
+  _archivio: ARC_DEFAULT,
   _bucket: AST_DEFAULT,
   _manager: MAN_DEFAULT,
   backend: BACKEND_HOST_DEFAULT,
@@ -10,9 +11,10 @@ const {
 } = connections['astenposServer']
 
 export default class Couchbase {
-  constructor (cluster, astenpos, manager, backendHost = BACKEND_HOST_DEFAULT) {
+  constructor (cluster, astenpos, archive, manager, backendHost = BACKEND_HOST_DEFAULT) {
     this._cluster = cluster
     this._astenpos = astenpos
+    this._archive = archive
     this._manager = manager
     this._backendHost = backendHost || ''
   }
@@ -40,6 +42,10 @@ export default class Couchbase {
     return this._astenpos.name || AST_DEFAULT
   }
   
+  get archiveBucketName () {
+    return this._archive.name || ARC_DEFAULT
+  }
+  
   get managerBucketName () {
     return this._manager.name || MAN_DEFAULT
   }
@@ -48,12 +54,20 @@ export default class Couchbase {
     return this._astenpos.defaultCollection()
   }
   
+  get archiveBucketCollection () {
+    return this._archive.defaultCollection()
+  }
+  
   get managerBucketCollection () {
     return this._manager.defaultCollection()
   }
   
   get astenposBucket () {
     return this._astenpos
+  }
+  
+  get archiveBucket () {
+    return this._archive
   }
   
   get managerBucket () {
@@ -71,6 +85,17 @@ export default class Couchbase {
     }
   }
   
+  get arcConnection () {
+    return {
+      BUCKET: this.archiveBucket,
+      BUCKET_NAME: this.archiveBucketName,
+      CLUSTER: this.cluster,
+      COLLECTION: this.archiveBucketCollection,
+      HOST: this.host,
+      PASSWORD: this.archiveBucketPassword(),
+    }
+  }
+  
   get manConnection () {
     return {
       BUCKET: this.managerBucket,
@@ -84,8 +109,11 @@ export default class Couchbase {
   
   get oldConnection () {
     return {
+      _archivio: this.archiveBucketName,
       _bucket: this.astenposBucketName,
+      _password_archivio: this.archiveBucketPassword(),
       _password_bucket: this.astenposBucketPassword(),
+      archivio: this.astenposBucketCollection,
       backend: this.backendHost,
       bucket: this.astenposBucketCollection,
       cluster: this.cluster,
@@ -94,7 +122,7 @@ export default class Couchbase {
   }
   
   connHost () {
-    const base = get(this._astenpos, '_cluster._connStr', HOST_DEFAULT)
+    const base = get(this._astenpos, '_cluster._connStr', HOST_DEFAULT) //suppose the same form archive
     const regex = /couchbase:\/\/([a-z\d.]+)\??/
     const match = regex.exec(base)
     if (match) {
@@ -107,6 +135,11 @@ export default class Couchbase {
   
   astenposBucketPassword () {
     const base = get(this._astenpos, '_cluster._auth')
+    return base.password
+  }
+  
+  archiveBucketPassword () {
+    const base = get(this._archive, '_cluster._auth')
     return base.password
   }
   

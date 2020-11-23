@@ -24,26 +24,13 @@ async function getDatabase (key) {
       password: results.key,
       logFunc,
     }
-    const optionsArchive = {
-      username: results.key,
-      password: results.key,
-      logFunc,
-    }
-    const optionsManager = {
-      username: results.key,
-      password: results.key,
-      logFunc,
-    }
     const queryString = cFunctions.objToQueryString({ config_total_timeout: CONFIG_TOTAL_TIMEOUT }, true)
     const connStr = `couchbase://${results.couchbaseUrl}${queryString}`
     log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
-    const archive_ = new couchbase.Cluster(connStr, optionsArchive)
-    const manager_ = new couchbase.Cluster(connStr, optionsManager)
     const astenpos = astenpos_.bucket(results.key)
-    const archive = archive_.bucket(results.key)
-    const manager = manager_.bucket(results.key)
-    __buckets[key] = new Couchbase(astenpos_, astenpos, archive, manager, results.backendUrl) //first parameter for cluster
+    const manager = astenpos_.bucket(results.key)
+    __buckets[key] = new Couchbase(astenpos_, astenpos, manager, results.backendUrl) //first parameter for cluster
     return __buckets[key]
   } catch (err) {
     log.error(err)
