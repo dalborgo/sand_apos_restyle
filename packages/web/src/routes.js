@@ -87,19 +87,6 @@ const routes = [
       },
       {
         exact: true,
-        path: [
-          '/app/chat/new',
-          '/app/chat/:threadKey',
-        ],
-        component: lazy(() => import('src/views/chat/ChatView')),
-      },
-      {
-        exact: true,
-        path: '/app/chat',
-        component: () => <Redirect to="/app/chat/new"/>,
-      },
-      {
-        exact: true,
         path: '/app/extra/charts/apex',
         component: lazy(() => import('src/views/extra/charts/ApexChartsView')),
       },
@@ -107,29 +94,6 @@ const routes = [
         exact: true,
         path: '/app/extra/forms/formik',
         component: lazy(() => import('src/views/extra/forms/FormikView')),
-      },
-      {
-        exact: true,
-        path: '/app/extra/editors/draft-js',
-        component: lazy(() => import('src/views/extra/editors/DraftEditorView')),
-      },
-      {
-        exact: true,
-        path: '/app/extra/editors/quill',
-        component: lazy(() => import('src/views/extra/editors/QuillEditorView')),
-      },
-      {
-        exact: true,
-        path: '/app/kanban',
-        component: lazy(() => import('src/views/kanban/KanbanView')),
-      },
-      {
-        exact: true,
-        path: [
-          '/app/mail/label/:customLabel/:mailId?',
-          '/app/mail/:systemLabel/:mailId?',
-        ],
-        component: lazy(() => import('src/views/mail/MailView')),
       },
       {
         exact: true,
@@ -173,43 +137,8 @@ const routes = [
       },
       {
         exact: true,
-        path: '/app/management/products',
-        component: lazy(() => import('src/views/product/ProductListView')),
-      },
-      {
-        exact: true,
-        path: '/app/management/products/create',
-        component: lazy(() => import('src/views/product/ProductCreateView')),
-      },
-      {
-        exact: true,
         path: '/app/management',
         component: () => <Redirect to="/app/management/customers"/>,
-      },
-      {
-        exact: true,
-        path: '/app/projects/overview',
-        component: lazy(() => import('src/views/project/OverviewView')),
-      },
-      {
-        exact: true,
-        path: '/app/projects/browse',
-        component: lazy(() => import('src/views/project/ProjectBrowseView')),
-      },
-      {
-        exact: true,
-        path: '/app/projects/create',
-        component: lazy(() => import('src/views/project/ProjectCreateView')),
-      },
-      {
-        exact: true,
-        path: '/app/projects/:id',
-        component: lazy(() => import('src/views/project/ProjectDetailsView')),
-      },
-      {
-        exact: true,
-        path: '/app/projects',
-        component: () => <Redirect to="/app/projects/browse"/>,
       },
       {
         exact: true,

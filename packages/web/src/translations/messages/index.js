@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  ECONNREFUSED:{
+    id: 'error.ECONNREFUSED',
+    defaultMessage: 'Connessione rifiutata!',
+  },
   common_all: {
     id: 'common.all',
     defaultMessage: 'Tutti',

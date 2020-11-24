@@ -15,13 +15,9 @@ import {
 import Page from 'src/components/Page'
 import Logo from 'src/components/Logo'
 import useAuth from 'src/hooks/useAuth'
-import Auth0Register from './Auth0Register'
-import FirebaseAuthRegister from './FirebaseAuthRegister'
 import JWTRegister from './JWTRegister'
 
 const methodIcons = {
-  Auth0: '/static/images/auth0.svg',
-  FirebaseAuth: '/static/images/firebase.svg',
   JWT: '/static/images/jwt.svg',
 };
 
@@ -178,8 +174,6 @@ const RegisterView = () => {
               flexGrow={1}
               mt={3}
             >
-              {method === 'Auth0' && <Auth0Register /> }
-              {method === 'FirebaseAuth' && <FirebaseAuthRegister /> }
               {method === 'JWT' && <JWTRegister /> }
             </Box>
             <Box my={3}>

@@ -7,6 +7,7 @@ import moment from 'moment'
 import { envConfig } from 'src/init'
 import qs from 'qs'
 import { expandError } from './errors'
+import log from '@adapter/common/src/log'
 
 export const axiosLocalInstance = axios.create({
   baseURL: envConfig.BACKEND_HOST,
@@ -53,7 +54,8 @@ export function useSnackQueryError () {
       } else if (responseData) {
         enqueueSnackbar(responseData.message || intl.formatMessage(messages[responseData.code]))
       } else {
-        enqueueSnackbar(message)
+        log.debug('error code:', err.code)
+        enqueueSnackbar(messages[err.code] ? intl.formatMessage(messages[err.code]) : message)
       }
     }
   })

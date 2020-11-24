@@ -113,7 +113,7 @@ const saveMutation = async (docs) => {
   return data
 }
 const deleteMutation = async (docId) => {
-  const { data } = await axiosLocalInstance.delete('/api/docs/delete', {
+  const { data } = await axiosLocalInstance.delete('/api/docs/remove', {
     data: {
       docId,
     },
@@ -286,6 +286,8 @@ const BrowserView = () => {
     onSettled: (data, error, variables) => {
       if (error) {
         enqueueSnackbar(error.message)
+      } else if (data?.ok === false) {
+        snackQueryError(data.err)
       } else {
         if (data?.results) {
           const [first] = data.results

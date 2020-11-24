@@ -25,5 +25,6 @@
   "error503.service_unavailable!": "",
   "error500.retry": "",
   "auth.login.error_to_fetch_codes": "",
-  "error500.reload_current_page": ""
+  "error500.reload_current_page": "",
+  "error.ECONNREFUSED": ""
 }

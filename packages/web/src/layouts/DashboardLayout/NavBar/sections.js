@@ -1,26 +1,17 @@
-import React from 'react'
 import {
-  AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
-  Briefcase as BriefcaseIcon,
   DollarSign as DollarSignIcon,
   Edit as EditIcon,
   Folder as FolderIcon,
-  Layout as LayoutIcon,
   List as ListIcon,
   Lock as LockIcon,
-  Mail as MailIcon,
-  MessageCircle as MessageCircleIcon,
   PieChart as PieChartIcon,
   Share2 as ShareIcon,
-  ShoppingCart as ShoppingCartIcon,
-  Trello as TrelloIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
   Users as UsersIcon,
 } from 'react-feather'
 import ReceiptIcon from '@material-ui/icons/ReceiptOutlined'
-import { Chip } from '@material-ui/core'
 
 const sections = [
   {
@@ -68,21 +59,6 @@ const sections = [
         ],
       },
       {
-        title: 'Products',
-        icon: ShoppingCartIcon,
-        href: '/app/management/products',
-        items: [
-          {
-            title: 'List Products',
-            href: '/app/management/products',
-          },
-          {
-            title: 'Create Product',
-            href: '/app/management/products/create',
-          },
-        ],
-      },
-      {
         title: 'Orders',
         icon: FolderIcon,
         href: '/app/management/orders',
@@ -118,29 +94,6 @@ const sections = [
     subheader: 'Applications',
     items: [
       {
-        title: 'Projects Platform',
-        href: '/app/projects',
-        icon: BriefcaseIcon,
-        items: [
-          {
-            title: 'Overview',
-            href: '/app/projects/overview',
-          },
-          {
-            title: 'Browse Projects',
-            href: '/app/projects/browse',
-          },
-          {
-            title: 'Create Project',
-            href: '/app/projects/create',
-          },
-          {
-            title: 'View Project',
-            href: '/app/projects/1',
-          },
-        ],
-      },
-      {
         title: 'Social Platform',
         href: '/app/social',
         icon: ShareIcon,
@@ -154,29 +107,6 @@ const sections = [
             href: '/app/social/feed',
           },
         ],
-      },
-      {
-        title: 'Kanban',
-        href: '/app/kanban',
-        icon: TrelloIcon,
-      },
-      {
-        title: 'Mail',
-        href: '/app/mail',
-        icon: MailIcon,
-      },
-      {
-        title: 'Chat',
-        href: '/app/chat',
-        icon: MessageCircleIcon,
-        // eslint-disable-next-line react/display-name
-        info: () => (
-          <Chip
-            color="secondary"
-            label="Updated"
-            size="small"
-          />
-        ),
       },
     ],
   },
@@ -202,11 +132,6 @@ const sections = [
         title: 'Account',
         href: '/app/account',
         icon: UserIcon,
-      },
-      {
-        title: 'Error',
-        href: '/404',
-        icon: AlertCircleIcon,
       },
       {
         title: 'Pricing',
@@ -241,21 +166,6 @@ const sections = [
           {
             title: 'Redux Forms',
             href: '/app/extra/forms/redux',
-          },
-        ],
-      },
-      {
-        title: 'Editors',
-        href: '/app/extra/editors',
-        icon: LayoutIcon,
-        items: [
-          {
-            title: 'DraftJS Editor',
-            href: '/app/extra/editors/draft-js',
-          },
-          {
-            title: 'Quill Editor',
-            href: '/app/extra/editors/quill',
           },
         ],
       },

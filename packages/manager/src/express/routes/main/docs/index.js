@@ -85,11 +85,18 @@ function addRouters (router) {
     const data = await couchSwagger.postDbBulkDocs(docs, connClass.astConnection)
     res.send(data)
   })
-  router.delete('/docs/delete', async function (req, res) {
+  router.put('/docs/upsert', async function (req, res) {
     const { connClass, body } = req
-    const { docId } = body
+    const { docId, doc, options } = body
     const { astenposBucketCollection: collection } = connClass
-    const data = await collection.remove(docId)
+    const data = await collection.upsert(docId, doc, options)
+    res.send({ ok: true, results: { docId, data } })
+  })
+  router.delete('/docs/remove', async function (req, res) {
+    const { connClass, body } = req
+    const { docId, options } = body
+    const { astenposBucketCollection: collection } = connClass
+    const data = await collection.remove(docId, options)
     res.send({ ok: true, results: { docId, data } })
   })
 }

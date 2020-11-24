@@ -33,9 +33,9 @@ async function execute (operationId, parameters, host) {
     timeout.cancel()
     if (!ok) { return { ok, message }}
     return { ok: true, results }
-  } catch ({ message }) {
+  } catch (err) {
     timeout.cancel()
-    return { ok: false, message }
+    return { ok: false, message: err.message, err }
   }
 }
 
@@ -76,9 +76,9 @@ async function executeMultiPart (operationId, parameters, arrayFirstIfError = []
       }
     }
     return { ok: true, results }
-  } catch ({ message }) {
+  } catch (err) {
     timeout.cancel()
-    return { ok: false, message }
+    return { ok: false, message: err.message, err }
   }
 }
 

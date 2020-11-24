@@ -13,14 +13,10 @@ import {
 } from '@material-ui/core'
 import Page from 'src/components/Page'
 import useAuth from 'src/hooks/useAuth'
-import Auth0Login from './Auth0Login'
-import FirebaseAuthLogin from './FirebaseAuthLogin'
 import JWTLogin from './JWTLogin'
 import { FormattedMessage } from 'react-intl'
 
 const methodIcons = {
-  Auth0: '/static/images/auth0.svg',
-  FirebaseAuth: '/static/images/firebase.svg',
   JWT: '/static/images/jwt.svg',
 }
 
@@ -173,8 +169,6 @@ const LoginView = () => {
                 flexGrow={1}
                 mt={3}
               >
-                {method === 'Auth0' && <Auth0Login/>}
-                {method === 'FirebaseAuth' && <FirebaseAuthLogin/>}
                 {method === 'JWT' && <JWTLogin/>}
               </Box>
             </CardContent>

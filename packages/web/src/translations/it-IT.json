@@ -25,5 +25,6 @@
   "error503.service_unavailable!": "503: Servizio non disponibile!",
   "error500.retry": "Riprova",
   "auth.login.error_to_fetch_codes": "Impossibile caricare i codici clienti!",
-  "error500.reload_current_page": "Ricarica la pagina"
+  "error500.reload_current_page": "Ricarica la pagina",
+  "error.ECONNREFUSED": "Connessione rifiutata!"
 }
