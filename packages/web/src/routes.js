@@ -151,6 +151,14 @@ const routes = [
       },
       {
         exact: true,
+        path: [
+          '/app/reports/closing-day',
+          '/app/reports/closing-day/:docId',
+        ],
+        component: lazy(() => import('src/views/reports/ClosingDay')),
+      },
+      {
+        exact: true,
         path: '/app/reports/dashboard',
         component: lazy(() => import('src/views/reports/DashboardView')),
       },

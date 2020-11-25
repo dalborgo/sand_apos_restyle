@@ -25,6 +25,12 @@ const sections = [
         href: '/app/reports/browser',
       },
       {
+        title: 'closing_day',
+        exact: false,
+        icon: DollarSignIcon,
+        href: '/app/reports/closing-day',
+      },
+      {
         title: 'Dashboard',
         icon: PieChartIcon,
         href: '/app/reports/dashboard',

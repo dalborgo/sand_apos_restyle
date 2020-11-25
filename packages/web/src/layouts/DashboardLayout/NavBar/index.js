@@ -19,20 +19,24 @@ import {
 import useAuth from 'src/hooks/useAuth'
 import NavItem from './NavItem'
 import { isMenuLinkToShow } from 'src/utils/logics'
+import { messages } from 'src/translations/messages'
+import { useIntl } from 'react-intl'
 
 function renderNavItems ({
   depth = 0,
+  intl,
   items,
   pathname,
   priority,
 }) {
+  
   return (
     <List disablePadding>
       {
         items.reduce(
           (acc, item) => {
             if (isMenuLinkToShow(item, {priority})) {
-              return reduceChildRoutes({ acc, item, pathname, depth })
+              return reduceChildRoutes({ acc, item, pathname, depth, intl })
             }
             return acc
           },
@@ -46,11 +50,12 @@ function renderNavItems ({
 function reduceChildRoutes ({
   acc,
   pathname,
+  intl,
   item,
   depth,
 }) {
   const key = item.title + depth
-  
+
   if (item.items) {
     const open = matchPath(pathname, {
       path: item.href,
@@ -64,7 +69,7 @@ function reduceChildRoutes ({
         info={item.info}
         key={key}
         open={Boolean(open)}
-        title={item.title}
+        title={messages[`menu_${item.title}`] ? intl.formatMessage(messages[`menu_${item.title}`]) : item.title}
       >
         {
           renderNavItems({
@@ -84,7 +89,7 @@ function reduceChildRoutes ({
         icon={item.icon}
         info={item.info}
         key={key}
-        title={item.title}
+        title={messages[`menu_${item.title}`] ? intl.formatMessage(messages[`menu_${item.title}`]) : item.title}
       />
     )
   }
@@ -113,7 +118,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
   const location = useLocation()
   const { user } = useAuth()
   const PerfectScrollbarRef = useRef(null)
-  
+  const intl = useIntl()
   useEffect(() => {
     if (openMobile && setMobileNavOpen) {
       setMobileNavOpen(false)
@@ -188,6 +193,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
               >
                 {
                   renderNavItems({
+                    intl,
                     items: section.items,
                     pathname: location.pathname,
                     priority: user.priority,

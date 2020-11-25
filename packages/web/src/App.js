@@ -3,9 +3,8 @@ import { Router } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import { create } from 'jss'
 import rtl from 'jss-rtl'
-import MomentUtils from '@date-io/moment'
 import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/core'
-import { MuiPickersUtilsProvider } from '@material-ui/pickers'
+import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import GlobalStyles from 'src/components/GlobalStyles'
 import ScrollReset from 'src/components/ScrollReset'
 import { defaultQueryFn } from 'src/utils/reactQueryFunctions'
@@ -23,6 +22,12 @@ import SnackMyProvider from 'src/components/Snack/SnackComponents'
 import Error500 from 'src/views/errors/Error500'
 import log from '@adapter/common/src/log'
 import useAuth from './hooks/useAuth'
+import moment from 'moment'
+import { LocalizationProvider } from '@material-ui/pickers'
+
+require('moment/locale/it')
+//require('moment/locale/de')
+moment.locale('it') //altrimenti prende il secondo importato
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -61,9 +66,9 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <StylesProvider jss={jss}>
         <IntlProvider defaultLocale="it" locale="it" messages={messages}>
-          <GlobalStyles/>
-          <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
+          <LocalizationProvider dateAdapter={MomentAdapter} locale="it">
+            <GlobalStyles/>
+            <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
               <SnackMyProvider>
                 <Router history={history}>
                   <ReactQueryCacheProvider queryCache={queryCache}>
@@ -78,8 +83,8 @@ const App = () => {
                   </ReactQueryCacheProvider>
                 </Router>
               </SnackMyProvider>
-            </MuiPickersUtilsProvider>
-          </ErrorBoundary>
+            </ErrorBoundary>
+          </LocalizationProvider>
         </IntlProvider>
       </StylesProvider>
     </ThemeProvider>

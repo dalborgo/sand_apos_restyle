@@ -1,6 +1,18 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  menu_closing_day:{
+    id: 'menu.closing_day',
+    defaultMessage: 'Chiusure di giornata',
+  },
+  date_range_start:{
+    id: 'date_range.start_date',
+    defaultMessage: 'Inizio',
+  },
+  date_range_end:{
+    id: 'date_range.end_date',
+    defaultMessage: 'Fine',
+  },
   ECONNREFUSED:{
     id: 'error.ECONNREFUSED',
     defaultMessage: 'Connessione rifiutata!',

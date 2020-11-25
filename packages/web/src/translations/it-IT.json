@@ -26,5 +26,10 @@
   "error500.retry": "Riprova",
   "auth.login.error_to_fetch_codes": "Impossibile caricare i codici clienti!",
   "error500.reload_current_page": "Ricarica la pagina",
-  "error.ECONNREFUSED": "Connessione rifiutata!"
+  "error.ECONNREFUSED": "Connessione rifiutata!",
+  "date_range.end_date": "Fine",
+  "date_range.start_date": "Inizio",
+  "menu.closing_day": "Chiusure di giornata",
+  "reports.closing_day.header_title": "Chiusure di giornata",
+  "to": "a"
 }

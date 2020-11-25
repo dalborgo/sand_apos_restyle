@@ -26,5 +26,10 @@
   "error500.retry": "",
   "auth.login.error_to_fetch_codes": "",
   "error500.reload_current_page": "",
-  "error.ECONNREFUSED": ""
+  "error.ECONNREFUSED": "",
+  "date_range.end_date": "",
+  "date_range.start_date": "",
+  "menu.closing_day": "",
+  "reports.closing_day.header_title": "",
+  "to": ""
 }
