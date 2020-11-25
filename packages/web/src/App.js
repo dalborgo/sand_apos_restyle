@@ -25,9 +25,8 @@ import useAuth from './hooks/useAuth'
 import moment from 'moment'
 import { LocalizationProvider } from '@material-ui/pickers'
 
+//require('moment/locale/de') //per aggiungere supporto ad altre lingue
 require('moment/locale/it')
-//require('moment/locale/de')
-moment.locale('it') //altrimenti prende il secondo importato
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -57,6 +56,7 @@ const RouteList = () => {
 const App = () => {
   const { settings } = useSettings()
   const { reset } = useErrorResetBoundary()
+  useMemo(() => {moment.locale(settings.locale)}, [settings.locale])  //altrimenti prende il secondo importato
   const theme = createTheme({
     direction: settings.direction,
     responsiveFontSizes: settings.responsiveFontSizes,
@@ -65,8 +65,8 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <StylesProvider jss={jss}>
-        <IntlProvider defaultLocale="it" locale="it" messages={messages}>
-          <LocalizationProvider dateAdapter={MomentAdapter} locale="it">
+        <IntlProvider defaultLocale="it" locale={settings.locale} messages={messages}>
+          <LocalizationProvider dateAdapter={MomentAdapter} locale={settings.locale}>
             <GlobalStyles/>
             <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
               <SnackMyProvider>

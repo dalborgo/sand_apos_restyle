@@ -2,8 +2,10 @@ import React, { createContext, useEffect, useState } from 'react'
 import merge from 'lodash/merge'
 import { THEMES } from 'src/constants'
 import log from '@adapter/common/src/log'
+
 const defaultSettings = {
   direction: 'ltr',
+  locale: 'it',
   responsiveFontSizes: true,
   theme: THEMES.LIGHT,
 }

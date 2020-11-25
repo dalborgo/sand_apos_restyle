@@ -30,39 +30,40 @@ const useStyles = makeStyles((theme) => ({
     width: 320,
     padding: theme.spacing(2),
   },
-}));
+}))
 
 const Settings = () => {
-  const classes = useStyles();
-  const ref = useRef(null);
-  const { settings, saveSettings } = useSettings();
-  const [isOpen, setOpen] = useState(false);
+  const classes = useStyles()
+  const ref = useRef(null)
+  const { settings, saveSettings } = useSettings()
+  const [isOpen, setOpen] = useState(false)
   const [values, setValues] = useState({
+    locale: 'it', //todo create menu to select locale
     direction: settings.direction,
     responsiveFontSizes: settings.responsiveFontSizes,
     theme: settings.theme,
-  });
-
+  })
+  
   const handleOpen = () => {
-    setOpen(true);
-  };
-
+    setOpen(true)
+  }
+  
   const handleClose = () => {
-    setOpen(false);
-  };
-
+    setOpen(false)
+  }
+  
   const handleChange = (field, value) => {
     setValues({
       ...values,
       [field]: value,
-    });
-  };
-
+    })
+  }
+  
   const handleSave = () => {
-    saveSettings(values);
-    setOpen(false);
-  };
-
+    saveSettings(values)
+    setOpen(false)
+  }
+  
   return (
     <>
       <Tooltip title="Settings">
@@ -77,7 +78,7 @@ const Settings = () => {
             ref={ref}
           >
             <SvgIcon fontSize="small">
-              <SettingsIcon />
+              <SettingsIcon/>
             </SvgIcon>
           </IconButton>
         </Badge>
@@ -171,7 +172,7 @@ const Settings = () => {
         </Box>
       </Popover>
     </>
-  );
+  )
 }
 
-export default Settings;
+export default Settings
