@@ -1,5 +1,6 @@
 import { couchQueries, couchSwagger, couchViews } from '@adapter/io'
 import Q from 'q'
+
 const { utils } = require(__helpers)
 async function allSettled (promises) {
   const output = []
@@ -70,7 +71,28 @@ function addRouters (router) {
       + 'ast.* '
       + 'FROM ' + connClass.astenposBucketName + ' ast '
       + 'USE KEYS "' + docId + '" '
-      + 'WHERE '+parsedOwner.queryCondition,
+      + 'WHERE ' + parsedOwner.queryCondition,
+      connClass.cluster
+    )
+    if (!ok) {
+      return res.send(ok, message)
+    }
+    const [results] = data
+    res.send({ ok, results })
+  })
+  router.get('/docs/get_by_type', async function (req, res) {
+    const { connClass, query } = req
+    const { type } = query
+    const parsedOwner = utils.parseOwner(query)
+    if (!type) {return res.send({ ok: false, message: 'type undefined!' })}
+    const { ok, results: data, message } = await couchQueries.exec(
+      'SELECT '
+      + 'meta(ast).id _id, '
+      + 'meta(ast).xattrs._sync.rev _rev, '
+      + 'ast.* '
+      + 'FROM ' + connClass.astenposBucketName + ' ast '
+      + 'WHERE type = "' + type + '" '
+      + 'AND ' + parsedOwner.queryCondition,
       connClass.cluster
     )
     if (!ok) {

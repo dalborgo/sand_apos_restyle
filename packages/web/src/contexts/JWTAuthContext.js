@@ -103,10 +103,12 @@ const AuthContext = createContext({
   changeCode: () => { },
 })
 
+const selResetAllIn = state => state.resetAllIn
+
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState)
   const queryCache = useQueryCache()
-  const resetAllIn = useGeneralStore(state => state.resetAllIn)
+  const resetAllIn = useGeneralStore(selResetAllIn)
   const login = async (username, password, code) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password, code })
     const { accessToken, user, codes } = response.data

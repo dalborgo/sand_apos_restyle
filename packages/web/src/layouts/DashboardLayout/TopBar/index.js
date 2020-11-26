@@ -104,13 +104,16 @@ function extracted (morseState, user, switchAllIn, allin) {
   }
 }
 
+const selAllIn = state => state.allIn
+const selSwitchAllIn = state => state.switchAllIn
+
 const TopBar = ({
   setMobileNavOpen,
 }) => {
   const { codes, selectedCode = { code: NO_SELECTED_CODE }, changeCode, user } = useAuth()
   const classes = useStyles()
-  const allIn_ = useGeneralStore(state => state.allIn)
-  const switchAllIn = useGeneralStore(state => state.switchAllIn)
+  const allIn_ = useGeneralStore(selAllIn)
+  const switchAllIn = useGeneralStore(selSwitchAllIn)
   const intl = useIntl()
   const divRef = useRef(null)
   const morseState = useRef({ count: 0, time: 0, serie: 0 })

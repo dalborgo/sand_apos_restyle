@@ -11,11 +11,27 @@ function parseOwner ({ owner }) {
       startkey: `"${startOwner}"`,
       endkey: `"${nextOwner}"`,
     },
+    ownerArray,
     queryCondition: `owner IN ${JSON.stringify(ownerArray)}`,
     startOwner,
   }
 }
 
+function controlParameters (query, requiredKeys) {
+  const out = []
+  let errors
+  for (let requiredKey of requiredKeys) {
+    if (!query[requiredKey]) {
+      out.push(requiredKey)
+    }
+  }
+  if (out.length) {
+    errors = out.join(', ')
+    throw Error(`Mandatory params missing: ${errors}!`)
+  }
+}
+
 export default {
+  controlParameters,
   parseOwner,
 }

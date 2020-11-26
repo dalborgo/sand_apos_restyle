@@ -7,7 +7,10 @@ import { messages } from 'src/translations/messages'
 import { DesktopDatePickerField } from 'src/components/DateRange'
 import { Field, Form, Formik } from 'formik'
 import create from 'zustand'
+import shallow from 'zustand/shallow'
 import { immerMiddleware } from 'src/zustand'
+import { useQuery } from 'react-query'
+import useAuth from 'src/hooks/useAuth'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,17 +39,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const useStore = create(immerMiddleware(set => ({
-  startDate: null,
-  endDate: null,
-  setDateRange: input => set(state => {
-    const [startDate, endDate] = input
-    if (startDate && endDate) {
-      state.startDate = startDate
-      state.endDate = endDate
-    }
-  }),
-})))
 
 const FormikWrapper = memo((function FormikWrapper () {
   console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
@@ -81,14 +73,39 @@ const FormikWrapper = memo((function FormikWrapper () {
     </Formik>
   )
 }))
+/*const selStartDate = state => state.startDate
+const selEndDate = state => state.endDate*/
 
+const useStore = create(immerMiddleware(set => ({
+  startDate: null,
+  startDateInMillis: null,
+  endDate: null,
+  endDateInMillis: null,
+  setDateRange: input => set(state => {
+    const [startDate, endDate] = input
+    if (startDate && endDate) {
+      state.startDate = startDate
+      state.endDate = endDate
+      state.startDateInMillis = startDate.format('YYYYMMDDHHmmssSSS')
+      state.endDateInMillis = endDate.format('YYYYMMDDHHmmssSSS')
+    }
+  }),
+})))
+
+const dateSelector = state => ({ startDateInMillis: state.startDateInMillis, endDateInMillis: state.endDateInMillis })
 const ClosingDay = () => {
+  const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const intl = useIntl()
-  const startDate = useStore(state => state.startDate)
-  const endDate = useStore(state => state.endDate)
-  console.log('startDate:', startDate)
-  console.log('endDate:', endDate)
+  const { startDateInMillis, endDateInMillis } = useStore(dateSelector, shallow)
+  
+  const closingDayList = useQuery(['reports/closing_days', { startDateInMillis, endDateInMillis, owner }], {
+    enabled: startDateInMillis && endDateInMillis,
+    onSuccess: ({ results }) => {
+      console.log('results:', results)
+    },
+  })
+  
   return (
     <Page
       className={classes.root}
@@ -104,7 +121,7 @@ const ClosingDay = () => {
           </Box>
           <Box bgcolor="grey.300" height="100%" mt={2} p={1}>
             <Typography>
-              loren ipsum
+              {JSON.stringify(closingDayList?.data, null, 2)}
             </Typography>
           </Box>
         </div>

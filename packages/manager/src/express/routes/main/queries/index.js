@@ -1,5 +1,20 @@
 import { couchQueries } from '@adapter/io'
+
+const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
+
+async function queryByType (req, res) {
+  const { connClass } = req
+  const params = Object.assign({}, req.body, req.query)
+  const parsedOwner = utils.parseOwner(params)
+  const { type, columns, withMeta = false, bucketName = connClass.astenposBucketName, options } = params
+  const knex_ = knex(bucketName).where({ type, owner: parsedOwner.startOwner }).select(columns)
+  if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
+  const statement = knex_.toQuery()
+  const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
+  if (!ok) {return res.send({ ok, message, info })}
+  res.send({ ok, results: data })
+}
 
 function addRouters (router) {
   router.post('/queries/raw_query', async function (req, res) {
@@ -19,19 +34,19 @@ function addRouters (router) {
   })
   router.post('/queries/query_by_id', async function (req, res) {
     const { connClass, body } = req
-    const { id, columns, bucketName = connClass.astenposBucketName, options } = body
-    const statement = `${knex(bucketName).select(columns).toQuery()} USE KEYS "${id}"`
+    const { id, columns, withMeta = false, bucketName = connClass.astenposBucketName, options } = body
+    const knex_ = knex(bucketName).select(columns)
+    if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
+    const statement = `${knex_.toQuery()} USE KEYS "${id}"`
     const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, info })}
     res.send({ ok, results: data })
   })
   router.post('/queries/query_by_type', async function (req, res) {
-    const { connClass, body } = req
-    const { type, columns, bucketName = connClass.astenposBucketName, options } = body
-    const statement = knex(bucketName).where({type}).select(columns).toQuery()
-    const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
-    if (!ok) {return res.send({ ok, message, info })}
-    res.send({ ok, results: data })
+    return await queryByType(req, res)
+  })
+  router.get('/queries/query_by_type', async function (req, res) {
+    return await queryByType(req, res)
   })
 }
 
