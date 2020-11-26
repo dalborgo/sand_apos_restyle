@@ -1,16 +1,6 @@
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import {
-  Box,
-  Card,
-  CardContent,
-  Chip,
-  Container,
-  Link,
-  makeStyles,
-  Tooltip,
-  Typography,
-} from '@material-ui/core'
+import { Box, Card, CardContent, Chip, Container, Link, makeStyles, Tooltip, Typography, } from '@material-ui/core'
 import Page from 'src/components/Page'
 import useAuth from 'src/hooks/useAuth'
 import JWTLogin from './JWTLogin'
@@ -102,20 +92,6 @@ const LoginView = () => {
                 {' '}
                 and find out how to switch between
               </Typography>
-              <Tooltip title="Auth0">
-                <img
-                  alt="Auth0"
-                  className={classes.methodIcon}
-                  src={methodIcons['Auth0']}
-                />
-              </Tooltip>
-              <Tooltip title="Firebase">
-                <img
-                  alt="Firebase"
-                  className={classes.methodIcon}
-                  src={methodIcons['FirebaseAuth']}
-                />
-              </Tooltip>
               <Tooltip title="JSON Web Token">
                 <img
                   alt="JWT"

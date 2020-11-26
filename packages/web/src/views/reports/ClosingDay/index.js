@@ -1,6 +1,6 @@
 import React, { memo, useRef, useState } from 'react'
 import Page from 'src/components/Page'
-import { Box, Button, makeStyles, Typography } from '@material-ui/core'
+import { Box, Button, makeStyles } from '@material-ui/core'
 import Header from './Header'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
@@ -11,6 +11,9 @@ import shallow from 'zustand/shallow'
 import { immerMiddleware } from 'src/zustand'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
+import Paper from '@material-ui/core/Paper'
+import TableList from './TableList'
+import LoadingCircularBoxed from 'src/components/LoadingCircularBoxed'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'hidden',
     flexDirection: 'column',
+  },
+  paper: {
+    height: '100%',
+    marginTop: theme.spacing(3),
   },
   content: {
     flexGrow: 1,
@@ -38,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }))
-
 
 const FormikWrapper = memo((function FormikWrapper () {
   console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
@@ -73,8 +79,6 @@ const FormikWrapper = memo((function FormikWrapper () {
     </Formik>
   )
 }))
-/*const selStartDate = state => state.startDate
-const selEndDate = state => state.endDate*/
 
 const useStore = create(immerMiddleware(set => ({
   startDate: null,
@@ -99,13 +103,13 @@ const ClosingDay = () => {
   const intl = useIntl()
   const { startDateInMillis, endDateInMillis } = useStore(dateSelector, shallow)
   
-  const closingDayList = useQuery(['reports/closing_days', { startDateInMillis, endDateInMillis, owner }], {
+  const { isLoading, data = {} } = useQuery(['reports/closing_days', { startDateInMillis, endDateInMillis, owner }], {
     enabled: startDateInMillis && endDateInMillis,
-    onSuccess: ({ results }) => {
-      console.log('results:', results)
-    },
   })
-  
+  const rows = data.results || [
+    { _id: 1, close_date: '2020-11-15', owner: 1 },
+    { _id: 2, close_date: '2020-11-16', owner: 2 },
+  ]
   return (
     <Page
       className={classes.root}
@@ -119,11 +123,16 @@ const ClosingDay = () => {
           <Box display="flex">
             <FormikWrapper/>
           </Box>
-          <Box bgcolor="grey.300" height="100%" mt={2} p={1}>
-            <Typography>
-              {JSON.stringify(closingDayList?.data, null, 2)}
-            </Typography>
-          </Box>
+          <Paper className={classes.paper}>
+            {
+              isLoading
+                ?
+                <LoadingCircularBoxed/>
+                :
+                <TableList rows={rows}/>
+              
+            }
+          </Paper>
         </div>
       </div>
     </Page>

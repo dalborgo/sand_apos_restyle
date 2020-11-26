@@ -13,6 +13,7 @@ function addRouters (router) {
       .where({ type: 'CLOSING_DAY' })
       .where(knex.raw(parsedOwner.queryCondition))
       .whereBetween('close_date', [startDate, endDate])
+      .select(knex.raw('meta().id _id'))
       .select(['owner', 'close_date'])
       .toQuery()
     const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)

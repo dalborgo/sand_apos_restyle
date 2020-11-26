@@ -1,10 +1,19 @@
 import React from 'react'
 import TextField from '@material-ui/core/TextField'
-import { Collapse } from '@material-ui/core'
+import { Collapse, makeStyles } from '@material-ui/core'
 import { DateRangeDelimiter, DateRangePicker } from '@material-ui/pickers'
 import { FormattedMessage, useIntl } from 'react-intl'
 import moment from 'moment'
 import { messages } from 'src/translations/messages'
+
+const useStyles = makeStyles(theme => ({
+  delimiterRoot: {
+    color: theme.palette.action.active,
+  },
+  textFieldRoot: {
+    backgroundColor: theme.palette.background.default,
+  },
+}))
 
 const DatePickerField = ({
   endDateRef,
@@ -18,6 +27,7 @@ const DatePickerField = ({
 }) => {
   const [startDate, endDate] = value
   const disabledEnd = !endDate && !startDate && !open
+  const classes = useStyles()
   const intl = useIntl()
   return (
     <DateRangePicker
@@ -48,6 +58,11 @@ const DatePickerField = ({
           <>
             <TextField
               {...startDateProps}
+              classes={
+                {
+                  root: classes.textFieldRoot,
+                }
+              }
               error={false}
               helperText={null}
               InputLabelProps={
@@ -66,9 +81,21 @@ const DatePickerField = ({
               }
               size="small"
             />
-            <DateRangeDelimiter><FormattedMessage defaultMessage="a" id="to"/></DateRangeDelimiter>
+            <DateRangeDelimiter
+              classes={
+                {
+                  root: classes.delimiterRoot,
+                }
+              }
+            ><FormattedMessage defaultMessage="a" id="to"/>
+            </DateRangeDelimiter>
             <TextField
               {...endDateProps}
+              classes={
+                {
+                  root: classes.textFieldRoot,
+                }
+              }
               disabled={disabledEnd}
               error={false}
               helperText={null}

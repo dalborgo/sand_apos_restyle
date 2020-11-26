@@ -19,7 +19,7 @@ import JWTRegister from './JWTRegister'
 
 const methodIcons = {
   JWT: '/static/images/jwt.svg',
-};
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,12 +59,12 @@ const useStyles = makeStyles((theme) => ({
       maxHeight: '100%',
     },
   },
-}));
+}))
 
 const RegisterView = () => {
-  const classes = useStyles();
-  const { method } = useAuth();
-
+  const classes = useStyles()
+  const { method } = useAuth()
+  
   return (
     <Page
       className={classes.root}
@@ -102,20 +102,6 @@ const RegisterView = () => {
                 {' '}
                 and find out how to switch between
               </Typography>
-              <Tooltip title="Auth0">
-                <img
-                  alt="Auth0"
-                  className={classes.methodIcon}
-                  src={methodIcons['Auth0']}
-                />
-              </Tooltip>
-              <Tooltip title="Firebase">
-                <img
-                  alt="Firebase"
-                  className={classes.methodIcon}
-                  src={methodIcons['FirebaseAuth']}
-                />
-              </Tooltip>
               <Tooltip title="JSON Web Token">
                 <img
                   alt="JWT"
@@ -137,7 +123,7 @@ const RegisterView = () => {
           mb={8}
         >
           <RouterLink to="/">
-            <Logo />
+            <Logo/>
           </RouterLink>
         </Box>
         <Card>
@@ -174,10 +160,10 @@ const RegisterView = () => {
               flexGrow={1}
               mt={3}
             >
-              {method === 'JWT' && <JWTRegister /> }
+              {method === 'JWT' && <JWTRegister/>}
             </Box>
             <Box my={3}>
-              <Divider />
+              <Divider/>
             </Box>
             <Link
               color="textSecondary"
@@ -191,7 +177,7 @@ const RegisterView = () => {
         </Card>
       </Container>
     </Page>
-  );
-};
+  )
+}
 
-export default RegisterView;
+export default RegisterView

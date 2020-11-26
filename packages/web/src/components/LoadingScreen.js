@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import NProgress from 'nprogress'
+import React from 'react'
 import { LinearProgress, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles(() => ({
@@ -8,15 +7,6 @@ const useStyles = makeStyles(() => ({
 
 const LoadingScreen = () => {
   const classes = useStyles()
-  
-  useEffect(() => {
-    NProgress.start()
-    
-    return () => {
-      NProgress.done()
-    }
-  }, [])
-  
   return (
     <div className={classes.root}>
       <LinearProgress/>
