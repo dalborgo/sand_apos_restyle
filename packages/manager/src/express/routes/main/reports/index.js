@@ -15,6 +15,7 @@ function addRouters (router) {
       .whereBetween('close_date', [startDate, endDate])
       .select(knex.raw('meta().id _id'))
       .select(['owner', 'close_date'])
+      .orderBy('close_date', 'desc')
       .toQuery()
     const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, info })}

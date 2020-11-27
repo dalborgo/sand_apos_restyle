@@ -13,7 +13,7 @@ import { capitalCase } from 'change-case'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { NO_SELECTED_CODE } from 'src/contexts/JWTAuthContext'
-import useGeneralStore from 'src/zustand/generalStore'
+import useGeneralStore from 'src/zustandStore/useGeneralStore'
 
 const useStyles = makeStyles(theme => ({
   root: {

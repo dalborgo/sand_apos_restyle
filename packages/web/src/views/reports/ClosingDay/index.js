@@ -6,14 +6,12 @@ import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { DesktopDatePickerField } from 'src/components/DateRange'
 import { Field, Form, Formik } from 'formik'
-import create from 'zustand'
 import shallow from 'zustand/shallow'
-import { immerMiddleware } from 'src/zustand'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
-import LoadingCircularBoxed from 'src/components/LoadingCircularBoxed'
+import useClosingDayStore from 'src/zustandStore/useClosingDayStore'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,15 +44,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const FormikWrapper = memo((function FormikWrapper () {
+const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate }) {
   console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
   const endDateRef = useRef(null)
   const startDateRef = useRef(null)
   const [open, setOpen] = useState(false)
-  const setDateRange = useStore(state => state.setDateRange)
+  const setDateRange = useClosingDayStore(state => state.setDateRange)
   return (
     <Formik
-      initialValues={{ dateRange: [null, null] }}
+      initialValues={{ dateRange: [startDate, endDate] }}
       onSubmit={
         value => {
           endDateRef.current.blur()
@@ -80,36 +78,34 @@ const FormikWrapper = memo((function FormikWrapper () {
   )
 }))
 
-const useStore = create(immerMiddleware(set => ({
-  startDate: null,
-  startDateInMillis: null,
-  endDate: null,
-  endDateInMillis: null,
-  setDateRange: input => set(state => {
-    const [startDate, endDate] = input
-    if (startDate && endDate) {
-      state.startDate = startDate
-      state.endDate = endDate
-      state.startDateInMillis = startDate.format('YYYYMMDDHHmmssSSS')
-      state.endDateInMillis = endDate.format('YYYYMMDDHHmmssSSS')
-    }
-  }),
-})))
-
-const dateSelector = state => ({ startDateInMillis: state.startDateInMillis, endDateInMillis: state.endDateInMillis })
+const dateSelector = state => ({
+  startDateInMillis: state.startDateInMillis,
+  endDateInMillis: state.endDateInMillis,
+  endDate: state.endDate,
+  startDate: state.startDate,
+  state,
+  reset: state.reset,
+})
 const ClosingDay = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const intl = useIntl()
-  const { startDateInMillis, endDateInMillis } = useStore(dateSelector, shallow)
-  
-  const { isLoading, data = {} } = useQuery(['reports/closing_days', { startDateInMillis, endDateInMillis, owner }], {
+  const { startDateInMillis, endDateInMillis, startDate, endDate } = useClosingDayStore(dateSelector, shallow)
+  /* useEffect(() => {return () => {reset()}}, [reset])*/
+  const { isLoading, data = {}, isIdle } = useQuery(['reports/closing_days', {
+    startDateInMillis,
+    endDateInMillis,
+    owner,
+  }], {
     enabled: startDateInMillis && endDateInMillis,
   })
-  const rows = data.results || [
-    { _id: 1, close_date: '2020-11-15', owner: 1 },
-    { _id: 2, close_date: '2020-11-16', owner: 2 },
+  const rows = data.results || []
+  /*
+  [
+  { _id: 1, close_date: '2020-11-15', owner: 1 },
+  { _id: 2, close_date: '2020-11-16', owner: 2 },
   ]
+  */
   return (
     <Page
       className={classes.root}
@@ -121,17 +117,10 @@ const ClosingDay = () => {
       <div className={classes.content}>
         <div className={classes.innerFirst}>
           <Box display="flex">
-            <FormikWrapper/>
+            <FormikWrapper endDate={endDate} startDate={startDate}/>
           </Box>
           <Paper className={classes.paper}>
-            {
-              isLoading
-                ?
-                <LoadingCircularBoxed/>
-                :
-                <TableList rows={rows}/>
-              
-            }
+            <TableList isIdle={isIdle} isLoading={isLoading} rows={rows}/>
           </Paper>
         </div>
       </div>

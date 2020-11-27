@@ -125,6 +125,14 @@
     "defaultMessage": "Lista Documenti"
   },
   {
+    "id": "table.no_data",
+    "defaultMessage": "Nessun risultato!"
+  },
+  {
+    "id": "table.select_date",
+    "defaultMessage": "Seleziona date!"
+  },
+  {
     "id": "to",
     "defaultMessage": "a"
   },

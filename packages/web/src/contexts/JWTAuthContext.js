@@ -5,7 +5,9 @@ import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
 import { useQueryCache } from 'react-query'
 import find from 'lodash/find'
-import useGeneralStore from 'src/zustand/generalStore'
+import each from 'lodash/each'
+import * as stores from 'src/zustandStore'
+import map from 'lodash/map'
 
 export const NO_SELECTED_CODE = 'All'
 
@@ -103,12 +105,12 @@ const AuthContext = createContext({
   changeCode: () => { },
 })
 
-const selResetAllIn = state => state.resetAllIn
+const selReset = state => state.reset
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState)
   const queryCache = useQueryCache()
-  const resetAllIn = useGeneralStore(selResetAllIn)
+  const clearAll = map(stores, (store, key) => stores[key](selReset))
   const login = async (username, password, code) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password, code })
     const { accessToken, user, codes } = response.data
@@ -126,7 +128,7 @@ export const AuthProvider = ({ children }) => {
   
   const logout = () => {
     setSession({})
-    resetAllIn()
+    each(clearAll, reset => reset()) //clear all zustand store
     queryCache.clear()
     dispatch({ type: 'LOGOUT' })
   }

@@ -31,5 +31,7 @@
   "date_range.start_date": "",
   "menu.closing_day": "",
   "reports.closing_day.header_title": "",
-  "to": ""
+  "to": "",
+  "table.no_data": "",
+  "table.select_date": ""
 }
