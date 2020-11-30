@@ -12,6 +12,7 @@ import useAuth from 'src/hooks/useAuth'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
 import useClosingDayStore from 'src/zustandStore/useClosingDayStore'
+import useGeneralStore from 'src/zustandStore/useGeneralStore'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,6 +87,8 @@ const dateSelector = state => ({
   state,
   reset: state.reset,
 })
+console.log(useGeneralStore.getState().priority)
+
 const ClosingDay = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()

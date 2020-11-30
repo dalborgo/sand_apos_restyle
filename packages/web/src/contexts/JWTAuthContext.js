@@ -6,6 +6,7 @@ import log from '@adapter/common/src/log'
 import { useQueryCache } from 'react-query'
 import find from 'lodash/find'
 import * as stores from 'src/zustandStore'
+import useGeneralStore from '../zustandStore/useGeneralStore'
 
 export const NO_SELECTED_CODE = 'All'
 
@@ -117,6 +118,7 @@ export const AuthProvider = ({ children }) => {
     const { accessToken, user, codes } = response.data
     const selectedCode = codes?.length === 1 ? codes[0] : { code: NO_SELECTED_CODE }
     setSession({ codes, accessToken, selectedCode })
+    useGeneralStore.setState({ priority: user.priority })
     dispatch({
       type: 'LOGIN',
       payload: {
@@ -161,6 +163,7 @@ export const AuthProvider = ({ children }) => {
             selectedCode = codes?.length === 1 ? codes[0] : { code: NO_SELECTED_CODE }
             setSession({ codes, selectedCode })
           }
+          useGeneralStore.setState({ priority: user.priority })
           dispatch({
             type: 'INITIALISE',
             payload: {

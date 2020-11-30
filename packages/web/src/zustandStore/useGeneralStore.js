@@ -1,9 +1,17 @@
 import create from 'zustand'
+import immerMiddleware from './immerMiddleware'
 
-const useGeneralStore = create(set => ({
+const initialState = {
   allIn: false,
-  switchAllIn: () => set(state => ({ allIn: !state.allIn })),
-  reset: () => set({ allIn: false }),
-}))
+  priority: 0,
+}
+
+const useGeneralStore = create(immerMiddleware(set => ({
+  ...initialState,
+  switchAllIn: () => set(state => {
+    state.allIn = !state.allIn
+  }),
+  reset: () => set(() => initialState),
+})))
 
 export default useGeneralStore
