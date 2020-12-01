@@ -11,7 +11,7 @@ export function useMoneyFormatter () {
     return (value, currency) =>
       intl.formatNumber(value / 1000, {
         style: 'currency',
-        currency: currency ? currency : defaultCurrency[intl.locale]
+        currency: currency ? currency : defaultCurrency[intl.locale] || 'EUR',
       })
   })
   return moneyFormatter

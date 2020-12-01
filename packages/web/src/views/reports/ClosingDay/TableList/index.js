@@ -2,7 +2,6 @@ import React, { memo, useCallback } from 'react'
 import { Grid, TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { Cell, LoadingComponent } from './comps'
 import { useGeneralStore } from 'src/zustandStore'
-import { DateTypeProvider } from 'src/utils/tableFormatters'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
@@ -23,7 +22,6 @@ const companyNumEntries = Object.keys(companyData).length
 if (companyNumEntries < 2) {
   columns.shift()
 }
-const dateColumns = ['date']
 
 const TableList = ({ rows, isLoading, isIdle }) => {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
@@ -37,9 +35,6 @@ const TableList = ({ rows, isLoading, isIdle }) => {
       rootComponent={Root}
       rows={rows}
     >
-      <DateTypeProvider
-        for={dateColumns}
-      />
       <VirtualTable
         cellComponent={Cell}
         columnExtensions={tableColumnExtensions}

@@ -1,4 +1,4 @@
-import React, { memo, useRef, useState } from 'react'
+import React, { memo, setState, useEffect, useRef, useState } from 'react'
 import Page from 'src/components/Page'
 import { Box, Button, makeStyles } from '@material-ui/core'
 import Header from './Header'
@@ -7,11 +7,13 @@ import { messages } from 'src/translations/messages'
 import { DesktopDatePickerField } from 'src/components/DateRange'
 import { Field, Form, Formik } from 'formik'
 import shallow from 'zustand/shallow'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryCache } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
 import useClosingDayStore from 'src/zustandStore/useClosingDayStore'
+import { useParams } from 'react-router'
+import ClosingDayDialog from './ClosingDayDialog'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -101,7 +103,10 @@ const dateSelector = state => ({
 
 const ClosingDay = () => {
   const { selectedCode: { code: owner } } = useAuth()
+  const { docId } = useParams()
+  console.log('docId:', docId)
   const classes = useStyles()
+  const queryCache = useQueryCache()
   const intl = useIntl()
   const { startDateInMillis, endDateInMillis, startDate, endDate } = useClosingDayStore(dateSelector, shallow)
   /* useEffect(() => {return () => {reset()}}, [reset])*/
@@ -112,6 +117,16 @@ const ClosingDay = () => {
   }], {
     enabled: startDateInMillis && endDateInMillis,
   })
+  useEffect(() => {
+    async function fetchData () {
+      await queryCache.prefetchQuery(['queries/query_by_type', {
+        type: 'USER',
+        owner,
+      }], { throwOnError: true })
+    }
+    
+    fetchData().then().catch(error => {setState(() => {throw error})})
+  }, [owner, queryCache])
   const rows = data.results || DEBUG_DATA
   
   return (
@@ -132,6 +147,7 @@ const ClosingDay = () => {
           </Paper>
         </div>
       </div>
+      <ClosingDayDialog open={!!docId}/>
     </Page>
   )
 }

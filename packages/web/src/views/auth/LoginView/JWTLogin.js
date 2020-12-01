@@ -39,8 +39,9 @@ const JWTLogin = memo(({ className, ...rest }) => {
     async function fetchData () {
       await queryCache.prefetchQuery('jwt/codes', { throwOnError: true })
     }
+  
     fetchData().then().catch(error => {setState(() => {throw error})}) //trick to send error to boundaries
-  }, [enqueueSnackbar, intl, queryCache])
+  }, [queryCache])
   const isMountedRef = useIsMountedRef()
   const snackQueryError = useSnackQueryError()
   return (
@@ -178,7 +179,6 @@ const JWTLogin = memo(({ className, ...rest }) => {
   )
 })
 
-JWTLogin.whyDidYouRender = true
 JWTLogin.displayName = 'JWTLogin'
 
 export default JWTLogin
