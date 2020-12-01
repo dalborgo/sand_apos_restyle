@@ -104,7 +104,6 @@ const dateSelector = state => ({
 const ClosingDay = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const { docId } = useParams()
-  console.log('docId:', docId)
   const classes = useStyles()
   const queryCache = useQueryCache()
   const intl = useIntl()
