@@ -25,8 +25,13 @@ const baseOptions = {
         backgroundColor: 'rgba(0,0,0,0.075)',
       },
     },
+    MuiTableCell: {
+      root: {
+        padding: 10,
+      },
+    },
   },
-};
+}
 
 const themesOptions = [
   {
@@ -124,16 +129,16 @@ const themesOptions = [
     },
     shadows: strongShadows,
   },
-];
+]
 
 export const createTheme = (config = {}) => {
-  let themeOptions = themesOptions.find((theme) => theme.name === config.theme);
-
+  let themeOptions = themesOptions.find((theme) => theme.name === config.theme)
+  
   if (!themeOptions) {
     log.warn(new Error(`The theme ${config.theme} is not valid`));
-    [themeOptions] = themesOptions;
+    [themeOptions] = themesOptions
   }
-
+  
   let theme = createMuiTheme(
     _.merge(
       {},
@@ -141,11 +146,11 @@ export const createTheme = (config = {}) => {
       themeOptions,
       { direction: config.direction }
     )
-  );
-
+  )
+  
   if (config.responsiveFontSizes) {
-    theme = responsiveFontSizes(theme);
+    theme = responsiveFontSizes(theme)
   }
-
-  return theme;
+  
+  return theme
 }

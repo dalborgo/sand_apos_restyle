@@ -56,7 +56,10 @@ const RouteList = () => {
 const App = () => {
   const { settings } = useSettings()
   const { reset } = useErrorResetBoundary()
-  useMemo(() => {moment.locale(settings.locale)}, [settings.locale])  //altrimenti prende il secondo importato
+  useMemo(() => {
+    log.info('Locale:', settings.locale)
+    moment.locale(settings.locale)
+  }, [settings.locale])  //altrimenti prende il secondo importato
   const theme = createTheme({
     direction: settings.direction,
     responsiveFontSizes: settings.responsiveFontSizes,

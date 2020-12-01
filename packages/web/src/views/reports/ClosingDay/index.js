@@ -47,10 +47,12 @@ const useStyles = makeStyles((theme) => ({
 const DEBUG_DATA = [
   {
     _id: 'CLOSING_DAY_20200930225455',
-    close_date: '20200930225455',
+    date: '20200930225455',
     owner: 'TEST123',
     pu_totale_sc: 2200,
     pu_totale_st: 5000,
+    pu_totale_nc: 16,
+    pu_totale_totale: 489300,
   },
 ]
 

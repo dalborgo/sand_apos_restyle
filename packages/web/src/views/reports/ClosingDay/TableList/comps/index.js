@@ -3,6 +3,7 @@ import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import Box from '@material-ui/core/Box'
 import { VirtualTable } from '@devexpress/dx-react-grid-material-ui'
+import { useMoneyFormatter } from 'src/utils/formatters'
 
 export const LoadingComponent = ({ colSpan, idle, loading }) => {
   return (
@@ -20,4 +21,37 @@ export const LoadingComponent = ({ colSpan, idle, loading }) => {
       </Box>
     </VirtualTable.Cell>
   )
+}
+
+export const Cell = props => {
+  const { column, row } = props
+  const moneyFormatter = useMoneyFormatter()
+  if (column.name === 'income') {
+    return (
+      <VirtualTable.Cell {...props}  >
+        <Box fontWeight="bold">
+          {moneyFormatter(row.pu_totale_totale)}
+        </Box>
+        {
+          row.pu_totale_sc > 0 &&
+          <Box color="red">
+            <FormattedMessage
+              defaultMessage="Sconti"
+              id="reports.closing_day.discounts"
+            />: {moneyFormatter(row.pu_totale_sc)}
+          </Box>
+        }
+        {
+          row.pu_totale_st > 0 &&
+          <Box color="orange">
+            <FormattedMessage
+              defaultMessage="Storni"
+              id="reports.closing_day.reversal "
+            />: {moneyFormatter(row.pu_totale_st)}
+          </Box>
+        }
+      </VirtualTable.Cell>
+    )
+  }
+  return <VirtualTable.Cell {...props} />
 }
