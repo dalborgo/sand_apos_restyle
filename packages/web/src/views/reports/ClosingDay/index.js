@@ -12,7 +12,6 @@ import useAuth from 'src/hooks/useAuth'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
 import useClosingDayStore from 'src/zustandStore/useClosingDayStore'
-import useGeneralStore from 'src/zustandStore/useGeneralStore'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +43,16 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }))
+
+const DEBUG_DATA = [
+  {
+    _id: 'CLOSING_DAY_20200930225455',
+    close_date: '20200930225455',
+    owner: 'TEST123',
+    pu_totale_sc: 2200,
+    pu_totale_st: 5000,
+  },
+]
 
 const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate }) {
   console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
@@ -87,7 +96,6 @@ const dateSelector = state => ({
   state,
   reset: state.reset,
 })
-console.log(useGeneralStore.getState().priority)
 
 const ClosingDay = () => {
   const { selectedCode: { code: owner } } = useAuth()
@@ -102,13 +110,8 @@ const ClosingDay = () => {
   }], {
     enabled: startDateInMillis && endDateInMillis,
   })
-  const rows = data.results || []
-  /*
-  [
-  { _id: 1, close_date: '2020-11-15', owner: 1 },
-  { _id: 2, close_date: '2020-11-16', owner: 2 },
-  ]
-  */
+  const rows = data.results || DEBUG_DATA
+  
   return (
     <Page
       className={classes.root}

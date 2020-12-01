@@ -1,13 +1,15 @@
 import React, { memo, useCallback } from 'react'
 import { Grid, TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { LoadingComponent } from './comps'
+import { useGeneralStore } from 'src/zustandStore'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
-
+const companyData = useGeneralStore.getState().companyData
+const companySelect = ({ owner }) => companyData ? companyData?.[owner]?.name : owner
 const columns = [
   { name: 'close_date', title: 'Data' },
-  { name: 'owner', title: 'Proprietario' },
+  { name: 'owner', title: 'Proprietario', getCellValue: companySelect },
 ]
 
 const TableList = ({ rows, isLoading, isIdle }) => {

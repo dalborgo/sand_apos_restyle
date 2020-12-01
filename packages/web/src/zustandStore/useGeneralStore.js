@@ -4,6 +4,7 @@ import immerMiddleware from './immerMiddleware'
 const initialState = {
   allIn: false,
   priority: 0,
+  companyData: {},
 }
 
 const useGeneralStore = create(immerMiddleware(set => ({
