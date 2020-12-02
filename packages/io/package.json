@@ -9,6 +9,6 @@
   "dependencies": {
     "couchbase": "^3.0.7",
     "http-message-parser": "^0.0.34",
-    "swagger-client": "^3.12.0"
+    "swagger-client": "^3.12.1"
   }
 }

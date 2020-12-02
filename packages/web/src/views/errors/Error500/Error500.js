@@ -1,6 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/styles'
-import { Button, Container, Typography, useMediaQuery, useTheme } from '@material-ui/core'
+import { Button, Container, makeStyles, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import Page from 'src/components/Page'
 import { FormattedMessage, useIntl } from 'react-intl'

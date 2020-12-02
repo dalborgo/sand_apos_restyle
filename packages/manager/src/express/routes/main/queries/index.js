@@ -8,7 +8,7 @@ async function queryByType (req, res) {
   const params = Object.assign({}, req.body, req.query)
   const parsedOwner = utils.parseOwner(params)
   const { type, columns, withMeta = false, bucketName = connClass.astenposBucketName, options } = params
-  const knex_ = knex(bucketName).where({ type, owner: parsedOwner.startOwner }).select(columns)
+  const knex_ = knex({ buc: bucketName }).where({ type, owner: parsedOwner.startOwner }).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = knex_.toQuery()
   const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
@@ -21,12 +21,12 @@ async function queryById (req, res) {
   const params = Object.assign({}, req.body, req.query)
   const parsedOwner = utils.parseOwner(params)
   const { id, columns, withMeta = false, bucketName = connClass.astenposBucketName, options } = params
-  const knex_ = knex(bucketName).select(columns)
+  const knex_ = knex({ buc: bucketName }).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = `${knex_.toQuery()} USE KEYS "${id}" WHERE owner = "${parsedOwner.startOwner}"`
   const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
   if (!ok) {return res.send({ ok, message, info })}
-  res.send({ ok, results: data })
+  res.send({ ok, results: data.length ? data[0] : null })
 }
 
 function addRouters (router) {
@@ -45,7 +45,7 @@ function addRouters (router) {
       ok,
       results: data,
       message,
-      info
+      info,
     } = await couchQueries.execByService(statement, connClass.astConnection, options)
     if (!ok) {return res.send({ ok, message, info })}
     res.send({ ok, results: data })

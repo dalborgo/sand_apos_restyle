@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { makeStyles, useTheme } from '@material-ui/styles'
+import { makeStyles, useTheme } from '@material-ui/core'
 import { FastField } from 'formik'
 import Grid from '@material-ui/core/Grid'
 import { Autocomplete } from 'material-ui-formik-components/Autocomplete'

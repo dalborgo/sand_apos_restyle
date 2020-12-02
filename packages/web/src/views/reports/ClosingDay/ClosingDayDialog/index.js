@@ -1,10 +1,11 @@
 import React, { memo } from 'react'
-import { Dialog, DialogContent, DialogContentText, DialogTitle, makeStyles, withWidth, } from '@material-ui/core'
+import { Dialog, DialogContent, DialogTitle, Grid, makeStyles, withWidth } from '@material-ui/core'
 import { useHistory } from 'react-router'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import LoadingCircularBoxed from 'src/components/LoadingCircularBoxed'
 import clsx from 'clsx'
+import ClosingTable from './ClosingTable'
 
 const useStyles = makeStyles(() => ({
   dialogContent: {
@@ -19,7 +20,7 @@ const ClosingDayDialog = ({ width, docId }) => {
   const fullScreen = ['sm', 'xs'].includes(width)
   const history = useHistory()
   const classes = useStyles()
-  const { isLoading, data = {} } = useQuery(['queries/query_by_id', { id: docId, owner }])
+  const { isLoading, data, isSuccess } = useQuery(['queries/query_by_id', { id: docId, owner }], { enabled: docId })
   return (
     <Dialog
       aria-labelledby="closingDay-dialog-title"
@@ -28,23 +29,29 @@ const ClosingDayDialog = ({ width, docId }) => {
       onClose={history.goBack}
       open={!!docId}
     >
-      <DialogTitle id="closingDay-dialog-title">Titolo</DialogTitle>
+      <DialogTitle id="closingDay-dialog-title">
+        <Grid
+          container
+          justify="space-between"
+        >
+          <Grid item>
+            Apertura:
+          </Grid>
+          <Grid item>
+            Chiusura:
+          </Grid>
+        </Grid>
+      </DialogTitle>
       <DialogContent className={clsx({ [classes.dialogContent]: !fullScreen })}>
         {
           isLoading ?
             <LoadingCircularBoxed/>
             :
-            <DialogContentText>
-              {JSON.stringify(data, null, 2)}
-            </DialogContentText>
+            isSuccess && <ClosingTable data={data}/>
         }
       </DialogContent>
     </Dialog>
   )
 }
 
-function moviePropsAreEqual (prevMovie, nextMovie) {
-  return prevMovie.docId === nextMovie.docId
-}
-
-export default memo(withWidth()(ClosingDayDialog), moviePropsAreEqual)
+export default memo(withWidth()(ClosingDayDialog))
