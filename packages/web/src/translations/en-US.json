@@ -43,5 +43,6 @@
   "reports.closing_day.total": "",
   "error.MISSINGPARAMETERS": "",
   "role.role_admin": "",
-  "role.role_customer": ""
+  "role.role_customer": "",
+  "common.wait": ""
 }

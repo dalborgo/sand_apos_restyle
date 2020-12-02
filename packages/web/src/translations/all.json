@@ -40,6 +40,10 @@
     "defaultMessage": "Tutti"
   },
   {
+    "id": "common.wait",
+    "defaultMessage": "Attendi..."
+  },
+  {
     "id": "date_range.end_date",
     "defaultMessage": "Fine"
   },

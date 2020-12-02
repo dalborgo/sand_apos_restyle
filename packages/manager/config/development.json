@@ -1,4 +1,7 @@
 {
+  "express": {
+    "MAXAGE_MINUTES": 120
+  },
   "couchbase": {
     "connections": {
       "astenposServer": {

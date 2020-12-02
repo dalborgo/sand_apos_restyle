@@ -43,5 +43,6 @@
   "reports.closing_day.total": "Totale",
   "error.MISSINGPARAMETERS": "Parametri obbligatori mancanti: {parameters}",
   "role.role_admin": "Amministratore",
-  "role.role_customer": "Cliente"
+  "role.role_customer": "Cliente",
+  "common.wait": "Attendi..."
 }

@@ -1,4 +1,4 @@
-import React, { memo, setState, useEffect, useRef, useState } from 'react'
+import React, { memo, useRef, useState } from 'react'
 import Page from 'src/components/Page'
 import { Box, Button, CircularProgress, IconButton, makeStyles } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -7,7 +7,7 @@ import { DesktopDatePickerField } from 'src/components/DateRange'
 import StandardHeader from 'src/components/StandardHeader'
 import { Field, Form, Formik } from 'formik'
 import shallow from 'zustand/shallow'
-import { useQuery, useQueryCache } from 'react-query'
+import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
@@ -144,7 +144,7 @@ const ClosingDay = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const { docId } = useParams()
   const classes = useStyles()
-  const queryCache = useQueryCache()
+  //const queryCache = useQueryCache()
   const snackQueryError = useSnackQueryError()
   const intl = useIntl()
   const { startDateInMillis, endDateInMillis, startDate, endDate } = useClosingDayStore(dateSelector, shallow)
@@ -157,7 +157,7 @@ const ClosingDay = () => {
     onError: snackQueryError,
     enabled: startDateInMillis && endDateInMillis,
   })
-  useEffect(() => {
+  /*useEffect(() => {
     async function fetchData () {
       await queryCache.prefetchQuery(['queries/query_by_type', {
         type: 'USER',
@@ -166,7 +166,7 @@ const ClosingDay = () => {
     }
     
     fetchData().then().catch(error => {setState(() => {throw error})})
-  }, [owner, queryCache])
+  }, [owner, queryCache])*/
   const rows = data.results || DEBUG_DATA
   
   return (
@@ -189,7 +189,7 @@ const ClosingDay = () => {
           </Paper>
         </div>
       </div>
-      <ClosingDayDialog open={!!docId}/>
+      <ClosingDayDialog docId={docId}/>
     </Page>
   )
 }

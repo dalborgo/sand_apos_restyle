@@ -1,40 +1,38 @@
 import React, { memo } from 'react'
-import {
-  Box,
-  CircularProgress,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  withWidth,
-} from '@material-ui/core'
+import { Dialog, DialogContent, DialogContentText, DialogTitle, makeStyles, withWidth, } from '@material-ui/core'
 import { useHistory } from 'react-router'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
+import LoadingCircularBoxed from 'src/components/LoadingCircularBoxed'
+import clsx from 'clsx'
 
-const ClosingDayDialog = ({ open, width }) => {
+const useStyles = makeStyles(() => ({
+  dialogContent: {
+    minHeight: 600,
+    minWidth: 500,
+  },
+}))
+
+const ClosingDayDialog = ({ width, docId }) => {
   console.log('%cRENDER_DIALOG_CLOSING_DAY', 'color: orange')
   const { selectedCode: { code: owner } } = useAuth()
   const fullScreen = ['sm', 'xs'].includes(width)
   const history = useHistory()
-  const { isLoading, data = {} } = useQuery(['queries/query_by_type', {
-    type: 'USER',
-    owner,
-  }])
-  
+  const classes = useStyles()
+  const { isLoading, data = {} } = useQuery(['queries/query_by_id', { id: docId, owner }])
   return (
     <Dialog
       aria-labelledby="closingDay-dialog-title"
       fullScreen={fullScreen}
       keepMounted
       onClose={history.goBack}
-      open={open}
+      open={!!docId}
     >
       <DialogTitle id="closingDay-dialog-title">Titolo</DialogTitle>
-      <DialogContent>
+      <DialogContent className={clsx({ [classes.dialogContent]: !fullScreen })}>
         {
           isLoading ?
-            <Box><CircularProgress/></Box>
+            <LoadingCircularBoxed/>
             :
             <DialogContentText>
               {JSON.stringify(data, null, 2)}
@@ -44,4 +42,9 @@ const ClosingDayDialog = ({ open, width }) => {
     </Dialog>
   )
 }
-export default memo(withWidth()(ClosingDayDialog))
+
+function moviePropsAreEqual (prevMovie, nextMovie) {
+  return prevMovie.docId === nextMovie.docId
+}
+
+export default memo(withWidth()(ClosingDayDialog), moviePropsAreEqual)

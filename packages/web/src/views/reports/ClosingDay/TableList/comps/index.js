@@ -1,5 +1,5 @@
 import { Button, Typography, withStyles } from '@material-ui/core'
-import React from 'react'
+import React, { useState } from 'react'
 import { FormattedDate, FormattedMessage } from 'react-intl'
 import Box from '@material-ui/core/Box'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
@@ -7,6 +7,8 @@ import { IntegratedSummary } from '@devexpress/dx-react-grid'
 import { useMoneyFormatter } from 'src/utils/formatters'
 import moment from 'moment'
 import { useHistory } from 'react-router'
+import { useQueryCache } from 'react-query'
+import useAuth from '../../../../../hooks/useAuth'
 
 export const LoadingComponent = ({ colSpan, idle, isFetching }) => {
   return (
@@ -81,7 +83,10 @@ const baseUrl = '/app/reports/closing-day'
 const CellBase = props => {
   const { column, row, value, theme } = props
   const moneyFormatter = useMoneyFormatter()
+  const [loading, setLoading] = useState(false)
+  const { selectedCode: { code: owner } } = useAuth()
   const history = useHistory()
+  const queryCache = useQueryCache()
   const docId = row._id
   const cellStyle = { paddingLeft: theme.spacing(2) }
   if (column.name === 'income') {
@@ -114,13 +119,34 @@ const CellBase = props => {
   if (column.name === 'date') {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
-        <Button color="secondary" onClick={() => history.push(`${baseUrl}/${docId}`)} variant="contained">
-          <FormattedDate
-            day="2-digit"
-            month="short"
-            value={moment(value, 'YYYYMMDDHHmmssSSS')}
-            year="numeric"
-          />
+        <Button
+          color="secondary"
+          disabled={loading}
+          onClick={
+            async () => {
+              const queryKey = ['queries/query_by_id', { id: docId, owner }]
+              if (!queryCache.getQueryData(queryKey)) {
+                setLoading(true)
+                await queryCache.prefetchQuery(queryKey, { throwOnError: true })
+                setLoading(false)
+              }
+              history.push(`${baseUrl}/${docId}`)
+            }
+          }
+          variant="contained"
+        >
+          {
+            loading ?
+              <FormattedMessage defaultMessage="Attendi..." description="" id="common.wait"/>
+              :
+              <FormattedDate
+                day="2-digit"
+                month="short"
+                value={moment(value, 'YYYYMMDDHHmmssSSS')}
+                year="numeric"
+              />
+        
+          }
         </Button>
       </VirtualTable.Cell>
     )
