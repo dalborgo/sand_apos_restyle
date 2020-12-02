@@ -1,10 +1,10 @@
 import React, { memo, setState, useEffect, useRef, useState } from 'react'
 import Page from 'src/components/Page'
-import { Box, Button, makeStyles } from '@material-ui/core'
-import Header from './Header'
-import { useIntl } from 'react-intl'
+import { Box, Button, CircularProgress, IconButton, makeStyles } from '@material-ui/core'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { DesktopDatePickerField } from 'src/components/DateRange'
+import StandardHeader from 'src/components/StandardHeader'
 import { Field, Form, Formik } from 'formik'
 import shallow from 'zustand/shallow'
 import { useQuery, useQueryCache } from 'react-query'
@@ -14,6 +14,9 @@ import TableList from './TableList'
 import useClosingDayStore from 'src/zustandStore/useClosingDayStore'
 import { useParams } from 'react-router'
 import ClosingDayDialog from './ClosingDayDialog'
+import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
+import ReplayIcon from '@material-ui/icons/Replay'
+import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'hidden',
     flexDirection: 'column',
+  },
+  wrapper: {
+    position: 'relative',
   },
   paper: {
     height: '100%',
@@ -33,6 +39,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflowY: 'hidden',
     overflowX: 'auto',
+  },
+  progress: {
+    color: theme.palette.primary.main,
+    position: 'absolute',
+    top: 4,
+    left: 4,
   },
   innerFirst: {
     display: 'flex',
@@ -58,37 +70,64 @@ const DEBUG_DATA = [
   },
 ]
 
-const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate }) {
+function IconButtonLoader ({ onClick, isFetching }) {
+  const classes = useStyles()
+  return (
+    <Box className={classes.wrapper}>
+      <IconButton
+        color="primary"
+        onClick={onClick}
+      >
+        {isFetching ? <HourglassEmptyIcon/> : <ReplayIcon/>}
+      </IconButton>
+      {isFetching && <CircularProgress className={classes.progress} size={40} thickness={2}/>}
+    </Box>
+  )
+}
+
+const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate, refetch, isFetching }) {
   console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
   const endDateRef = useRef(null)
   const startDateRef = useRef(null)
   const [open, setOpen] = useState(false)
   const setDateRange = useClosingDayStore(state => state.setDateRange)
   return (
-    <Formik
-      initialValues={{ dateRange: [startDate, endDate] }}
-      onSubmit={
-        value => {
-          endDateRef.current.blur()
-          startDateRef.current.blur()
-          setOpen(false)
-          setDateRange(value.dateRange)
+    <Box alignItems="center" display="flex">
+      <Box mr={2}>
+        <Formik
+          initialValues={{ dateRange: [startDate, endDate] }}
+          onSubmit={
+            value => {
+              endDateRef.current.blur()
+              startDateRef.current.blur()
+              setOpen(false)
+              setDateRange(value.dateRange)
+            }
+          }
+        >
+          <Form>
+            <Field
+              component={DesktopDatePickerField}
+              endDateRef={endDateRef}
+              name="dateRange"
+              open={open}
+              setDateRange={setDateRange}
+              setOpen={setOpen}
+              startDateRef={startDateRef}
+            />
+            <Button style={{ display: 'none' }} type="submit"/>
+          </Form>
+        </Formik>
+      </Box>
+      <IconButtonLoader
+        isFetching={isFetching}
+        onClick={
+          () => {
+            refetch().then()
+          }
         }
-      }
-    >
-      <Form>
-        <Field
-          component={DesktopDatePickerField}
-          endDateRef={endDateRef}
-          name="dateRange"
-          open={open}
-          setDateRange={setDateRange}
-          setOpen={setOpen}
-          startDateRef={startDateRef}
-        />
-        <Button style={{ display: 'none' }} type="submit"/>
-      </Form>
-    </Formik>
+      />
+    </Box>
   )
 }))
 
@@ -106,14 +145,16 @@ const ClosingDay = () => {
   const { docId } = useParams()
   const classes = useStyles()
   const queryCache = useQueryCache()
+  const snackQueryError = useSnackQueryError()
   const intl = useIntl()
   const { startDateInMillis, endDateInMillis, startDate, endDate } = useClosingDayStore(dateSelector, shallow)
   /* useEffect(() => {return () => {reset()}}, [reset])*/
-  const { isLoading, data = {}, isIdle } = useQuery(['reports/closing_days', {
+  const { data = {}, isIdle, refetch, isFetching } = useQuery(['reports/closing_days', {
     startDateInMillis,
     endDateInMillis,
     owner,
   }], {
+    onError: snackQueryError,
     enabled: startDateInMillis && endDateInMillis,
   })
   useEffect(() => {
@@ -134,15 +175,17 @@ const ClosingDay = () => {
       title={intl.formatMessage(messages['menu_closing_day'])}
     >
       <Box p={3} pb={2}>
-        <Header/>
+        <StandardHeader>
+          <FormattedMessage defaultMessage="Chiusure di giornata" id="reports.closing_day.header_title"/>
+        </StandardHeader>
       </Box>
       <div className={classes.content}>
         <div className={classes.innerFirst}>
           <Box display="flex">
-            <FormikWrapper endDate={endDate} startDate={startDate}/>
+            <FormikWrapper endDate={endDate} isFetching={isFetching} refetch={refetch} startDate={startDate}/>
           </Box>
           <Paper className={classes.paper}>
-            <TableList isIdle={isIdle} isLoading={isLoading} rows={rows}/>
+            <TableList isFetching={isFetching} isIdle={isIdle} rows={rows}/>
           </Paper>
         </div>
       </div>

@@ -21,6 +21,7 @@ import NavItem from './NavItem'
 import { isMenuLinkToShow } from 'src/utils/logics'
 import { messages } from 'src/translations/messages'
 import { useIntl } from 'react-intl'
+import { useRoleFormatter } from 'src/utils/formatters'
 
 function renderNavItems ({
   depth = 0,
@@ -118,6 +119,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
   const location = useLocation()
   const { user } = useAuth()
   const PerfectScrollbarRef = useRef(null)
+  const roleFormatter = useRoleFormatter()
   const intl = useIntl()
   useEffect(() => {
     if (openMobile && setMobileNavOpen) {
@@ -163,14 +165,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
               color="textSecondary"
               variant="body2"
             >
-              Your tier:
-              {' '}
-              <Link
-                component={RouterLink}
-                to="/pricing"
-              >
-                {' '}
-              </Link>
+              {roleFormatter(user.priority)}
             </Typography>
           </Box>
         </Box>

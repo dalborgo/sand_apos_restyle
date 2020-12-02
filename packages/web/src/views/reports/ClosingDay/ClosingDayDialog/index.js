@@ -6,16 +6,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Slide,
   withWidth,
 } from '@material-ui/core'
 import { useHistory } from 'react-router'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 
-const Transition = React.forwardRef(function Transition (props, ref) {
-  return <Slide ref={ref} {...props} />
-})
 const ClosingDayDialog = ({ open, width }) => {
   console.log('%cRENDER_DIALOG_CLOSING_DAY', 'color: orange')
   const { selectedCode: { code: owner } } = useAuth()
@@ -33,7 +29,6 @@ const ClosingDayDialog = ({ open, width }) => {
       keepMounted
       onClose={history.goBack}
       open={open}
-      TransitionComponent={Transition}
     >
       <DialogTitle id="closingDay-dialog-title">Titolo</DialogTitle>
       <DialogContent>

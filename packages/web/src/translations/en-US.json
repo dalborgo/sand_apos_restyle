@@ -36,5 +36,12 @@
   "table.select_date": "",
   "reports.closing_day.discounts": "",
   "reports.closing_day.sconti": "",
-  "reports.closing_day.reversal": ""
+  "reports.closing_day.reversal": "",
+  "loading": "",
+  "reports.closing_day.tot_discounts": "",
+  "reports.closing_day.tot_reversal": "",
+  "reports.closing_day.total": "",
+  "error.MISSINGPARAMETERS": "",
+  "role.role_admin": "",
+  "role.role_customer": ""
 }

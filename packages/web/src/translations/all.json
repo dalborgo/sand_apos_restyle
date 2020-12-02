@@ -52,6 +52,10 @@
     "defaultMessage": "Connessione rifiutata!"
   },
   {
+    "id": "error.MISSINGPARAMETERS",
+    "defaultMessage": "Parametri obbligatori mancanti: {parameters}"
+  },
+  {
     "id": "error404.go_back_button",
     "defaultMessage": "Torna alla pagina principale"
   },
@@ -96,6 +100,10 @@
     "defaultMessage": "Errore di rete: servizio non raggiungibile!"
   },
   {
+    "id": "loading",
+    "defaultMessage": "Caricamento..."
+  },
+  {
     "id": "menu.closing_day",
     "defaultMessage": "Chiusure di giornata"
   },
@@ -133,8 +141,28 @@
     "defaultMessage": "Sconti"
   },
   {
+    "id": "reports.closing_day.tot_discounts",
+    "defaultMessage": "Totale Sconti"
+  },
+  {
+    "id": "reports.closing_day.tot_reversal",
+    "defaultMessage": "Totale Storni"
+  },
+  {
+    "id": "reports.closing_day.total",
+    "defaultMessage": "Totale"
+  },
+  {
     "id": "reports.header.list_documents",
     "defaultMessage": "Lista Documenti"
+  },
+  {
+    "id": "role.role_admin",
+    "defaultMessage": "Amministratore"
+  },
+  {
+    "id": "role.role_customer",
+    "defaultMessage": "Cliente"
   },
   {
     "id": "table.no_data",

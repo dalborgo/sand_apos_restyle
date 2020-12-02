@@ -1,7 +1,8 @@
 import React, { memo, useCallback } from 'react'
-import { Grid, TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
-import { Cell, LoadingComponent } from './comps'
+import { Grid, TableHeaderRow, TableSummaryRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
+import { Cell, CellHeader, CellSummary, LoadingComponent, summaryCalculator } from './comps'
 import { useGeneralStore } from 'src/zustandStore'
+import { IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
@@ -23,10 +24,14 @@ if (companyNumEntries < 2) {
   columns.shift()
 }
 
-const TableList = ({ rows, isLoading, isIdle }) => {
+const totalSummaryItems = [
+  { columnName: 'income', type: 'incomeSum' },
+]
+
+const TableList = ({ rows, isFetching, isIdle }) => {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const noDataCellComponent = useCallback(({ colSpan }) =>
-    <LoadingComponent colSpan={colSpan} idle={isIdle} loading={isLoading}/>, [isLoading, isIdle])
+    <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])
   
   return (
     <Grid
@@ -35,13 +40,18 @@ const TableList = ({ rows, isLoading, isIdle }) => {
       rootComponent={Root}
       rows={rows}
     >
+      <SummaryState
+        totalItems={totalSummaryItems}
+      />
+      <IntegratedSummary calculator={summaryCalculator}/>
       <VirtualTable
         cellComponent={Cell}
         columnExtensions={tableColumnExtensions}
         height="auto"
         noDataCellComponent={noDataCellComponent}
       />
-      <TableHeaderRow/>
+      <TableHeaderRow cellComponent={CellHeader}/>
+      <TableSummaryRow totalCellComponent={CellSummary}/>
     </Grid>
   )
 }

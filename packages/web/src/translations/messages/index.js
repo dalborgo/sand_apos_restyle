@@ -1,21 +1,33 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
-  menu_closing_day:{
+  role_customer: {
+    id: 'role.role_customer',
+    defaultMessage: 'Cliente',
+  },
+  role_admin: {
+    id: 'role.role_admin',
+    defaultMessage: 'Amministratore',
+  },
+  menu_closing_day: {
     id: 'menu.closing_day',
     defaultMessage: 'Chiusure di giornata',
   },
-  date_range_start:{
+  date_range_start: {
     id: 'date_range.start_date',
     defaultMessage: 'Inizio',
   },
-  date_range_end:{
+  date_range_end: {
     id: 'date_range.end_date',
     defaultMessage: 'Fine',
   },
-  ECONNREFUSED:{
+  ECONNREFUSED: {
     id: 'error.ECONNREFUSED',
     defaultMessage: 'Connessione rifiutata!',
+  },
+  MISSINGPARAMETERS: {
+    id: 'error.MISSINGPARAMETERS',
+    defaultMessage: 'Parametri obbligatori mancanti: {parameters}',
   },
   common_all: {
     id: 'common.all',

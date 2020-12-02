@@ -1,13 +1,23 @@
-import _ from 'lodash'
-import { colors, createMuiTheme, responsiveFontSizes } from '@material-ui/core'
+import React from 'react'
+import merge from 'lodash/merge'
+import { colors, createMuiTheme, responsiveFontSizes, Slide } from '@material-ui/core'
 import { THEMES } from 'src/constants'
 import { softShadows, strongShadows } from './shadows'
 import typography from './typography'
 import log from '@adapter/common/src/log'
 
+const Transition = React.forwardRef(function Transition (props, ref) {
+  return <Slide ref={ref} {...props} />
+})
+
 const baseOptions = {
   direction: 'ltr',
   typography,
+  props: {
+    MuiDialog: {
+      TransitionComponent: Transition,
+    },
+  },
   overrides: {
     MuiLinearProgress: {
       root: {
@@ -23,11 +33,6 @@ const baseOptions = {
     MuiChip: {
       root: {
         backgroundColor: 'rgba(0,0,0,0.075)',
-      },
-    },
-    MuiTableCell: {
-      root: {
-        padding: 10,
       },
     },
   },
@@ -131,6 +136,7 @@ const themesOptions = [
   },
 ]
 
+
 export const createTheme = (config = {}) => {
   let themeOptions = themesOptions.find((theme) => theme.name === config.theme)
   
@@ -140,7 +146,7 @@ export const createTheme = (config = {}) => {
   }
   
   let theme = createMuiTheme(
-    _.merge(
+    merge(
       {},
       baseOptions,
       themeOptions,

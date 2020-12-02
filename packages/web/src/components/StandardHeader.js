@@ -1,8 +1,7 @@
 import React, { memo } from 'react'
 import { Grid, Typography } from '@material-ui/core'
-import { FormattedMessage } from 'react-intl'
 
-const Header = memo(function BrowserHeader () {
+const Header = memo(function BrowserHeader ({ children }) {
   return (
     <Grid
       container
@@ -16,7 +15,7 @@ const Header = memo(function BrowserHeader () {
               color="textPrimary"
               variant="h4"
             >
-              <FormattedMessage defaultMessage="Lista Documenti" id="reports.header.list_documents"/>
+              {children}
             </Typography>
           </Grid>
         </Grid>

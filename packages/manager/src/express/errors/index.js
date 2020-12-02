@@ -1,7 +1,9 @@
 export class BadRequest extends Error {
-  constructor (message = 'Bad Request') {
+  constructor (code, values = [], message = 'Bad Request') {
     super(message)
     this.status = 400
+    this.code = code
+    this.values = values
   }
 }
 

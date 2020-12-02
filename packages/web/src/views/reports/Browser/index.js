@@ -7,7 +7,7 @@ import SearchBox from './SearchBox'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { axiosLocalInstance, useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import { useHistory, useParams } from 'react-router'
-import Header from './Header'
+import StandardHeader from 'src/components/StandardHeader'
 import { useSnackbar } from 'notistack'
 import SaveIcon from '@material-ui/icons/Save'
 import Fab from '@material-ui/core/Fab'
@@ -352,7 +352,9 @@ const BrowserView = () => {
     >
       <Hidden xsDown>
         <Box p={3} pb={2}>
-          <Header/>
+          <StandardHeader>
+            <FormattedMessage defaultMessage="Lista Documenti" id="reports.header.list_documents"/>
+          </StandardHeader>
         </Box>
         <div className={classes.content}>
           <div className={classes.innerFirst}>

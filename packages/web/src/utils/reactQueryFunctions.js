@@ -54,7 +54,8 @@ export function useSnackQueryError () {
       if (isNetworkError) {
         enqueueSnackbar(intl.formatMessage(messages['network_error']), { variant: 'default' })
       } else if (responseData) {
-        enqueueSnackbar(responseData.message || intl.formatMessage(messages[responseData.code]))
+        const { values, code: errCode } = responseData.err || {}
+        enqueueSnackbar(intl.formatMessage(messages[responseData.code || errCode], values) || responseData.message)
       } else {
         log.debug('error code:', err.code)
         enqueueSnackbar(messages[err.code] ? intl.formatMessage(messages[err.code]) : message)

@@ -36,5 +36,12 @@
   "table.select_date": "Seleziona date!",
   "reports.closing_day.discounts": "Sconti",
   "reports.closing_day.sconti": "Sconti",
-  "reports.closing_day.reversal": "Storni"
+  "reports.closing_day.reversal": "Storni",
+  "loading": "Caricamento...",
+  "reports.closing_day.tot_discounts": "Totale Sconti",
+  "reports.closing_day.tot_reversal": "Totale Storni",
+  "reports.closing_day.total": "Totale",
+  "error.MISSINGPARAMETERS": "Parametri obbligatori mancanti: {parameters}",
+  "role.role_admin": "Amministratore",
+  "role.role_customer": "Cliente"
 }

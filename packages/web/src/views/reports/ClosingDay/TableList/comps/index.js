@@ -1,19 +1,20 @@
-import { Button, CircularProgress, Typography } from '@material-ui/core'
+import { Button, Typography, withStyles } from '@material-ui/core'
 import React from 'react'
 import { FormattedDate, FormattedMessage } from 'react-intl'
 import Box from '@material-ui/core/Box'
-import { VirtualTable } from '@devexpress/dx-react-grid-material-ui'
+import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
+import { IntegratedSummary } from '@devexpress/dx-react-grid'
 import { useMoneyFormatter } from 'src/utils/formatters'
 import moment from 'moment'
 import { useHistory } from 'react-router'
 
-export const LoadingComponent = ({ colSpan, idle, loading }) => {
+export const LoadingComponent = ({ colSpan, idle, isFetching }) => {
   return (
     <VirtualTable.Cell colSpan={colSpan}>
       <Box display="flex" justifyContent="center" p={5}>
         {
-          loading ?
-            <CircularProgress/>
+          isFetching ?
+            <Typography><FormattedMessage defaultMessage="Caricamento..." id="loading"/></Typography>
             :
             idle ?
               <Typography><FormattedMessage defaultMessage="Seleziona date!" id="table.select_date"/></Typography>
@@ -24,15 +25,68 @@ export const LoadingComponent = ({ colSpan, idle, loading }) => {
     </VirtualTable.Cell>
   )
 }
+
+export const summaryCalculator = (type, rows, getValue) => {
+  if (type === 'incomeSum') {
+    return rows.reduce((prev, curr) => {
+      prev.tot += curr.pu_totale_totale
+      prev.sc += curr.pu_totale_sc
+      prev.st += curr.pu_totale_st
+      return prev
+    }, { tot: 0, sc: 0, st: 0 })
+  } else {
+    return IntegratedSummary.defaultCalculator(type, rows, getValue)
+  }
+}
+export const SummaryCellBase = props => {
+  const { column, children } = props
+  const moneyFormatter = useMoneyFormatter()
+  if (column.name === 'income') {
+    const { columnSummaries } = children.props || {}
+    const [first] = columnSummaries
+    return (
+      <VirtualTable.Cell {...props}>
+        <Box color="black" fontWeight="bold">
+          <FormattedMessage
+            defaultMessage="Totale"
+            id="reports.closing_day.total"
+          />: {moneyFormatter(first.value.tot)}
+        </Box>
+        {
+          first.value.sc > 0 &&
+          <Box color="red">
+            <FormattedMessage
+              defaultMessage="Totale Sconti"
+              id="reports.closing_day.tot_discounts"
+            />: {moneyFormatter(first.value.sc)}
+          </Box>
+        }
+        {
+          first.value.st > 0 &&
+          <Box color="orange">
+            <FormattedMessage
+              defaultMessage="Totale Storni"
+              id="reports.closing_day.tot_reversal "
+            />: {moneyFormatter(first.value.st)}
+          </Box>
+        }
+      </VirtualTable.Cell>
+    )
+  } else {
+    return <VirtualTable.Cell {...props}/>
+  }
+}
 const baseUrl = '/app/reports/closing-day'
-export const Cell = props => {
-  const { column, row, value } = props
+
+const CellBase = props => {
+  const { column, row, value, theme } = props
   const moneyFormatter = useMoneyFormatter()
   const history = useHistory()
   const docId = row._id
+  const cellStyle = { paddingLeft: theme.spacing(2) }
   if (column.name === 'income') {
     return (
-      <VirtualTable.Cell {...props}  >
+      <VirtualTable.Cell {...props}>
         <Box fontWeight="bold">
           {moneyFormatter(row.pu_totale_totale)}
         </Box>
@@ -59,7 +113,7 @@ export const Cell = props => {
   }
   if (column.name === 'date') {
     return (
-      <VirtualTable.Cell {...props}  >
+      <VirtualTable.Cell {...props} style={cellStyle}>
         <Button color="secondary" onClick={() => history.push(`${baseUrl}/${docId}`)} variant="contained">
           <FormattedDate
             day="2-digit"
@@ -71,5 +125,28 @@ export const Cell = props => {
       </VirtualTable.Cell>
     )
   }
-  return <VirtualTable.Cell {...props} />
+  return <VirtualTable.Cell {...props} style={cellStyle}/>
 }
+
+const styles = theme => ({
+  cell: {
+    padding: theme.spacing(1, 2),
+  },
+})
+
+export const Cell = withStyles(styles, { withTheme: true })(
+  CellBase
+)
+export const CellSummary = withStyles(styles, { withTheme: true })(
+  SummaryCellBase
+)
+
+export const CellHeader = withStyles(styles, { withTheme: true })(
+  ({ classes, theme, ...rest }) => (
+    <TableHeaderRow.Cell
+      {...rest}
+      className={classes.cell}
+      style={{ paddingLeft: theme.spacing(2) }}
+    />
+  )
+)

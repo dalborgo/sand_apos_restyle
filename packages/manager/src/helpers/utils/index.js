@@ -1,3 +1,5 @@
+import { BadRequest } from '../../express/errors'
+
 function parseOwner ({ owner }) {
   const ownerArray = Array.isArray(owner) ? owner : [owner]
   const [startOwner] = ownerArray
@@ -27,7 +29,7 @@ function controlParameters (query, requiredKeys) {
   }
   if (out.length) {
     errors = out.join(', ')
-    throw Error(`Mandatory params missing: ${errors}!`)
+    throw new BadRequest('MISSINGPARAMETERS', { parameters: errors })
   }
 }
 

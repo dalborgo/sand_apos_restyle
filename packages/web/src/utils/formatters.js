@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
+import { messages } from 'src/translations/messages'
 
 const defaultCurrency = {
   it: 'EUR',
@@ -15,4 +16,19 @@ export function useMoneyFormatter () {
       })
   })
   return moneyFormatter
+}
+
+export function useRoleFormatter () {
+  const intl = useIntl()
+  const [roleFormatter] = useState(() => {
+    return priority => {
+      switch (priority) {
+        case 4:
+          return intl.formatMessage(messages['role_admin'])
+        default:
+          return intl.formatMessage(messages['role_customer'])
+      }
+    }
+  })
+  return roleFormatter
 }
