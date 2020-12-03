@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
+import moment from 'moment'
+import isDate from 'lodash/isDate'
 
 const defaultCurrency = {
   it: 'EUR',
@@ -16,6 +18,25 @@ export function useMoneyFormatter () {
       })
   })
   return moneyFormatter
+}
+
+const defaultDateFormat = {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+}
+
+export function useDateFormatter () {
+  const intl = useIntl()
+  const [dateFormatter] = useState(() => {
+    return (date, options) => {
+      let date_ = date
+      if (!isDate(date)) {date_ = moment(date_, 'YYYYMMDDHHmmssSSS')}
+      const options_ = Object.assign(defaultDateFormat, options)
+      return intl.formatDate(date_, options_)
+    }
+  })
+  return dateFormatter
 }
 
 export function useRoleFormatter () {

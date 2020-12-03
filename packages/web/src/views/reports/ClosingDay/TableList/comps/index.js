@@ -145,7 +145,6 @@ const CellBase = props => {
                 value={moment(value, 'YYYYMMDDHHmmssSSS')}
                 year="numeric"
               />
-        
           }
         </Button>
       </VirtualTable.Cell>
