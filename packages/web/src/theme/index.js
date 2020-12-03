@@ -35,11 +35,6 @@ const baseOptions = {
         backgroundColor: 'rgba(0,0,0,0.075)',
       },
     },
-    MuiCellBase: {
-      root: {
-        padding: 0,
-      },
-    },
   },
 }
 

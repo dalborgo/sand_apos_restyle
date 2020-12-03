@@ -17,7 +17,7 @@ const useClosingDayStore = create(immerMiddleware(set => ({
       state.startDate = startDate
       state.endDate = endDate
       state.startDateInMillis = startDate.format('YYYYMMDDHHmmssSSS')
-      state.endDateInMillis = endDate.format('YYYYMMDDHHmmssSSS')
+      state.endDateInMillis = endDate.endOf('day').format('YYYYMMDDHHmmssSSS')
     }
   }),
 })))

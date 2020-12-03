@@ -21,7 +21,7 @@ export const LoadingComponent = ({ colSpan, idle, isFetching }) => {
             <Typography><FormattedMessage defaultMessage="Caricamento..." id="common.loading"/></Typography>
             :
             idle ?
-              <Typography><FormattedMessage defaultMessage="Seleziona date!" id="table.select_date"/></Typography>
+              <Typography><FormattedMessage defaultMessage="Ricerca per date" id="table.select_date"/></Typography>
               :
               <Typography><FormattedMessage defaultMessage="Nessun risultato!" id="table.no_data"/></Typography>
         }

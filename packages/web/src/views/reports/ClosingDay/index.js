@@ -17,6 +17,7 @@ import ClosingDayDialog from './ClosingDayDialog'
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
 import ReplayIcon from '@material-ui/icons/Replay'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
+import { getEffectiveFetching } from 'src/utils/logics'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -148,10 +149,10 @@ const ClosingDay = () => {
   const snackQueryError = useSnackQueryError()
   const intl = useIntl()
   let { startDateInMillis, endDateInMillis, startDate, endDate } = useClosingDayStore(dateSelector, shallow)
-  startDateInMillis = '20201101000000000'
-  endDateInMillis = '20201130000000000'
+  /*startDateInMillis = '20201101000000000'
+  endDateInMillis = '20201130000000000'*/
   /* useEffect(() => {return () => {reset()}}, [reset])*/
-  const { data = {}, isIdle, refetch, isFetching, isSuccess, isFetchedAfterMount } = useQuery(['reports/closing_days', {
+  const { data = {}, isIdle, refetch, ...rest } = useQuery(['reports/closing_days', {
     startDateInMillis,
     endDateInMillis,
     owner,
@@ -159,7 +160,7 @@ const ClosingDay = () => {
     onError: snackQueryError,
     enabled: startDateInMillis && endDateInMillis,
   })
-  const effectiveFetching = isFetching && (!isSuccess || isFetchedAfterMount)
+  const effectiveFetching = getEffectiveFetching(rest)
   /*useEffect(() => {
     async function fetchData () {
       await queryCache.prefetchQuery(['queries/query_by_type', {
