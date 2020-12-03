@@ -1,5 +1,5 @@
 import { Button, Typography, withStyles } from '@material-ui/core'
-import React, { useState } from 'react'
+import React from 'react'
 import { FormattedDate, FormattedMessage } from 'react-intl'
 import Box from '@material-ui/core/Box'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
@@ -8,7 +8,9 @@ import { useMoneyFormatter } from 'src/utils/formatters'
 import moment from 'moment'
 import { useHistory } from 'react-router'
 import { useQueryCache } from 'react-query'
-import useAuth from '../../../../../hooks/useAuth'
+import useAuth from 'src/hooks/useAuth'
+import { useGeneralStore } from 'src/zustandStore'
+import shallow from 'zustand/shallow'
 
 export const LoadingComponent = ({ colSpan, idle, isFetching }) => {
   return (
@@ -78,12 +80,13 @@ export const SummaryCellBase = props => {
     return <VirtualTable.Cell {...props}/>
   }
 }
-const baseUrl = '/app/reports/closing-day'
+
+const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
 const CellBase = props => {
   const { column, row, value, theme } = props
   const moneyFormatter = useMoneyFormatter()
-  const [loading, setLoading] = useState(false)
+  const { setLoading, loading } = useGeneralStore(loadingSel, shallow)
   const { selectedCode: { code: owner } } = useAuth()
   const history = useHistory()
   const queryCache = useQueryCache()
@@ -130,22 +133,17 @@ const CellBase = props => {
                 await queryCache.prefetchQuery(queryKey, { throwOnError: true })
                 setLoading(false)
               }
-              history.push(`${baseUrl}/${docId}`)
+              history.push(`${window.location.pathname}/${docId}`)
             }
           }
           variant="contained"
         >
-          {
-            loading ?
-              <FormattedMessage defaultMessage="Attendi..." description="" id="common.wait"/>
-              :
-              <FormattedDate
-                day="2-digit"
-                month="short"
-                value={moment(value, 'YYYYMMDDHHmmssSSS')}
-                year="numeric"
-              />
-          }
+          <FormattedDate
+            day="2-digit"
+            month="short"
+            value={moment(value, 'YYYYMMDDHHmmssSSS')}
+            year="numeric"
+          />
         </Button>
       </VirtualTable.Cell>
     )
