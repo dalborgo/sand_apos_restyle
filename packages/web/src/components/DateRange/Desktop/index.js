@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import TextField from '@material-ui/core/TextField'
 import { Collapse, makeStyles } from '@material-ui/core'
 import { DateRangeDelimiter, DateRangePicker } from '@material-ui/pickers'
@@ -29,6 +29,7 @@ const DatePickerField = ({
   const disabledEnd = !endDate && !startDate && !open
   const classes = useStyles()
   const intl = useIntl()
+  const prevStart = useRef(null)
   return (
     <DateRangePicker
       disableAutoMonthSwitching
@@ -36,17 +37,19 @@ const DatePickerField = ({
       endText={intl.formatMessage(messages.date_range_end)}
       onAccept={
         date => {
+          prevStart.current = date[0]
           setDateRange(date)
         }
       }
       onChange={
         date => {
           const [startDate, endDate] = date
-          const isSameDate = moment(startDate).isSame(endDate)
+          const isSameDate = moment(startDate).isSame(prevStart.current) && moment(startDate).isSame(endDate)
           if (isSameDate) {
             setOpen(false)
             setDateRange(date)
           }
+          prevStart.current = startDate
           form.setFieldValue(name, date, false)
         }
       }

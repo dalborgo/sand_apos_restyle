@@ -18,6 +18,7 @@ import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty'
 import ReplayIcon from '@material-ui/icons/Replay'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import { getEffectiveFetching } from 'src/utils/logics'
+import moment from 'moment'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -133,8 +134,6 @@ const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate, refetc
 }))
 
 const dateSelector = state => ({
-  startDateInMillis: state.startDateInMillis,
-  endDateInMillis: state.endDateInMillis,
   endDate: state.endDate,
   startDate: state.startDate,
   state,
@@ -146,19 +145,25 @@ const ClosingDay = () => {
   const { docId } = useParams()
   const classes = useStyles()
   //const queryCache = useQueryCache()
+  const [rows, setRows] = useState([])
   const snackQueryError = useSnackQueryError()
   const intl = useIntl()
-  let { startDateInMillis, endDateInMillis, startDate, endDate } = useClosingDayStore(dateSelector, shallow)
+  let { startDate, endDate } = useClosingDayStore(dateSelector, shallow)
   /*startDateInMillis = '20201101000000000'
   endDateInMillis = '20201130000000000'*/
   /* useEffect(() => {return () => {reset()}}, [reset])*/
-  const { data = {}, isIdle, refetch, ...rest } = useQuery(['reports/closing_days', {
-    startDateInMillis,
-    endDateInMillis,
+  const { isIdle, refetch, ...rest } = useQuery(['reports/closing_days', {
+    startDateInMillis: moment(startDate).format('YYYYMMDDHHmmssSSS'),
+    endDateInMillis: moment(endDate).format('YYYYMMDDHHmmssSSS'),
     owner,
   }], {
     onError: snackQueryError,
-    enabled: startDateInMillis && endDateInMillis,
+    enabled: startDate && endDate,
+    onSettled: data => {
+      if (data.ok) {
+        setRows(data.results)
+      }
+    },
   })
   const effectiveFetching = getEffectiveFetching(rest)
   /*useEffect(() => {
@@ -171,7 +176,7 @@ const ClosingDay = () => {
     
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryCache])*/
-  const rows = data.results || []
+  //const rows = data.results || []
   
   return (
     <Page
@@ -189,7 +194,7 @@ const ClosingDay = () => {
             <FormikWrapper endDate={endDate} isFetching={effectiveFetching} refetch={refetch} startDate={startDate}/>
           </Box>
           <Paper className={classes.paper}>
-            <TableList isFetching={effectiveFetching} isIdle={isIdle} rows={rows}/>
+            <TableList isFetching={effectiveFetching && !rows.length} isIdle={isIdle} rows={rows}/>
           </Paper>
         </div>
       </div>

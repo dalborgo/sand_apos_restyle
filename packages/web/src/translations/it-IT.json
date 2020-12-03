@@ -33,7 +33,7 @@
   "reports.closing_day.header_title": "Chiusure di giornata",
   "common.to": "a",
   "table.no_data": "Nessun risultato!",
-  "table.select_date": "Seleziona date!",
+  "table.select_date": "Ricerca per date",
   "reports.closing_day.discounts": "Sconti",
   "reports.closing_day.sconti": "Sconti",
   "reports.closing_day.reversal": "Storni",

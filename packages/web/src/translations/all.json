@@ -182,7 +182,7 @@
   },
   {
     "id": "table.select_date",
-    "defaultMessage": "Seleziona date!"
+    "defaultMessage": "Ricerca per date"
   },
   {
     "id": "views.login.installation",

@@ -11,6 +11,8 @@
 - default properties
 - new Loader
 - Summary
+  ##### Bug
+  - selezionando la data finale (con data di inizio) cerca subito.
 
 #### Select Code
 

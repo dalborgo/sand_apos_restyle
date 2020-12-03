@@ -3,9 +3,7 @@ import immerMiddleware from './immerMiddleware'
 
 const initialState = {
   startDate: null,
-  startDateInMillis: null,
   endDate: null,
-  endDateInMillis: null,
 }
 
 const useClosingDayStore = create(immerMiddleware(set => ({
@@ -16,8 +14,6 @@ const useClosingDayStore = create(immerMiddleware(set => ({
     if (startDate && endDate) {
       state.startDate = startDate
       state.endDate = endDate
-      state.startDateInMillis = startDate.format('YYYYMMDDHHmmssSSS')
-      state.endDateInMillis = endDate.endOf('day').format('YYYYMMDDHHmmssSSS')
     }
   }),
 })))

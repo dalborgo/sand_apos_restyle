@@ -1,5 +1,5 @@
 import { Button, Typography, withStyles } from '@material-ui/core'
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { FormattedDate, FormattedMessage } from 'react-intl'
 import Box from '@material-ui/core/Box'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
@@ -12,7 +12,7 @@ import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 
-export const LoadingComponent = ({ colSpan, idle, isFetching }) => {
+export const LoadingComponent = memo(function LoadingComponent ({ colSpan, idle, isFetching }) {
   return (
     <VirtualTable.Cell colSpan={colSpan} style={{ border: 'none' }}>
       <Box display="flex" justifyContent="center" p={5}>
@@ -28,7 +28,7 @@ export const LoadingComponent = ({ colSpan, idle, isFetching }) => {
       </Box>
     </VirtualTable.Cell>
   )
-}
+})
 
 export const summaryCalculator = (type, rows, getValue) => {
   if (type === 'incomeSum') {
