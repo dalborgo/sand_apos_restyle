@@ -1,5 +1,5 @@
 import { Button, Typography, withStyles } from '@material-ui/core'
-import React from 'react'
+import React, { useState } from 'react'
 import { FormattedDate, FormattedMessage } from 'react-intl'
 import Box from '@material-ui/core/Box'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
@@ -14,11 +14,11 @@ import shallow from 'zustand/shallow'
 
 export const LoadingComponent = ({ colSpan, idle, isFetching }) => {
   return (
-    <VirtualTable.Cell colSpan={colSpan}>
+    <VirtualTable.Cell colSpan={colSpan} style={{ border: 'none' }}>
       <Box display="flex" justifyContent="center" p={5}>
         {
           isFetching ?
-            <Typography><FormattedMessage defaultMessage="Caricamento..." id="loading"/></Typography>
+            <Typography><FormattedMessage defaultMessage="Caricamento..." id="common.loading"/></Typography>
             :
             idle ?
               <Typography><FormattedMessage defaultMessage="Seleziona date!" id="table.select_date"/></Typography>
@@ -86,7 +86,8 @@ const loadingSel = state => ({ setLoading: state.setLoading, loading: state.load
 const CellBase = props => {
   const { column, row, value, theme } = props
   const moneyFormatter = useMoneyFormatter()
-  const { setLoading, loading } = useGeneralStore(loadingSel, shallow)
+  const { setLoading } = useGeneralStore(loadingSel, shallow)
+  const [intLoading, setIntLoading] = useState(false)
   const { selectedCode: { code: owner } } = useAuth()
   const history = useHistory()
   const queryCache = useQueryCache()
@@ -124,13 +125,15 @@ const CellBase = props => {
       <VirtualTable.Cell {...props} style={cellStyle}>
         <Button
           color="secondary"
-          disabled={loading}
+          disabled={intLoading}
           onClick={
             async () => {
               const queryKey = ['queries/query_by_id', { id: docId, owner }]
               if (!queryCache.getQueryData(queryKey)) {
                 setLoading(true)
+                setIntLoading(true)
                 await queryCache.prefetchQuery(queryKey, { throwOnError: true })
+                setIntLoading(false)
                 setLoading(false)
               }
               history.push(`${window.location.pathname}/${docId}`)

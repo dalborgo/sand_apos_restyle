@@ -87,7 +87,7 @@ const DatePickerField = ({
                   root: classes.delimiterRoot,
                 }
               }
-            ><FormattedMessage defaultMessage="a" id="to"/>
+            ><FormattedMessage defaultMessage="a" id="common.to"/>
             </DateRangeDelimiter>
             <TextField
               {...endDateProps}

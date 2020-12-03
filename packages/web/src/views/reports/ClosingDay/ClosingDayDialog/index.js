@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react'
+import React, { memo, useEffect, useMemo } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -13,10 +13,10 @@ import { Redirect, useHistory } from 'react-router'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import CloseIcon from '@material-ui/icons/Close'
-import clsx from 'clsx'
 import ClosingTable from './ClosingTable'
 import { useDateFormatter } from 'src/utils/formatters'
-import LoadingCircularBoxed from 'src/components/LoadingCircularBoxed'
+import { useGeneralStore } from '../../../../zustandStore'
+import shallow from 'zustand/shallow'
 
 const useStyles = makeStyles(() => ({
   dialogContent: {
@@ -57,46 +57,48 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
     </Grid>
   )
 })
-
+const loadingSel = state => ({ setLoading: state.setLoading })
 const ClosingDayDialog = ({ width, docId }) => {
   console.log('%cRENDER_DIALOG_CLOSING_DAY', 'color: orange')
   const { selectedCode: { code: owner } } = useAuth()
+  const { setLoading } = useGeneralStore(loadingSel, shallow)
   const fullScreen = ['sm', 'xs'].includes(width)
   const history = useHistory()
   const onClose = useMemo(() => {
     const baseUrl = window.location.pathname.replace(`/${docId}`, '')
     return () => history.push(baseUrl)
   }, [docId, history])
-  const classes = useStyles()
-  const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, owner }], { enabled: docId })
-  if (docId) {
+  
+  const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, owner }], {
+    enabled: docId,
+    onSettled: () => {
+      setLoading(false)
+    },
+  })
+  useEffect(() => {
+    if (isLoading) {
+      setLoading(true)
+    }
+  }, [isLoading, setLoading])
+  if (!isLoading && data?.ok) {
     return (
-      <Dialog
-        aria-labelledby="closingDay-dialog-title"
-        fullScreen={fullScreen}
-        keepMounted
-        onClose={onClose}
-        open={!!docId}
-      >
-        {
-          !isLoading ?
-            data.results ?
-              <>
-                <DialogTitle disableTypography id="closingDay-dialog-title">
-                  <DialogHeader data={data} onClose={onClose}/>
-                </DialogTitle>
-                <DialogContent>
-                  <ClosingTable data={data}/>
-                </DialogContent>
-              </>
-              :
-              <Redirect to="/404"/>
-            :
-            <DialogContent className={clsx({ [classes.dialogContent]: !fullScreen })}>
-              <LoadingCircularBoxed/>
-            </DialogContent>
-        }
-      </Dialog>
+      data.results ?
+        <Dialog
+          aria-labelledby="closingDay-dialog-title"
+          fullScreen={fullScreen}
+          keepMounted
+          onClose={onClose}
+          open={!!docId}
+        >
+          <DialogTitle disableTypography id="closingDay-dialog-title">
+            <DialogHeader data={data} onClose={onClose}/>
+          </DialogTitle>
+          <DialogContent>
+            <ClosingTable data={data}/>
+          </DialogContent>
+        </Dialog>
+        :
+        <Redirect to="/404"/>
     )
   } else {
     return null

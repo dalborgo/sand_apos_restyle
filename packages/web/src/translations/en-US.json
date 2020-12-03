@@ -31,18 +31,19 @@
   "date_range.start_date": "",
   "menu.closing_day": "",
   "reports.closing_day.header_title": "",
-  "to": "",
+  "common.to": "",
   "table.no_data": "",
   "table.select_date": "",
   "reports.closing_day.discounts": "",
   "reports.closing_day.sconti": "",
   "reports.closing_day.reversal": "",
-  "loading": "",
   "reports.closing_day.tot_discounts": "",
   "reports.closing_day.tot_reversal": "",
   "reports.closing_day.total": "",
   "error.MISSINGPARAMETERS": "",
   "role.role_admin": "",
   "role.role_customer": "",
-  "common.wait": ""
+  "common.wait": "",
+  "common.loading": "",
+  "loading": ""
 }

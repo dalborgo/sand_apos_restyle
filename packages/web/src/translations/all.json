@@ -40,6 +40,14 @@
     "defaultMessage": "Tutti"
   },
   {
+    "id": "common.loading",
+    "defaultMessage": "Caricamento..."
+  },
+  {
+    "id": "common.to",
+    "defaultMessage": "a"
+  },
+  {
     "id": "common.wait",
     "defaultMessage": "Attendi..."
   },
@@ -175,10 +183,6 @@
   {
     "id": "table.select_date",
     "defaultMessage": "Seleziona date!"
-  },
-  {
-    "id": "to",
-    "defaultMessage": "a"
   },
   {
     "id": "views.login.installation",

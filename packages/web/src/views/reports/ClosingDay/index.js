@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const DEBUG_DATA = [
+/*const DEBUG_DATA = [
   {
     _id: 'CLOSING_DAY_20200930225455',
     date: '20200930225455',
@@ -68,7 +68,7 @@ const DEBUG_DATA = [
     pu_totale_nc: 16,
     pu_totale_totale: 489300,
   },
-]
+]*/
 
 function IconButtonLoader ({ onClick, isFetching }) {
   const classes = useStyles()
@@ -147,9 +147,11 @@ const ClosingDay = () => {
   //const queryCache = useQueryCache()
   const snackQueryError = useSnackQueryError()
   const intl = useIntl()
-  const { startDateInMillis, endDateInMillis, startDate, endDate } = useClosingDayStore(dateSelector, shallow)
+  let { startDateInMillis, endDateInMillis, startDate, endDate } = useClosingDayStore(dateSelector, shallow)
+  startDateInMillis = '20201101000000000'
+  endDateInMillis = '20201130000000000'
   /* useEffect(() => {return () => {reset()}}, [reset])*/
-  const { data = {}, isIdle, refetch, isFetching } = useQuery(['reports/closing_days', {
+  const { data = {}, isIdle, refetch, isFetching, isSuccess, isFetchedAfterMount } = useQuery(['reports/closing_days', {
     startDateInMillis,
     endDateInMillis,
     owner,
@@ -157,6 +159,7 @@ const ClosingDay = () => {
     onError: snackQueryError,
     enabled: startDateInMillis && endDateInMillis,
   })
+  const effectiveFetching = isFetching && (!isSuccess || isFetchedAfterMount)
   /*useEffect(() => {
     async function fetchData () {
       await queryCache.prefetchQuery(['queries/query_by_type', {
@@ -167,7 +170,7 @@ const ClosingDay = () => {
     
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryCache])*/
-  const rows = data.results || DEBUG_DATA
+  const rows = data.results || []
   
   return (
     <Page
@@ -182,10 +185,10 @@ const ClosingDay = () => {
       <div className={classes.content}>
         <div className={classes.innerFirst}>
           <Box display="flex">
-            <FormikWrapper endDate={endDate} isFetching={isFetching} refetch={refetch} startDate={startDate}/>
+            <FormikWrapper endDate={endDate} isFetching={effectiveFetching} refetch={refetch} startDate={startDate}/>
           </Box>
           <Paper className={classes.paper}>
-            <TableList isFetching={isFetching} isIdle={isIdle} rows={rows}/>
+            <TableList isFetching={effectiveFetching} isIdle={isIdle} rows={rows}/>
           </Paper>
         </div>
       </div>

@@ -31,7 +31,7 @@
   "date_range.start_date": "Inizio",
   "menu.closing_day": "Chiusure di giornata",
   "reports.closing_day.header_title": "Chiusure di giornata",
-  "to": "a",
+  "common.to": "a",
   "table.no_data": "Nessun risultato!",
   "table.select_date": "Seleziona date!",
   "reports.closing_day.discounts": "Sconti",
@@ -44,5 +44,6 @@
   "error.MISSINGPARAMETERS": "Parametri obbligatori mancanti: {parameters}",
   "role.role_admin": "Amministratore",
   "role.role_customer": "Cliente",
-  "common.wait": "Attendi..."
+  "common.wait": "Attendi...",
+  "common.loading": "Caricamento..."
 }
