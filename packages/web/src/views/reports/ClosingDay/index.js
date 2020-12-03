@@ -136,8 +136,6 @@ const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate, refetc
 const dateSelector = state => ({
   endDate: state.endDate,
   startDate: state.startDate,
-  state,
-  reset: state.reset,
 })
 
 const ClosingDay = () => {
