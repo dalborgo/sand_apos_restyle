@@ -4,6 +4,7 @@ import immerMiddleware from './immerMiddleware'
 const initialState = {
   startDate: null,
   endDate: null,
+  closingRows: [],
 }
 
 const useClosingDayStore = create(immerMiddleware(set => ({
@@ -15,6 +16,9 @@ const useClosingDayStore = create(immerMiddleware(set => ({
       state.startDate = startDate
       state.endDate = endDate
     }
+  }),
+  setClosingRows: rows => set(state => {
+    state.closingRows = rows
   }),
 })))
 

@@ -133,9 +133,11 @@ const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate, refetc
   )
 }))
 
-const dateSelector = state => ({
+const closingSelector = state => ({
   endDate: state.endDate,
   startDate: state.startDate,
+  closingRows: state.closingRows,
+  setClosingRows: state.setClosingRows,
 })
 
 const ClosingDay = () => {
@@ -143,12 +145,9 @@ const ClosingDay = () => {
   const { docId } = useParams()
   const classes = useStyles()
   //const queryCache = useQueryCache()
-  const [rows, setRows] = useState([])
   const snackQueryError = useSnackQueryError()
   const intl = useIntl()
-  let { startDate, endDate } = useClosingDayStore(dateSelector, shallow)
-  /*startDateInMillis = '20201101000000000'
-  endDateInMillis = '20201130000000000'*/
+  let { startDate, endDate, closingRows, setClosingRows } = useClosingDayStore(closingSelector, shallow)
   /* useEffect(() => {return () => {reset()}}, [reset])*/
   const { isIdle, refetch, ...rest } = useQuery(['reports/closing_days', {
     startDateInMillis: moment(startDate).format('YYYYMMDDHHmmssSSS'),
@@ -159,7 +158,7 @@ const ClosingDay = () => {
     enabled: startDate && endDate,
     onSettled: data => {
       if (data.ok) {
-        setRows(data.results)
+        setClosingRows(data.results)
       }
     },
   })
@@ -175,7 +174,6 @@ const ClosingDay = () => {
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryCache])*/
   //const rows = data.results || []
-  
   return (
     <Page
       className={classes.root}
@@ -192,7 +190,7 @@ const ClosingDay = () => {
             <FormikWrapper endDate={endDate} isFetching={effectiveFetching} refetch={refetch} startDate={startDate}/>
           </Box>
           <Paper className={classes.paper}>
-            <TableList isFetching={effectiveFetching && !rows.length} isIdle={isIdle} rows={rows}/>
+            <TableList isFetching={effectiveFetching && !closingRows.length} isIdle={isIdle} rows={closingRows}/>
           </Paper>
         </div>
       </div>

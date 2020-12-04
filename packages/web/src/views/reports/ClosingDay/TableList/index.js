@@ -15,7 +15,7 @@ const tableColumnExtensions = [
 const totalSummaryItems = [
   { columnName: 'income', type: 'incomeSum' },
 ]
-const TableList = ({ rows, isFetching, isIdle }) => {
+const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const [columns] = useState(() => {
     const companyData = useGeneralStore.getState().companyData
@@ -57,6 +57,6 @@ const TableList = ({ rows, isFetching, isIdle }) => {
       <TableSummaryRow totalCellComponent={CellSummary}/>
     </Grid>
   )
-}
-
-export default memo(TableList)
+})
+TableList.whyDidYouRender = true
+export default TableList

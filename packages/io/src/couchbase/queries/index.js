@@ -26,7 +26,8 @@ async function exec (statement, cluster, options_ = {}) {
 }
 /**
  * @options es. { args: [ "smith", 45 ], scan_consistency: ... }
- * doc: https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html
+ * DOC:
+ * - [N1Ql rest api](https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html)
  */
 async function execByService (statement, connection = {}, options = {}) {
   const { HOST, PASSWORD, BUCKET_NAME } = connection

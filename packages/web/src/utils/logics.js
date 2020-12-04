@@ -7,5 +7,5 @@ export const isMenuLinkToShow = (item, payload = {}) => {
 export const getEffectiveFetching = ({
   isFetching,
   isSuccess,
-  isFetchedAfterMount
+  isFetchedAfterMount,
 }) => isFetching && (!isSuccess || isFetchedAfterMount)

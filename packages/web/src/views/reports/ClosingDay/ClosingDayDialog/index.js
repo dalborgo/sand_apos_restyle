@@ -18,10 +18,13 @@ import { useDateFormatter } from 'src/utils/formatters'
 import { useGeneralStore } from '../../../../zustandStore'
 import shallow from 'zustand/shallow'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   dialogContent: {
     minHeight: 600,
     minWidth: 500,
+  },
+  dialogTitle: {
+    paddingBottom: theme.spacing(1),
   },
   boldText: {
     fontWeight: 'bold',
@@ -60,6 +63,7 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
 const loadingSel = state => ({ setLoading: state.setLoading })
 const ClosingDayDialog = ({ width, docId }) => {
   console.log('%cRENDER_DIALOG_CLOSING_DAY', 'color: orange')
+  const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const fullScreen = ['sm', 'xs'].includes(width)
@@ -90,7 +94,7 @@ const ClosingDayDialog = ({ width, docId }) => {
           onClose={onClose}
           open={!!docId}
         >
-          <DialogTitle disableTypography id="closingDay-dialog-title">
+          <DialogTitle className={classes.dialogTitle} disableTypography id="closingDay-dialog-title">
             <DialogHeader data={data} onClose={onClose}/>
           </DialogTitle>
           <DialogContent>
