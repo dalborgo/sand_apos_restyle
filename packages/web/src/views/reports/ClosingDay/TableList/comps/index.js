@@ -50,7 +50,7 @@ export const SummaryCellBase = props => {
     const [first] = columnSummaries
     return (
       <VirtualTable.Cell {...props}>
-        <Box color="black" fontWeight="bold">
+        <Box color="text.primary" fontWeight="bold">
           <FormattedMessage
             defaultMessage="Totale"
             id="reports.closing_day.total"

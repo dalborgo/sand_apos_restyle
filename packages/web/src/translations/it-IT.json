@@ -45,5 +45,18 @@
   "role.role_admin": "Amministratore",
   "role.role_customer": "Cliente",
   "common.wait": "Attendi...",
-  "common.loading": "Caricamento..."
+  "common.loading": "Caricamento...",
+  "closing_day.discounts": "Sconti",
+  "closing_day.transfers": "Storni",
+  "closing_day.type_of_document": "Tipo di Documento",
+  "closing_day.type_of_payment": "Tipo di Pagamento",
+  "common.total": "Totale",
+  "common.covers": "Coperti",
+  "common.date": "Data",
+  "common.income": "Incassato",
+  "common.building": "Struttura",
+  "common.discounts": "Sconti",
+  "common.transfers": "Storni",
+  "common.type_of_document": "Tipo di Documento",
+  "common.type_of_payment": "Tipo di Pagamento"
 }

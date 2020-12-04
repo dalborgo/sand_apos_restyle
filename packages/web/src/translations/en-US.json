@@ -45,5 +45,18 @@
   "role.role_customer": "",
   "common.wait": "",
   "common.loading": "",
-  "loading": ""
+  "loading": "",
+  "closing_day.discounts": "",
+  "closing_day.transfers": "",
+  "closing_day.type_of_document": "",
+  "closing_day.type_of_payment": "",
+  "common.total": "",
+  "common.covers": "",
+  "common.date": "",
+  "common.income": "",
+  "common.building": "",
+  "common.discounts": "",
+  "common.transfers": "",
+  "common.type_of_document": "",
+  "common.type_of_payment": ""
 }

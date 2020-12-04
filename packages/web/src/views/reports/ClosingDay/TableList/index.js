@@ -3,6 +3,8 @@ import { Grid, TableHeaderRow, TableSummaryRow, VirtualTable } from '@devexpress
 import { Cell, CellHeader, CellSummary, LoadingComponent, summaryCalculator } from './comps'
 import { useGeneralStore } from 'src/zustandStore'
 import { IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
+import { useIntl } from 'react-intl'
+import { messages } from 'src/translations/messages'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
@@ -17,14 +19,15 @@ const totalSummaryItems = [
 ]
 const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
+  const intl = useIntl()
   const [columns] = useState(() => {
     const companyData = useGeneralStore.getState().companyData
     const companySelect = ({ owner }) => companyData ? companyData?.[owner]?.name : owner
     const columns_ = [
-      { name: 'owner', title: 'Struttura', getCellValue: companySelect },
-      { name: 'date', title: 'Data' },
-      { name: 'pu_totale_nc', title: 'Coperti' },
-      { name: 'income', title: 'Incassato' },
+      { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect },
+      { name: 'date', title: intl.formatMessage(messages['common_date']) },
+      { name: 'pu_totale_nc', title: intl.formatMessage(messages['common_covers']) },
+      { name: 'income', title: intl.formatMessage(messages['common_income']) },
     ]
     const companyNumEntries = Object.keys(companyData).length
     if (companyNumEntries < 2) {

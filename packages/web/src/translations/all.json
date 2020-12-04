@@ -36,8 +36,44 @@
     "defaultMessage": "Nome utente o password errati!"
   },
   {
+    "id": "closing_day.discounts",
+    "defaultMessage": "Sconti"
+  },
+  {
+    "id": "closing_day.transfers",
+    "defaultMessage": "Storni"
+  },
+  {
+    "id": "closing_day.type_of_document",
+    "defaultMessage": "Tipo di Documento"
+  },
+  {
+    "id": "closing_day.type_of_payment",
+    "defaultMessage": "Tipo di Pagamento"
+  },
+  {
     "id": "common.all",
     "defaultMessage": "Tutti"
+  },
+  {
+    "id": "common.building",
+    "defaultMessage": "Struttura"
+  },
+  {
+    "id": "common.covers",
+    "defaultMessage": "Coperti"
+  },
+  {
+    "id": "common.date",
+    "defaultMessage": "Data"
+  },
+  {
+    "id": "common.discounts",
+    "defaultMessage": "Sconti"
+  },
+  {
+    "id": "common.income",
+    "defaultMessage": "Incassato"
   },
   {
     "id": "common.loading",
@@ -46,6 +82,22 @@
   {
     "id": "common.to",
     "defaultMessage": "a"
+  },
+  {
+    "id": "common.total",
+    "defaultMessage": "Totale"
+  },
+  {
+    "id": "common.transfers",
+    "defaultMessage": "Storni"
+  },
+  {
+    "id": "common.type_of_document",
+    "defaultMessage": "Tipo di Documento"
+  },
+  {
+    "id": "common.type_of_payment",
+    "defaultMessage": "Tipo di Pagamento"
   },
   {
     "id": "common.wait",

@@ -33,6 +33,42 @@ export const messages = defineMessages({
     id: 'common.all',
     defaultMessage: 'Tutti',
   },
+  common_total: {
+    id: 'common.total',
+    defaultMessage: 'Totale',
+  },
+  common_covers: {
+    id: 'common.covers',
+    defaultMessage: 'Coperti',
+  },
+  common_date: {
+    id: 'common.date',
+    defaultMessage: 'Data',
+  },
+  common_building: {
+    id: 'common.building',
+    defaultMessage: 'Struttura',
+  },
+  common_income: {
+    id: 'common.income',
+    defaultMessage: 'Incassato',
+  },
+  common_type_document: {
+    id: 'common.type_of_document',
+    defaultMessage: 'Tipo di Documento',
+  },
+  common_type_payment: {
+    id: 'common.type_of_payment',
+    defaultMessage: 'Tipo di Pagamento',
+  },
+  common_discounts: {
+    id: 'common.discounts',
+    defaultMessage: 'Sconti',
+  },
+  common_transfers: {
+    id: 'common.transfers',
+    defaultMessage: 'Storni',
+  },
   network_error: {
     id: 'general.network_error',
     defaultMessage: 'Errore di rete: servizio non raggiungibile!',

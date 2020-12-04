@@ -13,8 +13,16 @@ export const calculateClosingTable = closing => {
     const { value, name } = mode
     daily = {
       ...daily,
-      [`tot_${value}`]: { name, val: closing[`pu_totale_${value}_totale`], num: closing[`pu_totale_${value}_nd`] },
-      [`tot_${value}_sc`]: { name, val: closing[`pu_totale_${value}_sc`], num: closing[`pu_totale_${value}_ns`] },
+      [`tot_${value}`]: {
+        display: name,
+        val: closing[`pu_totale_${value}_totale`],
+        num: closing[`pu_totale_${value}_nd`]
+      },
+      [`tot_${value}_sc`]: {
+        display: name,
+        val: closing[`pu_totale_${value}_sc`],
+        num: closing[`pu_totale_${value}_ns`]
+      },
       tot_st: { val: closing['pu_totale_st'], num: closing['pu_totale_nst'] },
       tot_sc: { val: closing['pu_totale_sc'], num: closing['pu_totale_ns'] },
       tot: { val: closing['pu_totale_totale'], num: closing['pu_totale_nd'] },
