@@ -1,6 +1,6 @@
 import { Button, Typography, withStyles } from '@material-ui/core'
 import React, { memo, useState } from 'react'
-import { FormattedDate, FormattedMessage } from 'react-intl'
+import { FormattedDate, FormattedMessage, useIntl } from 'react-intl'
 import Box from '@material-ui/core/Box'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { IntegratedSummary } from '@devexpress/dx-react-grid'
@@ -11,6 +11,7 @@ import { useQueryCache } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
+import { messages } from '../../../../../translations/messages'
 
 export const LoadingComponent = memo(function LoadingComponent ({ colSpan, idle, isFetching }) {
   return (
@@ -86,6 +87,7 @@ const loadingSel = state => ({ setLoading: state.setLoading, loading: state.load
 const CellBase = props => {
   const { column, row, value, theme } = props
   const moneyFormatter = useMoneyFormatter()
+  const intl = useIntl()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const [intLoading, setIntLoading] = useState(false)
   const { selectedCode: { code: owner } } = useAuth()
@@ -102,19 +104,13 @@ const CellBase = props => {
         {
           row.pu_totale_sc > 0 &&
           <Box color="red">
-            <FormattedMessage
-              defaultMessage="Sconti"
-              id="reports.closing_day.discounts"
-            />: {moneyFormatter(row.pu_totale_sc)}
+            {intl.formatMessage(messages['common_discounts'])}: {moneyFormatter(row.pu_totale_sc)}
           </Box>
         }
         {
           row.pu_totale_st > 0 &&
           <Box color="orange">
-            <FormattedMessage
-              defaultMessage="Storni"
-              id="reports.closing_day.reversal "
-            />: {moneyFormatter(row.pu_totale_st)}
+            {intl.formatMessage(messages['common_reversals'])}: {moneyFormatter(row.pu_totale_st)}
           </Box>
         }
       </VirtualTable.Cell>

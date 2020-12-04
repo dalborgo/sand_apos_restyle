@@ -103,9 +103,13 @@ function ClosingTable ({ data }) {
           <SimpleRow isBold values={{ left: intlTotal, right: moneyFormatter(elab['tot'].val) }}/>
           <WrapperRows closing={elab} title={intl.formatMessage(messages['common_type_document'])} values={modes}/>
           <WrapperRows closing={elab} title={intl.formatMessage(messages['common_type_payment'])} values={incomes}/>
-          <WrapperRows closing={elab} post="sc" title={intl.formatMessage(messages['common_discounts'])}
-                       values={modes}/>
-          <TitleRow title={intl.formatMessage(messages['common_transfers'])}/>
+          <WrapperRows
+            closing={elab}
+            post="sc"
+            title={intl.formatMessage(messages['common_discounts'])}
+            values={modes}
+          />
+          <TitleRow title={intl.formatMessage(messages['common_reversals'])}/>
           <SimpleRow
             isBold
             values={

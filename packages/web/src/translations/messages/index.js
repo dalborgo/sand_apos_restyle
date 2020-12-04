@@ -65,8 +65,8 @@ export const messages = defineMessages({
     id: 'common.discounts',
     defaultMessage: 'Sconti',
   },
-  common_transfers: {
-    id: 'common.transfers',
+  common_reversals: {
+    id: 'common.reversals',
     defaultMessage: 'Storni',
   },
   network_error: {

@@ -80,6 +80,10 @@
     "defaultMessage": "Caricamento..."
   },
   {
+    "id": "common.reversals",
+    "defaultMessage": "Storni"
+  },
+  {
     "id": "common.to",
     "defaultMessage": "a"
   },
@@ -164,10 +168,6 @@
     "defaultMessage": "Errore di rete: servizio non raggiungibile!"
   },
   {
-    "id": "loading",
-    "defaultMessage": "Caricamento..."
-  },
-  {
     "id": "menu.closing_day",
     "defaultMessage": "Chiusure di giornata"
   },
@@ -189,20 +189,8 @@
     "defaultMessage": "Righe totali"
   },
   {
-    "id": "reports.closing_day.discounts",
-    "defaultMessage": "Sconti"
-  },
-  {
     "id": "reports.closing_day.header_title",
     "defaultMessage": "Chiusure di giornata"
-  },
-  {
-    "id": "reports.closing_day.reversal",
-    "defaultMessage": "Storni"
-  },
-  {
-    "id": "reports.closing_day.sconti",
-    "defaultMessage": "Sconti"
   },
   {
     "id": "reports.closing_day.tot_discounts",

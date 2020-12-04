@@ -34,10 +34,6 @@
   "common.to": "a",
   "table.no_data": "Nessun risultato!",
   "table.select_date": "Ricerca per date",
-  "reports.closing_day.discounts": "Sconti",
-  "reports.closing_day.sconti": "Sconti",
-  "reports.closing_day.reversal": "Storni",
-  "loading": "Caricamento...",
   "reports.closing_day.tot_discounts": "Totale Sconti",
   "reports.closing_day.tot_reversal": "Totale Storni",
   "reports.closing_day.total": "Totale",
@@ -58,5 +54,6 @@
   "common.discounts": "Sconti",
   "common.transfers": "Storni",
   "common.type_of_document": "Tipo di Documento",
-  "common.type_of_payment": "Tipo di Pagamento"
+  "common.type_of_payment": "Tipo di Pagamento",
+  "common.reversals": "Storni"
 }

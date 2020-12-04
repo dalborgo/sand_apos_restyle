@@ -34,9 +34,6 @@
   "common.to": "",
   "table.no_data": "",
   "table.select_date": "",
-  "reports.closing_day.discounts": "",
-  "reports.closing_day.sconti": "",
-  "reports.closing_day.reversal": "",
   "reports.closing_day.tot_discounts": "",
   "reports.closing_day.tot_reversal": "",
   "reports.closing_day.total": "",
@@ -45,7 +42,6 @@
   "role.role_customer": "",
   "common.wait": "",
   "common.loading": "",
-  "loading": "",
   "closing_day.discounts": "",
   "closing_day.transfers": "",
   "closing_day.type_of_document": "",
@@ -58,5 +54,6 @@
   "common.discounts": "",
   "common.transfers": "",
   "common.type_of_document": "",
-  "common.type_of_payment": ""
+  "common.type_of_payment": "",
+  "common.reversals": ""
 }
