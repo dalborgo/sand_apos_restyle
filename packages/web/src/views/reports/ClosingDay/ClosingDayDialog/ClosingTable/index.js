@@ -1,11 +1,14 @@
 import React, { memo } from 'react'
 import { calculateClosingTable } from './calculation'
-import { Divider, makeStyles, Table, TableBody, TableCell, TableRow } from '@material-ui/core'
+import { Divider, makeStyles, Table, TableBody, TableCell, TableRow, useTheme } from '@material-ui/core'
 import { useMoneyFormatter } from 'src/utils/formatters'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 
 const useStyles = makeStyles(theme => ({
+  table: {
+    minWidth: 450,
+  },
   bold: props => ({
     fontWeight: props.isBold ? 'bold' : undefined,
   }),
@@ -17,9 +20,9 @@ const useStylesCell = makeStyles(theme => ({
   },
   sizeSmall: {
     border: 0,
-    padding: theme.spacing(0, 1),
+    padding: theme.spacing(0),
     '&:last-child': {
-      paddingRight: theme.spacing(1),
+      paddingRight: theme.spacing(0),
     },
   },
 }), { name: 'MuiTableCell' })
@@ -52,12 +55,12 @@ const TitleRow = ({ title }) => {
   )
 }
 
-function createRows (closing, incomes, post, mf, intl) {
+function createRows (closing, values, pre, post, mf, intl) {
   const tot = { num: 0, val: 0 }
-  const rows = incomes.reduce((prev, curr) => {
+  const rows = values.reduce((prev, curr) => {
     const { key, value } = curr
     const defKey = key || value
-    const { num, display, val } = closing[`tot_${defKey}${post ? `_${post}` : ''}`] || {}
+    const { num, display, val } = closing[`${pre}_${defKey}${post ? `_${post}` : ''}`] || {}
     num && prev.push(<SimpleRow key={defKey} values={{ left: display, center: num, right: mf(val) }}/>)
     tot.num += num || 0
     tot.val += val || 0
@@ -73,7 +76,7 @@ function createRows (closing, incomes, post, mf, intl) {
   return rows
 }
 
-const WrapperRows = ({ closing, values, title, post }) => {
+const WrapperRows = ({ closing, values, title, pre, post }) => {
   const moneyFormatter = useMoneyFormatter()
   const intl = useIntl()
   return (
@@ -81,7 +84,7 @@ const WrapperRows = ({ closing, values, title, post }) => {
       <TitleRow title={title}/>
       <>
         {
-          createRows(closing, values, post, moneyFormatter, intl).map(row => row)
+          createRows(closing, values, pre, post, moneyFormatter, intl).map(row => row)
         }
       </>
     </>
@@ -89,37 +92,65 @@ const WrapperRows = ({ closing, values, title, post }) => {
 }
 
 function ClosingTable ({ data }) {
+  const classes = useStyles()
   const closing = data?.results
   const intl = useIntl()
-  const { payment_incomes: incomes, modes } = closing
+  const theme = useTheme()
+  const { payment_incomes: incomes, modes, operators } = closing
   const elab = calculateClosingTable(closing)
   const moneyFormatter = useMoneyFormatter()
   const intlTotal = intl.formatMessage(messages['common_total'])
   return (
     <>
-      <Divider/>
-      <Table aria-label="closing-table" size="small">
+      <Table aria-label="closing-table" className={classes.table} size="small">
         <TableBody>
-          <SimpleRow isBold values={{ left: intlTotal, right: moneyFormatter(elab['tot'].val) }}/>
-          <WrapperRows closing={elab} title={intl.formatMessage(messages['common_type_document'])} values={modes}/>
-          <WrapperRows closing={elab} title={intl.formatMessage(messages['common_type_payment'])} values={incomes}/>
-          <WrapperRows
-            closing={elab}
-            post="sc"
-            title={intl.formatMessage(messages['common_discounts'])}
-            values={modes}
-          />
-          <TitleRow title={intl.formatMessage(messages['common_reversals'])}/>
-          <SimpleRow
-            isBold
-            values={
-              {
-                left: intlTotal,
-                center: elab['tot_st'].num,
-                right: moneyFormatter(elab['tot_st'].val),
-              }
-            }
-          />
+          {
+            operators.map(({ user }) => {
+              return (
+                <React.Fragment key={user}>
+                  <TableRow>
+                    <TableCell
+                      colSpan={3}
+                      style={{ padding: theme.spacing(1, 0) }}
+                    >
+                      <Divider/>
+                    </TableCell>
+                  </TableRow>
+                  <SimpleRow isBold values={{ left: user.toUpperCase(), right: moneyFormatter(elab[user].val) }}/>
+                  <WrapperRows
+                    closing={elab}
+                    pre={user}
+                    title={intl.formatMessage(messages['common_type_document'])}
+                    values={modes}
+                  />
+                  <WrapperRows
+                    closing={elab}
+                    pre={user}
+                    title={intl.formatMessage(messages['common_type_payment'])}
+                    values={incomes}
+                  />
+                  <WrapperRows
+                    closing={elab}
+                    post="sc"
+                    pre={user}
+                    title={intl.formatMessage(messages['common_discounts'])}
+                    values={modes}
+                  />
+                  <TitleRow title={intl.formatMessage(messages['common_reversals'])}/>
+                  <SimpleRow
+                    isBold
+                    values={
+                      {
+                        left: intlTotal,
+                        center: elab[`${user}_st`].num,
+                        right: moneyFormatter(elab[`${user}_st`].val),
+                      }
+                    }
+                  />
+                </React.Fragment>
+              )
+            })
+          }
         </TableBody>
       </Table>
     </>

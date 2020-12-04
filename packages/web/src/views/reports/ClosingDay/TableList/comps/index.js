@@ -11,11 +11,11 @@ import { useQueryCache } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
-import { messages } from '../../../../../translations/messages'
+import { messages } from 'src/translations/messages'
 
-export const LoadingComponent = memo(function LoadingComponent ({ colSpan, idle, isFetching }) {
+export const LoadingComponent = memo(function LoadingComponent ({ idle, isFetching, ...rest }) {
   return (
-    <VirtualTable.Cell colSpan={colSpan} style={{ border: 'none' }}>
+    <VirtualTable.Cell {...rest} style={{ border: 'none' }}>
       <Box display="flex" justifyContent="center" p={5}>
         {
           isFetching ?
@@ -162,11 +162,12 @@ export const Cell = withStyles(styles, { withTheme: true })(
 export const CellSummary = withStyles(styles, { withTheme: true })(
   SummaryCellBase
 )
-
+//c'era un warning sul campo children mancante
 export const CellHeader = withStyles(styles, { withTheme: true })(
-  ({ classes, theme, ...rest }) => (
+  ({ classes, theme, children, ...rest }) => (
     <TableHeaderRow.Cell
       {...rest}
+      children={children}
       className={classes.cell}
       style={{ paddingLeft: theme.spacing(2) }}
     />

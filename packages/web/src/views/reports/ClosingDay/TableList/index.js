@@ -61,5 +61,5 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
     </Grid>
   )
 })
-TableList.whyDidYouRender = true
+
 export default TableList

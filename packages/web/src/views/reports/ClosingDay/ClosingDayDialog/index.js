@@ -20,11 +20,11 @@ import shallow from 'zustand/shallow'
 
 const useStyles = makeStyles(theme => ({
   dialogContent: {
-    minHeight: 600,
-    minWidth: 500,
+    paddingTop: 0,
+    paddingBottom: theme.spacing(2),
   },
   dialogTitle: {
-    paddingBottom: theme.spacing(1),
+    paddingBottom: 0,
   },
   boldText: {
     fontWeight: 'bold',
@@ -97,7 +97,7 @@ const ClosingDayDialog = ({ width, docId }) => {
           <DialogTitle className={classes.dialogTitle} disableTypography id="closingDay-dialog-title">
             <DialogHeader data={data} onClose={onClose}/>
           </DialogTitle>
-          <DialogContent>
+          <DialogContent className={classes.dialogContent}>
             <ClosingTable data={data}/>
           </DialogContent>
         </Dialog>
