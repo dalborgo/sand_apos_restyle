@@ -15,7 +15,7 @@ import useAuth from 'src/hooks/useAuth'
 import CloseIcon from '@material-ui/icons/Close'
 import ClosingTable from './ClosingTable'
 import { useDateFormatter } from 'src/utils/formatters'
-import { useGeneralStore } from '../../../../zustandStore'
+import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 
 const useStyles = makeStyles(theme => ({

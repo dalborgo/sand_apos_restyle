@@ -23,7 +23,7 @@ export const calculateClosingTable = closing => {
         [`${user}_${value}_sc`]: {
           name,
           val: closing[`pu_${user}_${value}_sc`],
-          num: closing[`pu_${user}_${value}_ns`]
+          num: closing[`pu_${user}_${value}_ns`],
         },
         [`${user}_st`]: { val: closing[`pu_${user}_st`], num: closing[`pu_${user}_nst`] },
         [`${user}_sc`]: { val: closing[`pu_${user}_sc`], num: closing[`pu_${user}_ns`] },

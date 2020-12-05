@@ -5,7 +5,7 @@ import { useMoneyFormatter } from 'src/utils/formatters'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   table: {
     minWidth: 450,
   },
@@ -69,7 +69,7 @@ function createRows (closing, values, pre, post, mf, intl) {
   tot.num && rows.push(
     <SimpleRow
       isBold
-      key="tot_modes"
+      key="tot_rows"
       values={{ left: intl.formatMessage(messages['common_total']), center: tot.num, right: mf(tot.val) }}
     />
   )
@@ -136,17 +136,23 @@ function ClosingTable ({ data }) {
                     title={intl.formatMessage(messages['common_discounts'])}
                     values={modes}
                   />
-                  <TitleRow title={intl.formatMessage(messages['common_reversals'])}/>
-                  <SimpleRow
-                    isBold
-                    values={
-                      {
-                        left: intlTotal,
-                        center: elab[`${user}_st`].num,
-                        right: moneyFormatter(elab[`${user}_st`].val),
-                      }
-                    }
-                  />
+  
+                  {
+                    !!elab[`${user}_st`].num &&
+                    <>
+                      <TitleRow title={intl.formatMessage(messages['common_reversals'])}/>
+                      <SimpleRow
+                        isBold
+                        values={
+                          {
+                            left: intlTotal,
+                            center: elab[`${user}_st`].num,
+                            right: moneyFormatter(elab[`${user}_st`].val),
+                          }
+                        }
+                      />
+                    </>
+                  }
                 </React.Fragment>
               )
             })
