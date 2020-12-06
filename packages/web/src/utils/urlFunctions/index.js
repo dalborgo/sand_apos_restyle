@@ -11,3 +11,5 @@ export function testParams (path) {
     return outParams
   }
 }
+
+export const parentPath = path => path.split('/').slice(0, -1).join('/')

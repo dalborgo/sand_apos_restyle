@@ -172,6 +172,10 @@
     "defaultMessage": "Chiusure di giornata"
   },
   {
+    "id": "menu.running_tables",
+    "defaultMessage": "Tavoli in corso"
+  },
+  {
     "id": "reports.browser.response_time",
     "defaultMessage": "Tempo query"
   },
@@ -207,6 +211,10 @@
   {
     "id": "reports.header.list_documents",
     "defaultMessage": "Lista Documenti"
+  },
+  {
+    "id": "reports.running_tables.header_title",
+    "defaultMessage": "Tavoli in corso"
   },
   {
     "id": "role.role_admin",

@@ -159,6 +159,14 @@ const routes = [
       },
       {
         exact: true,
+        path: [
+          '/app/reports/running-tables',
+          '/app/reports/running-tables/:docId',
+        ],
+        component: lazy(() => import('src/views/reports/RunningTables')),
+      },
+      {
+        exact: true,
         path: '/app/reports/dashboard',
         component: lazy(() => import('src/views/reports/DashboardView')),
       },

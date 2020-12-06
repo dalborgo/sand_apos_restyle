@@ -17,6 +17,7 @@ import ClosingTable from './ClosingTable'
 import { useDateFormatter } from 'src/utils/formatters'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
+import { parentPath } from 'src/utils/urlFunctions'
 
 const useStyles = makeStyles(theme => ({
   dialogContent: {
@@ -69,12 +70,12 @@ const ClosingDayDialog = ({ width, docId }) => {
   const fullScreen = ['sm', 'xs'].includes(width)
   const history = useHistory()
   const onClose = useMemo(() => {
-    const baseUrl = window.location.pathname.replace(`/${docId}`, '')
-    return () => history.push(baseUrl)
-  }, [docId, history])
+    return () => history.push(parentPath(history.location.pathname))
+  }, [history])
   
   const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, owner }], {
     enabled: docId,
+    notifyOnStatusChange: false,
     onSettled: () => {
       setLoading(false)
     },

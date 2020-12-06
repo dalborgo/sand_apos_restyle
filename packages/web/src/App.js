@@ -39,7 +39,7 @@ const myErrorHandler = (error, info) => {
 const queryCache = new QueryCache({
   defaultConfig: {
     queries: {
-      notifyOnStatusChange: false,
+      notifyOnStatusChange: true,
       queryFn: defaultQueryFn,
       refetchOnWindowFocus: false,
       retry: false,

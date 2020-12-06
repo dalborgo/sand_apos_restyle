@@ -55,5 +55,7 @@
   "common.transfers": "",
   "common.type_of_document": "",
   "common.type_of_payment": "",
-  "common.reversals": ""
+  "common.reversals": "",
+  "menu.running_tables": "",
+  "reports.running_tables.header_title": ""
 }

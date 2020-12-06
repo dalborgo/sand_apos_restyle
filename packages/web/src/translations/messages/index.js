@@ -13,6 +13,10 @@ export const messages = defineMessages({
     id: 'menu.closing_day',
     defaultMessage: 'Chiusure di giornata',
   },
+  menu_running_tables: {
+    id: 'menu.running_tables',
+    defaultMessage: 'Tavoli in corso',
+  },
   date_range_start: {
     id: 'date_range.start_date',
     defaultMessage: 'Inizio',

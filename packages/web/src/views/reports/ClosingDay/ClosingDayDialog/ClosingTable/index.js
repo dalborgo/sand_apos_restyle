@@ -136,7 +136,6 @@ function ClosingTable ({ data }) {
                     title={intl.formatMessage(messages['common_discounts'])}
                     values={modes}
                   />
-  
                   {
                     !!elab[`${user}_st`].num &&
                     <>

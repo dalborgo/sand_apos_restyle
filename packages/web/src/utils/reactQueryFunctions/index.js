@@ -6,7 +6,7 @@ import { useState } from 'react'
 import moment from 'moment'
 import { envConfig } from 'src/init'
 import qs from 'qs'
-import { expandError } from './errors'
+import { expandError } from 'src/utils/errors'
 import log from '@adapter/common/src/log'
 
 export const axiosLocalInstance = axios.create({

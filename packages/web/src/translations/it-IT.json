@@ -55,5 +55,7 @@
   "common.transfers": "Storni",
   "common.type_of_document": "Tipo di Documento",
   "common.type_of_payment": "Tipo di Pagamento",
-  "common.reversals": "Storni"
+  "common.reversals": "Storni",
+  "menu.running_tables": "Tavoli in corso",
+  "reports.running_tables.header_title": "Tavoli in corso"
 }
