@@ -72,9 +72,9 @@ const ClosingDayDialog = ({ width, docId }) => {
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))
   }, [history])
-  
+
   const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, owner }], {
-    enabled: docId,
+    enabled: !!docId,
     notifyOnStatusChange: false,
     onSettled: () => {
       setLoading(false)

@@ -81,7 +81,7 @@ const App = () => {
                       <RouteList/>
                       {
                         REACT_QUERY_DEV_TOOLS &&
-                        <ReactQueryDevtools initialIsOpen/>
+                        <ReactQueryDevtools initialIsOpen panelProps={{ style: { height: 400 } }}/>
                       }
                     </AuthProvider>
                   </ReactQueryCacheProvider>
