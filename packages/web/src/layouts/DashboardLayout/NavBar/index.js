@@ -36,7 +36,7 @@ function renderNavItems ({
       {
         items.reduce(
           (acc, item) => {
-            if (isMenuLinkToShow(item, {priority})) {
+            if (isMenuLinkToShow(item, { priority })) {
               return reduceChildRoutes({ acc, item, pathname, depth, intl })
             }
             return acc
@@ -56,7 +56,7 @@ function reduceChildRoutes ({
   depth,
 }) {
   const key = item.title + depth
-
+  
   if (item.items) {
     const open = matchPath(pathname, {
       path: item.href,
@@ -181,7 +181,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
                       disableGutters
                       disableSticky
                     >
-                      {section.subheader}
+                      {messages[`sub_${section.subheader}`] ? intl.formatMessage(messages[`sub_${section.subheader}`]) : section.subheader}
                     </ListSubheader>
                   )
                 }

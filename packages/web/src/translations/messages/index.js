@@ -9,6 +9,10 @@ export const messages = defineMessages({
     id: 'role.role_admin',
     defaultMessage: 'Amministratore',
   },
+  sub_reports: {
+    id: 'sub.reports',
+    defaultMessage: 'Report',
+  },
   menu_closing_day: {
     id: 'menu.closing_day',
     defaultMessage: 'Chiusure di giornata',

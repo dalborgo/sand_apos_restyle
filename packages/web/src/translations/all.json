@@ -72,6 +72,10 @@
     "defaultMessage": "Sconti"
   },
   {
+    "id": "common.filters",
+    "defaultMessage": "Filtri"
+  },
+  {
     "id": "common.income",
     "defaultMessage": "Incassato"
   },
@@ -223,6 +227,10 @@
   {
     "id": "role.role_customer",
     "defaultMessage": "Cliente"
+  },
+  {
+    "id": "sub.reports",
+    "defaultMessage": "Report"
   },
   {
     "id": "table.no_data",

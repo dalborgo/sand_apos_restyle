@@ -16,7 +16,7 @@ import ReceiptIcon from '@material-ui/icons/ReceiptOutlined'
 
 const sections = [
   {
-    subheader: 'Reports',
+    subheader: 'reports',
     items: [
       {
         title: 'Browser',

@@ -57,5 +57,7 @@
   "common.type_of_payment": "Tipo di Pagamento",
   "common.reversals": "Storni",
   "menu.running_tables": "Tavoli in corso",
-  "reports.running_tables.header_title": "Tavoli in corso"
+  "reports.running_tables.header_title": "Tavoli in corso",
+  "sub.reports": "Report",
+  "common.filters": "Filtri"
 }

@@ -57,5 +57,7 @@
   "common.type_of_payment": "",
   "common.reversals": "",
   "menu.running_tables": "",
-  "reports.running_tables.header_title": ""
+  "reports.running_tables.header_title": "",
+  "sub.reports": "",
+  "common.filters": ""
 }
