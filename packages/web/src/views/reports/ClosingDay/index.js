@@ -122,8 +122,8 @@ const ClosingDay = () => {
   //const queryCache = useQueryCache()
   const snackQueryError = useSnackQueryError()
   const intl = useIntl()
-  let { startDate, endDate, closingRows, setClosingRows } = useClosingDayStore(closingSelector, shallow)
   /* useEffect(() => {return () => {reset()}}, [reset])*/
+  const { startDate, endDate, closingRows, setClosingRows } = useClosingDayStore(closingSelector, shallow)
   const { isIdle, refetch, ...rest } = useQuery(['reports/closing_days', {
     startDateInMillis: moment(startDate).format('YYYYMMDDHHmmssSSS'),
     endDateInMillis: moment(endDate).format('YYYYMMDDHHmmssSSS'),

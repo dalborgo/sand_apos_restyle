@@ -1,6 +1,11 @@
 import { BadRequest } from '../../express/errors'
 
-function parseOwner ({ owner }) {
+/**
+ *
+ * @param owner
+ * @param bucketLabel = identificativo per la query condition se richiede di un essere ambigua (es. JOIN)
+ */
+function parseOwner ({ owner }, bucketLabel) {
   const ownerArray = Array.isArray(owner) ? owner : [owner]
   const [startOwner] = ownerArray
   const endOwner = ownerArray.length > 1 ? ownerArray[ownerArray.length - 1] : startOwner
@@ -14,7 +19,7 @@ function parseOwner ({ owner }) {
       endkey: `"${nextOwner}"`,
     },
     ownerArray,
-    queryCondition: `owner IN ${JSON.stringify(ownerArray)}`,
+    queryCondition: `${bucketLabel ? `${bucketLabel}.` : ''}owner IN ${JSON.stringify(ownerArray)}`,
     startOwner,
   }
 }

@@ -21,12 +21,12 @@ export default function IconButtonLoader ({ onClick, isFetching }) {
   return (
     <Box className={classes.wrapper}>
       <IconButton
-        color="primary"
+        color="secondary"
         onClick={onClick}
       >
         {isFetching ? <HourglassEmptyIcon/> : <ReplayIcon/>}
       </IconButton>
-      {isFetching && <CircularProgress className={classes.progress} size={40} thickness={2}/>}
+      {isFetching && <CircularProgress className={classes.progress} color="secondary" size={40} thickness={2}/>}
     </Box>
   )
 }

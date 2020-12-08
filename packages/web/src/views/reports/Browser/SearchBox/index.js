@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     position: 'relative',
   },
   lockedButton: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
   },
   notLockedButton: {
     color: theme.palette.error.main,
@@ -35,6 +35,7 @@ const InputText = memo(function BrowserInputText ({ text, setText }) {
     <FormControl fullWidth size="small">
       <Input
         autoFocus
+        color="secondary"
         endAdornment={
           <InputAdornment position="end">
             <IconButton
@@ -109,7 +110,7 @@ const SearchBox = memo(function SearchBox ({
           </Box>
           <Box display="flex">
             <IconButton
-              color="primary"
+              color="secondary"
               onClick={
                 () => {
                   const filter = document.getElementById('browserSearchBox').value
@@ -136,7 +137,7 @@ const SearchBox = memo(function SearchBox ({
             </IconButton>
             <div className={classes.wrapper}>
               <IconButton
-                color="primary"
+                color="secondary"
                 onClick={
                   () => {
                     refetchLine()

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Button, makeStyles, SvgIcon } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
@@ -8,6 +8,12 @@ import IconButtonLoader from 'src/components/IconButtonLoader'
 import { StandardBreadcrumb } from 'src/components/StandardBreadcrumb'
 import { Filter as FilterIcon } from 'react-feather'
 import RightDrawer from 'src/components/RightDrawer'
+import { useQuery } from 'react-query'
+import shallow from 'zustand/shallow'
+import { getEffectiveFetching } from 'src/utils/logics'
+import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
+import useAuth from 'src/hooks/useAuth'
+import useRunningTablesStore from 'src/zustandStore/useRunningTablesStore'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,14 +41,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ClosingDay = () => {
+const runningSelector = state => ({
+  openFilter: state.openFilter,
+  switchOpenFilter: state.switchOpenFilter,
+  runningRows: state.runningRows,
+  setRunningRows: state.setRunningRows,
+})
+
+const RunningTables = () => {
+  const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
-  const [open, setOpen] = useState(false)
-  
-  const switchOpen = () => {
-    setOpen(open => !open)
-  }
   const intl = useIntl()
+  const snackQueryError = useSnackQueryError()
+  const { runningRows, setRunningRows, openFilter, switchOpenFilter } = useRunningTablesStore(runningSelector, shallow)
+  const { isIdle, refetch, ...rest } = useQuery(['reports/running_tables', {
+    owner,
+  }], {
+    onError: snackQueryError,
+    onSettled: data => {
+      if (data.ok) {
+        setRunningRows(data.results)
+      }
+    },
+  })
+  console.log('runningRows:', runningRows)
+  const effectiveFetching = getEffectiveFetching(rest)
   return (
     <Page
       className={classes.root}
@@ -59,12 +82,12 @@ const ClosingDay = () => {
             <Box alignItems="center" display="flex">
               <Box mr={2}>
                 <IconButtonLoader
-                  isFetching={false}
-                  onClick={() => null}
+                  isFetching={effectiveFetching}
+                  onClick={refetch}
                 />
               </Box>
               <Box>
-                <Button color="secondary" onClick={switchOpen} variant="contained">
+                <Button color="secondary" onClick={switchOpenFilter} variant="contained">
                   <SvgIcon fontSize="small">
                     <FilterIcon/>
                   </SvgIcon>
@@ -76,15 +99,15 @@ const ClosingDay = () => {
         >
           <FormattedMessage defaultMessage="Tavoli in corso" id="reports.running_tables.header_title"/>
         </StandardHeader>
-        <RightDrawer open={open} switchOpen={switchOpen}/>
+        <RightDrawer open={openFilter} switchOpen={switchOpenFilter}/>
       </Box>
       <div className={classes.content}>
         <div className={classes.innerFirst}>
-          Running Tables
+          {JSON.stringify(runningRows, null, 2)}
         </div>
       </div>
     </Page>
   )
 }
 
-export default ClosingDay
+export default RunningTables

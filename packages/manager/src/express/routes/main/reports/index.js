@@ -13,7 +13,7 @@ function addRouters (router) {
       bucketName = connClass.astenposBucketName,
       options,
       startDateInMillis: startDate,
-      endDateInMillis: endDate
+      endDateInMillis: endDate,
     } = query
     const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') //end day
     const statement = knex(bucketName)
@@ -23,6 +23,27 @@ function addRouters (router) {
       .select(knex.raw('meta().id _id'))
       .select(['owner', 'date', 'pu_totale_sc', 'pu_totale_st', 'pu_totale_nc', 'pu_totale_totale'])
       .orderBy('date', 'desc')
+      .toQuery()
+    const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
+    if (!ok) {return res.send({ ok, message, info })}
+    res.send({ ok, results: data })
+  })
+  
+  router.get('/reports/running_tables', async function (req, res) {
+    const { connClass, query } = req
+    utils.controlParameters(query, ['owner'])
+    const parsedOwner = utils.parseOwner(query, 'buc')
+    const {
+      bucketName = connClass.astenposBucketName,
+      options,
+    } = query
+    const statement = knex({ buc: bucketName })
+      .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "ORDER"`))
+      .select(knex.raw('meta(buc).id _id'))
+      .select(['buc.owner', 'buc.creation_date', 'buc.table_display', 'buc.room_display', 'buc.covers', 'user.user'])
+      .select(knex.raw('ARRAY_SUM(ARRAY((e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta) FOR e IN buc.entries WHEN e.deleted != TRUE END) + buc.cover_price * buc.covers AS amount'))
+      .joinRaw('JOIN `' + bucketName + '` as `user` ON KEYS buc.creating_user')
+      .orderBy('buc.creation_date', 'desc')
       .toQuery()
     const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, info })}

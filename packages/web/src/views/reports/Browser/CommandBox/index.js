@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react'
 import { Box, Button, Typography } from '@material-ui/core'
 import { FormattedMessage } from 'react-intl'
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack'
 
 const CommandBox = memo(function CommandBox ({ mutate, isDocId, output }) {
   const { enqueueSnackbar } = useSnackbar()
@@ -25,7 +25,7 @@ const CommandBox = memo(function CommandBox ({ mutate, isDocId, output }) {
         <Typography color={output.error ? 'error' : 'initial'} variant="body2">{output.text}</Typography>
       </Box>
       <Box>
-        <Button color="primary" disabled={!isDocId} id="BrowserSaveButton" onClick={save} size="small">
+        <Button color="secondary" disabled={!isDocId} id="BrowserSaveButton" onClick={save} size="small">
           <FormattedMessage defaultMessage="Salva" description="Bottone Salva" id="reports.browser.save"/>
         </Button>
       </Box>
