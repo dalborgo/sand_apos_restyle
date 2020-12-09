@@ -21,7 +21,7 @@
   "dependencies": {
     "bluebird": "^3.7.2",
     "module-alias": "^2.2.2",
-    "config": "^3.3.2",
+    "config": "^3.3.3",
     "debug": "^4.2.0",
     "esm": "^3.2.25",
     "q": "^1.5.1"

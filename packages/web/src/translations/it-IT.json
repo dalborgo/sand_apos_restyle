@@ -59,5 +59,9 @@
   "menu.running_tables": "Tavoli in corso",
   "reports.running_tables.header_title": "Tavoli in corso",
   "sub.reports": "Report",
-  "common.filters": "Filtri"
+  "common.filters": "Filtri",
+  "filter_from.apply": "Applica",
+  "filter_from.clear": "Pulisci",
+  "common.room": "Stanza",
+  "common.table": "Tavolo"
 }

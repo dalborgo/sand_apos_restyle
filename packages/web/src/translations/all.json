@@ -88,6 +88,14 @@
     "defaultMessage": "Storni"
   },
   {
+    "id": "common.room",
+    "defaultMessage": "Stanza"
+  },
+  {
+    "id": "common.table",
+    "defaultMessage": "Tavolo"
+  },
+  {
     "id": "common.to",
     "defaultMessage": "a"
   },
@@ -166,6 +174,14 @@
   {
     "id": "error503.service_unavailable!",
     "defaultMessage": "503: Servizio non disponibile!"
+  },
+  {
+    "id": "filter_from.apply",
+    "defaultMessage": "Applica"
+  },
+  {
+    "id": "filter_from.clear",
+    "defaultMessage": "Pulisci"
   },
   {
     "id": "general.network_error",

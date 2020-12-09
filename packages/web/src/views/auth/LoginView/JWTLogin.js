@@ -39,7 +39,6 @@ const JWTLogin = memo(({ className, ...rest }) => {
     async function fetchData () {
       await queryCache.prefetchQuery('jwt/codes', { throwOnError: true })
     }
-  
     fetchData().then().catch(error => {setState(() => {throw error})}) //trick to send error to boundaries
   }, [queryCache])
   const isMountedRef = useIsMountedRef()

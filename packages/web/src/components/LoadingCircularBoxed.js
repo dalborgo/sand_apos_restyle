@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, CircularProgress } from '@material-ui/core'
 
-function LoadingCircularBoxed () {
+function LoadingCircularBoxed ({ size }) {
   return (
     <Box
       alignItems="center"
@@ -9,9 +9,13 @@ function LoadingCircularBoxed () {
       height="100%"
       justifyContent="center"
     >
-      <CircularProgress/>
+      <CircularProgress size={size}/>
     </Box>
   )
+}
+
+LoadingCircularBoxed.defaultProps = {
+  size: 40,
 }
 
 export default LoadingCircularBoxed

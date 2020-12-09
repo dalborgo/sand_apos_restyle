@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { Box, Drawer, IconButton, makeStyles, Typography } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
@@ -11,7 +11,8 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const RightDrawer = ({ open, switchOpen, children, title }) => {
+const RightDrawer = memo(function RightDrawer ({ open, switchOpen, children, title }) {
+  console.log('%cRENDER_Drawer', 'color: yellow')
   const classes = useStyles()
   return (
     <Drawer
@@ -46,7 +47,7 @@ const RightDrawer = ({ open, switchOpen, children, title }) => {
       </PerfectScrollbar>
     </Drawer>
   )
-}
+})
 
 RightDrawer.defaultProps = {
   title: <FormattedMessage defaultMessage="Filtri" id="common.filters"/>,

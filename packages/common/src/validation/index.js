@@ -70,6 +70,15 @@ const trimAll = obj => {
     }
   })
 }
+const resetAll = obj => {
+  return mapValues(obj, val => {
+    if (isString(val)) {
+      return ''
+    } else {
+      return null
+    }
+  })
+}
 
 const objectUpperCase = obj => mapValues(obj, inp => !isNil(inp) ? String(inp).toUpperCase() : undefined)
 const objectRemoveEmpty = obj => mapValues(obj, inp => inp !== '' && inp !== null ? inp : undefined)
@@ -78,6 +87,7 @@ export default {
   escapeUnknownChar,
   objectRemoveEmpty,
   objectUpperCase,
+  resetAll,
   trimAll,
   valCF,
   valDate,

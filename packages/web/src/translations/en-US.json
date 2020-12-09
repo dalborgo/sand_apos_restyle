@@ -59,5 +59,9 @@
   "menu.running_tables": "",
   "reports.running_tables.header_title": "",
   "sub.reports": "",
-  "common.filters": ""
+  "common.filters": "",
+  "filter_from.apply": "",
+  "filter_from.clear": "",
+  "common.room": "",
+  "common.table": ""
 }

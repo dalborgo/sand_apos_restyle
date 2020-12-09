@@ -1,6 +1,14 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  common_table: {
+    id: 'common.table',
+    defaultMessage: 'Tavolo',
+  },
+  common_room: {
+    id: 'common.room',
+    defaultMessage: 'Stanza',
+  },
   role_customer: {
     id: 'role.role_customer',
     defaultMessage: 'Cliente',
