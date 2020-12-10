@@ -157,7 +157,7 @@ const RunningTables = () => {
         owner,
       }], { throwOnError: true })
     }
-  
+    
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryCache])
   const onFilterSubmit = useCallback(filter => {
