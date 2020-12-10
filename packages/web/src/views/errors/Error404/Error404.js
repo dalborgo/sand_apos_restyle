@@ -76,7 +76,7 @@ const Error404 = () => {
           <img
             alt="Error 404"
             className={classes.image}
-            src="static/images/undraw_page_not_found_su7k.svg"
+            src="/static/images/undraw_page_not_found_su7k.svg"
           />
         </div>
         <div className={classes.buttonContainer}>

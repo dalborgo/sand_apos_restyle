@@ -78,9 +78,9 @@ function addRouters (router) {
     const { userId } = jwt.verify(accessToken, JWT_SECRET)
     const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
                   + getQueryUserField()
-                  + 'FROM ' + connClass.managerBucketName + ' `user` LEFT NEST ' + connClass.managerBucketName + ' setups '
+                  + 'FROM ' + connClass.managerBucketName + ' `user` USE KEYS "' + userId + '" LEFT NEST ' + connClass.managerBucketName + ' setups '
                   + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) '
-                  + 'FOR code IN `user`.codes END WHERE meta(`user`).id = "'+ userId +'" AND `user`.type = "USER_MANAGER"'
+                  + 'FOR code IN `user`.codes END'
     const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
     if (!ok) {
       log.error('path', path)

@@ -50,18 +50,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-/*const DEBUG_DATA = [
-  {
-    _id: 'CLOSING_DAY_20200930225455',
-    date: '20200930225455',
-    owner: 'TEST123',
-    pu_totale_sc: 2200,
-    pu_totale_st: 5000,
-    pu_totale_nc: 16,
-    pu_totale_totale: 489300,
-  },
-]*/
-
 const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate, refetch, isFetching }) {
   console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
   const endDateRef = useRef(null)
@@ -119,7 +107,6 @@ const ClosingDay = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const { docId } = useParams()
   const classes = useStyles()
-  //const queryCache = useQueryCache()
   const snackQueryError = useSnackQueryError()
   const intl = useIntl()
   /* useEffect(() => {return () => {reset()}}, [reset])*/
@@ -132,23 +119,12 @@ const ClosingDay = () => {
     onError: snackQueryError,
     enabled: startDate && endDate,
     onSettled: data => {
-      if (data.ok) {
+      if (data?.ok) {
         setClosingRows(data.results)
       }
     },
   })
   const effectiveFetching = getEffectiveFetching(rest)
-  /*useEffect(() => {
-    async function fetchData () {
-      await queryCache.prefetchQuery(['queries/query_by_type', {
-        type: 'USER',
-        owner,
-      }], { throwOnError: true })
-    }
-    
-    fetchData().then().catch(error => {setState(() => {throw error})})
-  }, [owner, queryCache])*/
-  //const rows = data.results || []
   return (
     <Page
       className={classes.root}

@@ -79,14 +79,14 @@ const Error500 = ({ error, resetErrorBoundary }) => {
               <img
                 alt="Error 503"
                 className={classes.image}
-                src="static/images/undraw_server_down_s4lk.svg"
+                src="/static/images/undraw_server_down_s4lk.svg"
                 title="undraw server down"
               />
               :
               <img
                 alt="Error 500"
                 className={classes.image}
-                src="static/images/undraw_something_wrong.svg"
+                src="/static/images/undraw_something_wrong.svg"
                 title="undraw something wrong"
               />
           }

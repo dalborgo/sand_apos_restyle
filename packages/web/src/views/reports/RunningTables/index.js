@@ -1,4 +1,4 @@
-import React, { setState, useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Box, Button, makeStyles, TextField as TF } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
@@ -26,6 +26,10 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     overflow: 'hidden',
     flexDirection: 'column',
+  },
+  paper: {
+    height: '100%',
+    marginTop: theme.spacing(3),
   },
   content: {
     flexGrow: 1,
@@ -144,6 +148,8 @@ const RunningTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const intl = useIntl()
+  // eslint-disable-next-line no-unused-vars
+  const [_, setState] = useState()
   const queryCache = useQueryCache()
   const snackQueryError = useSnackQueryError()
   const {
@@ -165,14 +171,13 @@ const RunningTables = () => {
       }
     },
   })
-  
   useEffect(() => {
     async function fetchData () {
       await queryCache.prefetchQuery(['types/rooms', {
         owner,
       }], { throwOnError: true })
     }
-    
+  
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryCache])
   console.log('runningRows:', runningRows)
@@ -183,10 +188,22 @@ const RunningTables = () => {
     return filter
   }, [setFilter, switchOpenFilter])
   
+  const DivWrapper = ({ children }) => {
+    const classes = useStyles()
+    return (
+      <div className={classes.content}>
+        <div className={classes.innerFirst}>
+          {children}
+        </div>
+      </div>
+    )
+  }
+  
   const FilterFormWr = useMemo(() => (
     <FilterForm onSubmit={onFilterSubmit} roomFilter={roomFilter} tableFilter={tableFilter}/>
   ), [roomFilter, onFilterSubmit, tableFilter])
   const effectiveFetching = getEffectiveFetching(rest)
+  
   return (
     <Page
       className={classes.root}
@@ -222,11 +239,9 @@ const RunningTables = () => {
           {FilterFormWr}
         </RightDrawer>
       </Box>
-      <div className={classes.content}>
-        <div className={classes.innerFirst}>
-          {JSON.stringify(runningRows, null, 2)}
-        </div>
-      </div>
+      <DivWrapper>
+        {JSON.stringify(runningRows, null, 2)}
+      </DivWrapper>
     </Page>
   )
 }
