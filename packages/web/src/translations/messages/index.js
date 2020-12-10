@@ -1,9 +1,17 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  common_tot: {
+    id: 'common.tot',
+    defaultMessage: 'Tot',
+  },
   common_table: {
     id: 'common.table',
     defaultMessage: 'Tavolo',
+  },
+  common_tables: {
+    id: 'common.tables',
+    defaultMessage: 'Tavoli',
   },
   common_room: {
     id: 'common.room',

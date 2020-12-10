@@ -63,5 +63,7 @@
   "filter_from.apply": "",
   "filter_from.clear": "",
   "common.room": "",
-  "common.table": ""
+  "common.table": "",
+  "common.tot": "",
+  "common.tables": ""
 }

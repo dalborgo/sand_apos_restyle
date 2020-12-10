@@ -41,7 +41,7 @@ function addRouters (router) {
       .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "ORDER"`))
       .select(knex.raw('meta(buc).id _id'))
       .select(['buc.owner', 'buc.creation_date', 'buc.table_display', 'buc.room_display', 'buc.covers', 'user.user'])
-      .select(knex.raw('ARRAY_SUM(ARRAY((e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta) FOR e IN buc.entries WHEN e.deleted != TRUE END) + buc.cover_price * buc.covers AS amount'))
+      .select(knex.raw('ARRAY_SUM(ARRAY((e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta) FOR e IN buc.entries WHEN e.deleted != TRUE END) + buc.cover_price * buc.covers AS income'))
       .joinRaw('JOIN `' + bucketName + '` as `user` ON KEYS buc.creating_user')
       .orderBy('buc.creation_date', 'desc')
       .toQuery()

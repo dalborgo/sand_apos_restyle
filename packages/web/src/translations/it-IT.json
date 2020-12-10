@@ -63,5 +63,7 @@
   "filter_from.apply": "Applica",
   "filter_from.clear": "Pulisci",
   "common.room": "Stanza",
-  "common.table": "Tavolo"
+  "common.table": "Tavolo",
+  "common.tot": "Tot",
+  "common.tables": "Tavoli"
 }

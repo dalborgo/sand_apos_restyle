@@ -4,7 +4,7 @@ import { messages } from 'src/translations/messages'
 import moment from 'moment'
 import isDate from 'lodash/isDate'
 
-const defaultCurrency = {
+export const codeCurrency = { //il codice della valuta
   it: 'EUR',
 }
 
@@ -14,7 +14,7 @@ export function useMoneyFormatter () {
     return (value, currency) =>
       intl.formatNumber(value / 1000, {
         style: 'currency',
-        currency: currency ? currency : defaultCurrency[intl.locale] || 'EUR',
+        currency: currency ? currency : codeCurrency[intl.locale] || 'EUR',
       })
   })
   return moneyFormatter
@@ -24,6 +24,10 @@ const defaultDateFormat = {
   day: '2-digit',
   month: '2-digit',
   year: 'numeric',
+}
+const defaultTimeFormat = {
+  hour: 'numeric',
+  minute: 'numeric',
 }
 
 export function useDateFormatter () {
@@ -37,6 +41,20 @@ export function useDateFormatter () {
     }
   })
   return dateFormatter
+}
+
+export function useDateTimeFormatter () {
+  const intl = useIntl()
+  const [dateTimeFormatter] = useState(() => {
+    return (date, dateOptions, timeOptions) => {
+      let date_ = date
+      if (!isDate(date)) {date_ = moment(date_, 'YYYYMMDDHHmmssSSS')}
+      const dateOptions_ = Object.assign(defaultDateFormat, dateOptions)
+      const timeOptions_ = Object.assign(defaultTimeFormat, timeOptions)
+      return `${intl.formatDate(date_, dateOptions_)} ${intl.formatTime(date_, timeOptions_)}`
+    }
+  })
+  return dateTimeFormatter
 }
 
 export function useRoleFormatter () {

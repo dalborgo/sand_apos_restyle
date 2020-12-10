@@ -18,34 +18,14 @@ import { TextField } from 'formik-material-ui'
 import FilterButton from 'src/components/FilterButton'
 import { cFunctions } from '@adapter/common'
 import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
+import DivContentWrapper from 'src/components/DivContentWrapper'
+import Paper from '@material-ui/core/Paper'
+import TableList from './TableList'
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.background.dark,
-    height: '100%',
-    display: 'flex',
-    overflow: 'hidden',
-    flexDirection: 'column',
-  },
   paper: {
     height: '100%',
     marginTop: theme.spacing(3),
-  },
-  content: {
-    flexGrow: 1,
-    flexShrink: 1,
-    display: 'flex',
-    overflowY: 'hidden',
-    overflowX: 'auto',
-  },
-  innerFirst: {
-    display: 'flex',
-    padding: theme.spacing(2),
-    paddingTop: theme.spacing(1),
-    width: '100%',
-    [theme.breakpoints.down('xs')]: {
-      padding: 0,
-    },
   },
 }))
 
@@ -161,7 +141,7 @@ const RunningTables = () => {
     roomFilter,
     setFilter,
   } = useRunningTablesStore(runningSelector, shallow)
-  const { isIdle, refetch, ...rest } = useQuery(['reports/running_tables', {
+  const { refetch, ...rest } = useQuery(['reports/running_tables', {
     owner,
   }], {
     onError: snackQueryError,
@@ -180,24 +160,12 @@ const RunningTables = () => {
   
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryCache])
-  console.log('runningRows:', runningRows)
   const onFilterSubmit = useCallback(filter => {
     console.log('filter:', filter)
     setFilter(filter)
     switchOpenFilter()
     return filter
   }, [setFilter, switchOpenFilter])
-  
-  const DivWrapper = ({ children }) => {
-    const classes = useStyles()
-    return (
-      <div className={classes.content}>
-        <div className={classes.innerFirst}>
-          {children}
-        </div>
-      </div>
-    )
-  }
   
   const FilterFormWr = useMemo(() => (
     <FilterForm onSubmit={onFilterSubmit} roomFilter={roomFilter} tableFilter={tableFilter}/>
@@ -206,7 +174,6 @@ const RunningTables = () => {
   
   return (
     <Page
-      className={classes.root}
       title={intl.formatMessage(messages['menu_running_tables'])}
     >
       <Box p={3} pb={2}>
@@ -239,9 +206,11 @@ const RunningTables = () => {
           {FilterFormWr}
         </RightDrawer>
       </Box>
-      <DivWrapper>
-        {JSON.stringify(runningRows, null, 2)}
-      </DivWrapper>
+      <DivContentWrapper>
+        <Paper className={classes.paper}>
+          <TableList isFetching={effectiveFetching} rows={runningRows}/>
+        </Paper>
+      </DivContentWrapper>
     </Page>
   )
 }

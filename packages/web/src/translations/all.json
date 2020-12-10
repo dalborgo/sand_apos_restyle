@@ -96,8 +96,16 @@
     "defaultMessage": "Tavolo"
   },
   {
+    "id": "common.tables",
+    "defaultMessage": "Tavoli"
+  },
+  {
     "id": "common.to",
     "defaultMessage": "a"
+  },
+  {
+    "id": "common.tot",
+    "defaultMessage": "Tot"
   },
   {
     "id": "common.total",

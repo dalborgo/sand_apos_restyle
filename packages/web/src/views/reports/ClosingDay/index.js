@@ -18,37 +18,15 @@ import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import { getEffectiveFetching } from 'src/utils/logics'
 import moment from 'moment'
 import IconButtonLoader from 'src/components/IconButtonLoader'
+import DivContentWrapper from 'src/components/DivContentWrapper'
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.dark,
-    height: '100%',
-    display: 'flex',
-    overflow: 'hidden',
-    flexDirection: 'column',
-  },
   paper: {
     height: '100%',
     marginTop: theme.spacing(3),
   },
-  content: {
-    flexGrow: 1,
-    flexShrink: 1,
-    display: 'flex',
-    overflowY: 'hidden',
-    overflowX: 'auto',
-  },
-  innerFirst: {
-    display: 'flex',
-    flexDirection: 'column',
-    padding: theme.spacing(2),
-    paddingTop: theme.spacing(1),
-    width: '100%',
-    [theme.breakpoints.down('xs')]: {
-      padding: 0,
-    },
-  },
 }))
+
 
 const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate, refetch, isFetching }) {
   console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
@@ -127,7 +105,6 @@ const ClosingDay = () => {
   const effectiveFetching = getEffectiveFetching(rest)
   return (
     <Page
-      className={classes.root}
       title={intl.formatMessage(messages['menu_closing_day'])}
     >
       <Box p={3} pb={2}>
@@ -135,16 +112,14 @@ const ClosingDay = () => {
           <FormattedMessage defaultMessage="Chiusure di giornata" id="reports.closing_day.header_title"/>
         </StandardHeader>
       </Box>
-      <div className={classes.content}>
-        <div className={classes.innerFirst}>
-          <Box display="flex">
-            <FormikWrapper endDate={endDate} isFetching={effectiveFetching} refetch={refetch} startDate={startDate}/>
-          </Box>
-          <Paper className={classes.paper}>
-            <TableList isFetching={effectiveFetching && !closingRows.length} isIdle={isIdle} rows={closingRows}/>
-          </Paper>
-        </div>
-      </div>
+      <DivContentWrapper>
+        <Box display="flex">
+          <FormikWrapper endDate={endDate} isFetching={effectiveFetching} refetch={refetch} startDate={startDate}/>
+        </Box>
+        <Paper className={classes.paper}>
+          <TableList isFetching={effectiveFetching && !closingRows.length} isIdle={isIdle} rows={closingRows}/>
+        </Paper>
+      </DivContentWrapper>
       <ClosingDayDialog docId={docId}/>
     </Page>
   )
