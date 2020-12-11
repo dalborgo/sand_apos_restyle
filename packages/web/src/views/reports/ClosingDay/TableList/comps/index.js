@@ -120,7 +120,6 @@ const CellBase = props => {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
         <Button
-          color="secondary"
           disabled={intLoading}
           onClick={
             async () => {
@@ -136,6 +135,7 @@ const CellBase = props => {
             }
           }
           size="small"
+          style={{textTransform: 'none'}}
           variant="contained"
         >
           <FormattedDate

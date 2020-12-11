@@ -67,5 +67,8 @@
   "common.tot": "Tot",
   "common.tables": "Tavoli",
   "reports.closing_day.closing": "Chiusura",
-  "reports.closing_day.opening": "Apertura"
+  "reports.closing_day.opening": "Apertura",
+  "common.product": "Prodotto",
+  "common.quantity": "Qta",
+  "common.price": "Prezzo"
 }

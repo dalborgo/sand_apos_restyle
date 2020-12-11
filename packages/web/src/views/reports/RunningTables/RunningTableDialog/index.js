@@ -1,20 +1,10 @@
 import React, { memo, useEffect, useMemo } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  IconButton,
-  makeStyles,
-  Typography,
-  withWidth,
-} from '@material-ui/core'
+import { Dialog, DialogContent, DialogTitle, Grid, IconButton, makeStyles, Typography } from '@material-ui/core'
 import { Redirect, useHistory } from 'react-router'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import CloseIcon from '@material-ui/icons/Close'
 import DetailTable from './DetailTable'
-import { useDateFormatter } from 'src/utils/formatters'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import { parentPath } from 'src/utils/urlFunctions'
@@ -23,11 +13,10 @@ import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles(theme => ({
   dialogContent: {
-    paddingTop: 0,
-    paddingBottom: theme.spacing(2),
+    padding: 0,
   },
   dialogTitle: {
-    paddingBottom: 0,
+    padding: theme.spacing(2),
   },
   boldText: {
     fontWeight: 'bold',
@@ -35,7 +24,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
-  const dateFormatter = useDateFormatter()
   const intl = useIntl()
   const classes = useStyles()
   const { results: header } = data
@@ -65,17 +53,16 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
   )
 })
 const loadingSel = state => ({ setLoading: state.setLoading })
-const RunningTableDialog = ({ width, docId }) => {
+const RunningTableDialog = ({ docId }) => {
   console.log('%cRENDER_DIALOG_RUNNING_DAY', 'color: orange')
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
-  const fullScreen = ['sm', 'xs'].includes(width)
   const history = useHistory()
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))
   }, [history])
-
+  
   const { isLoading, data } = useQuery([`reports/running_table/${docId}`, { owner }], {
     enabled: !!docId,
     notifyOnStatusChange: false,
@@ -93,8 +80,8 @@ const RunningTableDialog = ({ width, docId }) => {
       data.results ?
         <Dialog
           aria-labelledby="runningTable-dialog-title"
-          fullScreen={fullScreen}
           keepMounted
+          maxWidth="md"
           onClose={onClose}
           open={!!docId}
         >
@@ -102,8 +89,7 @@ const RunningTableDialog = ({ width, docId }) => {
             <DialogHeader data={data} onClose={onClose}/>
           </DialogTitle>
           <DialogContent className={classes.dialogContent}>
-            {JSON.stringify(data, null, 2)}
-            {/*<DetailTable data={data}/>*/}
+            <DetailTable data={data.results}/>
           </DialogContent>
         </Dialog>
         :
@@ -115,4 +101,4 @@ const RunningTableDialog = ({ width, docId }) => {
   
 }
 
-export default memo(withWidth()(RunningTableDialog))
+export default memo(RunningTableDialog)

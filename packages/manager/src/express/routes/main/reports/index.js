@@ -63,7 +63,7 @@ function addRouters (router) {
     const statement = knex
       .from(knex.raw(`${bucketName} buc USE KEYS "${orderId}" LEFT NEST ${bucketName} us ON KEYS ARRAY x.\`user\` FOR x IN buc.entries END`))
       .select(['buc.owner', 'buc.creation_date', 'buc.table_display', 'buc.room_display', 'buc.covers', 'buc.cover_price', 'user.user'])
-      .select(knex.raw('ARRAY {"user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "price": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries WHEN e.deleted != TRUE END AS entries'))
+      .select(knex.raw('ARRAY {"pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries WHEN e.deleted != TRUE END AS entries'))
       .joinRaw('JOIN `' + bucketName + '` as `user` ON KEYS buc.creating_user')
       .orderBy('buc.creation_date', 'desc')
       .where(knex.raw(`${parsedOwner.queryCondition}`))

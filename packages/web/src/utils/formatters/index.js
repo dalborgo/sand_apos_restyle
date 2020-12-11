@@ -25,6 +25,7 @@ const defaultDateFormat = {
 const defaultTimeFormat = {
   hour: 'numeric',
   minute: 'numeric',
+  second: 'numeric',
 }
 
 export function useDateFormatter () {

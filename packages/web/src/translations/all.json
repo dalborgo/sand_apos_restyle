@@ -84,6 +84,18 @@
     "defaultMessage": "Caricamento..."
   },
   {
+    "id": "common.price",
+    "defaultMessage": "Prezzo"
+  },
+  {
+    "id": "common.product",
+    "defaultMessage": "Prodotto"
+  },
+  {
+    "id": "common.quantity",
+    "defaultMessage": "Qta"
+  },
+  {
     "id": "common.reversals",
     "defaultMessage": "Storni"
   },

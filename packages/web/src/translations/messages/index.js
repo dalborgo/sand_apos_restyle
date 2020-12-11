@@ -9,9 +9,13 @@ export const messages = defineMessages({
     id: 'common.table',
     defaultMessage: 'Tavolo',
   },
-  common_tables: {
-    id: 'common.tables',
-    defaultMessage: 'Tavoli',
+  common_price: {
+    id: 'common.price',
+    defaultMessage: 'Prezzo',
+  },
+  common_product: {
+    id: 'common.product',
+    defaultMessage: 'Prodotto',
   },
   common_room: {
     id: 'common.room',
@@ -64,6 +68,10 @@ export const messages = defineMessages({
   common_covers: {
     id: 'common.covers',
     defaultMessage: 'Coperti',
+  },
+  common_quantity: {
+    id: 'common.quantity',
+    defaultMessage: 'Qta',
   },
   common_date: {
     id: 'common.date',

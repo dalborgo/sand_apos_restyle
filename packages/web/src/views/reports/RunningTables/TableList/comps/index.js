@@ -45,10 +45,11 @@ export const SummaryCellBase = props => {
 
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   buttonRoot: {
     textTransform: 'none',
     lineHeight: '18px',
+    textAlign: 'left',
   },
 }))
 
@@ -72,7 +73,6 @@ const CellBase = props => {
               root: classes.buttonRoot,
             }
           }
-          color="secondary"
           disabled={intLoading}
           onClick={
             async () => {
@@ -90,7 +90,7 @@ const CellBase = props => {
           size="small"
           variant="contained"
         >
-          {parse(dateTimeFormatter(row.creation_date, { year: undefined }) + '<br/>' + row.user)}
+          {parse(dateTimeFormatter(row.creation_date, { year: undefined, month: 'short'}, {second: undefined}) + '<br/>' + row.user)}
         </Button>
       </VirtualTable.Cell>
     )

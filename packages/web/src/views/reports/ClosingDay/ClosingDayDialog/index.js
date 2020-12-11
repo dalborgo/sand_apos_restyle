@@ -14,7 +14,7 @@ import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import CloseIcon from '@material-ui/icons/Close'
 import ClosingTable from './ClosingTable'
-import { useDateFormatter } from 'src/utils/formatters'
+import { useDateTimeFormatter } from 'src/utils/formatters'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import { parentPath } from 'src/utils/urlFunctions'
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
-  const dateFormatter = useDateFormatter()
+  const dateTimeFormatter = useDateTimeFormatter()
   const classes = useStyles()
   const { results: header } = data
   return (
@@ -44,16 +44,26 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
       justify="space-between"
     >
       <Grid item>
-        <Typography display="inline" variant="body2"><FormattedMessage defaultMessage="Apertura" id="reports.closing_day.opening"/>:</Typography>
+        <Typography display="inline" variant="body2">
+          <FormattedMessage
+            defaultMessage="Chiusura"
+            id="reports.closing_day.closing"
+          />:
+        </Typography>
         &nbsp;
         <Typography className={classes.boldText} display="inline" variant="body2">
-          {dateFormatter(header.date, { month: 'short' })}
+          {dateTimeFormatter(header.close_date, { year: undefined, month: '2-digit' }, {second: undefined})}
         </Typography>
         <br/>
-        <Typography display="inline" variant="body2"><FormattedMessage defaultMessage="Chiusura" id="reports.closing_day.closing"/>:</Typography>
+        <Typography display="inline" variant="body2">
+          <FormattedMessage
+            defaultMessage="Apertura"
+            id="reports.closing_day.opening"
+          />:
+        </Typography>
         &nbsp;
         <Typography className={classes.boldText} display="inline" variant="body2">
-          {dateFormatter(header.date, { month: 'short' })}
+          {dateTimeFormatter(header.date, { year: undefined, month: '2-digit' }, {second: undefined})}
         </Typography>
       </Grid>
       <Grid item>
@@ -73,7 +83,7 @@ const ClosingDayDialog = ({ width, docId }) => {
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))
   }, [history])
-
+  
   const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, owner }], {
     enabled: !!docId,
     notifyOnStatusChange: false,

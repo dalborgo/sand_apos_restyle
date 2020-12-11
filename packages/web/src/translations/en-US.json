@@ -67,5 +67,8 @@
   "common.tot": "",
   "common.tables": "",
   "reports.closing_day.closing": "",
-  "reports.closing_day.opening": ""
+  "reports.closing_day.opening": "",
+  "common.product": "",
+  "common.quantity": "",
+  "common.price": ""
 }
