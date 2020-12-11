@@ -1,16 +1,16 @@
-import { Button, Typography, withStyles } from '@material-ui/core'
+import { Button, makeStyles, Typography, withStyles } from '@material-ui/core'
 import React, { memo, useState } from 'react'
-import { FormattedDate, FormattedMessage } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import Box from '@material-ui/core/Box'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { IntegratedSummary } from '@devexpress/dx-react-grid'
 import { useDateTimeFormatter } from 'src/utils/formatters'
-import moment from 'moment'
 import { useHistory } from 'react-router'
 import { useQueryCache } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
+import parse from 'html-react-parser'
 
 export const LoadingComponent = memo(function LoadingComponent ({ isFetching, ...rest }) {
   return (
@@ -45,12 +45,20 @@ export const SummaryCellBase = props => {
 
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
+const useStyles = makeStyles((theme) => ({
+  buttonRoot: {
+    textTransform: 'none',
+    lineHeight: '18px',
+  },
+}))
+
 const CellBase = props => {
-  const { column, row, value, theme } = props
+  const { column, row, theme } = props
   const dateTimeFormatter = useDateTimeFormatter()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const [intLoading, setIntLoading] = useState(false)
   const { selectedCode: { code: owner } } = useAuth()
+  const classes = useStyles()
   const history = useHistory()
   const queryCache = useQueryCache()
   const docId = row._id
@@ -58,33 +66,17 @@ const CellBase = props => {
   if (column.name === 'creation_date') {
     return (
       <VirtualTable.Cell {...props}>
-        <Box>
-          {dateTimeFormatter(row.creation_date, { year: undefined })}
-        </Box>
-        {/* {
-          row.pu_totale_sc > 0 &&
-          <Box color="red">
-            {intl.formatMessage(messages['common_discounts'])}: {moneyFormatter(row.pu_totale_sc)}
-          </Box>
-        }
-        {
-          row.pu_totale_st > 0 &&
-          <Box color="orange">
-            {intl.formatMessage(messages['common_reversals'])}: {moneyFormatter(row.pu_totale_st)}
-          </Box>
-        }*/}
-      </VirtualTable.Cell>
-    )
-  }
-  if (column.name === 'date') {
-    return (
-      <VirtualTable.Cell {...props} style={cellStyle}>
         <Button
+          classes={
+            {
+              root: classes.buttonRoot,
+            }
+          }
           color="secondary"
           disabled={intLoading}
           onClick={
             async () => {
-              const queryKey = ['queries/query_by_id', { id: docId, owner }]
+              const queryKey = [`reports/running_table/${docId}`, { owner }]
               if (!queryCache.getQueryData(queryKey)) {
                 setLoading(true)
                 setIntLoading(true)
@@ -95,15 +87,23 @@ const CellBase = props => {
               history.push(`${window.location.pathname}/${docId}`)
             }
           }
+          size="small"
           variant="contained"
         >
-          <FormattedDate
-            day="2-digit"
-            month="short"
-            value={moment(value, 'YYYYMMDDHHmmssSSS')}
-            year="numeric"
-          />
+          {parse(dateTimeFormatter(row.creation_date, { year: undefined }) + '<br/>' + row.user)}
         </Button>
+      </VirtualTable.Cell>
+    )
+  }
+  if (column.name === 'table_display') {
+    return (
+      <VirtualTable.Cell {...props} style={cellStyle}>
+        <Box>
+          {row.table_display}
+        </Box>
+        <Box>
+          {row.room_display}
+        </Box>
       </VirtualTable.Cell>
     )
   }

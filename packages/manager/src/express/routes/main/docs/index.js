@@ -48,7 +48,7 @@ function addRouters (router) {
         couchQueries.exec(queryTotal, connClass.cluster),
       ]
       const [data, resp2] = await allSettled(promises)
-      if(data.results){
+      if(data.results && resp2.results){
         data.results['total_rows'] = resp2.results[0]
       }
       res.send(data)

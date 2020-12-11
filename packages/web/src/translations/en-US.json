@@ -65,5 +65,7 @@
   "common.room": "",
   "common.table": "",
   "common.tot": "",
-  "common.tables": ""
+  "common.tables": "",
+  "reports.closing_day.closing": "",
+  "reports.closing_day.opening": ""
 }

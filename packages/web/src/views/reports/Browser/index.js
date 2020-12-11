@@ -129,7 +129,7 @@ const TimeStats = memo(function TimeStats ({ hasData }) {
           <FormattedMessage defaultMessage="Tempo query" id="reports.browser.response_time"/>{': '}
         </Typography>
       </Box>
-      <Box style={{ width: 60, marginLeft: 3 }}>
+      <Box style={{ width: 70, marginLeft: 3 }}>
         <Typography display="inline" variant="h6">
           <span id="BrowserSpan">{hasData ? `${responseTimeInMilli || 0} ms` : '---'}</span>
         </Typography>
@@ -194,7 +194,7 @@ const SearchComponent = memo((function SearchComponent (props) {
   )
 }))
 
-const DisplayComponent = memo((function DisplayComponent (props) {
+const DisplayComponent = memo(function DisplayComponent (props) {
   const { enqueueSnackbar } = useSnackbar()
   const save = useCallback(async () => {
     try {
@@ -215,7 +215,6 @@ const DisplayComponent = memo((function DisplayComponent (props) {
           />
           <Fab
             className={props.classes.floatIcon}
-            disabled={!props.docId}
             onClick={save}
             size="small"
           >
@@ -225,7 +224,7 @@ const DisplayComponent = memo((function DisplayComponent (props) {
       }
     </Paper>
   )
-}))
+})
 
 const BrowserView = () => {
   const queryCache = useQueryCache()

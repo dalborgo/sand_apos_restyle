@@ -42,7 +42,7 @@ const TableList = memo(function TableList ({ rows, isFetching }) {
   })
   const [messagesSummary] = useState(() => ({
     sum: intl.formatMessage(messages['common_total']),
-    count: intl.formatMessage(messages['common_total'])
+    count: intl.formatMessage(messages['common_total']),
   }))
   const noDataCellComponent = useCallback(({ colSpan }) =>
     <LoadingComponent colSpan={colSpan} isFetching={isFetching}/>, [isFetching])

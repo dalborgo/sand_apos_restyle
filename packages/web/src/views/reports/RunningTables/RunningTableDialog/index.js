@@ -13,12 +13,13 @@ import { Redirect, useHistory } from 'react-router'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import CloseIcon from '@material-ui/icons/Close'
-import ClosingTable from './ClosingTable'
+import DetailTable from './DetailTable'
 import { useDateFormatter } from 'src/utils/formatters'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import { parentPath } from 'src/utils/urlFunctions'
-import { FormattedMessage } from 'react-intl'
+import { messages } from 'src/translations/messages'
+import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles(theme => ({
   dialogContent: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles(theme => ({
 
 const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
   const dateFormatter = useDateFormatter()
+  const intl = useIntl()
   const classes = useStyles()
   const { results: header } = data
   return (
@@ -44,16 +46,16 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
       justify="space-between"
     >
       <Grid item>
-        <Typography display="inline" variant="body2"><FormattedMessage defaultMessage="Apertura" id="reports.closing_day.opening"/>:</Typography>
+        <Typography display="inline" variant="body2">{intl.formatMessage(messages['common_table'])}:</Typography>
         &nbsp;
         <Typography className={classes.boldText} display="inline" variant="body2">
-          {dateFormatter(header.date, { month: 'short' })}
+          {header.table_display}
         </Typography>
         <br/>
-        <Typography display="inline" variant="body2"><FormattedMessage defaultMessage="Chiusura" id="reports.closing_day.closing"/>:</Typography>
+        <Typography display="inline" variant="body2">{intl.formatMessage(messages['common_room'])}:</Typography>
         &nbsp;
         <Typography className={classes.boldText} display="inline" variant="body2">
-          {dateFormatter(header.date, { month: 'short' })}
+          {header.room_display}
         </Typography>
       </Grid>
       <Grid item>
@@ -63,8 +65,8 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
   )
 })
 const loadingSel = state => ({ setLoading: state.setLoading })
-const ClosingDayDialog = ({ width, docId }) => {
-  console.log('%cRENDER_DIALOG_CLOSING_DAY', 'color: orange')
+const RunningTableDialog = ({ width, docId }) => {
+  console.log('%cRENDER_DIALOG_RUNNING_DAY', 'color: orange')
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
@@ -74,7 +76,7 @@ const ClosingDayDialog = ({ width, docId }) => {
     return () => history.push(parentPath(history.location.pathname))
   }, [history])
 
-  const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, owner }], {
+  const { isLoading, data } = useQuery([`reports/running_table/${docId}`, { owner }], {
     enabled: !!docId,
     notifyOnStatusChange: false,
     onSettled: () => {
@@ -90,17 +92,18 @@ const ClosingDayDialog = ({ width, docId }) => {
     return (
       data.results ?
         <Dialog
-          aria-labelledby="closingDay-dialog-title"
+          aria-labelledby="runningTable-dialog-title"
           fullScreen={fullScreen}
           keepMounted
           onClose={onClose}
           open={!!docId}
         >
-          <DialogTitle className={classes.dialogTitle} disableTypography id="closingDay-dialog-title">
+          <DialogTitle className={classes.dialogTitle} disableTypography id="runningTable-dialog-title">
             <DialogHeader data={data} onClose={onClose}/>
           </DialogTitle>
           <DialogContent className={classes.dialogContent}>
-            <ClosingTable data={data}/>
+            {JSON.stringify(data, null, 2)}
+            {/*<DetailTable data={data}/>*/}
           </DialogContent>
         </Dialog>
         :
@@ -112,4 +115,4 @@ const ClosingDayDialog = ({ width, docId }) => {
   
 }
 
-export default memo(withWidth()(ClosingDayDialog))
+export default memo(withWidth()(RunningTableDialog))

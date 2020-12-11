@@ -62,8 +62,10 @@
   "common.filters": "Filtri",
   "filter_from.apply": "Applica",
   "filter_from.clear": "Pulisci",
-  "common.room": "Stanza",
+  "common.room": "Sala",
   "common.table": "Tavolo",
   "common.tot": "Tot",
-  "common.tables": "Tavoli"
+  "common.tables": "Tavoli",
+  "reports.closing_day.closing": "Chiusura",
+  "reports.closing_day.opening": "Apertura"
 }

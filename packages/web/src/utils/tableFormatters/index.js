@@ -2,7 +2,7 @@ import React from 'react'
 import { DataTypeProvider } from '@devexpress/dx-react-grid'
 import { FormattedDate, useIntl } from 'react-intl'
 import moment from 'moment'
-import { codeCurrency } from 'src/utils/formatters'
+import { translations } from '@adapter/common'
 
 const NumberFormatter = ({ value }) => {
   return value / 1000
@@ -13,7 +13,7 @@ const MoneyFormatter = ({ value, column }) => {
   const { currency } = column
   return intl.formatNumber(value / 1000, {
     style: 'currency',
-    currency: currency ? currency : codeCurrency[intl.locale] || 'EUR',
+    currency: currency ? currency : translations.getLocaleCurrency(intl.locale) || 'EUR',
   })
 }
 

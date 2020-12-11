@@ -21,6 +21,8 @@ import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
+import RunningTableDialog from './RunningTableDialog'
+import { useParams } from 'react-router'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -127,6 +129,7 @@ const FilterForm = function FilterForm ({ tableFilter, roomFilter, onSubmit }) {
 const RunningTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
+  const { docId } = useParams()
   const intl = useIntl()
   // eslint-disable-next-line no-unused-vars
   const [_, setState] = useState()
@@ -210,6 +213,7 @@ const RunningTables = () => {
           <TableList isFetching={effectiveFetching} rows={runningRows}/>
         </Paper>
       </DivContentWrapper>
+      <RunningTableDialog docId={docId}/>
     </Page>
   )
 }

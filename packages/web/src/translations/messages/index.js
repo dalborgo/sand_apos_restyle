@@ -15,7 +15,7 @@ export const messages = defineMessages({
   },
   common_room: {
     id: 'common.room',
-    defaultMessage: 'Stanza',
+    defaultMessage: 'Sala',
   },
   role_customer: {
     id: 'role.role_customer',

@@ -89,7 +89,7 @@
   },
   {
     "id": "common.room",
-    "defaultMessage": "Stanza"
+    "defaultMessage": "Sala"
   },
   {
     "id": "common.table",
@@ -221,8 +221,16 @@
     "defaultMessage": "Righe totali"
   },
   {
+    "id": "reports.closing_day.closing",
+    "defaultMessage": "Chiusura"
+  },
+  {
     "id": "reports.closing_day.header_title",
     "defaultMessage": "Chiusure di giornata"
+  },
+  {
+    "id": "reports.closing_day.opening",
+    "defaultMessage": "Apertura"
   },
   {
     "id": "reports.closing_day.tot_discounts",

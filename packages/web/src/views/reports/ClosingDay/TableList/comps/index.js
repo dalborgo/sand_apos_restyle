@@ -135,6 +135,7 @@ const CellBase = props => {
               history.push(`${window.location.pathname}/${docId}`)
             }
           }
+          size="small"
           variant="contained"
         >
           <FormattedDate
