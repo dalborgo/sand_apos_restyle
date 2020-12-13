@@ -19,6 +19,7 @@ router.get('/', function (req, res) {
   res.locals.nodejs = process.version
   res.locals.info = info
   res.locals.namespace = NAMESPACE
+  res.locals.environment = process.env.NODE_ENV || 'development'
   res.render('index')
 })
 

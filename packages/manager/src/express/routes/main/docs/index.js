@@ -19,7 +19,7 @@ async function allSettled (promises) {
 function addRouters (router) {
   router.get('/docs/browser', async function (req, res) {
     const { connClass, query } = req
-    const parsedOwner = utils.parseOwner(query)
+    const parsedOwner = utils.parseOwner(req)
     if (query.text) {
       const { startkey, limit = 40, text = '' } = query
       const cursor = startkey ? `AND META().cas < ${startkey} ${parsedOwner.queryCondition} ` : ''
@@ -62,7 +62,7 @@ function addRouters (router) {
   router.get('/docs/get_by_id', async function (req, res) {
     const { connClass, query } = req
     const { docId } = query
-    const parsedOwner = utils.parseOwner(query)
+    const parsedOwner = utils.parseOwner(req)
     if (!docId) {return res.send({ ok: false, message: 'docId undefined!' })}
     const { ok, results: data, message } = await couchQueries.exec(
       'SELECT '
@@ -83,7 +83,7 @@ function addRouters (router) {
   router.get('/docs/get_by_type', async function (req, res) {
     const { connClass, query } = req
     const { type } = query
-    const parsedOwner = utils.parseOwner(query)
+    const parsedOwner = utils.parseOwner(req)
     if (!type) {return res.send({ ok: false, message: 'type undefined!' })}
     const { ok, results: data, message } = await couchQueries.exec(
       'SELECT '

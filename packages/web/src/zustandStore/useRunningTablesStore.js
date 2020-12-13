@@ -19,9 +19,10 @@ const useRunningTablesStore = create(immerMiddleware(set => ({
   setRunningRows: rows => set(state => {
     state.runningRows = rows
   }),
-  setFilter: ({ room, table }) => set(state => {
+  submitFilter: ({ room, table }) => set(state => {
     state.filter.room = room
     state.filter.table = table
+    state.openFilter = !state.openFilter
   }),
 })))
 

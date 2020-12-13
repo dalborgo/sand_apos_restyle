@@ -58,14 +58,15 @@ function addRouters (router) {
       return res.status(400).send({ code: 'LOGIN_WRONG_CREDENTIALS' })
     }
     const [identity] = results
+    const codes = code ? [code] : identity.codes
     const accessToken = jwt.sign(
-      { userId: identity._id },
+      { userId: identity._id, codes },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRES_IN }
     )
     res.send({
       accessToken,
-      codes: code ? [code] : identity.codes,
+      codes,
       user: {
         ...selectUserFields(identity),
       },
@@ -75,12 +76,10 @@ function addRouters (router) {
     const { connClass, route: { path } } = req
     const { authorization } = req.headers
     const accessToken = authorization.split(' ')[1]
-    const { userId } = jwt.verify(accessToken, JWT_SECRET)
-    const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
+    const { userId, codes } = jwt.verify(accessToken, JWT_SECRET)
+    const query = 'SELECT '
                   + getQueryUserField()
-                  + 'FROM ' + connClass.managerBucketName + ' `user` USE KEYS "' + userId + '" LEFT NEST ' + connClass.managerBucketName + ' setups '
-                  + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) '
-                  + 'FOR code IN `user`.codes END'
+                  + 'FROM ' + connClass.managerBucketName + ' `user` USE KEYS "' + userId + '"'
     const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
     if (!ok) {
       log.error('path', path)
@@ -92,7 +91,7 @@ function addRouters (router) {
     const [identity] = results
     res.send({
       accessToken,
-      codes: identity.codes,
+      codes,
       user: {
         ...selectUserFields(identity),
       },

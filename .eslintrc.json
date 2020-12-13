@@ -7,6 +7,7 @@
   "globals": {
     "__db": "readonly",
     "__helpers": "readonly",
+    "__errors": "readonly",
     "__buckets": "writable"
   },
   "parserOptions": {

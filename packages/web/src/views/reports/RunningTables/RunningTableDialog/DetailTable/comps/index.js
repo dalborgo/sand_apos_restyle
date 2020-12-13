@@ -4,6 +4,8 @@ import Box from '@material-ui/core/Box'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { IntegratedSummary } from '@devexpress/dx-react-grid'
 import { useTimeFormatter } from 'src/utils/formatters'
+import { messages } from 'src/translations/messages'
+import { useIntl } from 'react-intl'
 
 export const summaryCalculator = (type, rows, getValue) => {
   if (type === 'incomeSum') {
@@ -24,7 +26,7 @@ export const SummaryCellBase = props => {
 const CellBase = props => {
   const { column, row, theme } = props
   const timeFormatter = useTimeFormatter()
-  
+  const intl = useIntl()
   const cellStyle = { paddingLeft: theme.spacing(2) }
   if (column.name === 'date') {
     return (
@@ -42,7 +44,7 @@ const CellBase = props => {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
         <Box>
-          {row.pro_display}
+          {row.intl_code ? intl.formatMessage(messages[row.intl_code]) : row.pro_display}
         </Box>
         <Box>
           {row.cat_display}

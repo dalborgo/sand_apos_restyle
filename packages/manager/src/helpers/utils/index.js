@@ -1,12 +1,15 @@
-import { BadRequest } from '../../express/errors'
+const { BadRequest } = require(__errors)
+import { security } from '../'
 
 /**
  *
- * @param owner
+ * @param req: {owner, headers}
  * @param bucketLabel = identificativo per la query condition se richiede di un essere ambigua (es. JOIN)
  */
-function parseOwner ({ owner }, bucketLabel) {
+function parseOwner ({ query, body, headers }, bucketLabel) {
+  const {owner} = Object.assign({}, body, query)
   const ownerArray = Array.isArray(owner) ? owner : [owner]
+  security.hasAuthorization(headers, ownerArray)
   const [startOwner] = ownerArray
   const endOwner = ownerArray.length > 1 ? ownerArray[ownerArray.length - 1] : startOwner
   const nextOwner = endOwner

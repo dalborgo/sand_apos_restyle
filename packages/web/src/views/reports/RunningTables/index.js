@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Box, Button, makeStyles, TextField as TF } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
@@ -16,7 +16,7 @@ import useRunningTablesStore from 'src/zustandStore/useRunningTablesStore'
 import { FastField, Form, Formik } from 'formik'
 import { TextField } from 'formik-material-ui'
 import FilterButton from 'src/components/FilterButton'
-import { cFunctions } from '@adapter/common'
+import { validation } from '@adapter/common'
 import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import Paper from '@material-ui/core/Paper'
@@ -38,10 +38,10 @@ const runningSelector = state => ({
   setRunningRows: state.setRunningRows,
   tableFilter: state.filter.table,
   roomFilter: state.filter.room,
-  setFilter: state.setFilter,
+  submitFilter: state.submitFilter,
 })
 
-const FilterForm = function FilterForm ({ tableFilter, roomFilter, onSubmit }) {
+const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit }) {
   console.log('%cRENDER_FORM', 'color: pink')
   const { selectedCode: { code: owner } } = useAuth()
   const intl = useIntl()
@@ -109,7 +109,7 @@ const FilterForm = function FilterForm ({ tableFilter, roomFilter, onSubmit }) {
             </Box>
             <Box display="flex" justifyContent="flex-end">
               <Box mr={2}>
-                <Button onClick={() => setValues(cFunctions.resetAll(values))} size="small" variant="contained">
+                <Button onClick={() => setValues(validation.resetAll(values))} size="small" variant="contained">
                   <FormattedMessage defaultMessage="Pulisci" id="filter_from.clear"/>
                 </Button>
               </Box>
@@ -124,7 +124,7 @@ const FilterForm = function FilterForm ({ tableFilter, roomFilter, onSubmit }) {
       }
     </Formik>
   )
-}
+})
 
 const RunningTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
@@ -142,10 +142,12 @@ const RunningTables = () => {
     switchOpenFilter,
     tableFilter,
     roomFilter,
-    setFilter,
+    submitFilter,
   } = useRunningTablesStore(runningSelector, shallow)
   const { refetch, ...rest } = useQuery(['reports/running_tables', {
     owner,
+    roomFilter,
+    tableFilter,
   }], {
     onError: snackQueryError,
     onSettled: data => {
@@ -162,18 +164,22 @@ const RunningTables = () => {
     }
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryCache])
+  useEffect(() => {
+    if (rest?.data?.ok && !rest.isFetchedAfterMount) {
+      console.log('%c***USE_EFFECT', 'color: cyan')
+      setRunningRows(rest.data.results)
+    }
+  }, [rest.data, rest.isFetchedAfterMount, setRunningRows])
   const onFilterSubmit = useCallback(filter => {
     console.log('filter:', filter)
-    setFilter(filter)
-    switchOpenFilter()
+    submitFilter(filter)
     return filter
-  }, [setFilter, switchOpenFilter])
+  }, [submitFilter])
   
   const FilterFormWr = useMemo(() => (
     <FilterForm onSubmit={onFilterSubmit} roomFilter={roomFilter} tableFilter={tableFilter}/>
   ), [roomFilter, onFilterSubmit, tableFilter])
   const effectiveFetching = getEffectiveFetching(rest)
-  
   return (
     <Page
       title={intl.formatMessage(messages['menu_running_tables'])}

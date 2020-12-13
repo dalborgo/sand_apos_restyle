@@ -7,7 +7,7 @@ function addRouters (router) {
   router.get('/types/rooms', async function (req, res) {
     const { connClass, query } = req
     utils.controlParameters(query, ['owner'])
-    const parsedOwner = utils.parseOwner(query)
+    const parsedOwner = utils.parseOwner(req)
     const {
       bucketName = connClass.astenposBucketName,
       options,

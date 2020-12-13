@@ -8,7 +8,7 @@ function addRouters (router) {
   router.get('/reports/closing_days', async function (req, res) {
     const { connClass, query } = req
     utils.controlParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
-    const parsedOwner = utils.parseOwner(query)
+    const parsedOwner = utils.parseOwner(req)
     const {
       bucketName = connClass.astenposBucketName,
       options,
@@ -32,20 +32,22 @@ function addRouters (router) {
   router.get('/reports/running_tables', async function (req, res) {
     const { connClass, query } = req
     utils.controlParameters(query, ['owner'])
-    const parsedOwner = utils.parseOwner(query, 'buc')
+    const parsedOwner = utils.parseOwner(req, 'buc')
     const {
       bucketName = connClass.astenposBucketName,
+      tableFilter,
+      roomFilter,
       options,
     } = query
-    const statement = knex({ buc: bucketName })
-      .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "ORDER"`))
-      .select(knex.raw('meta(buc).id _id'))
+    const statement = knex({ buc: bucketName }).where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "ORDER"`))
+    roomFilter && statement.where('buc.room', roomFilter)
+    tableFilter && statement.where('buc.table_display', 'like', `%${tableFilter}%`)
+    statement.select(knex.raw('meta(buc).id _id'))
       .select(['buc.owner', 'buc.creation_date', 'buc.table_display', 'buc.room_display', 'buc.covers', 'user.user'])
       .select(knex.raw('ARRAY_SUM(ARRAY((e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta) FOR e IN buc.entries WHEN e.deleted != TRUE END) + buc.cover_price * buc.covers AS income'))
       .joinRaw('JOIN `' + bucketName + '` as `user` ON KEYS buc.creating_user')
       .orderBy('buc.creation_date', 'desc')
-      .toQuery()
-    const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
+    const { ok, results: data, message, info } = await couchQueries.exec(statement.toQuery(), connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, info })}
     res.send({ ok, results: data })
   })
@@ -55,16 +57,16 @@ function addRouters (router) {
     utils.controlParameters(query, ['owner'])
     utils.controlParameters(params, ['orderId'])
     const { orderId } = params
-    const parsedOwner = utils.parseOwner(query, 'buc')
+    const parsedOwner = utils.parseOwner(req, 'buc')
     const {
       bucketName = connClass.astenposBucketName,
       options,
     } = query
     const statement = knex
       .from(knex.raw(`${bucketName} buc USE KEYS "${orderId}" LEFT NEST ${bucketName} us ON KEYS ARRAY x.\`user\` FOR x IN buc.entries END`))
-      .select(['buc.owner', 'buc.creation_date', 'buc.table_display', 'buc.room_display', 'buc.covers', 'buc.cover_price', 'user.user'])
-      .select(knex.raw('ARRAY {"pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries WHEN e.deleted != TRUE END AS entries'))
-      .joinRaw('JOIN `' + bucketName + '` as `user` ON KEYS buc.creating_user')
+      .select(['buc.table_display', 'buc.room_display'])
+      .select(knex.raw('CASE WHEN buc.covers > 0 THEN ARRAY_PREPEND({"date":buc.creation_date, "pro_qta": buc.covers, "amount": buc.cover_price * buc.covers, "user":`user`.`user`, "intl_code": "common_covers"}, arr_entries) ELSE arr_entries END AS entries'))
+      .joinRaw('JOIN `' + bucketName + '` as `user` ON KEYS buc.creating_user LET arr_entries = ARRAY {"pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries WHEN e.deleted != TRUE END')
       .orderBy('buc.creation_date', 'desc')
       .where(knex.raw(`${parsedOwner.queryCondition}`))
       .toQuery()

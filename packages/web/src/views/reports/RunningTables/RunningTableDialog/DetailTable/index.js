@@ -16,21 +16,6 @@ const totalSummaryItems = [
   { columnName: 'amount', type: 'sum' },
 ]
 
-function addCoverEntry (data, coverDisplay) {
-  const { entries, covers, cover_price: coverPrice, creation_date, user } = data
-  if (covers) {
-    return [{
-      date: creation_date,
-      pro_qta: covers,
-      amount: coverPrice * covers,
-      user,
-      pro_display: coverDisplay,
-    }, ...entries]
-  } else {
-    return entries
-  }
-}
-
 const getUnitPrice = ({ amount, pro_qta: proQta }) => amount / proQta
 const moneyColumns = ['amount', 'unit_price']
 
@@ -48,11 +33,10 @@ function DetailTable ({ data }) {
   const [messagesSummary] = useState(() => ({
     sum: intl.formatMessage(messages['common_total']),
   }))
-  const entries = addCoverEntry(data, intl.formatMessage(messages['common_covers'])) //ok no useState
   return (
     <Grid
       columns={columns}
-      rows={entries}
+      rows={data.entries}
     >
       <SummaryState
         totalItems={totalSummaryItems}

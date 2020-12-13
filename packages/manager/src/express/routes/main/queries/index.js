@@ -4,10 +4,9 @@ const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
 
 async function queryByType (req, res) {
-  const { connClass } = req
-  const params = Object.assign({}, req.body, req.query)
-  const parsedOwner = utils.parseOwner(params)
-  const { type, columns, withMeta = false, bucketName = connClass.astenposBucketName, options } = params
+  const { connClass, body, query } = req
+  const parsedOwner = utils.parseOwner(req)
+  const { type, columns, withMeta = false, bucketName = connClass.astenposBucketName, options } = Object.assign({}, body, query)
   const knex_ = knex({ buc: bucketName }).where({ type }).where(knex.raw(parsedOwner.queryCondition)).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = knex_.toQuery()
@@ -17,10 +16,9 @@ async function queryByType (req, res) {
 }
 
 async function queryById (req, res) {
-  const { connClass } = req
-  const params = Object.assign({}, req.body, req.query)
-  const parsedOwner = utils.parseOwner(params)
-  const { id, columns, withMeta = false, bucketName = connClass.astenposBucketName, options } = params
+  const { connClass, body, query } = req
+  const parsedOwner = utils.parseOwner(req)
+  const { id, columns, withMeta = false, bucketName = connClass.astenposBucketName, options } = Object.assign({}, body, query)
   const knex_ = knex({ buc: bucketName }).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = `${knex_.toQuery()} USE KEYS "${id}" WHERE ${parsedOwner.queryCondition}`
