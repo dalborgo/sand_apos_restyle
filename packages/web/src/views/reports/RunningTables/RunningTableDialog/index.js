@@ -66,6 +66,7 @@ const RunningTableDialog = ({ docId }) => {
   const { isLoading, data } = useQuery([`reports/running_table/${docId}`, { owner }], {
     enabled: !!docId,
     notifyOnStatusChange: false,
+    staleTime: 5000, //non chiama due volte il server per richieste ravvicinate
     onSettled: () => {
       setLoading(false)
     },

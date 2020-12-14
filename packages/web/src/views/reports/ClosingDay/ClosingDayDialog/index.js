@@ -87,6 +87,7 @@ const ClosingDayDialog = ({ width, docId }) => {
   const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, owner }], {
     enabled: !!docId,
     notifyOnStatusChange: false,
+    staleTime: 5000,
     onSettled: () => {
       setLoading(false)
     },

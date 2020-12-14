@@ -226,6 +226,16 @@ const DisplayComponent = memo(function DisplayComponent (props) {
   )
 })
 
+function setBrowserArea (docObj, history) {
+  if (docObj) {
+    const defaultValue = docObj ? JSON.stringify(docObj, null, 2) : ''
+    const elem = document.getElementById('browserDisplayArea')
+    if (elem) {elem.value = defaultValue}
+  } else {
+    history.push('/app/reports/browser')
+  }
+}
+
 const BrowserView = () => {
   const queryCache = useQueryCache()
   const { enqueueSnackbar } = useSnackbar()
@@ -270,17 +280,16 @@ const BrowserView = () => {
   }, [text])
   const respDoc = useQuery(['docs/get_by_id', { docId }], {
     enabled: docId,
-    onSuccess: ({ results }) => {
-      const docObj = results
-      if (docObj) {
-        const defaultValue = docObj ? JSON.stringify(docObj, null, 2) : ''
-        const elem = document.getElementById('browserDisplayArea')
-        if (elem) {elem.value = defaultValue}
-      } else {
-        history.push('/app/reports/browser')
-      }
+    onSuccess: ({ ok, results }) => {
+      ok && setBrowserArea(results, history)
     },
   })
+  useEffect(() => {
+    if (respDoc?.data?.ok && !respDoc.isFetchedAfterMount) {
+      console.log('%c***USE_EFFECT', 'color: cyan')
+      setBrowserArea(respDoc.data.results, history)
+    }
+  }, [history, respDoc.data, respDoc.isFetchedAfterMount])
   const [mutate] = useMutation(saveMutation, {
     onSettled: (data, error, variables) => {
       if (error) {
