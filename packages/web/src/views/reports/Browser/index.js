@@ -269,7 +269,6 @@ const BrowserView = () => {
       prevDocID.current = docId
     }
   }, [docId])
-  
   useEffect(() => {
     const browserSearchBox = document.getElementById('browserSearchBox')
     browserSearchBox && browserSearchBox.select()

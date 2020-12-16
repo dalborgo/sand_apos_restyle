@@ -171,7 +171,6 @@ const RunningTables = () => {
     }
   }, [rest.data, rest.isFetchedAfterMount, setRunningRows])
   const onFilterSubmit = useCallback(filter => {
-    console.log('filter:', filter)
     submitFilter(filter)
     return filter
   }, [submitFilter])
