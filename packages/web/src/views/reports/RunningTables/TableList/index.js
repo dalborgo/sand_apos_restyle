@@ -29,7 +29,7 @@ const TableList = memo(function TableList ({ rows, isFetching }) {
     const companySelect = ({ owner }) => companyData ? companyData?.[owner]?.name : owner
     const columns_ = [
       { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect },
-      { name: 'creation_date', title: intl.formatMessage(messages['common_date']) },
+      { name: 'last_saved_date', title: intl.formatMessage(messages['common_date']) },
       { name: 'table_display', title: intl.formatMessage(messages['common_table']) },
       { name: 'covers', title: intl.formatMessage(messages['common_covers']) },
       { name: 'income', title: intl.formatMessage(messages['common_income']) },

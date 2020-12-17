@@ -64,7 +64,7 @@ const CellBase = props => {
   const queryClient = useQueryClient()
   const docId = row._id
   const cellStyle = { paddingLeft: theme.spacing(2) }
-  if (column.name === 'creation_date') {
+  if (column.name === 'last_saved_date') {
     return (
       <VirtualTable.Cell {...props}>
         <Button
@@ -90,7 +90,7 @@ const CellBase = props => {
           size="small"
           variant="contained"
         >
-          {parse(dateTimeFormatter(row.creation_date, { year: undefined, month: 'short'}, {second: undefined}) + '<br/>' + row.user)}
+          {parse(dateTimeFormatter(row.last_saved_date, { year: undefined, month: 'short'}, {second: undefined}) + '<br/>' + row.user)}
         </Button>
       </VirtualTable.Cell>
     )
