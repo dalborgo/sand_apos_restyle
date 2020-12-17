@@ -7,7 +7,7 @@ import StandardHeader from 'src/components/StandardHeader'
 import IconButtonLoader from 'src/components/IconButtonLoader'
 import { StandardBreadcrumb } from 'src/components/StandardBreadcrumb'
 import RightDrawer from 'src/components/RightDrawer'
-import { useQuery, useQueryCache } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import shallow from 'zustand/shallow'
 import { getEffectiveFetching } from 'src/utils/logics'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
@@ -27,7 +27,6 @@ import { useParams } from 'react-router'
 const useStyles = makeStyles(theme => ({
   paper: {
     height: '100%',
-    marginTop: theme.spacing(3),
   },
 }))
 
@@ -46,7 +45,7 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
   const { selectedCode: { code: owner } } = useAuth()
   const intl = useIntl()
   const { isLoading, data } = useQuery(['types/rooms', { owner }], {
-    notifyOnStatusChange: false,
+    notifyOnChangeProps: ['data', 'error'],
     staleTime: Infinity, //non aggiorna la cache delle stanze ogni volta che si apre la drawer (richiesto refresh)
   })
   return (
@@ -133,7 +132,7 @@ const RunningTables = () => {
   const intl = useIntl()
   // eslint-disable-next-line no-unused-vars
   const [_, setState] = useState()
-  const queryCache = useQueryCache()
+  const queryClient = useQueryClient()
   const snackQueryError = useSnackQueryError()
   const {
     runningRows,
@@ -150,7 +149,7 @@ const RunningTables = () => {
     tableFilter,
   }], {
     onError: snackQueryError,
-    onSettled: data => {
+    onSettled: data => { //fa risparmiare un expensive rendere al primo caricamento rispetto a sueEffect
       if (data?.ok) {
         setRunningRows(data.results)
       }
@@ -158,14 +157,14 @@ const RunningTables = () => {
   })
   useEffect(() => {
     async function fetchData () {
-      await queryCache.prefetchQuery(['types/rooms', {
+      await queryClient.prefetchQuery(['types/rooms', {
         owner,
       }], { throwOnError: true })
     }
     fetchData().then().catch(error => {setState(() => {throw error})})
-  }, [owner, queryCache])
+  }, [owner, queryClient])
   useEffect(() => {
-    if (rest?.data?.ok && !rest.isFetchedAfterMount) {
+    if (rest?.data?.ok && !rest.isFetchedAfterMount) { //necessario per triggerare quando legge dalla cache
       console.log('%c***USE_EFFECT', 'color: cyan')
       setRunningRows(rest.data.results)
     }
@@ -183,7 +182,7 @@ const RunningTables = () => {
     <Page
       title={intl.formatMessage(messages['menu_running_tables'])}
     >
-      <Box p={3} pb={2}>
+      <Box p={2}>
         <StandardHeader
           breadcrumb={
             <StandardBreadcrumb
@@ -218,7 +217,7 @@ const RunningTables = () => {
           <TableList isFetching={effectiveFetching} rows={runningRows}/>
         </Paper>
       </DivContentWrapper>
-      <RunningTableDialog docId={docId}/>
+      {docId && <RunningTableDialog docId={docId}/>}
     </Page>
   )
 }

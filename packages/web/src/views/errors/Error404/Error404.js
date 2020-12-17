@@ -1,8 +1,8 @@
 import React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
 import { Button, Container, makeStyles, Typography, useMediaQuery, useTheme } from '@material-ui/core'
 import Page from 'src/components/Page'
 import { FormattedMessage } from 'react-intl'
+import { useHistory } from 'react-router'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,7 +40,7 @@ const Error404 = () => {
   const classes = useStyles()
   const theme = useTheme()
   const mobileDevice = useMediaQuery(theme.breakpoints.down('sm'))
-  
+  const history = useHistory()
   return (
     <Page
       className={classes.root}
@@ -82,11 +82,10 @@ const Error404 = () => {
         <div className={classes.buttonContainer}>
           <Button
             color="primary"
-            component={RouterLink}
-            to="/"
+            onClick={() => history.goBack()}
             variant="outlined"
           >
-            <FormattedMessage defaultMessage="Torna alla pagina principale" id="error404.go_back_button" />
+            <FormattedMessage defaultMessage="Torna alla pagina precedente" id="error404.go_back_button" />
           </Button>
         </div>
       </Container>

@@ -78,6 +78,7 @@ app.use(`/${NAMESPACE}`, appRouter)
 
 function getInterceptedResponse (message) {
   switch (message) {
+    case 'cluster object was closed':
     case 'parent cluster object has been closed':
       return { interceptedResponseStatus: 503, hasToRestartServer: true }
     default:

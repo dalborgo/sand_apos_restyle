@@ -10,7 +10,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import CodeAutocomplete from './CodeAutocomplete'
-import { useQueryCache } from 'react-query'
+import { useQueryClient } from 'react-query'
 import { useSnackbar } from 'notistack'
 import { ErrorBoundary } from 'react-error-boundary'
 
@@ -30,17 +30,17 @@ const isAsten = username => username?.toLowerCase() === 'asten'
 const JWTLogin = memo(({ className, ...rest }) => {
   const classes = useStyles()
   const { login } = useAuth()
-  const queryCache = useQueryCache()
+  const queryClient = useQueryClient()
   const { enqueueSnackbar } = useSnackbar()
   const intl = useIntl()
   // eslint-disable-next-line no-unused-vars
   const [_, setState] = useState()
   useEffect(() => {
     async function fetchData () {
-      await queryCache.prefetchQuery('jwt/codes', { throwOnError: true })
+      await queryClient.prefetchQuery('jwt/codes', { throwOnError: true })
     }
     fetchData().then().catch(error => {setState(() => {throw error})}) //trick to send error to boundaries
-  }, [queryCache])
+  }, [queryClient])
   const isMountedRef = useIsMountedRef()
   const snackQueryError = useSnackQueryError()
   return (

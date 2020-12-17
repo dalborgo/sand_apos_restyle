@@ -36,10 +36,10 @@ axiosLocalInstance.interceptors.response.use(function (response) {
   return Promise.reject(error)
 })
 
-export const defaultQueryFn = async (key, params_) => {
+export const defaultQueryFn = async ({ queryKey }) => {
   //viene già injectato questo parametro (owner) di default e se viene passato è solo per questioni di chiave della cache
-  const { owner, ...params } = params_ || {}
-  const { data } = await axiosLocalInstance(`/api/${key}`, {
+  const [_key, { owner, ...params } = {}] = queryKey //passo i parametri come oggetto
+  const { data } = await axiosLocalInstance(`/api/${_key}`, {
     params,
   })
   return data

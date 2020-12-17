@@ -20,13 +20,11 @@ import moment from 'moment'
 import IconButtonLoader from 'src/components/IconButtonLoader'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
     height: '100%',
-    marginTop: theme.spacing(3),
   },
 }))
-
 
 const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate, refetch, isFetching }) {
   console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
@@ -35,7 +33,7 @@ const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate, refetc
   const [open, setOpen] = useState(false)
   const setDateRange = useClosingDayStore(state => state.setDateRange)
   return (
-    <Box alignItems="center" display="flex">
+    <Box alignItems="center" display="flex" p={2} pt={1}>
       <Box mr={2}>
         <Formik
           initialValues={{ dateRange: [startDate, endDate] }}
@@ -90,12 +88,12 @@ const ClosingDay = () => {
   /* useEffect(() => {return () => {reset()}}, [reset])*/
   const { startDate, endDate, closingRows, setClosingRows } = useClosingDayStore(closingSelector, shallow)
   const { isIdle, refetch, ...rest } = useQuery(['reports/closing_days', {
-    startDateInMillis: moment(startDate).format('YYYYMMDDHHmmssSSS'),
-    endDateInMillis: moment(endDate).format('YYYYMMDDHHmmssSSS'),
+    startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
+    endDateInMillis: endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined,
     owner,
   }], {
     onError: snackQueryError,
-    enabled: startDate && endDate,
+    enabled: Boolean(startDate && endDate),
     onSettled: data => {
       if (data?.ok) {
         setClosingRows(data.results)
@@ -107,20 +105,18 @@ const ClosingDay = () => {
     <Page
       title={intl.formatMessage(messages['menu_closing_day'])}
     >
-      <Box p={3} pb={2}>
+      <Box p={2}>
         <StandardHeader>
           <FormattedMessage defaultMessage="Chiusure di giornata" id="reports.closing_day.header_title"/>
         </StandardHeader>
       </Box>
+      <FormikWrapper endDate={endDate} isFetching={effectiveFetching} refetch={refetch} startDate={startDate}/>
       <DivContentWrapper>
-        <Box display="flex">
-          <FormikWrapper endDate={endDate} isFetching={effectiveFetching} refetch={refetch} startDate={startDate}/>
-        </Box>
         <Paper className={classes.paper}>
           <TableList isFetching={effectiveFetching && !closingRows.length} isIdle={isIdle} rows={closingRows}/>
         </Paper>
       </DivContentWrapper>
-      <ClosingDayDialog docId={docId}/>
+      {docId && <ClosingDayDialog docId={docId}/>}
     </Page>
   )
 }

@@ -7,7 +7,7 @@ import { IntegratedSummary } from '@devexpress/dx-react-grid'
 import { useMoneyFormatter } from 'src/utils/formatters'
 import moment from 'moment'
 import { useHistory } from 'react-router'
-import { useQueryCache } from 'react-query'
+import { useQueryClient } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
@@ -92,7 +92,7 @@ const CellBase = props => {
   const [intLoading, setIntLoading] = useState(false)
   const { selectedCode: { code: owner } } = useAuth()
   const history = useHistory()
-  const queryCache = useQueryCache()
+  const queryClient = useQueryClient()
   const docId = row._id
   const cellStyle = { paddingLeft: theme.spacing(2) }
   if (column.name === 'income') {
@@ -124,10 +124,10 @@ const CellBase = props => {
           onClick={
             async () => {
               const queryKey = ['queries/query_by_id', { id: docId, owner }]
-              if (!queryCache.getQueryData(queryKey)) {
+              if (!queryClient.getQueryData(queryKey)) {
                 setLoading(true)
                 setIntLoading(true)
-                await queryCache.prefetchQuery(queryKey, { throwOnError: true })
+                await queryClient.prefetchQuery(queryKey, { throwOnError: true })
                 setIntLoading(false)
                 setLoading(false)
               }

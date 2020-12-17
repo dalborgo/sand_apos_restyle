@@ -3,7 +3,7 @@ import jwtDecode from 'jwt-decode'
 import SplashScreen from 'src/components/SplashScreen'
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import log from '@adapter/common/src/log'
-import { useQueryCache } from 'react-query'
+import { useQueryClient } from 'react-query'
 import find from 'lodash/find'
 import * as stores from 'src/zustandStore'
 import useGeneralStore from '../zustandStore/useGeneralStore'
@@ -113,7 +113,7 @@ function clearAllStores () {
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState)
-  const queryCache = useQueryCache()
+  const queryClient = useQueryClient()
   const login = async (username, password, code) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password, code })
     const { accessToken, user, codes } = response.data
@@ -133,7 +133,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setSession({})
     clearAllStores()
-    queryCache.clear()
+    queryClient.clear()
     dispatch({ type: 'LOGOUT' })
   }
   const changeCode = selectedCode => {

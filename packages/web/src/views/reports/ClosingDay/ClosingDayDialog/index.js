@@ -85,8 +85,7 @@ const ClosingDayDialog = ({ width, docId }) => {
   }, [history])
   
   const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, owner }], {
-    enabled: !!docId,
-    notifyOnStatusChange: false,
+    notifyOnChangeProps: ['data', 'error'],
     staleTime: 5000,
     onSettled: () => {
       setLoading(false)
@@ -105,7 +104,7 @@ const ClosingDayDialog = ({ width, docId }) => {
           fullScreen={fullScreen}
           keepMounted
           onClose={onClose}
-          open={!!docId}
+          open={Boolean(true)}
         >
           <DialogTitle className={classes.dialogTitle} disableTypography id="closingDay-dialog-title">
             <DialogHeader data={data} onClose={onClose}/>

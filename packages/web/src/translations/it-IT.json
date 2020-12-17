@@ -12,7 +12,7 @@
   "error500.goto_home_page": "Vai all home page",
   "error500.something_wrong": "500: Ooops, qualcosa è andato storto!",
   "error500.goto_home_page_button": "Vai all'home page",
-  "error404.go_back_button": "Torna alla pagina principale",
+  "error404.go_back_button": "Torna alla pagina precedente",
   "error404.goto_home_page_description": "Se hai digitato un collegamento nella barra degli indirizzi, prova ad utilizzare il menu di navigazione a\n          sinistra.",
   "error404.wrong_page": "404: La pagina che stai cercando non è qui!",
   "reports.browser.response_time": "Tempo query",

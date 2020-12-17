@@ -62,13 +62,11 @@ const RunningTableDialog = ({ docId }) => {
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))
   }, [history])
-  
   const { isLoading, data } = useQuery([`reports/running_table/${docId}`, { owner }], {
-    enabled: !!docId,
-    notifyOnStatusChange: false,
+    notifyOnChangeProps: ['data', 'error'],
     staleTime: 5000, //non chiama due volte il server per richieste ravvicinate
     onSettled: () => {
-      setLoading(false)
+      isLoading && setLoading(false)
     },
   })
   useEffect(() => {
@@ -81,10 +79,9 @@ const RunningTableDialog = ({ docId }) => {
       data.results ?
         <Dialog
           aria-labelledby="runningTable-dialog-title"
-          keepMounted
           maxWidth="md"
           onClose={onClose}
-          open={!!docId}
+          open={Boolean(true)}
         >
           <DialogTitle className={classes.dialogTitle} disableTypography id="runningTable-dialog-title">
             <DialogHeader data={data} onClose={onClose}/>

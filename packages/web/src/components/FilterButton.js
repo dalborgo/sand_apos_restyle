@@ -20,7 +20,9 @@ export default memo(function FilterButton ({ isActive, onClick }) {
     >
       <Button
         color="secondary"
+        disableFocusRipple
         onClick={onClick}
+        size="small"
         variant="contained"
       >
         <SvgIcon fontSize="small">

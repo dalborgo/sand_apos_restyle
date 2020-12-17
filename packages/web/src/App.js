@@ -8,7 +8,11 @@ import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import GlobalStyles from 'src/components/GlobalStyles'
 import ScrollReset from 'src/components/ScrollReset'
 import { defaultQueryFn } from 'src/utils/reactQueryFunctions'
-import { QueryCache, ReactQueryCacheProvider, useErrorResetBoundary } from 'react-query'
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQueryErrorResetBoundary,
+} from 'react-query'
 import { IntlProvider } from 'react-intl'
 import { ErrorBoundary } from 'react-error-boundary'
 import messages from 'src/translations/it-IT.json'
@@ -16,7 +20,7 @@ import { AuthProvider } from 'src/contexts/JWTAuthContext'
 import useSettings from 'src/hooks/useSettings'
 import { createTheme } from 'src/theme'
 import routes, { renderRoutes } from 'src/routes'
-import { ReactQueryDevtools } from 'react-query-devtools'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import { REACT_QUERY_DEV_TOOLS } from 'src/constants'
 import SnackMyProvider from 'src/components/Snack/SnackComponents'
 import Error500 from 'src/views/errors/Error500'
@@ -36,10 +40,9 @@ const myErrorHandler = (error, info) => {
   log.error('Global componentStack', info.componentStack)
 }
 
-const queryCache = new QueryCache({
-  defaultConfig: {
+const queryClient = new QueryClient({
+  defaultOptions: {
     queries: {
-      notifyOnStatusChange: true,
       queryFn: defaultQueryFn,
       refetchOnWindowFocus: false,
       retry: false,
@@ -56,7 +59,7 @@ const RouteList = () => {
 
 const App = () => {
   const { settings } = useSettings()
-  const { reset } = useErrorResetBoundary()
+  const { reset } = useQueryErrorResetBoundary()
   useMemo(() => {
     log.info('Locale:', settings.locale)
     moment.locale(settings.locale)
@@ -75,16 +78,16 @@ const App = () => {
             <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
               <SnackMyProvider>
                 <Router history={history}>
-                  <ReactQueryCacheProvider queryCache={queryCache}>
+                  <QueryClientProvider client={queryClient}>
                     <AuthProvider>
                       <ScrollReset/>
                       <RouteList/>
                       {
                         REACT_QUERY_DEV_TOOLS &&
-                        <ReactQueryDevtools initialIsOpen panelProps={{ style: { height: 400 } }}/>
+                        <ReactQueryDevtools initialIsOpen={Boolean(true)} panelProps={{ style: { height: 400 } }}/>
                       }
                     </AuthProvider>
-                  </ReactQueryCacheProvider>
+                  </QueryClientProvider>
                 </Router>
               </SnackMyProvider>
             </ErrorBoundary>

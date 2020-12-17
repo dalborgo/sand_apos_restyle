@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Divider, Grid, makeStyles, Paper, Typography } from '@material-ui/core'
-import { useInfiniteQuery, useMutation, useQuery, useQueryCache } from 'react-query'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from 'react-query'
 import Page from 'src/components/Page'
 import DocList from './DocList'
 import SearchBox from './SearchBox'
@@ -94,8 +94,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 export let responseTimeInMilli
-const fetchList = async (key, text, _, cursor) => {
-  const { data, config } = await axiosLocalInstance(`/api/${key}`, {
+const fetchList = async ({queryKey, pageParam: cursor}) => {
+  const [_key, text ] = queryKey
+  const { data, config } = await axiosLocalInstance(`/api/${_key}`, {
     params: {
       limit: LIMIT,
       startkey: cursor,
@@ -237,7 +238,7 @@ function setBrowserArea (docObj, history) {
 }
 
 const BrowserView = () => {
-  const queryCache = useQueryCache()
+  const queryClient = useQueryClient()
   const { enqueueSnackbar } = useSnackbar()
   const { selectedCode } = useAuth()
   const classes = useStyles()
@@ -248,7 +249,7 @@ const BrowserView = () => {
   const prevDocID = useRef(null)
   const snackQueryError = useSnackQueryError()
   const respList = useInfiniteQuery(['docs/browser', text, selectedCode], fetchList, {
-    getFetchMore: (lastGroup, allGroups) => {
+    getNextPageParam: (lastGroup, allGroups) => {
       const { total_rows: totalRows, rows = [] } = lastGroup?.results
       const cursor = rows[rows.length - 1]?.key
       const rowsFetched = allGroups.length * LIMIT
@@ -269,6 +270,7 @@ const BrowserView = () => {
       prevDocID.current = docId
     }
   }, [docId])
+  
   useEffect(() => {
     const browserSearchBox = document.getElementById('browserSearchBox')
     browserSearchBox && browserSearchBox.select()
@@ -278,7 +280,7 @@ const BrowserView = () => {
     }
   }, [text])
   const respDoc = useQuery(['docs/get_by_id', { docId }], {
-    enabled: docId,
+    enabled: !!docId,
     onSuccess: ({ ok, results }) => {
       ok && setBrowserArea(results, history)
     },
@@ -289,7 +291,7 @@ const BrowserView = () => {
       setBrowserArea(respDoc.data.results, history)
     }
   }, [history, respDoc.data, respDoc.isFetchedAfterMount])
-  const [mutate] = useMutation(saveMutation, {
+  const {mutateAsync: mutate} = useMutation(saveMutation, {
     onSettled: (data, error, variables) => {
       if (error) {
         enqueueSnackbar(error.message)
@@ -312,29 +314,29 @@ const BrowserView = () => {
             enqueueSnackbar(message, { variant: 'success' })
           }
         }
-        queryCache.invalidateQueries('docs/browser').then()
-        queryCache.invalidateQueries(['docs/get_by_id', docId]).then()
+        queryClient.invalidateQueries('docs/browser').then()
+        queryClient.invalidateQueries(['docs/get_by_id', docId]).then()
       }
     },
   })
-  const [remove] = useMutation(deleteMutation, {
+  const {mutateAsync : remove} = useMutation(deleteMutation, {
     onSettled: (data) => {
       const { ok, results } = data
       const message = `[DELETED] docId: ${results.docId}`
       enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
-      queryCache.invalidateQueries('docs/browser').then()
+      queryClient.invalidateQueries('docs/browser').then()
     },
   })
   const searchBody = {
-    canFetchMore: respList.canFetchMore,
+    canFetchMore: respList.hasNextPage,
     classes,
-    data: respList.data,
-    fetchMore: respList.fetchMore,
+    data: respList.data?.pages,
+    fetchMore: respList.fetchNextPage,
     isFetchingList: respList.isFetching,
     isFetchingDoc: respDoc.isFetching,
     isFetchedAfterMountList: respList.isFetchedAfterMount,
     isFetching: respList.isFetching || respDoc.isFetching,
-    isFetchingMore: respList.isFetchingMore,
+    isFetchingMore: respList.isFetchingNextPage,
     isLoading: respList.isLoading,
     isSuccessList: respList.isSuccess,
     isSuccessDoc: respDoc.isSuccess,

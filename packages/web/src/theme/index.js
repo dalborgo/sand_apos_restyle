@@ -17,6 +17,9 @@ const baseOptions = {
     MuiDialog: {
       TransitionComponent: Transition,
     },
+    MuiButton: {
+      disableFocusRipple: true,
+    },
   },
   overrides: {
     MuiLinearProgress: {

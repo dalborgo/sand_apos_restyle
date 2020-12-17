@@ -1,5 +1,5 @@
-import React, { memo, useCallback, useEffect, useRef } from 'react'
-import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, TextField, Toolbar } from '@material-ui/core'
+import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, TextField, Toolbar, useTheme } from '@material-ui/core'
 import { Menu as MenuIcon } from 'react-feather'
 import { THEMES } from 'src/constants'
 import Account from './Account'
@@ -35,8 +35,19 @@ const useStyles = makeStyles(theme => ({
     minWidth: 120,
   },
   inputRoot: {
-    backgroundColor: theme.palette.secondary.light,
     color: theme.palette.secondary.contrastText,
+    backgroundColor: 'none',
+  },
+  iconOutlined: {
+    color: theme.palette.secondary.contrastText,
+  },
+  select: {
+    '&:focus': {
+      backgroundColor: theme.name === THEMES.LIGHT ? theme.palette.primary.main : theme.palette.background.default,
+    },
+  },
+  inputNotchedOutline: {
+    border: 0,
   },
   toolbar: {
     minHeight: 64,
@@ -48,10 +59,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.error.main,
   },
 }))
-
-const optionBg = {
-  backgroundColor: '#7973EF',
-}
 
 function extracted (morseState, user, switchAllIn, allin) {
   let dt = new Date().getTime()
@@ -111,14 +118,21 @@ const TopBar = ({
   setMobileNavOpen,
 }) => {
   const { codes, selectedCode = { code: NO_SELECTED_CODE }, changeCode, user } = useAuth()
+  const { settings } = useSettings()
+  const theme = useTheme()
+  const optionBg = useMemo(() => {
+    if (settings.theme === 'LIGHT') {
+      return {
+        backgroundColor: theme.palette.secondary.main,
+      }
+    }
+  }, [settings.theme, theme.palette.secondary.main])
   const classes = useStyles()
   const allIn_ = useGeneralStore(selAllIn)
   const switchAllIn = useGeneralStore(selSwitchAllIn)
   const intl = useIntl()
   const divRef = useRef(null)
   const morseState = useRef({ count: 0, time: 0, serie: 0 })
-  const { settings } = useSettings()
-  const isLight = settings.theme === 'LIGHT'
   const handleMorse = useCallback(() => {
     extracted(morseState, user, switchAllIn, allIn_)
   }, [user, switchAllIn, allIn_])
@@ -158,7 +172,8 @@ const TopBar = ({
             InputProps={
               {
                 classes: {
-                  root: isLight ? classes.inputRoot : undefined,
+                  root: classes.inputRoot,
+                  notchedOutline: classes.inputNotchedOutline,
                 },
               }
             }
@@ -174,6 +189,10 @@ const TopBar = ({
             SelectProps={
               {
                 native: true,
+                classes: {
+                  iconOutlined: classes.iconOutlined,
+                  select: classes.select,
+                },
               }
             }
             size="small"
@@ -183,7 +202,7 @@ const TopBar = ({
             {
               codes.length > 1 &&
               <option
-                style={isLight ? optionBg : undefined}
+                style={optionBg}
                 value={NO_SELECTED_CODE}
               >
                 {intl.formatMessage(messages.common_all)}
@@ -193,7 +212,7 @@ const TopBar = ({
               codes.map(({ code, name }) => (
                 <option
                   key={code}
-                  style={isLight ? optionBg : undefined}
+                  style={optionBg}
                   value={code}
                 >
                   {capitalCase(name)}

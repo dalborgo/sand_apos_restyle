@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, withWidth } from '@material-ui/core'
 
-const StandardHeader = memo(function StandardHeader ({ children, rightComponent, breadcrumb }) {
+const StandardHeader = memo(function StandardHeader ({ children, rightComponent, breadcrumb, width }) {
   return (
     <Grid
       alignItems="center"
@@ -13,7 +13,7 @@ const StandardHeader = memo(function StandardHeader ({ children, rightComponent,
         <Grid container spacing={3}>
           <Grid item>
             {
-              breadcrumb && breadcrumb
+              (breadcrumb && width !== 'xs') && breadcrumb
             }
             <Typography
               color="textPrimary"
@@ -34,4 +34,4 @@ const StandardHeader = memo(function StandardHeader ({ children, rightComponent,
   )
 })
 
-export default StandardHeader
+export default withWidth()(StandardHeader)
