@@ -20,6 +20,9 @@ const baseOptions = {
     MuiButton: {
       disableFocusRipple: true,
     },
+    MuiIconButton: {
+      disableFocusRipple: true,
+    },
   },
   overrides: {
     MuiLinearProgress: {
