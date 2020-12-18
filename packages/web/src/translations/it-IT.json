@@ -70,5 +70,6 @@
   "reports.closing_day.opening": "Apertura",
   "common.product": "Prodotto",
   "common.quantity": "Qta",
-  "common.price": "Prezzo"
+  "common.price": "Prezzo",
+  "reports.dashboard.best_earning": "Miglior Guadagno"
 }

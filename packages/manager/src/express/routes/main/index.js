@@ -3,6 +3,7 @@ import docs from './docs'
 import info from './info'
 import jwt from './jwt'
 import reports from './reports'
+import stats from './stats'
 import types from './types'
 
 const express = require('express')
@@ -14,6 +15,7 @@ docs.addRouters(router)
 info.addRouters(router)
 jwt.addRouters(router)
 reports.addRouters(router)
+stats.addRouters(router)
 types.addRouters(router)
 
 router.get('/', function (req, res) {

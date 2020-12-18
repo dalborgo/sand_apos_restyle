@@ -257,6 +257,10 @@
     "defaultMessage": "Totale"
   },
   {
+    "id": "reports.dashboard.best_earning",
+    "defaultMessage": "Miglior Guadagno"
+  },
+  {
     "id": "reports.header.list_documents",
     "defaultMessage": "Lista Documenti"
   },

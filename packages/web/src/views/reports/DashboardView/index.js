@@ -9,7 +9,7 @@ import RealTime from './RealTime'
 import RoiPerCustomer from './RoiPerCustomer'
 import SystemHealth from './SystemHealth'
 import TeamTasks from './TeamTasks'
-import TodaysMoney from './TodaysMoney'
+import BestEarning from './BestEarning'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +40,7 @@ const DashboardView = () => {
             sm={6}
             xs={12}
           >
-            <TodaysMoney/>
+            <BestEarning/>
           </Grid>
           <Grid
             item

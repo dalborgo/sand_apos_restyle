@@ -70,5 +70,6 @@
   "reports.closing_day.opening": "",
   "common.product": "",
   "common.quantity": "",
-  "common.price": ""
+  "common.price": "",
+  "reports.dashboard.best_earning": ""
 }
