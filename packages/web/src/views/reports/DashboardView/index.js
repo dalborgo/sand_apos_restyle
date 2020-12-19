@@ -1,6 +1,7 @@
 import React from 'react'
-import { Container, Grid, makeStyles } from '@material-ui/core'
+import { Container, Grid, makeStyles, withWidth } from '@material-ui/core'
 import Page from 'src/components/Page'
+import ErrorSuspenseWrapper from 'src/components/ErrorSuspenseWrapper'
 import Header from './Header'
 import LatestProjects from './LatestProjects'
 import NewProjects from './NewProjects'
@@ -10,6 +11,7 @@ import RoiPerCustomer from './RoiPerCustomer'
 import SystemHealth from './SystemHealth'
 import TeamTasks from './TeamTasks'
 import BestEarning from './BestEarning'
+import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,9 +20,12 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
   },
+  sameHeight: {
+    minHeight: 143,
+  },
 }))
 
-const DashboardView = () => {
+const DashboardView = ({ width }) => {
   const classes = useStyles()
   
   return (
@@ -35,12 +40,15 @@ const DashboardView = () => {
           spacing={3}
         >
           <Grid
+            className={clsx({ [classes.sameHeight]: width !== 'xs' })}
             item
             lg={3}
             sm={6}
             xs={12}
           >
-            <BestEarning/>
+            <ErrorSuspenseWrapper>
+              <BestEarning/>
+            </ErrorSuspenseWrapper>
           </Grid>
           <Grid
             item
@@ -102,4 +110,4 @@ const DashboardView = () => {
   )
 }
 
-export default DashboardView
+export default withWidth()(DashboardView)

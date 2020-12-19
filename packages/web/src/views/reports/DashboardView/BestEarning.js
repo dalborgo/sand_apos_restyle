@@ -5,7 +5,6 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { useDateFormatter, useMoneyFormatter } from 'src/utils/formatters'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
-import LoadingCircularBoxed from 'src/components/LoadingCircularBoxed'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,13 +23,17 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const BestEarning = () => {
-  const classes = useStyles()
+  console.log('%cRENDER_BEST', 'color: pink')
   const { selectedCode: { code: owner } } = useAuth()
+  const classes = useStyles()
   const intl = useIntl()
   const moneyFormatter = useMoneyFormatter()
   const dateFormatter = useDateFormatter()
-  const { isLoading, data } = useQuery(['stats/best_earning', { owner }])
-  if (!isLoading && data?.ok) {
+  const { data } = useQuery(['stats/best_earning', { owner }], {
+    notifyOnChangeProps: ['data', 'error'],
+    suspense: true,
+  })
+  if (data?.ok) {
     const [value, date] = data.results
     return (
       <Card
@@ -66,7 +69,7 @@ const BestEarning = () => {
       </Card>
     )
   } else {
-    return <LoadingCircularBoxed/>
+    return null
   }
 }
 

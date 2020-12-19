@@ -1,8 +1,9 @@
 import React, { memo, useEffect, useState } from 'react'
 import clsx from 'clsx'
 import * as Yup from 'yup'
+import ErrorSuspenseWrapper from 'src/components/ErrorSuspenseWrapper'
 import { FastField, Formik } from 'formik'
-import { Box, Button, CircularProgress, makeStyles } from '@material-ui/core'
+import { Box, Button, makeStyles } from '@material-ui/core'
 import { TextField } from 'formik-material-ui'
 import useAuth from 'src/hooks/useAuth'
 import useIsMountedRef from 'src/hooks/useIsMountedRef'
@@ -11,8 +12,6 @@ import { messages } from 'src/translations/messages'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import CodeAutocomplete from './CodeAutocomplete'
 import { useQueryClient } from 'react-query'
-import { useSnackbar } from 'notistack'
-import { ErrorBoundary } from 'react-error-boundary'
 
 const useStyles = makeStyles(theme => ({
   helperText: {
@@ -31,7 +30,6 @@ const JWTLogin = memo(({ className, ...rest }) => {
   const classes = useStyles()
   const { login } = useAuth()
   const queryClient = useQueryClient()
-  const { enqueueSnackbar } = useSnackbar()
   const intl = useIntl()
   // eslint-disable-next-line no-unused-vars
   const [_, setState] = useState()
@@ -39,6 +37,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
     async function fetchData () {
       await queryClient.prefetchQuery('jwt/codes', { throwOnError: true })
     }
+    
     fetchData().then().catch(error => {setState(() => {throw error})}) //trick to send error to boundaries
   }, [queryClient])
   const isMountedRef = useIsMountedRef()
@@ -143,21 +142,12 @@ const JWTLogin = memo(({ className, ...rest }) => {
             />
             {
               isAsten(values['username']) &&
-              <ErrorBoundary
-                FallbackComponent={() => null}
-                onError={
-                  () => {
-                    enqueueSnackbar(intl.formatMessage(messages['error_to_fetch_codes']), { variant: 'default' })
-                  }
-                }
-              >
-                <React.Suspense fallback={<div style={{ textAlign: 'center' }}><CircularProgress/></div>}>
-                  <CodeAutocomplete
-                    setFieldTouched={setFieldTouched}
-                    setFieldValue={setFieldValue}
-                  />
-                </React.Suspense>
-              </ErrorBoundary>
+              <ErrorSuspenseWrapper message={intl.formatMessage(messages['error_to_fetch_codes'])} variant="default">
+                <CodeAutocomplete
+                  setFieldTouched={setFieldTouched}
+                  setFieldValue={setFieldValue}
+                />
+              </ErrorSuspenseWrapper>
             }
             <Box mt={2}>
               <Button

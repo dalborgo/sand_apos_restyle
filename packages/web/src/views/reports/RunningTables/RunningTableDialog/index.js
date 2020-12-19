@@ -21,6 +21,12 @@ const useStyles = makeStyles(theme => ({
   boldText: {
     fontWeight: 'bold',
   },
+  divTable: {
+    padding: theme.spacing(0, 1),
+  },
+  gridHeader: {
+    paddingLeft: theme.spacing(1),
+  },
 }))
 
 const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
@@ -30,6 +36,7 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
   return (
     <Grid
       alignItems="center"
+      className={classes.gridHeader}
       container
       justify="space-between"
     >
@@ -87,7 +94,9 @@ const RunningTableDialog = ({ docId }) => {
             <DialogHeader data={data} onClose={onClose}/>
           </DialogTitle>
           <DialogContent className={classes.dialogContent}>
-            <DetailTable data={data.results}/>
+            <div className={classes.divTable}>
+              <DetailTable data={data.results}/>
+            </div>
           </DialogContent>
         </Dialog>
         :
