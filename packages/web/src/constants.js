@@ -6,5 +6,4 @@ export const REACT_QUERY_DEV_TOOLS = false
 export const THEMES = {
   LIGHT: 'LIGHT',
   ONE_DARK: 'ONE_DARK',
-  UNICORN: 'UNICORN',
 }

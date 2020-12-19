@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { capitalCase } from 'change-case'
 import {
-  Badge,
   Box,
   Button,
   FormControlLabel,
@@ -17,15 +16,10 @@ import {
 import { Settings as SettingsIcon } from 'react-feather'
 import useSettings from 'src/hooks/useSettings'
 import { THEMES } from 'src/constants'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { messages } from 'src/translations/messages'
 
 const useStyles = makeStyles((theme) => ({
-  badge: {
-    height: 10,
-    width: 10,
-    borderRadius: 5,
-    marginTop: 10,
-    marginRight: 5,
-  },
   popover: {
     width: 320,
     padding: theme.spacing(2),
@@ -34,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Settings = () => {
   const classes = useStyles()
+  const intl = useIntl()
   const ref = useRef(null)
   const { settings, saveSettings } = useSettings()
   const [isOpen, setOpen] = useState(false)
@@ -66,22 +61,16 @@ const Settings = () => {
   
   return (
     <>
-      <Tooltip title="Settings">
-        <Badge
-          classes={{ badge: classes.badge }}
-          color="secondary"
-          variant="dot"
+      <Tooltip title={intl.formatMessage(messages['common_settings'])}>
+        <IconButton
+          color="inherit"
+          onClick={handleOpen}
+          ref={ref}
         >
-          <IconButton
-            color="inherit"
-            onClick={handleOpen}
-            ref={ref}
-          >
-            <SvgIcon fontSize="small">
-              <SettingsIcon/>
-            </SvgIcon>
-          </IconButton>
-        </Badge>
+          <SvgIcon fontSize="small">
+            <SettingsIcon/>
+          </SvgIcon>
+        </IconButton>
       </Tooltip>
       <Popover
         anchorEl={ref.current}
@@ -99,7 +88,7 @@ const Settings = () => {
           color="textPrimary"
           variant="h4"
         >
-          Settings
+          {intl.formatMessage(messages['common_settings'])}
         </Typography>
         <Box
           mt={2}
@@ -134,13 +123,13 @@ const Settings = () => {
                 />
               )
             }
-            label="Responsive font sizes"
+            label={intl.formatMessage(messages['settings_responsive_fonts'])}
           />
         </Box>
         <Box mt={2}>
           <TextField
             fullWidth
-            label="Theme"
+            label={intl.formatMessage(messages['common_theme'])}
             name="theme"
             onChange={(event) => handleChange('theme', event.target.value)}
             select
@@ -167,7 +156,7 @@ const Settings = () => {
             onClick={handleSave}
             variant="contained"
           >
-            Save Settings
+            <FormattedMessage defaultMessage="Salva Impostazioni" id="toolbar.settings.save"/>
           </Button>
         </Box>
       </Popover>

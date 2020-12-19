@@ -104,12 +104,20 @@
     "defaultMessage": "Sala"
   },
   {
+    "id": "common.settings",
+    "defaultMessage": "Impostazioni"
+  },
+  {
     "id": "common.table",
     "defaultMessage": "Tavolo"
   },
   {
     "id": "common.tables",
     "defaultMessage": "Tavoli"
+  },
+  {
+    "id": "common.theme",
+    "defaultMessage": "Tema"
   },
   {
     "id": "common.to",
@@ -287,6 +295,14 @@
   {
     "id": "table.select_date",
     "defaultMessage": "Ricerca per date"
+  },
+  {
+    "id": "toolbar.settings.responsive_fonts",
+    "defaultMessage": "Font responsivi"
+  },
+  {
+    "id": "toolbar.settings.save",
+    "defaultMessage": "Salva Impostazioni"
   },
   {
     "id": "views.login.installation",

@@ -15,7 +15,7 @@ function addRouters (router) {
     const statement = knex(bucketName)
       .where({ type: 'CLOSING_DAY' })
       .where(knex.raw(parsedOwner.queryCondition))
-      .select(knex.raw('raw max([pu_totale_totale, date])'))
+      .select(knex.raw('raw max([pu_totale_totale, date, owner])'))
       .toQuery()
     const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, info })}

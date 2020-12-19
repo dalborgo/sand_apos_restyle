@@ -32,6 +32,7 @@ export function useDateFormatter () {
   const intl = useIntl()
   const [dateFormatter] = useState(() => {
     return (date, options) => {
+      if (!date) {return ''}
       const date_ = isDate(date) ? date : moment(date, 'YYYYMMDDHHmmssSSS')
       const options_ = Object.assign(defaultDateFormat, options)
       return intl.formatDate(date_, options_)
@@ -44,6 +45,7 @@ export function useTimeFormatter () {
   const intl = useIntl()
   const [timeFormatter] = useState(() => {
     return (date, options) => {
+      if (!date) {return ''}
       const date_ = isDate(date) ? date : moment(date, 'YYYYMMDDHHmmssSSS')
       const options_ = Object.assign(defaultTimeFormat, options)
       return intl.formatTime(date_, options_)
@@ -56,6 +58,7 @@ export function useDateTimeFormatter () {
   const intl = useIntl()
   const [dateTimeFormatter] = useState(() => {
     return (date, dateOptions, timeOptions) => {
+      if (!date) {return ''}
       const date_ = isDate(date) ? date : moment(date, 'YYYYMMDDHHmmssSSS')
       const dateOptions_ = Object.assign(defaultDateFormat, dateOptions)
       const timeOptions_ = Object.assign(defaultTimeFormat, timeOptions)

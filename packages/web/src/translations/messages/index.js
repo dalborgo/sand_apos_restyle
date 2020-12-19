@@ -9,6 +9,14 @@ export const messages = defineMessages({
     id: 'common.table',
     defaultMessage: 'Tavolo',
   },
+  common_settings: {
+    id: 'common.settings',
+    defaultMessage: 'Impostazioni',
+  },
+  common_theme: {
+    id: 'common.theme',
+    defaultMessage: 'Tema',
+  },
   common_price: {
     id: 'common.price',
     defaultMessage: 'Prezzo',
@@ -124,6 +132,10 @@ export const messages = defineMessages({
   installation_required: {
     id: 'auth.login.installation_required',
     defaultMessage: 'Installazione obbligatoria!',
+  },
+  settings_responsive_fonts: {
+    id: 'toolbar.settings.responsive_fonts',
+    defaultMessage: 'Font responsivi',
   },
   LOGIN_WRONG_CREDENTIALS: {
     id: 'auth.login.wrong_credentials',

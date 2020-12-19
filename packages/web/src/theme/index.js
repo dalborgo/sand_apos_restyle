@@ -23,6 +23,14 @@ const baseOptions = {
     MuiIconButton: {
       disableFocusRipple: true,
     },
+    MuiTooltip: {
+      arrow: true,
+      disableFocusListener:true,
+      enterDelay: 0,
+      TransitionProps: {
+        timeout: 0,
+      },
+    },
   },
   overrides: {
     MuiLinearProgress: {
@@ -110,38 +118,7 @@ const themesOptions = [
     },
     shadows: strongShadows,
   },
-  {
-    name: THEMES.UNICORN,
-    palette: {
-      type: 'dark',
-      action: {
-        active: 'rgba(255, 255, 255, 0.54)',
-        hover: 'rgba(255, 255, 255, 0.04)',
-        selected: 'rgba(255, 255, 255, 0.08)',
-        disabled: 'rgba(255, 255, 255, 0.26)',
-        disabledBackground: 'rgba(255, 255, 255, 0.12)',
-        focus: 'rgba(255, 255, 255, 0.12)',
-      },
-      background: {
-        default: '#2a2d3d',
-        dark: '#222431',
-        paper: '#2a2d3d',
-      },
-      primary: {
-        main: '#a67dff',
-      },
-      secondary: {
-        main: '#a67dff',
-      },
-      text: {
-        primary: '#f6f5f8',
-        secondary: '#9699a4',
-      },
-    },
-    shadows: strongShadows,
-  },
 ]
-
 
 export const createTheme = (config = {}) => {
   let themeOptions = themesOptions.find((theme) => theme.name === config.theme)

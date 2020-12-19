@@ -71,5 +71,9 @@
   "common.product": "Prodotto",
   "common.quantity": "Qta",
   "common.price": "Prezzo",
-  "reports.dashboard.best_earning": "Miglior Guadagno"
+  "reports.dashboard.best_earning": "Miglior Guadagno",
+  "common.settings": "Impostazioni",
+  "toolbar.settings.responsive_fonts": "Font responsivi",
+  "toolbar.settings.save": "Salva Impostazioni",
+  "common.theme": "Tema"
 }

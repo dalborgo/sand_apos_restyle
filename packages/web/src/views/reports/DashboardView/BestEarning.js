@@ -5,6 +5,8 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { useDateFormatter, useMoneyFormatter } from 'src/utils/formatters'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
+import { useGeneralStore } from '../../../zustandStore'
+import { messages } from 'src/translations/messages'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,8 +35,10 @@ const BestEarning = () => {
     notifyOnChangeProps: ['data', 'error'],
     suspense: true,
   })
+  const companyData = useGeneralStore.getState().companyData
+  const isSingleCompany = Object.keys(companyData).length < 2
   if (data?.ok) {
-    const [value, date] = data.results
+    const [value, date, owner] = data.results || [0]
     return (
       <Card
         className={classes.root}
@@ -50,12 +54,19 @@ const BestEarning = () => {
           </Typography>
           <Typography
             color="textPrimary"
+            variant="h6"
+          >
+            {isSingleCompany ? intl.formatMessage(messages['common_total']) : companyData[owner].name}
+          </Typography>
+          <Typography
+            color="textPrimary"
             variant="h3"
           >
             {moneyFormatter(value)}
           </Typography>
           <Typography
             color="textPrimary"
+            style={{textTransform: 'capitalize'}}
             variant="h6"
           >
             {

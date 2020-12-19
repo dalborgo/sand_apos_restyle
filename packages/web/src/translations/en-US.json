@@ -71,5 +71,9 @@
   "common.product": "",
   "common.quantity": "",
   "common.price": "",
-  "reports.dashboard.best_earning": ""
+  "reports.dashboard.best_earning": "",
+  "common.settings": "",
+  "toolbar.settings.responsive_fonts": "",
+  "toolbar.settings.save": "",
+  "common.theme": ""
 }

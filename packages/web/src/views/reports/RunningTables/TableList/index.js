@@ -34,10 +34,7 @@ const TableList = memo(function TableList ({ rows, isFetching }) {
       { name: 'covers', title: intl.formatMessage(messages['common_covers']) },
       { name: 'income', title: intl.formatMessage(messages['common_income']) },
     ]
-    const companyNumEntries = Object.keys(companyData).length
-    if (companyNumEntries < 2) {
-      columns_.shift()
-    }
+    if (Object.keys(companyData).length < 2) {columns_.shift()}
     return columns_
   })
   const [messagesSummary] = useState(() => ({
