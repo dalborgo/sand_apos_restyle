@@ -5,6 +5,7 @@ const initialState = {
   allIn: false,
   companyData: {},
   loading: false,
+  locales: [],
   priority: 0,
 }
 

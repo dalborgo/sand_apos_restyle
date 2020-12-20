@@ -5,9 +5,9 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { useDateFormatter, useMoneyFormatter } from 'src/utils/formatters'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
-import { useGeneralStore } from '../../../zustandStore'
+import { useGeneralStore } from 'src/zustandStore'
 import { messages } from 'src/translations/messages'
-
+import { upperCaseFirst } from 'upper-case-first';
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -66,11 +66,10 @@ const BestEarning = () => {
           </Typography>
           <Typography
             color="textPrimary"
-            style={{textTransform: 'capitalize'}}
             variant="h6"
           >
             {
-              dateFormatter(date, { month: 'long', weekday: 'long' })
+              upperCaseFirst(dateFormatter(date, { month: 'long', weekday: 'long' }))
             }
           </Typography>
         </Box>

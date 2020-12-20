@@ -13,6 +13,22 @@ export const messages = defineMessages({
     id: 'common.settings',
     defaultMessage: 'Impostazioni',
   },
+  common_language: {
+    id: 'common.language',
+    defaultMessage: 'Lingua',
+  },
+  language_it: {
+    id: 'language.it',
+    defaultMessage: 'Italiano',
+  },
+  language_de: {
+    id: 'language.de',
+    defaultMessage: 'Tedesco',
+  },
+  language_en_US: {
+    id: 'language.en-gb',
+    defaultMessage: 'Inglese',
+  },
   common_theme: {
     id: 'common.theme',
     defaultMessage: 'Tema',

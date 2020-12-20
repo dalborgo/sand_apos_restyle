@@ -25,7 +25,7 @@ function selectUserFields (identity) {
   }
 }
 function getQueryUserField () {
-  return '`user`.`user`, `user`.`role`, `user`.`type`, `user`.`morse` '
+  return '`user`.`user`, `user`.`role`, `user`.`type`, `user`.`morse`, `user`.`locales` '
 }
 
 async function getInitialData (connClass) {
@@ -67,6 +67,7 @@ function addRouters (router) {
     res.send({
       accessToken,
       codes,
+      locales: identity.locales || [],
       user: {
         ...selectUserFields(identity),
       },
@@ -92,6 +93,7 @@ function addRouters (router) {
     res.send({
       accessToken,
       codes,
+      locales: identity.locales || [],
       user: {
         ...selectUserFields(identity),
       },

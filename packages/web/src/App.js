@@ -8,14 +8,9 @@ import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import GlobalStyles from 'src/components/GlobalStyles'
 import ScrollReset from 'src/components/ScrollReset'
 import { defaultQueryFn } from 'src/utils/reactQueryFunctions'
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQueryErrorResetBoundary,
-} from 'react-query'
+import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from 'react-query'
 import { IntlProvider } from 'react-intl'
 import { ErrorBoundary } from 'react-error-boundary'
-import messages from 'src/translations/it-IT.json'
 import { AuthProvider } from 'src/contexts/JWTAuthContext'
 import useSettings from 'src/hooks/useSettings'
 import { createTheme } from 'src/theme'
@@ -28,9 +23,7 @@ import log from '@adapter/common/src/log'
 import useAuth from './hooks/useAuth'
 import moment from 'moment'
 import { LocalizationProvider } from '@material-ui/pickers'
-
-//require('moment/locale/de') //per aggiungere supporto ad altre lingue
-require('moment/locale/it')
+import translations from 'src/translations'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -59,11 +52,9 @@ const RouteList = () => {
 
 const App = () => {
   const { settings } = useSettings()
+  const { locale = 'it' } = settings //in futuro default lingua browser per homepage prima del login
   const { reset } = useQueryErrorResetBoundary()
-  useMemo(() => {
-    log.info('Locale:', settings.locale)
-    moment.locale(settings.locale)
-  }, [settings.locale])  //altrimenti prende il secondo importato
+  useMemo(() => {moment.locale(locale)}, [locale])  //altrimenti prende il secondo importato
   const theme = createTheme({
     direction: settings.direction,
     responsiveFontSizes: settings.responsiveFontSizes,
@@ -72,27 +63,32 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <StylesProvider jss={jss}>
-        <IntlProvider defaultLocale="it" locale={settings.locale} messages={messages}>
-          <LocalizationProvider dateAdapter={MomentAdapter} locale={settings.locale}>
-            <GlobalStyles/>
-            <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
-              <SnackMyProvider>
-                <Router history={history}>
-                  <QueryClientProvider client={queryClient}>
-                    <AuthProvider>
+        <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider> {/*prima del IntlProvider*/}
+              <IntlProvider
+                defaultLocale="it"
+                key={locale}
+                locale={locale}
+                messages={translations[locale]}
+              >
+                <LocalizationProvider dateAdapter={MomentAdapter} locale={locale}>
+                  <GlobalStyles/>
+                  <SnackMyProvider>
+                    <Router history={history}>
                       <ScrollReset/>
                       <RouteList/>
                       {
                         REACT_QUERY_DEV_TOOLS &&
                         <ReactQueryDevtools initialIsOpen={Boolean(true)} panelProps={{ style: { height: 400 } }}/>
                       }
-                    </AuthProvider>
-                  </QueryClientProvider>
-                </Router>
-              </SnackMyProvider>
-            </ErrorBoundary>
-          </LocalizationProvider>
-        </IntlProvider>
+                    </Router>
+                  </SnackMyProvider>
+                </LocalizationProvider>
+              </IntlProvider>
+            </AuthProvider>
+          </QueryClientProvider>
+        </ErrorBoundary>
       </StylesProvider>
     </ThemeProvider>
   )

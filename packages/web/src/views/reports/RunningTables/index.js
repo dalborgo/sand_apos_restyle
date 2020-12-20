@@ -24,7 +24,7 @@ import TableList from './TableList'
 import RunningTableDialog from './RunningTableDialog'
 import { useParams } from 'react-router'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   paper: {
     height: '100%',
   },
@@ -161,6 +161,7 @@ const RunningTables = () => {
         owner,
       }], { throwOnError: true })
     }
+    
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryClient])
   useEffect(() => {

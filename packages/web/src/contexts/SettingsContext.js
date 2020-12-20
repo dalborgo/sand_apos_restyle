@@ -2,10 +2,8 @@ import React, { createContext, useEffect, useState } from 'react'
 import merge from 'lodash/merge'
 import { THEMES } from 'src/constants'
 import log from '@adapter/common/src/log'
-
 const defaultSettings = {
   direction: 'ltr',
-  locale: 'it',
   responsiveFontSizes: true,
   theme: THEMES.LIGHT,
 }
@@ -19,6 +17,7 @@ export const restoreSettings = () => {
     if (storedData) {
       settings = JSON.parse(storedData)
     }
+    log.info('Locale:', settings?.locale)
   } catch (err) {
     log.error('restoreSettings', err.message)
     // If stored data is not a stringified JSON this will fail,

@@ -18,6 +18,7 @@ import useSettings from 'src/hooks/useSettings'
 import { THEMES } from 'src/constants'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
+import { useGeneralStore } from 'src/zustandStore'
 
 const useStyles = makeStyles((theme) => ({
   popover: {
@@ -30,10 +31,11 @@ const Settings = () => {
   const classes = useStyles()
   const intl = useIntl()
   const ref = useRef(null)
+  const locales = useGeneralStore.getState().locales
   const { settings, saveSettings } = useSettings()
   const [isOpen, setOpen] = useState(false)
   const [values, setValues] = useState({
-    locale: 'it', //todo create menu to select locale
+    locale: settings.locale,
     direction: settings.direction,
     responsiveFontSizes: settings.responsiveFontSizes,
     theme: settings.theme,
@@ -126,6 +128,32 @@ const Settings = () => {
             label={intl.formatMessage(messages['settings_responsive_fonts'])}
           />
         </Box>
+        {
+          locales.length > 1 &&
+          <Box mt={2}>
+            <TextField
+              fullWidth
+              label={intl.formatMessage(messages['common_language'])}
+              name="locale"
+              onChange={(event) => handleChange('locale', event.target.value)}
+              select
+              SelectProps={{ native: true }}
+              value={values.locale}
+              variant="outlined"
+            >
+              {
+                locales.map(val => (
+                  <option
+                    key={val}
+                    value={val}
+                  >
+                    {intl.formatMessage(messages[`language_${val}`])}
+                  </option>
+                ))
+              }
+            </TextField>
+          </Box>
+        }
         <Box mt={2}>
           <TextField
             fullWidth

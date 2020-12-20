@@ -80,6 +80,10 @@
     "defaultMessage": "Incassato"
   },
   {
+    "id": "common.language",
+    "defaultMessage": "Lingua"
+  },
+  {
     "id": "common.loading",
     "defaultMessage": "Caricamento..."
   },
@@ -214,6 +218,18 @@
   {
     "id": "general.network_error",
     "defaultMessage": "Errore di rete: servizio non raggiungibile!"
+  },
+  {
+    "id": "language.de",
+    "defaultMessage": "Tedesco"
+  },
+  {
+    "id": "language.en-gb",
+    "defaultMessage": "Inglese"
+  },
+  {
+    "id": "language.it",
+    "defaultMessage": "Italiano"
   },
   {
     "id": "menu.closing_day",

@@ -6,8 +6,9 @@ import log from '@adapter/common/src/log'
 import { useQueryClient } from 'react-query'
 import find from 'lodash/find'
 import * as stores from 'src/zustandStore'
-import useGeneralStore from '../zustandStore/useGeneralStore'
+import useGeneralStore from 'src/zustandStore/useGeneralStore'
 import keyBy from 'lodash/keyBy'
+import useSettings from 'src/hooks/useSettings'
 
 export const NO_SELECTED_CODE = 'All'
 
@@ -114,12 +115,19 @@ function clearAllStores () {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialAuthState)
   const queryClient = useQueryClient()
+  const { saveSettings, settings } = useSettings()
   const login = async (username, password, code) => {
     const response = await axiosLocalInstance.post('/api/jwt/login', { username, password, code })
-    const { accessToken, user, codes } = response.data
+    const { accessToken, user, codes, locales } = response.data
+    if (locales.length) {
+      const [locale] = locales
+      if(!settings.locale){
+        saveSettings({ locale })
+      }
+    }
     const selectedCode = codes?.length === 1 ? codes[0] : { code: NO_SELECTED_CODE }
     setSession({ codes, accessToken, selectedCode })
-    useGeneralStore.setState({ priority: user.priority, companyData: keyBy(codes, 'code') })
+    useGeneralStore.setState({ priority: user.priority, companyData: keyBy(codes, 'code'), locales })
     dispatch({
       type: 'LOGIN',
       payload: {
@@ -156,7 +164,7 @@ export const AuthProvider = ({ children }) => {
         if (accessToken && isValidToken(accessToken)) {
           setSession({ accessToken })
           const response = await axiosLocalInstance.get('/api/jwt/me')
-          let { user, codes } = response.data
+          let { user, codes, locales } = response.data
           let selectedCode = window.localStorage.getItem('selectedCode')
           if (selectedCode) {selectedCode = JSON.parse(selectedCode)}
           codes = codes ? codes : [selectedCode]
@@ -164,7 +172,7 @@ export const AuthProvider = ({ children }) => {
             selectedCode = codes?.length === 1 ? codes[0] : { code: NO_SELECTED_CODE }
             setSession({ codes, selectedCode })
           }
-          useGeneralStore.setState({ priority: user.priority, companyData: keyBy(codes, 'code') })
+          useGeneralStore.setState({ priority: user.priority, companyData: keyBy(codes, 'code'), locales })
           dispatch({
             type: 'INITIALISE',
             payload: {
