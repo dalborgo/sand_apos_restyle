@@ -12,7 +12,7 @@ export const maskMap = {
   en: '__/__/____',
   it: '__/__/____',
 }
-export const to2Chars = (val = '') => val.split('-')[1] || val.split('-')[0]
+export const to2Chars = (val = '') => val.split('-')[1] || val
 export default {
   'en-gb': messagesGB,
   de: messagesDE,

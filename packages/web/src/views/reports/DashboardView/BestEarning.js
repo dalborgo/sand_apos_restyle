@@ -7,7 +7,8 @@ import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import { messages } from 'src/translations/messages'
-import { upperCaseFirst } from 'upper-case-first';
+import upperCaseFirst from 'upper-case-first'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),

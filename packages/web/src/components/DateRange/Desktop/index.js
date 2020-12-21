@@ -28,7 +28,7 @@ const DatePickerField = ({
   ...other
 }) => {
   const [startDate, endDate] = value
-  const disabledEnd = !endDate && !startDate && !open
+  const disabledEnd = !endDate && !startDate && (!open || (open && !startDate))
   const classes = useStyles()
   const { settings: { locale } } = useSettings()
   const intl = useIntl()

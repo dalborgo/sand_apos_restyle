@@ -118,7 +118,7 @@ const Settings = () => {
           {intl.formatMessage(messages['common_settings'])}
         </Typography>
         <Box
-          mt={2}
+          mt={1}
           px={1}
         >
           <FormControlLabel
@@ -136,7 +136,7 @@ const Settings = () => {
           />
         </Box>
         <Box
-          mt={2}
+          mt={0}
           px={1}
         >
           <FormControlLabel

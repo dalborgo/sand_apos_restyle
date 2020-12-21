@@ -71,9 +71,11 @@ const themesOptions = [
       MuiInputBase: {
         input: {
           '&::placeholder': {
-            opacity: 1,
-            color: colors.blueGrey[600],
+            opacity: 0.6,
           },
+        },
+        root: {
+          color: colors.blueGrey[800],
         },
       },
     },

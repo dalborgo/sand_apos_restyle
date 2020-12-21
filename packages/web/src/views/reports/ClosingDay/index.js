@@ -1,11 +1,9 @@
-import React, { memo, useRef, useState } from 'react'
+import React from 'react'
 import Page from 'src/components/Page'
-import { Box, Button, makeStyles } from '@material-ui/core'
+import { Box, makeStyles } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
-import { DesktopDatePickerField } from 'src/components/DateRange'
 import StandardHeader from 'src/components/StandardHeader'
-import { Field, Form, Formik } from 'formik'
 import shallow from 'zustand/shallow'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
@@ -17,8 +15,8 @@ import ClosingDayDialog from './ClosingDayDialog'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import { getEffectiveFetching } from 'src/utils/logics'
 import moment from 'moment'
-import IconButtonLoader from 'src/components/IconButtonLoader'
 import DivContentWrapper from 'src/components/DivContentWrapper'
+import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -26,57 +24,12 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const FormikWrapper = memo((function FormikWrapper ({ startDate, endDate, refetch, isFetching }) {
-  console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
-  const endDateRef = useRef(null)
-  const startDateRef = useRef(null)
-  const [open, setOpen] = useState(false)
-  const setDateRange = useClosingDayStore(state => state.setDateRange)
-  return (
-    <Box alignItems="center" display="flex" p={2} pt={1}>
-      <Box mr={2}>
-        <Formik
-          initialValues={{ dateRange: [startDate, endDate] }}
-          onSubmit={
-            value => {
-              endDateRef.current.blur()
-              startDateRef.current.blur()
-              setOpen(false)
-              setDateRange(value.dateRange)
-            }
-          }
-        >
-          <Form>
-            <Field
-              component={DesktopDatePickerField}
-              endDateRef={endDateRef}
-              name="dateRange"
-              open={open}
-              setDateRange={setDateRange}
-              setOpen={setOpen}
-              startDateRef={startDateRef}
-            />
-            <Button style={{ display: 'none' }} type="submit"/>
-          </Form>
-        </Formik>
-      </Box>
-      <IconButtonLoader
-        isFetching={isFetching}
-        onClick={
-          () => {
-            refetch().then()
-          }
-        }
-      />
-    </Box>
-  )
-}))
-
 const closingSelector = state => ({
-  endDate: state.endDate,
-  startDate: state.startDate,
   closingRows: state.closingRows,
+  endDate: state.endDate,
   setClosingRows: state.setClosingRows,
+  setDateRange: state.setDateRange,
+  startDate: state.startDate,
 })
 
 const ClosingDay = () => {
@@ -86,7 +39,7 @@ const ClosingDay = () => {
   const snackQueryError = useSnackQueryError()
   const intl = useIntl()
   /* useEffect(() => {return () => {reset()}}, [reset])*/
-  const { startDate, endDate, closingRows, setClosingRows } = useClosingDayStore(closingSelector, shallow)
+  const { startDate, endDate, setDateRange, closingRows, setClosingRows } = useClosingDayStore(closingSelector, shallow)
   const { isIdle, refetch, ...rest } = useQuery(['reports/closing_days', {
     startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
     endDateInMillis: endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined,
@@ -110,7 +63,13 @@ const ClosingDay = () => {
           <FormattedMessage defaultMessage="Chiusure di giornata" id="reports.closing_day.header_title"/>
         </StandardHeader>
       </Box>
-      <FormikWrapper endDate={endDate} isFetching={effectiveFetching} refetch={refetch} startDate={startDate}/>
+      <DateRangeFormikWrapper
+        endDate={endDate}
+        isFetching={effectiveFetching}
+        refetch={refetch}
+        setDateRange={setDateRange}
+        startDate={startDate}
+      />
       <DivContentWrapper>
         <Paper className={classes.paper}>
           <TableList isFetching={effectiveFetching && !closingRows.length} isIdle={isIdle} rows={closingRows}/>
