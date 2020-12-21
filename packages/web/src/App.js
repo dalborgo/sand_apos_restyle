@@ -63,17 +63,17 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <StylesProvider jss={jss}>
-        <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
-          <QueryClientProvider client={queryClient}>
-            <AuthProvider> {/*prima del IntlProvider*/}
-              <IntlProvider
-                defaultLocale="it"
-                key={locale}
-                locale={locale}
-                messages={translations[locale]}
-              >
-                <LocalizationProvider dateAdapter={MomentAdapter} locale={locale}>
-                  <GlobalStyles/>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider> {/*prima del IntlProvider*/}
+            <IntlProvider
+              defaultLocale="it"
+              key={locale}
+              locale={locale}
+              messages={translations[locale]}
+            >
+              <LocalizationProvider dateAdapter={MomentAdapter} locale={locale}>
+                <GlobalStyles/>
+                <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
                   <SnackMyProvider>
                     <Router history={history}>
                       <ScrollReset/>
@@ -84,11 +84,11 @@ const App = () => {
                       }
                     </Router>
                   </SnackMyProvider>
-                </LocalizationProvider>
-              </IntlProvider>
-            </AuthProvider>
-          </QueryClientProvider>
-        </ErrorBoundary>
+                </ErrorBoundary>
+              </LocalizationProvider>
+            </IntlProvider>
+          </AuthProvider>
+        </QueryClientProvider>
       </StylesProvider>
     </ThemeProvider>
   )

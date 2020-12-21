@@ -121,7 +121,7 @@ export const AuthProvider = ({ children }) => {
     const { accessToken, user, codes, locales } = response.data
     if (locales.length) {
       const [locale] = locales
-      if(!settings.locale){
+      if (!settings.locale || !locales.includes(settings.locale)) {
         saveSettings({ locale })
       }
     }

@@ -25,14 +25,26 @@ const baseOptions = {
     },
     MuiTooltip: {
       arrow: true,
-      disableFocusListener:true,
+      disableFocusListener: true,
       enterDelay: 0,
+      placement: 'bottom',
       TransitionProps: {
         timeout: 0,
       },
     },
   },
   overrides: {
+    MuiTooltip: {
+      tooltipPlacementBottom: {
+        marginTop: 2,
+      },
+      arrow: {
+        color: '#282C34',
+      },
+      tooltip: {
+        backgroundColor: '#282C34',
+      },
+    },
     MuiLinearProgress: {
       root: {
         borderRadius: 3,

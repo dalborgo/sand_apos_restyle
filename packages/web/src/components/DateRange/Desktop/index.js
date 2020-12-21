@@ -5,6 +5,8 @@ import { DateRangeDelimiter, DateRangePicker } from '@material-ui/pickers'
 import { FormattedMessage, useIntl } from 'react-intl'
 import moment from 'moment'
 import { messages } from 'src/translations/messages'
+import useSettings from 'src/hooks/useSettings'
+import { maskMap } from 'src/translations'
 
 const useStyles = makeStyles(theme => ({
   delimiterRoot: {
@@ -28,6 +30,7 @@ const DatePickerField = ({
   const [startDate, endDate] = value
   const disabledEnd = !endDate && !startDate && !open
   const classes = useStyles()
+  const { settings: { locale } } = useSettings()
   const intl = useIntl()
   const prevStart = useRef(null)
   return (
@@ -35,6 +38,7 @@ const DatePickerField = ({
       disableAutoMonthSwitching
       disableFuture
       endText={intl.formatMessage(messages.date_range_end)}
+      mask={maskMap[locale]}
       onAccept={
         date => {
           prevStart.current = date[0]

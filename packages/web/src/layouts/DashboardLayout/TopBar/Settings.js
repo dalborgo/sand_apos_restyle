@@ -3,13 +3,17 @@ import { capitalCase } from 'change-case'
 import {
   Box,
   Button,
+  FormControl,
   FormControlLabel,
+  Grid,
   IconButton,
+  InputLabel,
   makeStyles,
+  MenuItem,
   Popover,
+  Select,
   SvgIcon,
   Switch,
-  TextField,
   Tooltip,
   Typography,
 } from '@material-ui/core'
@@ -19,13 +23,30 @@ import { THEMES } from 'src/constants'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { useGeneralStore } from 'src/zustandStore'
+import ReactCountryFlag from 'react-country-flag'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   popover: {
     width: 320,
     padding: theme.spacing(2),
   },
+  tooltip: {
+    marginTop:0,
+  },
 }))
+
+const menuProps = {
+  anchorOrigin: {
+    vertical: 'bottom',
+    horizontal: 'left',
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'left',
+  },
+  transitionDuration: 0,
+  getContentAnchorEl: null,
+}
 
 const Settings = () => {
   const classes = useStyles()
@@ -63,7 +84,15 @@ const Settings = () => {
   
   return (
     <>
-      <Tooltip title={intl.formatMessage(messages['common_settings'])}>
+      <Tooltip
+       /* classes={
+          {
+            tooltipPlacementBottom: classes.tooltip,
+          }
+        }*/
+        keepMounted
+        title={intl.formatMessage(messages['common_settings'])}
+      >
         <IconButton
           color="inherit"
           onClick={handleOpen}
@@ -85,6 +114,7 @@ const Settings = () => {
         classes={{ paper: classes.popover }}
         onClose={handleClose}
         open={isOpen}
+        transitionDuration={0}
       >
         <Typography
           color="textPrimary"
@@ -131,51 +161,58 @@ const Settings = () => {
         {
           locales.length > 1 &&
           <Box mt={2}>
-            <TextField
-              fullWidth
-              label={intl.formatMessage(messages['common_language'])}
-              name="locale"
-              onChange={(event) => handleChange('locale', event.target.value)}
-              select
-              SelectProps={{ native: true }}
-              value={values.locale}
-              variant="outlined"
-            >
-              {
-                locales.map(val => (
-                  <option
-                    key={val}
-                    value={val}
-                  >
-                    {intl.formatMessage(messages[`language_${val}`])}
-                  </option>
-                ))
-              }
-            </TextField>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel id="language_select">{intl.formatMessage(messages['common_language'])}</InputLabel>
+              <Select
+                label={intl.formatMessage(messages['common_language'])}
+                labelId="language_select"
+                MenuProps={menuProps}
+                onChange={(event) => handleChange('locale', event.target.value)}
+                value={values.locale}
+              >
+                {
+                  locales.map(val => (
+                    <MenuItem
+                      key={val}
+                      value={val}
+                    >
+                      <Grid container justify="space-between">
+                        <Grid item>
+                          {intl.formatMessage(messages[`language_${val}`])}
+                        </Grid>
+                        <Grid item>
+                          <ReactCountryFlag countryCode={val}/>
+                        </Grid>
+                      </Grid>
+                    </MenuItem>
+                  ))
+                }
+              </Select>
+            </FormControl>
           </Box>
         }
         <Box mt={2}>
-          <TextField
-            fullWidth
-            label={intl.formatMessage(messages['common_theme'])}
-            name="theme"
-            onChange={(event) => handleChange('theme', event.target.value)}
-            select
-            SelectProps={{ native: true }}
-            value={values.theme}
-            variant="outlined"
-          >
-            {
-              Object.keys(THEMES).map((theme) => (
-                <option
-                  key={theme}
-                  value={theme}
-                >
-                  {capitalCase(theme)}
-                </option>
-              ))
-            }
-          </TextField>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel id="theme_select">{intl.formatMessage(messages['common_theme'])}</InputLabel>
+            <Select
+              label={intl.formatMessage(messages['common_theme'])}
+              labelId="theme_select"
+              MenuProps={menuProps}
+              onChange={(event) => handleChange('theme', event.target.value)}
+              value={values.theme}
+            >
+              {
+                Object.keys(THEMES).map(theme => (
+                  <MenuItem
+                    key={theme}
+                    value={theme}
+                  >
+                    {capitalCase(theme)}
+                  </MenuItem>
+                ))
+              }
+            </Select>
+          </FormControl>
         </Box>
         <Box mt={2}>
           <Button
