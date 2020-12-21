@@ -25,7 +25,7 @@ export const messages = defineMessages({
     id: 'language.de',
     defaultMessage: 'Tedesco',
   },
-  language_en_US: {
+  'language_en-gb': {
     id: 'language.en-gb',
     defaultMessage: 'Inglese',
   },

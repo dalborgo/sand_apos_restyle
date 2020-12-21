@@ -90,7 +90,12 @@ const CellBase = props => {
           size="small"
           variant="contained"
         >
-          {parse(dateTimeFormatter(row.last_saved_date, { year: undefined, month: 'short'}, {second: undefined}) + '<br/>' + row.user)}
+          {
+            parse(dateTimeFormatter(row.last_saved_date, {
+              year: undefined,
+              month: 'short',
+            }, { second: undefined }) + '<br/>' + row.user)
+          }
         </Button>
       </VirtualTable.Cell>
     )

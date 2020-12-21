@@ -24,6 +24,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { useGeneralStore } from 'src/zustandStore'
 import ReactCountryFlag from 'react-country-flag'
+import { to2Chars } from 'src/translations'
 
 const useStyles = makeStyles(theme => ({
   popover: {
@@ -85,12 +86,6 @@ const Settings = () => {
   return (
     <>
       <Tooltip
-       /* classes={
-          {
-            tooltipPlacementBottom: classes.tooltip,
-          }
-        }*/
-        keepMounted
         title={intl.formatMessage(messages['common_settings'])}
       >
         <IconButton
@@ -178,10 +173,10 @@ const Settings = () => {
                     >
                       <Grid container justify="space-between">
                         <Grid item>
-                          {intl.formatMessage(messages[`language_${val}`])}
+                          {messages[`language_${val}`] ? intl.formatMessage(messages[`language_${val}`]) : ''}
                         </Grid>
                         <Grid item>
-                          <ReactCountryFlag countryCode={val}/>
+                          <ReactCountryFlag countryCode={to2Chars(val)}/>
                         </Grid>
                       </Grid>
                     </MenuItem>

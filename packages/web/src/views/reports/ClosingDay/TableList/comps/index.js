@@ -142,6 +142,7 @@ const CellBase = props => {
             day="2-digit"
             month="short"
             value={moment(value, 'YYYYMMDDHHmmssSSS')}
+            weekday="short"
             year="numeric"
           />
         </Button>
