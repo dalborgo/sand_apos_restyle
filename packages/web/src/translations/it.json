@@ -79,5 +79,7 @@
   "table.select_date": "Ricerca per date",
   "toolbar.settings.responsive_fonts": "Font responsivi",
   "toolbar.settings.save": "Salva Impostazioni",
-  "views.login.installation": "Installazione"
+  "views.login.installation": "Installazione",
+  "menu.closing_tables": "Tavoli chiusi",
+  "reports.closing_tables.header_title": "Tavoli chiusi"
 }

@@ -167,6 +167,14 @@ const routes = [
       },
       {
         exact: true,
+        path: [
+          '/app/reports/closing-tables',
+          '/app/reports/closing-tables/:docId',
+        ],
+        component: lazy(() => import('src/views/reports/ClosedTables')),
+      },
+      {
+        exact: true,
         path: '/app/reports/dashboard',
         component: lazy(() => import('src/views/reports/DashboardView')),
       },

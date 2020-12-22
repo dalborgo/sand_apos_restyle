@@ -1,6 +1,7 @@
 import {
   BarChart as BarChartIcon,
   Clock as ClockIcon,
+  FileText as FileTextIcon,
   DollarSign as DollarSignIcon,
   Edit as EditIcon,
   Folder as FolderIcon,
@@ -36,6 +37,12 @@ const sections = [
         exact: false,
         icon: ClockIcon,
         href: '/app/reports/running-tables',
+      },
+      {
+        title: 'closing_tables',
+        exact: false,
+        icon: FileTextIcon,
+        href: '/app/reports/closing-tables',
       },
       {
         title: 'Dashboard',

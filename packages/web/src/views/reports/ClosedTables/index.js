@@ -12,7 +12,7 @@ import shallow from 'zustand/shallow'
 import { getEffectiveFetching } from 'src/utils/logics'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import useAuth from 'src/hooks/useAuth'
-import useRunningTablesStore from 'src/zustandStore/useRunningTablesStore'
+import useClosedTablesStore from 'src/zustandStore/useClosedTablesStore'
 import { FastField, Form, Formik } from 'formik'
 import { TextField } from 'formik-material-ui'
 import FilterButton from 'src/components/FilterButton'
@@ -21,7 +21,7 @@ import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
-import RunningTableDialog from './RunningTableDialog'
+import ClosedTableDialog from './ClosedTableDialog'
 import { useParams } from 'react-router'
 
 const useStyles = makeStyles(() => ({
@@ -30,11 +30,11 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const runningSelector = state => ({
+const closingSelector = state => ({
   openFilter: state.openFilter,
   switchOpenFilter: state.switchOpenFilter,
-  runningRows: state.runningRows,
-  setRunningRows: state.setRunningRows,
+  closingRows: state.closingRows,
+  setClosedRows: state.setClosedRows,
   tableFilter: state.filter.table,
   roomFilter: state.filter.room,
   submitFilter: state.submitFilter,
@@ -125,7 +125,7 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
   )
 })
 
-const RunningTables = () => {
+const ClosedTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const { docId } = useParams()
@@ -134,15 +134,15 @@ const RunningTables = () => {
   const queryClient = useQueryClient()
   const snackQueryError = useSnackQueryError()
   const {
-    runningRows,
-    setRunningRows,
+    closingRows,
+    setClosedRows,
     openFilter,
     switchOpenFilter,
     tableFilter,
     roomFilter,
     submitFilter,
-  } = useRunningTablesStore(runningSelector, shallow)
-  const { refetch, ...rest } = useQuery(['reports/running_tables', {
+  } = useClosedTablesStore(closingSelector, shallow)
+  const { refetch, ...rest } = useQuery(['reports/closing_tables', {
     owner,
     roomFilter,
     tableFilter,
@@ -150,7 +150,7 @@ const RunningTables = () => {
     onError: snackQueryError,
     onSettled: data => { //fa risparmiare un expensive rendere al primo caricamento rispetto a sueEffect
       if (data?.ok) {
-        setRunningRows(data.results)
+        setClosedRows(data.results)
       }
     },
   })
@@ -166,9 +166,9 @@ const RunningTables = () => {
   useEffect(() => {
     if (rest?.data?.ok && !rest.isFetchedAfterMount) { //necessario per triggerare quando legge dalla cache
       console.log('%c***USE_EFFECT', 'color: cyan')
-      setRunningRows(rest.data.results)
+      setClosedRows(rest.data.results)
     }
-  }, [rest.data, rest.isFetchedAfterMount, setRunningRows])
+  }, [rest.data, rest.isFetchedAfterMount, setClosedRows])
   const onFilterSubmit = useCallback(filter => {
     submitFilter(filter)
     return filter
@@ -180,7 +180,7 @@ const RunningTables = () => {
   const effectiveFetching = getEffectiveFetching(rest)
   return (
     <Page
-      title={intl.formatMessage(messages['menu_running_tables'])}
+      title={intl.formatMessage(messages['menu_closing_tables'])}
     >
       <Box p={2}>
         <StandardHeader
@@ -206,7 +206,7 @@ const RunningTables = () => {
             </Box>
           }
         >
-          <FormattedMessage defaultMessage="Tavoli in corso" id="reports.running_tables.header_title"/>
+          <FormattedMessage defaultMessage="Tavoli chiusi" id="reports.closing_tables.header_title"/>
         </StandardHeader>
         <RightDrawer open={openFilter} switchOpen={switchOpenFilter}>
           {FilterFormWr}
@@ -214,12 +214,12 @@ const RunningTables = () => {
       </Box>
       <DivContentWrapper>
         <Paper className={classes.paper}>
-          <TableList isFetching={effectiveFetching} rows={runningRows}/>
+          <TableList isFetching={effectiveFetching} rows={closingRows}/>
         </Paper>
       </DivContentWrapper>
-      {docId && <RunningTableDialog docId={docId}/>}
+      {docId && <ClosedTableDialog docId={docId}/>}
     </Page>
   )
 }
 
-export default RunningTables
+export default ClosedTables

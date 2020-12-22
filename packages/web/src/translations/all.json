@@ -236,6 +236,10 @@
     "defaultMessage": "Chiusure di giornata"
   },
   {
+    "id": "menu.closing_tables",
+    "defaultMessage": "Tavoli chiusi"
+  },
+  {
     "id": "menu.running_tables",
     "defaultMessage": "Tavoli in corso"
   },
@@ -279,6 +283,10 @@
   {
     "id": "reports.closing_day.total",
     "defaultMessage": "Totale"
+  },
+  {
+    "id": "reports.closing_tables.header_title",
+    "defaultMessage": "Tavoli chiusi"
   },
   {
     "id": "reports.dashboard.best_earning",

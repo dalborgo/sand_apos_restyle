@@ -10,9 +10,9 @@ async function queryByType (req, res) {
   const knex_ = knex({ buc: bucketName }).where({ type }).where(knex.raw(parsedOwner.queryCondition)).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = knex_.toQuery()
-  const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
+  const { ok, results, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
   if (!ok) {return res.send({ ok, message, info })}
-  res.send({ ok, results: data })
+  res.send({ ok, results })
 }
 
 async function queryById (req, res) {
@@ -41,12 +41,12 @@ function addRouters (router) {
     const { statement, options } = body
     const {
       ok,
-      results: data,
+      results,
       message,
       info,
     } = await couchQueries.execByService(statement, connClass.astConnection, options)
     if (!ok) {return res.send({ ok, message, info })}
-    res.send({ ok, results: data })
+    res.send({ ok, results })
   })
   router.post('/queries/query_by_id', async function (req, res) {
     return await queryById(req, res)
