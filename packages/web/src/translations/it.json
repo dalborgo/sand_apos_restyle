@@ -81,5 +81,6 @@
   "toolbar.settings.save": "Salva Impostazioni",
   "views.login.installation": "Installazione",
   "menu.closed_tables": "Tavoli chiusi",
-  "reports.closed_tables.header_title": "Tavoli chiusi"
+  "reports.closed_tables.header_title": "Tavoli chiusi",
+  "common.type": "Tipo"
 }

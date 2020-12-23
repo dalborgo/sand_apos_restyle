@@ -1,5 +1,16 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
-import { AppBar, Box, Hidden, IconButton, makeStyles, SvgIcon, TextField, Toolbar, useTheme } from '@material-ui/core'
+import {
+  AppBar,
+  Box,
+  Hidden,
+  IconButton,
+  makeStyles,
+  SvgIcon,
+  TextField,
+  Toolbar,
+  Typography,
+  useTheme,
+} from '@material-ui/core'
 import { Menu as MenuIcon } from 'react-feather'
 import { THEMES } from 'src/constants'
 import Account from './Account'
@@ -8,7 +19,6 @@ import Notifications from './Notifications'
 import Search from './Search'*/
 import Settings from './Settings'
 import useAuth from 'src/hooks/useAuth'
-import useSettings from 'src/hooks/useSettings'
 import { capitalCase } from 'change-case'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
@@ -37,6 +47,7 @@ const useStyles = makeStyles(theme => ({
   inputRoot: {
     color: theme.palette.secondary.contrastText,
     backgroundColor: 'none',
+    ...theme.typography.h4,
   },
   iconOutlined: {
     color: theme.palette.secondary.contrastText,
@@ -45,6 +56,7 @@ const useStyles = makeStyles(theme => ({
     '&:focus': {
       backgroundColor: theme.name === THEMES.LIGHT ? theme.palette.primary.main : theme.palette.background.default,
     },
+    paddingLeft: 0,
   },
   inputNotchedOutline: {
     border: 0,
@@ -118,15 +130,13 @@ const TopBar = ({
   setMobileNavOpen,
 }) => {
   const { codes, selectedCode = { code: NO_SELECTED_CODE }, changeCode, user } = useAuth()
-  const { settings } = useSettings()
   const theme = useTheme()
   const optionBg = useMemo(() => {
-    if (settings.theme === 'LIGHT') {
-      return {
-        backgroundColor: theme.palette.secondary.main,
-      }
+    return {
+      ...theme.typography.h5,
+      ...theme.name === THEMES.LIGHT ? { backgroundColor: theme.palette.secondary.main } : {},
     }
-  }, [settings.theme, theme.palette.secondary.main])
+  }, [theme.name, theme.palette.secondary.main, theme.typography.h5])
   const classes = useStyles()
   const allIn_ = useGeneralStore(selAllIn)
   const switchAllIn = useGeneralStore(selSwitchAllIn)
@@ -167,59 +177,60 @@ const TopBar = ({
           </IconButton>
         </Hidden>
         {
-          codes?.length &&
-          <TextField
-            InputProps={
-              {
-                classes: {
-                  root: classes.inputRoot,
-                  notchedOutline: classes.inputNotchedOutline,
-                },
+          codes?.length > 1 ?
+            <TextField
+              InputProps={
+                {
+                  classes: {
+                    root: classes.inputRoot,
+                    notchedOutline: classes.inputNotchedOutline,
+                  },
+                }
               }
-            }
-            name="code"
-            onChange={
-              event => {
-                event.persist()
-                const value = event.target.value
-                changeCode(value)
+              name="code"
+              onChange={
+                event => {
+                  event.persist()
+                  const value = event.target.value
+                  changeCode(value)
+                }
               }
-            }
-            select
-            SelectProps={
-              {
-                native: true,
-                classes: {
-                  iconOutlined: classes.iconOutlined,
-                  select: classes.select,
-                },
+              select
+              SelectProps={
+                {
+                  native: true,
+                  classes: {
+                    iconOutlined: classes.iconOutlined,
+                    select: classes.select,
+                  },
+                }
               }
-            }
-            size="small"
-            value={selectedCode.code}
-            variant="outlined"
-          >
-            {
-              codes.length > 1 &&
+              size="small"
+              value={selectedCode.code}
+              variant="outlined"
+            >
               <option
-                style={optionBg}
+                style={optionBg} //non riesco con il className
                 value={NO_SELECTED_CODE}
               >
                 {intl.formatMessage(messages.common_all)}
               </option>
-            }
-            {
-              codes.map(({ code, name }) => (
-                <option
-                  key={code}
-                  style={optionBg}
-                  value={code}
-                >
-                  {capitalCase(name)}
-                </option>
-              ))
-            }
-          </TextField>
+              {
+                codes.map(({ code, name }) => (
+                  <option
+                    key={code}
+                    style={optionBg}
+                    value={code}
+                  >
+                    {capitalCase(name)}
+                  </option>
+                ))
+              }
+            </TextField>
+            :
+            <Typography variant="h4">
+              {capitalCase(codes?.[0].name)}
+            </Typography>
         }
         <Box
           flexGrow={1}

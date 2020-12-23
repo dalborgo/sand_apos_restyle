@@ -9,6 +9,10 @@ export const messages = defineMessages({
     id: 'common.table',
     defaultMessage: 'Tavolo',
   },
+  common_type: {
+    id: 'common.type',
+    defaultMessage: 'Tipo',
+  },
   common_settings: {
     id: 'common.settings',
     defaultMessage: 'Impostazioni',

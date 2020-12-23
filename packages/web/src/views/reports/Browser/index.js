@@ -170,7 +170,7 @@ const SearchComponent = memo((function SearchComponent (props) {
               </Typography>
             </Box>
             <TimeStats
-              hasData={!!props?.data}
+              hasData={Boolean(props?.data)}
             />
           </Box>
         }
@@ -280,7 +280,7 @@ const BrowserView = () => {
     }
   }, [text])
   const respDoc = useQuery(['docs/get_by_id', { docId }], {
-    enabled: !!docId,
+    enabled: Boolean(docId),
     onSuccess: ({ ok, results }) => {
       ok && setBrowserArea(results, history)
     },
@@ -395,7 +395,7 @@ const BrowserView = () => {
                 <Dialog
                   fullScreen
                   keepMounted
-                  open={!!docId && !respDoc.isFetching}
+                  open={Boolean(docId) && !respDoc.isFetching}
                   transitionDuration={0}
                 >
                   <DisplayComponent

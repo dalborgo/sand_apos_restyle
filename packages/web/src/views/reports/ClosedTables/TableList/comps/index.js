@@ -1,9 +1,9 @@
 import { Button, makeStyles, withStyles } from '@material-ui/core'
 import React, { useState } from 'react'
 import Box from '@material-ui/core/Box'
-import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
+import { VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { IntegratedSummary } from '@devexpress/dx-react-grid'
-import { useDateTimeFormatter } from 'src/utils/formatters'
+import { useDateTimeFormatter, useMoneyFormatter } from 'src/utils/formatters'
 import { useHistory } from 'react-router'
 import { useQueryClient } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
@@ -23,9 +23,6 @@ export const summaryCalculator = (type, rows, getValue) => {
     return IntegratedSummary.defaultCalculator(type, rows, getValue)
   }
 }
-export const SummaryCellBase = props => {
-  return <VirtualTable.Cell {...props}/>
-}
 
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
@@ -40,6 +37,7 @@ const useStyles = makeStyles(() => ({
 const CellBase = props => {
   const { column, row, theme } = props
   const dateTimeFormatter = useDateTimeFormatter()
+  const moneyFormatter = useMoneyFormatter()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const [intLoading, setIntLoading] = useState(false)
   const { selectedCode: { code: owner } } = useAuth()
@@ -48,7 +46,7 @@ const CellBase = props => {
   const queryClient = useQueryClient()
   const docId = row._id
   const cellStyle = { paddingLeft: theme.spacing(2) }
-  if (column.name === 'last_saved_date') {
+  if (column.name === 'date') {
     return (
       <VirtualTable.Cell {...props}>
         <Button
@@ -60,7 +58,7 @@ const CellBase = props => {
           disabled={intLoading}
           onClick={
             async () => {
-              const queryKey = [`reports/running_table/${docId}`, { owner }]
+              const queryKey = [`reports/closed_table/${docId}`, { owner }]
               if (!queryClient.getQueryData(queryKey)) {
                 setLoading(true)
                 setIntLoading(true)
@@ -75,12 +73,24 @@ const CellBase = props => {
           variant="contained"
         >
           {
-            parse(dateTimeFormatter(row.last_saved_date, {
+            parse(dateTimeFormatter(row.date, {
               year: undefined,
               month: 'short',
             }, { second: undefined }) + '<br/>' + row.user)
           }
         </Button>
+      </VirtualTable.Cell>
+    )
+  }
+  if (column.name === 'mode') {
+    return (
+      <VirtualTable.Cell {...props} style={cellStyle}>
+        <Box>
+          {row.table_display}
+        </Box>
+        <Box>
+          {row.room_display}
+        </Box>
       </VirtualTable.Cell>
     )
   }
@@ -96,6 +106,21 @@ const CellBase = props => {
       </VirtualTable.Cell>
     )
   }
+  if (column.name === 'final_price') {
+    return (
+      <VirtualTable.Cell {...props} style={cellStyle}>
+        <Box>
+          {moneyFormatter(row.final_price)}
+        </Box>
+        {
+          Boolean(row.discount_price) &&
+          <Box>
+            -{moneyFormatter(row.discount_price)}
+          </Box>
+        }
+      </VirtualTable.Cell>
+    )
+  }
   return <VirtualTable.Cell {...props} style={cellStyle}/>
 }
 
@@ -108,17 +133,4 @@ const styles = theme => ({
 export const Cell = withStyles(styles, { withTheme: true })(
   CellBase
 )
-export const CellSummary = withStyles(styles, { withTheme: true })(
-  SummaryCellBase
-)
-//c'era un warning sul campo children mancante
-export const CellHeader = withStyles(styles, { withTheme: true })(
-  ({ classes, theme, children, ...rest }) => (
-    <TableHeaderRow.Cell
-      {...rest}
-      children={children}
-      className={classes.cell}
-      style={{ paddingLeft: theme.spacing(2) }}
-    />
-  )
-)
+

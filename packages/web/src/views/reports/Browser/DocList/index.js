@@ -122,7 +122,7 @@ const DocList = memo(function DocList ({ data, fetchMore, canFetchMore, isFetchi
           data.map((page, i) => (
             <React.Fragment key={i}>
               {
-                !!page?.results?.rows?.length && page.results.rows.map(elem => (
+                Boolean(page?.results?.rows?.length) && page.results.rows.map(elem => (
                   <ListElem
                     isSingleRow={page.results.rows.length === 1 && i === 0}
                     key={elem.id}
@@ -139,7 +139,7 @@ const DocList = memo(function DocList ({ data, fetchMore, canFetchMore, isFetchi
         <div style={{ width: '100%', textAlign: 'center' }}>
           <Button
             color="primary"
-            disabled={!!isFetchingMore}
+            disabled={Boolean(isFetchingMore)}
             onClick={() => fetchMore()}
             ref={loadMoreButtonRef}
             size="small"

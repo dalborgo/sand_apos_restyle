@@ -1,8 +1,7 @@
 import { Button, makeStyles, withStyles } from '@material-ui/core'
 import React, { useState } from 'react'
 import Box from '@material-ui/core/Box'
-import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
-import { IntegratedSummary } from '@devexpress/dx-react-grid'
+import { VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { useDateTimeFormatter } from 'src/utils/formatters'
 import { useHistory } from 'react-router'
 import { useQueryClient } from 'react-query'
@@ -10,22 +9,6 @@ import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
-
-export const summaryCalculator = (type, rows, getValue) => {
-  if (type === 'incomeSum') {
-    return rows.reduce((prev, curr) => {
-      prev.tot += curr.pu_totale_totale
-      prev.sc += curr.pu_totale_sc
-      prev.st += curr.pu_totale_st
-      return prev
-    }, { tot: 0, sc: 0, st: 0 })
-  } else {
-    return IntegratedSummary.defaultCalculator(type, rows, getValue)
-  }
-}
-export const SummaryCellBase = props => {
-  return <VirtualTable.Cell {...props}/>
-}
 
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
@@ -108,18 +91,4 @@ const styles = theme => ({
 
 export const Cell = withStyles(styles, { withTheme: true })(
   CellBase
-)
-export const CellSummary = withStyles(styles, { withTheme: true })(
-  SummaryCellBase
-)
-//c'era un warning sul campo children mancante
-export const CellHeader = withStyles(styles, { withTheme: true })(
-  ({ classes, theme, children, ...rest }) => (
-    <TableHeaderRow.Cell
-      {...rest}
-      children={children}
-      className={classes.cell}
-      style={{ paddingLeft: theme.spacing(2) }}
-    />
-  )
 )

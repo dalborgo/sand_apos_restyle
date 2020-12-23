@@ -1,3 +1,5 @@
 import produce from 'immer'
 
-export default config => (set, get) => config(fn => set(produce(fn)), get)
+const immerMiddleware = config => (set, get) => config(fn => set(produce(fn)), get)
+
+export default immerMiddleware

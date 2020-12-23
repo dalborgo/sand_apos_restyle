@@ -140,6 +140,10 @@
     "defaultMessage": "Storni"
   },
   {
+    "id": "common.type",
+    "defaultMessage": "Tipo"
+  },
+  {
     "id": "common.type_of_document",
     "defaultMessage": "Tipo di Documento"
   },

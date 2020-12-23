@@ -137,7 +137,7 @@ function ClosingTable ({ data }) {
                     values={modes}
                   />
                   {
-                    !!elab[`${user}_st`].num &&
+                    Boolean(elab[`${user}_st`].num) &&
                     <>
                       <TitleRow title={intl.formatMessage(messages['common_reversals'])}/>
                       <SimpleRow

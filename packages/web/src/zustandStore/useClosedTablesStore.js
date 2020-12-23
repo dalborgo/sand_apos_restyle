@@ -19,7 +19,7 @@ const useClosedTablesStore = create(immerMiddleware(set => ({
     state.openFilter = !state.openFilter
   }),
   setClosedRows: rows => set(state => {
-    state.runningRows = rows
+    state.closedRows = rows
   }),
   setDateRange: input => set(state => {
     const [startDate, endDate] = input

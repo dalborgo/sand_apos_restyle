@@ -184,7 +184,7 @@ const ClosedTables = () => {
     submitFilter(filter)
     return filter
   }, [submitFilter])
-  
+  console.log('closedRows:', closedRows)
   const FilterFormWr = useMemo(() => (
     <FilterForm onSubmit={onFilterSubmit} roomFilter={roomFilter} tableFilter={tableFilter}/>
   ), [roomFilter, onFilterSubmit, tableFilter])

@@ -81,5 +81,6 @@
   "toolbar.settings.save": "",
   "views.login.installation": "",
   "menu.closed_tables": "",
-  "reports.closed_tables.header_title": ""
+  "reports.closed_tables.header_title": "",
+  "common.type": ""
 }

@@ -2,9 +2,10 @@ import React, { memo, useState } from 'react'
 import { Grid, Table, TableHeaderRow, TableSummaryRow } from '@devexpress/dx-react-grid-material-ui'
 import { messages } from 'src/translations/messages'
 import { useIntl } from 'react-intl'
-import { Cell, CellHeader, CellSummary } from './comps'
+import { Cell } from './comps'
 import { MoneyTypeProvider } from 'src/utils/tableFormatters'
 import { IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
+import { CellHeader, CellSummary } from 'src/components/TableComponents/CellBase'
 
 const tableColumnExtensions = [
   { columnName: 'pro_qta', align: 'right' },

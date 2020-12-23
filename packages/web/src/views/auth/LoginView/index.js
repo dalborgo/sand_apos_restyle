@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import { Box, Card, CardContent, Chip, Container, Link, makeStyles, Tooltip, Typography, } from '@material-ui/core'
+import { Box, Card, CardContent, Chip, Container, Link, makeStyles, Tooltip, Typography } from '@material-ui/core'
 import Page from 'src/components/Page'
 import useAuth from 'src/hooks/useAuth'
 import JWTLogin from './JWTLogin'
