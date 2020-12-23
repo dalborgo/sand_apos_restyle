@@ -78,6 +78,12 @@ const themesOptions = [
           color: colors.blueGrey[800],
         },
       },
+      MuiAvatar: {
+        rounded: {
+          border: '1px solid',
+          borderColor: '#282C34',
+        },
+      },
     },
     palette: {
       type: 'light',

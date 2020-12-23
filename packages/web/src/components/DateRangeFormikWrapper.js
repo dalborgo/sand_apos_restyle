@@ -2,9 +2,12 @@ import React, { memo, useRef, useState } from 'react'
 import { Box, Button } from '@material-ui/core'
 import { Field, Form, Formik } from 'formik'
 import { DesktopDatePickerField } from './DateRange'
-import IconButtonLoader from './IconButtonLoader'
 
-const DateRangeFormikWrapper = memo((function DateRangeFormikWrapper ({ startDate, endDate, setDateRange, refetch, isFetching }) {
+const DateRangeFormikWrapper = memo((function DateRangeFormikWrapper ({
+  startDate,
+  endDate,
+  setDateRange,
+}) {
   console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
   const endDateRef = useRef(null)
   const startDateRef = useRef(null)
@@ -37,14 +40,6 @@ const DateRangeFormikWrapper = memo((function DateRangeFormikWrapper ({ startDat
           </Form>
         </Formik>
       </Box>
-      <IconButtonLoader
-        isFetching={isFetching}
-        onClick={
-          () => {
-            refetch().then()
-          }
-        }
-      />
     </Box>
   )
 }))

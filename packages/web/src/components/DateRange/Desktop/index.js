@@ -28,11 +28,12 @@ const DatePickerField = ({
   ...other
 }) => {
   const [startDate, endDate] = value
-  const disabledEnd = !endDate && !startDate && (!open || (open && !startDate))
+  const disabledEnd = !startDate && (!open || (open && !startDate)) //disabilitare endDate con la popup aperta fa crashare se valorizzato
   const classes = useStyles()
   const { settings: { locale } } = useSettings()
   const intl = useIntl()
   const prevStart = useRef(null)
+  const prevEnd = useRef(null)
   return (
     <DateRangePicker
       disableAutoMonthSwitching
@@ -48,12 +49,13 @@ const DatePickerField = ({
       onChange={
         date => {
           const [startDate, endDate] = date
-          const isSameDate = moment(startDate).isSame(prevStart.current) && moment(startDate).isSame(endDate)
+          const isSameDate = moment(startDate).isSame(prevStart.current) && moment(startDate).isSame(endDate) && !moment(endDate).isSame(prevEnd.current)
           if (isSameDate) {
             setOpen(false)
             setDateRange(date)
           }
           prevStart.current = startDate
+          prevEnd.current = endDate
           form.setFieldValue(name, date, false)
         }
       }
@@ -114,7 +116,7 @@ const DatePickerField = ({
               inputProps={
                 {
                   ...endDateProps.inputProps,
-                  disabled: disabledEnd,
+                  disabled: disabledEnd, //disabilita l'interno del campo
                 }
               }
               inputRef={endDateRef}

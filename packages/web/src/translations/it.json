@@ -80,6 +80,6 @@
   "toolbar.settings.responsive_fonts": "Font responsivi",
   "toolbar.settings.save": "Salva Impostazioni",
   "views.login.installation": "Installazione",
-  "menu.closing_tables": "Tavoli chiusi",
-  "reports.closing_tables.header_title": "Tavoli chiusi"
+  "menu.closed_tables": "Tavoli chiusi",
+  "reports.closed_tables.header_title": "Tavoli chiusi"
 }

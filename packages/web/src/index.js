@@ -1,12 +1,5 @@
-import 'react-app-polyfill/ie11'
-import 'react-app-polyfill/stable'
 import 'react-perfect-scrollbar/dist/css/styles.css'
-import 'prismjs/prism'
-import 'prismjs/components/prism-bash'
-import 'prismjs/components/prism-javascript'
-import 'prismjs/components/prism-jsx'
 import 'src/__mocks__'
-import 'src/assets/css/prism.css'
 import 'src/mixins/chartjs'
 import 'fontsource-roboto/300.css'
 import 'fontsource-roboto/400.css'
@@ -16,13 +9,11 @@ import 'src/utils/wdyr'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { enableES5 } from 'immer'
 import store from 'src/store'
 import { SettingsProvider } from 'src/contexts/SettingsContext'
 import App from 'src/App'
 import './init'
 
-enableES5()
 
 ReactDOM.render(
   <Provider store={store}>

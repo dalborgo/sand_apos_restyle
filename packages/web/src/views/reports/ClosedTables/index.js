@@ -23,6 +23,8 @@ import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
 import ClosedTableDialog from './ClosedTableDialog'
 import { useParams } from 'react-router'
+import moment from 'moment'
+import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -30,14 +32,17 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const closingSelector = state => ({
+const closedTableSelector = state => ({
+  closedRows: state.closedRows,
+  endDate: state.endDate,
   openFilter: state.openFilter,
-  switchOpenFilter: state.switchOpenFilter,
-  closingRows: state.closingRows,
-  setClosedRows: state.setClosedRows,
-  tableFilter: state.filter.table,
   roomFilter: state.filter.room,
+  setClosedRows: state.setClosedRows,
+  setDateRange: state.setDateRange,
+  startDate: state.startDate,
   submitFilter: state.submitFilter,
+  switchOpenFilter: state.switchOpenFilter,
+  tableFilter: state.filter.table,
 })
 
 const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit }) {
@@ -134,21 +139,27 @@ const ClosedTables = () => {
   const queryClient = useQueryClient()
   const snackQueryError = useSnackQueryError()
   const {
-    closingRows,
+    startDate,
+    endDate,
+    closedRows,
+    setDateRange,
     setClosedRows,
     openFilter,
     switchOpenFilter,
     tableFilter,
     roomFilter,
     submitFilter,
-  } = useClosedTablesStore(closingSelector, shallow)
-  const { refetch, ...rest } = useQuery(['reports/closing_tables', {
+  } = useClosedTablesStore(closedTableSelector, shallow)
+  const { refetch, isIdle, ...rest } = useQuery(['reports/closed_tables', {
+    startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
+    endDateInMillis: endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined,
     owner,
     roomFilter,
     tableFilter,
   }], {
     onError: snackQueryError,
-    onSettled: data => { //fa risparmiare un expensive rendere al primo caricamento rispetto a sueEffect
+    enabled: Boolean(startDate && endDate),
+    onSettled: data => { //fa risparmiare un expensive rendere al primo caricamento rispetto a useEffect
       if (data?.ok) {
         setClosedRows(data.results)
       }
@@ -180,7 +191,7 @@ const ClosedTables = () => {
   const effectiveFetching = getEffectiveFetching(rest)
   return (
     <Page
-      title={intl.formatMessage(messages['menu_closing_tables'])}
+      title={intl.formatMessage(messages['menu_closed_tables'])}
     >
       <Box p={2}>
         <StandardHeader
@@ -193,6 +204,7 @@ const ClosedTables = () => {
             <Box alignItems="center" display="flex">
               <Box mr={2}>
                 <IconButtonLoader
+                  disabled={!startDate}
                   isFetching={effectiveFetching}
                   onClick={refetch}
                 />
@@ -206,15 +218,20 @@ const ClosedTables = () => {
             </Box>
           }
         >
-          <FormattedMessage defaultMessage="Tavoli chiusi" id="reports.closing_tables.header_title"/>
+          <FormattedMessage defaultMessage="Tavoli chiusi" id="reports.closed_tables.header_title"/>
         </StandardHeader>
         <RightDrawer open={openFilter} switchOpen={switchOpenFilter}>
           {FilterFormWr}
         </RightDrawer>
       </Box>
+      <DateRangeFormikWrapper
+        endDate={endDate}
+        setDateRange={setDateRange}
+        startDate={startDate}
+      />
       <DivContentWrapper>
         <Paper className={classes.paper}>
-          <TableList isFetching={effectiveFetching} rows={closingRows}/>
+          <TableList isFetching={effectiveFetching && !closedRows.length} isIdle={isIdle} rows={closedRows}/>
         </Paper>
       </DivContentWrapper>
       {docId && <ClosedTableDialog docId={docId}/>}

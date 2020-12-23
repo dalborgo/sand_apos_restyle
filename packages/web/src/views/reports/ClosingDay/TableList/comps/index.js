@@ -1,5 +1,5 @@
-import { Button, Typography, withStyles } from '@material-ui/core'
-import React, { memo, useState } from 'react'
+import { Button, withStyles } from '@material-ui/core'
+import React, { useState } from 'react'
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl'
 import Box from '@material-ui/core/Box'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
@@ -12,24 +12,6 @@ import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import { messages } from 'src/translations/messages'
-
-export const LoadingComponent = memo(function LoadingComponent ({ idle, isFetching, ...rest }) {
-  return (
-    <VirtualTable.Cell {...rest} style={{ border: 'none' }}>
-      <Box display="flex" justifyContent="center" p={5}>
-        {
-          isFetching ?
-            <Typography><FormattedMessage defaultMessage="Caricamento..." id="common.loading"/></Typography>
-            :
-            idle ?
-              <Typography><FormattedMessage defaultMessage="Ricerca per date" id="table.select_date"/></Typography>
-              :
-              <Typography><FormattedMessage defaultMessage="Nessun risultato!" id="table.no_data"/></Typography>
-        }
-      </Box>
-    </VirtualTable.Cell>
-  )
-})
 
 export const summaryCalculator = (type, rows, getValue) => {
   if (type === 'incomeSum') {
@@ -135,7 +117,7 @@ const CellBase = props => {
             }
           }
           size="small"
-          style={{textTransform: 'none'}}
+          style={{ textTransform: 'none' }}
           variant="contained"
         >
           <FormattedDate

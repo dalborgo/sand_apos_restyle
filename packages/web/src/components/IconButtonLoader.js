@@ -16,13 +16,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function IconButtonLoader ({ onClick, isFetching }) {
+export default function IconButtonLoader ({ isFetching, ...rest }) {
   const classes = useStyles()
   return (
     <Box className={classes.wrapper}>
       <IconButton
         color="secondary"
-        onClick={onClick}
+        {
+          ...rest
+        }
       >
         {isFetching ? <HourglassEmptyIcon/> : <ReplayIcon/>}
       </IconButton>

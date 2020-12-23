@@ -1,6 +1,5 @@
-import { Button, makeStyles, Typography, withStyles } from '@material-ui/core'
-import React, { memo, useState } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { Button, makeStyles, withStyles } from '@material-ui/core'
+import React, { useState } from 'react'
 import Box from '@material-ui/core/Box'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { IntegratedSummary } from '@devexpress/dx-react-grid'
@@ -11,21 +10,6 @@ import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
-
-export const LoadingComponent = memo(function LoadingComponent ({ isFetching, ...rest }) {
-  return (
-    <VirtualTable.Cell {...rest} style={{ border: 'none' }}>
-      <Box display="flex" justifyContent="center" p={5}>
-        {
-          isFetching ?
-            <Typography><FormattedMessage defaultMessage="Caricamento..." id="common.loading"/></Typography>
-            :
-            <Typography><FormattedMessage defaultMessage="Nessun risultato!" id="table.no_data"/></Typography>
-        }
-      </Box>
-    </VirtualTable.Cell>
-  )
-})
 
 export const summaryCalculator = (type, rows, getValue) => {
   if (type === 'incomeSum') {

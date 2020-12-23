@@ -168,8 +168,8 @@ const routes = [
       {
         exact: true,
         path: [
-          '/app/reports/closing-tables',
-          '/app/reports/closing-tables/:docId',
+          '/app/reports/closed-tables',
+          '/app/reports/closed-tables/:docId',
         ],
         component: lazy(() => import('src/views/reports/ClosedTables')),
       },

@@ -12,7 +12,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "connect-couchbase": "^0.2.10",
     "cors": "^2.8.5",
     "ejs": "^3.1.5",
@@ -21,7 +21,7 @@
     "express-basic-auth": "^1.2.0",
     "express-session": "^1.17.0",
     "http-errors": "^1.8.0",
-    "knex": "^0.21.13",
+    "knex": "^0.21.14",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "morgan": "^1.10.0",

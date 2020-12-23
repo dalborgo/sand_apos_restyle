@@ -1,11 +1,12 @@
 import React, { memo, useCallback, useState } from 'react'
 import { Grid, TableHeaderRow, TableSummaryRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
-import { Cell, CellHeader, CellSummary, LoadingComponent } from './comps'
+import { Cell, CellHeader, CellSummary } from './comps'
 import { useGeneralStore } from 'src/zustandStore'
 import { IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { MoneyTypeProvider } from 'src/utils/tableFormatters'
+import { LoadingComponent } from 'src/components/TableComponents'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
@@ -69,5 +70,4 @@ const TableList = memo(function TableList ({ rows, isFetching }) {
     </Grid>
   )
 })
-
 export default TableList

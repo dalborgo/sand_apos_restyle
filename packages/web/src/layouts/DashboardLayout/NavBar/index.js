@@ -144,12 +144,13 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
               <Avatar
                 alt="User"
                 className={classes.avatar}
-                src="/static/images/avatars/avatar_6.png"
+                src={`/static/images/avatars/${user.priority}.png`}
+                variant="rounded"
               />
             </RouterLink>
           </Box>
           <Box
-            mt={2}
+            mt={1}
             textAlign="center"
           >
             <Link

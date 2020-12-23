@@ -160,7 +160,6 @@ export const AuthProvider = ({ children }) => {
     const initialise = async () => {
       try {
         const accessToken = window.localStorage.getItem('accessToken')
-        
         if (accessToken && isValidToken(accessToken)) {
           setSession({ accessToken })
           const response = await axiosLocalInstance.get('/api/jwt/me')

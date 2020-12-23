@@ -42,14 +42,14 @@ function addRouters (router) {
     if (!ok) {return res.send({ ok, message, info })}
     res.send({ ok, results })
   })
-  
+
   /**
    *  covered index
-   *  CREATE INDEX adv_covered_closed_tables ON `astenpos`(`room`,`archived`,`date`,`mode`,`final_price`,`room_display`,`order_id`,`discount_price`,`income`,`closed_by`,`table_display`,`covers`,`owner`) WHERE (`type` = 'PAYMENT')
+   *  CREATE INDEX adv_covered_closed_tables ON `astenpos`(`archived`,`date`,`mode`,`final_price`,`room_display`,`order`,`discount_price`,`income`,`closed_by`,`table_display`,`covers`,`owner`) WHERE (`type` = 'PAYMENT')
    */
   router.get('/reports/closed_tables', async function (req, res) {
     const { connClass, query } = req
-    utils.controlParameters(query, ['owner'])
+    utils.controlParameters(query, ['owner', 'startDateInMillis', 'endDateInMillis'])
     const parsedOwner = utils.parseOwner(req, 'buc')
     const {
       bucketName = connClass.astenposBucketName,
@@ -61,9 +61,9 @@ function addRouters (router) {
     } = query
     const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') //end day
     const statement = knex({ buc: bucketName }).where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "PAYMENT"`))
-    roomFilter && statement.where('buc.room', roomFilter)
+    roomFilter && statement.where('buc.room_display', roomFilter)
     tableFilter && statement.whereRaw(`LOWER(buc.table_display) like "%${tableFilter.toLowerCase()}%"`)
-    statement.column({ _id: 'buc.order_id' })
+    statement.column({ _id: 'buc.order' })
       .select(knex.raw('MAX(buc.date) date, '
                        + 'SUM(buc.covers) covers, '
                        + 'SUM(buc.final_price) final_price, '
@@ -77,7 +77,7 @@ function addRouters (router) {
       .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by')
       .joinRaw('LEFT JOIN `' + bucketName + '` as income ON KEYS "PAYMENT_INCOME_" || buc.income')
       .whereBetween('buc.date', [startDate, endDate_])
-      .groupBy('buc.order_id')
+      .groupBy('buc.order')
       .orderBy('date', 'desc')
     const {
       ok,
@@ -99,7 +99,7 @@ function addRouters (router) {
       options,
     } = query
     const statement = knex({ buc: bucketName }).where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "ORDER"`))
-    roomFilter && statement.where('buc.room', roomFilter)
+    roomFilter && statement.where('buc.room_display', roomFilter)
     tableFilter && statement.whereRaw(`LOWER(buc.table_display) like "%${tableFilter.toLowerCase()}%"`)
     statement.column({ _id: 'buc.order_id' })
       .select('buc.owner', 'buc.last_saved_date', 'buc.table_display', 'buc.room_display', 'buc.covers', 'buc.cover_price', 'user.user')

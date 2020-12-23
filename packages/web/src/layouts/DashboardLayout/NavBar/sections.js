@@ -39,10 +39,10 @@ const sections = [
         href: '/app/reports/running-tables',
       },
       {
-        title: 'closing_tables',
+        title: 'closed_tables',
         exact: false,
         icon: FileTextIcon,
-        href: '/app/reports/closing-tables',
+        href: '/app/reports/closed-tables',
       },
       {
         title: 'Dashboard',

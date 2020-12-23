@@ -17,6 +17,8 @@ import { getEffectiveFetching } from 'src/utils/logics'
 import moment from 'moment'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
+import { StandardBreadcrumb } from 'src/components/StandardBreadcrumb'
+import IconButtonLoader from 'src/components/IconButtonLoader'
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -59,14 +61,29 @@ const ClosingDay = () => {
       title={intl.formatMessage(messages['menu_closing_day'])}
     >
       <Box p={2}>
-        <StandardHeader>
+        <StandardHeader
+          breadcrumb={
+            <StandardBreadcrumb
+              crumbs={[{ to: '/app', name: 'DashBoard' }, { name: 'Report' }]}
+            />
+          }
+          rightComponent={
+            <Box alignItems="center" display="flex">
+              <Box mr={2}>
+                <IconButtonLoader
+                  disabled={!startDate}
+                  isFetching={effectiveFetching}
+                  onClick={refetch}
+                />
+              </Box>
+            </Box>
+          }
+        >
           <FormattedMessage defaultMessage="Chiusure di giornata" id="reports.closing_day.header_title"/>
         </StandardHeader>
       </Box>
       <DateRangeFormikWrapper
         endDate={endDate}
-        isFetching={effectiveFetching}
-        refetch={refetch}
         setDateRange={setDateRange}
         startDate={startDate}
       />

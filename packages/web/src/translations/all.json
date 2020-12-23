@@ -232,12 +232,12 @@
     "defaultMessage": "Italiano"
   },
   {
-    "id": "menu.closing_day",
-    "defaultMessage": "Chiusure di giornata"
+    "id": "menu.closed_tables",
+    "defaultMessage": "Tavoli chiusi"
   },
   {
-    "id": "menu.closing_tables",
-    "defaultMessage": "Tavoli chiusi"
+    "id": "menu.closing_day",
+    "defaultMessage": "Chiusure di giornata"
   },
   {
     "id": "menu.running_tables",
@@ -259,6 +259,10 @@
   {
     "id": "reports.browser.total_rows",
     "defaultMessage": "Righe totali"
+  },
+  {
+    "id": "reports.closed_tables.header_title",
+    "defaultMessage": "Tavoli chiusi"
   },
   {
     "id": "reports.closing_day.closing",
@@ -283,10 +287,6 @@
   {
     "id": "reports.closing_day.total",
     "defaultMessage": "Totale"
-  },
-  {
-    "id": "reports.closing_tables.header_title",
-    "defaultMessage": "Tavoli chiusi"
   },
   {
     "id": "reports.dashboard.best_earning",

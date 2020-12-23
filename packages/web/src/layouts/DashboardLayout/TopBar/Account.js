@@ -54,7 +54,7 @@ const Account = () => {
         <Avatar
           alt="User"
           className={classes.avatar}
-          src="/static/images/avatars/avatar_6.png"
+          src={`/static/images/avatars/${user.priority}.png`}
         />
         <Hidden smDown>
           <Typography

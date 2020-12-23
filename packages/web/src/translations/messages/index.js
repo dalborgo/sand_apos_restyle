@@ -65,8 +65,8 @@ export const messages = defineMessages({
     id: 'menu.running_tables',
     defaultMessage: 'Tavoli in corso',
   },
-  menu_closing_tables: {
-    id: 'menu.closing_tables',
+  menu_closed_tables: {
+    id: 'menu.closed_tables',
     defaultMessage: 'Tavoli chiusi',
   },
   date_range_start: {

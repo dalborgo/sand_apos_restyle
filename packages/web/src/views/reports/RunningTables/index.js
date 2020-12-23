@@ -97,7 +97,7 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
                       data.results.map(room => (
                         <option
                           key={room._id}
-                          value={room._id}
+                          value={room.display}
                         >
                           {room.display}
                         </option>
@@ -148,7 +148,7 @@ const RunningTables = () => {
     tableFilter,
   }], {
     onError: snackQueryError,
-    onSettled: data => { //fa risparmiare un expensive rendere al primo caricamento rispetto a sueEffect
+    onSettled: data => { //fa risparmiare un expensive rendere al primo caricamento rispetto a useEffect
       if (data?.ok) {
         setRunningRows(data.results)
       }
