@@ -248,6 +248,22 @@
     "defaultMessage": "Tavoli in corso"
   },
   {
+    "id": "mode.5STELLE",
+    "defaultMessage": "Addebito"
+  },
+  {
+    "id": "mode.CHECK",
+    "defaultMessage": "Scontrino"
+  },
+  {
+    "id": "mode.INVOICE",
+    "defaultMessage": "Fattura"
+  },
+  {
+    "id": "mode.PRECHECK",
+    "defaultMessage": "Preconto"
+  },
+  {
     "id": "reports.browser.response_time",
     "defaultMessage": "Tempo query"
   },
@@ -281,16 +297,8 @@
     "defaultMessage": "Apertura"
   },
   {
-    "id": "reports.closing_day.tot_discounts",
-    "defaultMessage": "Totale Sconti"
-  },
-  {
     "id": "reports.closing_day.tot_reversal",
     "defaultMessage": "Totale Storni"
-  },
-  {
-    "id": "reports.closing_day.total",
-    "defaultMessage": "Totale"
   },
   {
     "id": "reports.dashboard.best_earning",
@@ -303,6 +311,14 @@
   {
     "id": "reports.running_tables.header_title",
     "defaultMessage": "Tavoli in corso"
+  },
+  {
+    "id": "reports.tot_discount",
+    "defaultMessage": "Totale Sconti"
+  },
+  {
+    "id": "reports.total",
+    "defaultMessage": "Totale"
   },
   {
     "id": "role.role_admin",

@@ -66,9 +66,9 @@
   "reports.closing_day.closing": "",
   "reports.closing_day.header_title": "",
   "reports.closing_day.opening": "",
-  "reports.closing_day.tot_discounts": "",
+  "reports.tot_discount": "",
   "reports.closing_day.tot_reversal": "",
-  "reports.closing_day.total": "",
+  "reports.total": "",
   "reports.dashboard.best_earning": "",
   "reports.header.list_documents": "",
   "reports.running_tables.header_title": "",
@@ -82,5 +82,9 @@
   "views.login.installation": "",
   "menu.closed_tables": "",
   "reports.closed_tables.header_title": "",
-  "common.type": ""
+  "common.type": "",
+  "mode.5STELLE": "",
+  "mode.CHECK": "",
+  "mode.INVOICE": "",
+  "mode.PRECHECK": ""
 }

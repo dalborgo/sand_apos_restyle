@@ -1,6 +1,22 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  mode_INVOICE: {
+    id: 'mode.INVOICE',
+    defaultMessage: 'Fattura',
+  },
+  mode_CHECK: {
+    id: 'mode.CHECK',
+    defaultMessage: 'Scontrino',
+  },
+  mode_5STELLE: {
+    id: 'mode.5STELLE',
+    defaultMessage: 'Addebito',
+  },
+  mode_PRECHECK: {
+    id: 'mode.PRECHECK',
+    defaultMessage: 'Preconto',
+  },
   common_tot: {
     id: 'common.tot',
     defaultMessage: 'Tot',

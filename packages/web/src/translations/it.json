@@ -66,9 +66,9 @@
   "reports.closing_day.closing": "Chiusura",
   "reports.closing_day.header_title": "Chiusure di giornata",
   "reports.closing_day.opening": "Apertura",
-  "reports.closing_day.tot_discounts": "Totale Sconti",
+  "reports.tot_discount": "Totale Sconti",
   "reports.closing_day.tot_reversal": "Totale Storni",
-  "reports.closing_day.total": "Totale",
+  "reports.total": "Totale",
   "reports.dashboard.best_earning": "Miglior Guadagno",
   "reports.header.list_documents": "Lista Documenti",
   "reports.running_tables.header_title": "Tavoli in corso",
@@ -82,5 +82,9 @@
   "views.login.installation": "Installazione",
   "menu.closed_tables": "Tavoli chiusi",
   "reports.closed_tables.header_title": "Tavoli chiusi",
-  "common.type": "Tipo"
+  "common.type": "Tipo",
+  "mode.5STELLE": "Addebito",
+  "mode.CHECK": "Scontrino",
+  "mode.INVOICE": "Fattura",
+  "mode.PRECHECK": "Preconto"
 }

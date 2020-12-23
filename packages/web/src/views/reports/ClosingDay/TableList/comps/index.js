@@ -36,7 +36,7 @@ export const SummaryCellBase = props => {
         <Box color="text.primary" fontWeight="bold">
           <FormattedMessage
             defaultMessage="Totale"
-            id="reports.closing_day.total"
+            id="reports.total"
           />: {moneyFormatter(first.value.tot)}
         </Box>
         {
@@ -44,7 +44,7 @@ export const SummaryCellBase = props => {
           <Box color="red">
             <FormattedMessage
               defaultMessage="Totale Sconti"
-              id="reports.closing_day.tot_discounts"
+              id="reports.tot_discount"
             />: {moneyFormatter(first.value.sc)}
           </Box>
         }

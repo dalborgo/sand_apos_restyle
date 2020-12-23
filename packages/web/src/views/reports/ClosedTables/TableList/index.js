@@ -1,12 +1,12 @@
 import React, { memo, useCallback, useState } from 'react'
 import { Grid, TableHeaderRow, TableSummaryRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
-import { Cell } from './comps'
+import { Cell, CellSummary, summaryCalculator } from './comps'
 import { useGeneralStore } from 'src/zustandStore'
 import { IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { LoadingComponent } from 'src/components/TableComponents'
-import { CellHeader, CellSummary } from 'src/components/TableComponents/CellBase'
+import { CellHeader } from 'src/components/TableComponents/CellBase'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
@@ -18,10 +18,10 @@ const tableColumnExtensions = [
 const totalSummaryItems = [
   { columnName: 'table_display', type: 'count' },
   { columnName: 'covers', type: 'sum' },
+  { columnName: 'final_price', type: 'incomeSum' },
 ]
 
 const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
-  console.log('rows:', rows)
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const intl = useIntl()
   const [columns] = useState(() => {
@@ -55,7 +55,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
       <SummaryState
         totalItems={totalSummaryItems}
       />
-      <IntegratedSummary/>
+      <IntegratedSummary calculator={summaryCalculator}/>
       <VirtualTable
         cellComponent={Cell}
         columnExtensions={tableColumnExtensions}

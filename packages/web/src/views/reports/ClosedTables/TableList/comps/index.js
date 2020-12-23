@@ -1,4 +1,4 @@
-import { Button, makeStyles, withStyles } from '@material-ui/core'
+import { Button, ButtonGroup, colors, makeStyles, withStyles } from '@material-ui/core'
 import React, { useState } from 'react'
 import Box from '@material-ui/core/Box'
 import { VirtualTable } from '@devexpress/dx-react-grid-material-ui'
@@ -10,15 +10,18 @@ import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
+import { messages } from 'src/translations/messages'
+import { FormattedMessage, useIntl } from 'react-intl'
+import PrintIcon from '@material-ui/icons/PrintTwoTone'
+import clsx from 'clsx'
 
 export const summaryCalculator = (type, rows, getValue) => {
   if (type === 'incomeSum') {
     return rows.reduce((prev, curr) => {
-      prev.tot += curr.pu_totale_totale
-      prev.sc += curr.pu_totale_sc
-      prev.st += curr.pu_totale_st
+      prev.tot += curr.final_price
+      prev.sc += curr.discount_price
       return prev
-    }, { tot: 0, sc: 0, st: 0 })
+    }, { tot: 0, sc: 0 })
   } else {
     return IntegratedSummary.defaultCalculator(type, rows, getValue)
   }
@@ -26,16 +29,73 @@ export const summaryCalculator = (type, rows, getValue) => {
 
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   buttonRoot: {
     textTransform: 'none',
     lineHeight: '18px',
     textAlign: 'left',
   },
+  printIcon: {
+    fontSize: 18,
+    marginTop: 2,
+  },
+  buttonGrouped: {
+    padding: theme.spacing(0, 0.5),
+  },
+  buttonGreen: {
+    backgroundColor: colors.green[100],
+    '&:hover': {
+      backgroundColor: colors.green[200],
+    },
+  },
+  buttonCyan: {
+    backgroundColor: colors.cyan[100],
+    '&:hover': {
+      backgroundColor: colors.cyan[200],
+    },
+  },
+  buttonPink: {
+    backgroundColor: colors.red[100],
+    '&:hover': {
+      backgroundColor: colors.red[200],
+    },
+  },
 }))
+
+export const SummaryCellBase = props => {
+  const { column, children } = props
+  const moneyFormatter = useMoneyFormatter()
+  if (column.name === 'final_price') {
+    const { columnSummaries } = children.props || {}
+    const [first] = columnSummaries
+    return (
+      <VirtualTable.Cell {...props}>
+        <Box color="text.primary" fontWeight="bold">
+          <FormattedMessage
+            defaultMessage="Totale"
+            id="reports.total"
+          />: {moneyFormatter(first.value.tot)}
+        </Box>
+        {
+          first.value.sc > 0 &&
+          <Box color="red">
+            <FormattedMessage
+              defaultMessage="Totale Sconti"
+              id="reports.tot_discount"
+            />: {moneyFormatter(first.value.sc)}
+          </Box>
+        }
+      </VirtualTable.Cell>
+    )
+  } else {
+    return <VirtualTable.Cell {...props}/>
+  }
+}
+
 
 const CellBase = props => {
   const { column, row, theme } = props
+  const intl = useIntl()
   const dateTimeFormatter = useDateTimeFormatter()
   const moneyFormatter = useMoneyFormatter()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
@@ -82,18 +142,6 @@ const CellBase = props => {
       </VirtualTable.Cell>
     )
   }
-  if (column.name === 'mode') {
-    return (
-      <VirtualTable.Cell {...props} style={cellStyle}>
-        <Box>
-          {row.table_display}
-        </Box>
-        <Box>
-          {row.room_display}
-        </Box>
-      </VirtualTable.Cell>
-    )
-  }
   if (column.name === 'table_display') {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
@@ -106,6 +154,38 @@ const CellBase = props => {
       </VirtualTable.Cell>
     )
   }
+  if (column.name === 'type') {
+    return (
+      <VirtualTable.Cell {...props} style={cellStyle}>
+        {
+          row.mode ?
+            <>
+              <Box mb={0.5}>
+                {intl.formatMessage(messages[`mode_${row.mode}`])}
+              </Box>
+              <ButtonGroup size="small" variant="contained">
+                {
+                  row.mode !== 'PRECHECK' &&
+                  <Button className={clsx(classes.buttonGrouped, classes.buttonPink)}>
+                    <PrintIcon className={classes.printIcon}/>
+                  </Button>
+                }
+                <Button className={clsx(classes.buttonGrouped, classes.buttonCyan)}>
+                  <PrintIcon className={classes.printIcon}/>&nbsp;P
+                </Button>
+                <Button className={clsx(classes.buttonGrouped, classes.buttonGreen)}>
+                  {row.income}
+                </Button>
+              </ButtonGroup>
+            </>
+            :
+            <Box>
+              separato
+            </Box>
+        }
+      </VirtualTable.Cell>
+    )
+  }
   if (column.name === 'final_price') {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
@@ -114,7 +194,7 @@ const CellBase = props => {
         </Box>
         {
           Boolean(row.discount_price) &&
-          <Box>
+          <Box color="red">
             -{moneyFormatter(row.discount_price)}
           </Box>
         }
@@ -134,3 +214,6 @@ export const Cell = withStyles(styles, { withTheme: true })(
   CellBase
 )
 
+export const CellSummary = withStyles(styles, { withTheme: true })(
+  SummaryCellBase
+)
