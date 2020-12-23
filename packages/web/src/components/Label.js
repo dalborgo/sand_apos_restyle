@@ -42,17 +42,16 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.warning.main,
     backgroundColor: fade(theme.palette.warning.main, 0.08),
   },
-}));
+}))
 
 const Label = ({
   className = '',
   color = 'secondary',
   children,
-  style,
   ...rest
 }) => {
-  const classes = useStyles();
-
+  const classes = useStyles()
+  
   return (
     <span
       className={
@@ -64,14 +63,13 @@ const Label = ({
     >
       {children}
     </span>
-  );
-};
+  )
+}
 
 Label.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   color: PropTypes.oneOf(['primary', 'secondary', 'error', 'warning', 'success']),
-  style: PropTypes.object,
-};
+}
 
-export default Label;
+export default Label

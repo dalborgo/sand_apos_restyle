@@ -38,6 +38,7 @@ axiosLocalInstance.interceptors.response.use(function (response) {
 
 export const defaultQueryFn = async ({ queryKey }) => {
   //viene già injectato questo parametro (owner) di default e se viene passato è solo per questioni di chiave della cache
+  // eslint-disable-next-line no-unused-vars
   const [_key, { owner, ...params } = {}] = queryKey //passo i parametri come oggetto
   const { data } = await axiosLocalInstance(`/api/${_key}`, {
     params,

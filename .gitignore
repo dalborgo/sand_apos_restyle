@@ -9,3 +9,4 @@
 /packages/web/node_modules/
 /packages/web/build/
 yarn.lock
+/packages/web/.eslintcache
