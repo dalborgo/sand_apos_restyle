@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     color: theme.palette.text.secondary,
-    padding: '10px 8px',
+    padding: '5px 8px',
     justifyContent: 'flex-start',
     textTransform: 'none',
     letterSpacing: 0,
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonLeaf: {
     color: theme.palette.text.secondary,
-    padding: '10px 8px',
+    padding: '5px 8px',
     justifyContent: 'flex-start',
     textTransform: 'none',
     letterSpacing: 0,
