@@ -170,6 +170,7 @@ const routes = [
         path: [
           '/app/reports/closed-tables',
           '/app/reports/closed-tables/:docId',
+          '/app/reports/closed-tables/change-payment-method/:targetDocId',
         ],
         component: lazy(() => import('src/views/reports/ClosedTables')),
       },

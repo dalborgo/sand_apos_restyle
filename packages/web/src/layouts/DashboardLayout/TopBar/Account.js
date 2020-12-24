@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 import { Avatar, Box, ButtonBase, Hidden, makeStyles, Menu, MenuItem, Typography } from '@material-ui/core'
 import useAuth from 'src/hooks/useAuth'
 import log from '@adapter/common/src/log'
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   avatar: {
     height: 32,
     width: 32,
@@ -73,11 +73,13 @@ const Account = () => {
             horizontal: 'center',
           }
         }
+        disableAutoFocusItem
         getContentAnchorEl={null}
         keepMounted
         onClose={handleClose}
         open={isOpen}
         PaperProps={{ className: classes.popover }}
+        transitionDuration={0}
       >
         <MenuItem
           component={RouterLink}

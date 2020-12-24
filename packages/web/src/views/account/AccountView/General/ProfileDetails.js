@@ -1,11 +1,8 @@
 import React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { Avatar, Box, Button, Card, CardActions, CardContent, Link, makeStyles, Typography } from '@material-ui/core'
+import { Avatar, Box, Card, CardContent, makeStyles, Typography } from '@material-ui/core'
+import { useRoleFormatter } from 'src/utils/formatters'
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
   name: {
     marginTop: theme.spacing(1),
   },
@@ -13,16 +10,13 @@ const useStyles = makeStyles((theme) => ({
     height: 100,
     width: 100,
   },
-}));
+}))
 
-const ProfileDetails = ({ className, user, ...rest }) => {
-  const classes = useStyles();
-
+const ProfileDetails = ({ user }) => {
+  const classes = useStyles()
+  const roleFormatter = useRoleFormatter()
   return (
-    <Card
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
+    <Card>
       <CardContent>
         <Box
           alignItems="center"
@@ -32,7 +26,7 @@ const ProfileDetails = ({ className, user, ...rest }) => {
         >
           <Avatar
             className={classes.avatar}
-            src={user.avatar}
+            src={`/static/images/avatars/${user.priority}.png`}
           />
           <Typography
             className={classes.name}
@@ -46,32 +40,12 @@ const ProfileDetails = ({ className, user, ...rest }) => {
             color="textPrimary"
             variant="body1"
           >
-            Your tier:
-            {' '}
-            <Link
-              component={RouterLink}
-              to="/pricing"
-            >
-              {' '}
-            </Link>
+            {roleFormatter(user.priority)}
           </Typography>
         </Box>
       </CardContent>
-      <CardActions>
-        <Button
-          fullWidth
-          variant="text"
-        >
-          Remove picture
-        </Button>
-      </CardActions>
     </Card>
-  );
-};
+  )
+}
 
-ProfileDetails.propTypes = {
-  className: PropTypes.string,
-  user: PropTypes.object.isRequired,
-};
-
-export default ProfileDetails;
+export default ProfileDetails

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-import { capitalCase } from 'change-case'
 import {
   Box,
   Button,
@@ -20,6 +19,7 @@ import {
 import { Settings as SettingsIcon } from 'react-feather'
 import useSettings from 'src/hooks/useSettings'
 import { THEMES } from 'src/constants'
+import startCase from 'lodash/startCase'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { useGeneralStore } from 'src/zustandStore'
@@ -202,7 +202,7 @@ const Settings = () => {
                     key={theme}
                     value={theme}
                   >
-                    {capitalCase(theme)}
+                    {startCase(theme)}
                   </MenuItem>
                 ))
               }

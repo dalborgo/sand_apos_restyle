@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { v4 as uuidv4 } from 'uuid'
 import _ from 'lodash'
 import mock from 'src/utils/mock'
 
@@ -168,7 +167,7 @@ mock.onPost('/api/kanban/lists/new').reply((request) => {
   try {
     const { name } = JSON.parse(request.data);
     const list = {
-      id: uuidv4(),
+      id: Math.ceil(Math.random() * 100),
       name,
       cardIds: [],
     };
@@ -238,7 +237,7 @@ mock.onPost('/api/kanban/cards/new').reply((request) => {
   try {
     const { listId, name } = JSON.parse(request.data);
     const card = {
-      id: uuidv4(),
+      id: Math.ceil(Math.random() * 100),
       attachments: [],
       checklists: [],
       comments: [],
@@ -346,7 +345,7 @@ mock.onPost('/api/kanban/comments/new').reply((request) => {
   try {
     const { cardId, message } = JSON.parse(request.data);
     const comment = {
-      id: uuidv4(),
+      id: Math.ceil(Math.random() * 100),
       cardId,
       createdAt: moment()
         .toDate()
@@ -378,7 +377,7 @@ mock.onPost('/api/kanban/checklists/new').reply((request) => {
   try {
     const { cardId, name } = JSON.parse(request.data);
     const checklist = {
-      id: uuidv4(),
+      id: Math.ceil(Math.random() * 100),
       name,
       checkItems: [],
     };
@@ -458,7 +457,7 @@ mock.onPost('/api/kanban/checkitems/new').reply((request) => {
   try {
     const { cardId, checklistId, name } = JSON.parse(request.data);
     const checkItem = {
-      id: uuidv4(),
+      id: Math.ceil(Math.random() * 100),
       checklistId,
       name,
       state: 'incomplete',

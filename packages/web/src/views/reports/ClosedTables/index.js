@@ -25,6 +25,7 @@ import ClosedTableDialog from './ClosedTableDialog'
 import { useParams } from 'react-router'
 import moment from 'moment'
 import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
+import ChangePaymentDialog from './ChangePaymentDialog'
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -133,7 +134,7 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
 const ClosedTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
-  const { docId } = useParams()
+  const { docId, targetDocId } = useParams()
   const intl = useIntl()
   const [, setState] = useState()
   const queryClient = useQueryClient()
@@ -234,6 +235,7 @@ const ClosedTables = () => {
         </Paper>
       </DivContentWrapper>
       {docId && <ClosedTableDialog docId={docId}/>}
+      {targetDocId && <ChangePaymentDialog docId={targetDocId}/>}
     </Page>
   )
 }

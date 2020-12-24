@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken'
-import { v4 as uuidv4 } from 'uuid'
 import mock from 'src/utils/mock'
 import wait from 'src/utils/wait'
 
@@ -71,7 +70,7 @@ mock.onPost('/api/account/register').reply(async (config) => {
     }
     
     user = {
-      id: uuidv4(),
+      id: Math.ceil(Math.random() * 1000),
       avatar: null,
       canHire: false,
       country: null,

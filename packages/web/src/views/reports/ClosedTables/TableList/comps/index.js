@@ -163,7 +163,7 @@ const CellBase = props => {
               <Box mb={0.5}>
                 {intl.formatMessage(messages[`mode_${row.mode}`])}
               </Box>
-              <ButtonGroup size="small" variant="contained">
+              <ButtonGroup disableFocusRipple size="small" variant="contained">
                 {
                   row.mode !== 'PRECHECK' &&
                   <Button className={clsx(classes.buttonGrouped, classes.buttonPink)}>
@@ -173,7 +173,22 @@ const CellBase = props => {
                 <Button className={clsx(classes.buttonGrouped, classes.buttonCyan)}>
                   <PrintIcon className={classes.printIcon}/>&nbsp;P
                 </Button>
-                <Button className={clsx(classes.buttonGrouped, classes.buttonGreen)}>
+                <Button
+                  className={clsx(classes.buttonGrouped, classes.buttonGreen)}
+                  onClick={
+                    async () => {
+                      const queryKey = ['types/incomes', { owner }]
+                      if (!queryClient.getQueryData(queryKey)) {
+                        setLoading(true)
+                        setIntLoading(true)
+                        await queryClient.prefetchQuery(queryKey, { throwOnError: true })
+                        setIntLoading(false)
+                        setLoading(false)
+                      }
+                      history.push(`${window.location.pathname}/change-payment-method/${docId}`)
+                    }
+                  }
+                >
                   {row.income}
                 </Button>
               </ButtonGroup>

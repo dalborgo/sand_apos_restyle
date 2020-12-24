@@ -17,9 +17,9 @@ import Account from './Account'
 /*import Contacts from './Contacts'
 import Notifications from './Notifications'
 import Search from './Search'*/
+import startCase from 'lodash/startCase'
 import Settings from './Settings'
 import useAuth from 'src/hooks/useAuth'
-import { capitalCase } from 'change-case'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { NO_SELECTED_CODE } from 'src/contexts/JWTAuthContext'
@@ -222,14 +222,14 @@ const TopBar = ({
                     style={optionBg}
                     value={code}
                   >
-                    {capitalCase(name)}
+                    {startCase(name)}
                   </option>
                 ))
               }
             </TextField>
             :
             <Typography variant="h4">
-              {capitalCase(codes?.[0].name)}
+              {startCase(codes?.[0].name)}
             </Typography>
         }
         <Box

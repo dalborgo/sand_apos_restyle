@@ -86,5 +86,6 @@
   "mode.5STELLE": "",
   "mode.CHECK": "",
   "mode.INVOICE": "",
-  "mode.PRECHECK": ""
+  "mode.PRECHECK": "",
+  "reports.closed_tables.type_of_payment": ""
 }

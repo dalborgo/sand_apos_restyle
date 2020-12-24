@@ -7,7 +7,7 @@ import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import { messages } from 'src/translations/messages'
-import upperCaseFirst from 'upper-case-first'
+import upperFirst from 'lodash/upperFirst'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,7 +70,7 @@ const BestEarning = () => {
             variant="h6"
           >
             {
-              upperCaseFirst(dateFormatter(date, { month: 'long', weekday: 'long' }))
+              upperFirst(dateFormatter(date, { month: 'long', weekday: 'long' }))
             }
           </Typography>
         </Box>

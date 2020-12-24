@@ -12,4 +12,4 @@ export function testParams (path) {
   }
 }
 
-export const parentPath = path => path.split('/').slice(0, -1).join('/')
+export const  parentPath = (path, back = -1) => path.split('/').slice(0, back).join('/')

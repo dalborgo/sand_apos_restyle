@@ -86,5 +86,6 @@
   "mode.5STELLE": "Addebito",
   "mode.CHECK": "Scontrino",
   "mode.INVOICE": "Fattura",
-  "mode.PRECHECK": "Preconto"
+  "mode.PRECHECK": "Preconto",
+  "reports.closed_tables.type_of_payment": "Tipo di pagamento"
 }

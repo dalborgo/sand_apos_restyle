@@ -1,3 +1,4 @@
+import React from 'react'
 import { withStyles } from '@material-ui/core'
 import { TableHeaderRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 

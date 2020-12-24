@@ -285,6 +285,10 @@
     "defaultMessage": "Tavoli chiusi"
   },
   {
+    "id": "reports.closed_tables.type_of_payment",
+    "defaultMessage": "Tipo di pagamento"
+  },
+  {
     "id": "reports.closing_day.closing",
     "defaultMessage": "Chiusura"
   },

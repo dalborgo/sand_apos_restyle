@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import _ from 'lodash'
 import mock from 'src/utils/mock'
@@ -449,7 +448,7 @@ mock.onPost('/api/chat/messages/new').reply((request) => {
     }
 
     const message = {
-      id: uuidv4(),
+      id: Math.ceil(Math.random() * 100),
       attachments: [],
       body,
       contentType: 'text',
@@ -480,7 +479,7 @@ mock.onPost('/api/chat/messages/new').reply((request) => {
       });
 
       thread = {
-        id: uuidv4(),
+        id: Math.ceil(Math.random() * 100),
         messages: [message],
         participants,
         type: participants.length === 2 ? 'ONE_TO_ONE' : 'GROUP',

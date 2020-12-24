@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { v4 as uuidv4 } from 'uuid'
 import _ from 'lodash'
 import { colors } from '@material-ui/core'
 import mock from 'src/utils/mock'
@@ -128,7 +127,7 @@ mock.onPost('/api/calendar/events/new').reply((request) => {
   try {
     const { allDay, description, end, start, title } = JSON.parse(request.data);
     const event = {
-      id: uuidv4(),
+      id: Math.ceil(Math.random() * 100),
       allDay,
       description,
       end,
