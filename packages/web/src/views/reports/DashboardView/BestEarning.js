@@ -57,7 +57,7 @@ const BestEarning = () => {
             color="textPrimary"
             variant="h6"
           >
-            {isSingleCompany ? intl.formatMessage(messages['common_total']) : companyData[owner].name}
+            {isSingleCompany ? intl.formatMessage(messages['common_total']) : companyData?.[owner]?.name}
           </Typography>
           <Typography
             color="textPrimary"

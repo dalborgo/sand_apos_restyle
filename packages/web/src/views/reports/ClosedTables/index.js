@@ -115,12 +115,12 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
             <Box display="flex" justifyContent="flex-end">
               <Box mr={2}>
                 <Button onClick={() => setValues(validation.resetAll(values))} size="small" variant="contained">
-                  <FormattedMessage defaultMessage="Pulisci" id="filter_from.clear"/>
+                  <FormattedMessage defaultMessage="Pulisci" id="common.clear"/>
                 </Button>
               </Box>
               <Box>
                 <Button color="secondary" disabled={!dirty} size="small" type="submit" variant="contained">
-                  <FormattedMessage defaultMessage="Applica" id="filter_from.apply"/>
+                  <FormattedMessage defaultMessage="Applica" id="common.apply"/>
                 </Button>
               </Box>
             </Box>

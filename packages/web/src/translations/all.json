@@ -56,8 +56,16 @@
     "defaultMessage": "Tutti"
   },
   {
+    "id": "common.apply",
+    "defaultMessage": "Applica"
+  },
+  {
     "id": "common.building",
     "defaultMessage": "Struttura"
+  },
+  {
+    "id": "common.clear",
+    "defaultMessage": "Pulisci"
   },
   {
     "id": "common.covers",
@@ -212,14 +220,6 @@
     "defaultMessage": "503: Servizio non disponibile!"
   },
   {
-    "id": "filter_from.apply",
-    "defaultMessage": "Applica"
-  },
-  {
-    "id": "filter_from.clear",
-    "defaultMessage": "Pulisci"
-  },
-  {
     "id": "general.network_error",
     "defaultMessage": "Errore di rete: servizio non raggiungibile!"
   },
@@ -283,6 +283,10 @@
   {
     "id": "reports.closed_tables.header_title",
     "defaultMessage": "Tavoli chiusi"
+  },
+  {
+    "id": "reports.closed_tables.select_type_of_payment",
+    "defaultMessage": "Seleziona il Tipo di Pagamento"
   },
   {
     "id": "reports.closed_tables.type_of_payment",

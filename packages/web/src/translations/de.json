@@ -51,8 +51,8 @@
   "error500.retry": "",
   "error500.something_wrong": "",
   "error503.service_unavailable!": "",
-  "filter_from.apply": "",
-  "filter_from.clear": "",
+  "common.apply": "",
+  "common.clear": "",
   "general.network_error": "",
   "language.de": "",
   "language.en-gb": "",
@@ -87,5 +87,6 @@
   "mode.CHECK": "",
   "mode.INVOICE": "",
   "mode.PRECHECK": "",
-  "reports.closed_tables.type_of_payment": ""
+  "reports.closed_tables.type_of_payment": "",
+  "reports.closed_tables.select_type_of_payment": ""
 }

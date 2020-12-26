@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Dialog, DialogContent, DialogTitle, Grid, IconButton, makeStyles, Typography } from '@material-ui/core'
 import { Redirect, useHistory } from 'react-router'
 import { useQuery } from 'react-query'
@@ -8,13 +8,15 @@ import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import { parentPath } from 'src/utils/urlFunctions'
 import { FormattedMessage } from 'react-intl'
+import ChangePaymentForm from './comps/ChangePaymentForm'
+import { useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   dialogContent: {
     padding: 0,
   },
   dialogTitle: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
   },
   boldText: {
     fontWeight: 'bold',
@@ -27,9 +29,8 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const ChangePaymentHeader = memo(function DialogHeader ({ data, onClose }) {
+const ChangePaymentHeader = memo(function DialogHeader ({ onClose }) {
   const classes = useStyles()
-  const { results: header } = data
   return (
     <Grid
       alignItems="center"
@@ -38,12 +39,8 @@ const ChangePaymentHeader = memo(function DialogHeader ({ data, onClose }) {
       justify="space-between"
     >
       <Grid item>
-        <Typography display="inline" variant="body2">
-          <FormattedMessage defaultMessage="Tipo di pagamento" id="reports.closed_tables.type_of_payment"/>:
-        </Typography>
-        &nbsp;
-        <Typography className={classes.boldText} display="inline" variant="body2">
-          {header.income}
+        <Typography style={{fontVariant: 'small-caps'}} variant="h4">
+          <FormattedMessage defaultMessage="Seleziona il Tipo di Pagamento" id="reports.closed_tables.select_type_of_payment"/>&nbsp;
         </Typography>
       </Grid>
       <Grid item>
@@ -55,14 +52,21 @@ const ChangePaymentHeader = memo(function DialogHeader ({ data, onClose }) {
 const loadingSel = state => ({ setLoading: state.setLoading })
 const ChangePaymentDialog = ({ docId }) => {
   console.log('%cRENDER_DIALOG_CHANGE_PAYMENT', 'color: orange')
-  console.log('targetDocId:', docId)
   const classes = useStyles()
+  const location = useLocation()
+  const [income] = useState(location.income)
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const history = useHistory()
-  const onClose = useMemo(() => {
+  const closeChangePaymentDialog = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname, -2))
   }, [history])
+  const changePaymentSubmit = useCallback(values => {
+    console.log('targetDocId:', docId)
+    console.log('values:', values)
+    closeChangePaymentDialog()
+    return values
+  }, [closeChangePaymentDialog, docId])
   const { isLoading, data } = useQuery(['types/incomes', { owner }], {
     notifyOnChangeProps: ['data', 'error'],
     staleTime: 5000, //non chiama due volte il server per richieste ravvicinate
@@ -81,15 +85,15 @@ const ChangePaymentDialog = ({ docId }) => {
         <Dialog
           aria-labelledby="runningTable-dialog-title"
           maxWidth="md"
-          onClose={onClose}
+          onClose={closeChangePaymentDialog}
           open={Boolean(true)}
         >
           <DialogTitle className={classes.dialogTitle} disableTypography id="changePaymentForm-dialog-title">
-            <ChangePaymentHeader data={data} onClose={onClose}/>
+            <ChangePaymentHeader income={income} onClose={closeChangePaymentDialog}/>
           </DialogTitle>
           <DialogContent className={classes.dialogContent}>
             <div className={classes.divTable}>
-              Prova
+              <ChangePaymentForm income={income} onSubmit={changePaymentSubmit}/>
             </div>
           </DialogContent>
         </Dialog>

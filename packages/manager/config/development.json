@@ -5,11 +5,11 @@
   "couchbase": {
     "connections": {
       "astenposServer": {
-        "server": "192.168.15.251"
+        "server": "10.0.0.183"
       }
     },
     "utility": {
-      "couchbase": "192.168.15.251"
+      "couchbase": "10.0.0.183"
     }
   }
 }

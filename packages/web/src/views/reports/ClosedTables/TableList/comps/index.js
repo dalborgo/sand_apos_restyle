@@ -12,7 +12,6 @@ import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
 import { messages } from 'src/translations/messages'
 import { FormattedMessage, useIntl } from 'react-intl'
-import PrintIcon from '@material-ui/icons/PrintTwoTone'
 import clsx from 'clsx'
 import find from 'lodash/find'
 
@@ -170,15 +169,6 @@ const CellBase = props => {
                 {intl.formatMessage(messages[`mode_${payments.mode}`])}
               </Box>
               <ButtonGroup disableFocusRipple size="small" variant="contained">
-                {
-                  payments.mode !== 'PRECHECK' &&
-                  <Button className={clsx(classes.buttonGrouped, classes.buttonPink)}>
-                    <PrintIcon className={classes.printIcon}/>
-                  </Button>
-                }
-                <Button className={clsx(classes.buttonGrouped, classes.buttonCyan)}>
-                  <PrintIcon className={classes.printIcon}/>&nbsp;P
-                </Button>
                 <Button
                   className={clsx(classes.buttonGrouped, classes.buttonGreen)}
                   onClick={
@@ -191,7 +181,10 @@ const CellBase = props => {
                         setIntLoading(false)
                         setLoading(false)
                       }
-                      history.push(`${window.location.pathname}/change-payment-method/${docId}`)
+                      history.push({
+                        pathname: `${window.location.pathname}/change-payment-method/${docId}`,
+                        income: payments.income,
+                      })
                     }
                   }
                 >

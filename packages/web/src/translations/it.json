@@ -51,8 +51,8 @@
   "error500.retry": "Riprova",
   "error500.something_wrong": "500: Ooops, qualcosa è andato storto!",
   "error503.service_unavailable!": "503: Servizio non disponibile!",
-  "filter_from.apply": "Applica",
-  "filter_from.clear": "Pulisci",
+  "common.apply": "Applica",
+  "common.clear": "Pulisci",
   "general.network_error": "Errore di rete: servizio non raggiungibile!",
   "language.de": "Tedesco",
   "language.en-gb": "Inglese",
@@ -87,5 +87,6 @@
   "mode.CHECK": "Scontrino",
   "mode.INVOICE": "Fattura",
   "mode.PRECHECK": "Preconto",
-  "reports.closed_tables.type_of_payment": "Tipo di pagamento"
+  "reports.closed_tables.type_of_payment": "Tipo di pagamento",
+  "reports.closed_tables.select_type_of_payment": "Seleziona il Tipo di Pagamento"
 }
