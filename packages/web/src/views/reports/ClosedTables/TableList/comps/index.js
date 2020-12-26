@@ -14,6 +14,7 @@ import { messages } from 'src/translations/messages'
 import { FormattedMessage, useIntl } from 'react-intl'
 import PrintIcon from '@material-ui/icons/PrintTwoTone'
 import clsx from 'clsx'
+import find from 'lodash/find'
 
 export const summaryCalculator = (type, rows, getValue) => {
   if (type === 'incomeSum') {
@@ -92,7 +93,6 @@ export const SummaryCellBase = props => {
   }
 }
 
-
 const CellBase = props => {
   const { column, row, theme } = props
   const intl = useIntl()
@@ -106,7 +106,9 @@ const CellBase = props => {
   const queryClient = useQueryClient()
   const docId = row._id
   const cellStyle = { paddingLeft: theme.spacing(2) }
+  const { payments } = row
   if (column.name === 'date') {
+    const { closed_by: closedBy } = Array.isArray(payments) ? find(payments, { date: row.date }) || {} : payments
     return (
       <VirtualTable.Cell {...props}>
         <Button
@@ -136,7 +138,7 @@ const CellBase = props => {
             parse(dateTimeFormatter(row.date, {
               year: undefined,
               month: 'short',
-            }, { second: undefined }) + '<br/>' + row.user)
+            }, { second: undefined }) + '<br/>' + closedBy)
           }
         </Button>
       </VirtualTable.Cell>
@@ -158,14 +160,18 @@ const CellBase = props => {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
         {
-          row.mode ?
+          Array.isArray(payments) ?
+            <Box>
+              separato
+            </Box>
+            :
             <>
               <Box mb={0.5}>
-                {intl.formatMessage(messages[`mode_${row.mode}`])}
+                {intl.formatMessage(messages[`mode_${payments.mode}`])}
               </Box>
               <ButtonGroup disableFocusRipple size="small" variant="contained">
                 {
-                  row.mode !== 'PRECHECK' &&
+                  payments.mode !== 'PRECHECK' &&
                   <Button className={clsx(classes.buttonGrouped, classes.buttonPink)}>
                     <PrintIcon className={classes.printIcon}/>
                   </Button>
@@ -189,14 +195,10 @@ const CellBase = props => {
                     }
                   }
                 >
-                  {row.income}
+                  {payments.income}
                 </Button>
               </ButtonGroup>
             </>
-            :
-            <Box>
-              separato
-            </Box>
         }
       </VirtualTable.Cell>
     )
