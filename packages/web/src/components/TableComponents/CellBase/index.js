@@ -11,6 +11,7 @@ const styleToolbar = theme => ({
   toolbar: {
     padding: theme.spacing(1, 2),
     minHeight: theme.spacing(6),
+    borderBottom: 0,
   },
 })
 export const SummaryCellBase = props => {

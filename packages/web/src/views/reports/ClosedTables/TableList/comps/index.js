@@ -13,7 +13,6 @@ import parse from 'html-react-parser'
 import { messages } from 'src/translations/messages'
 import { FormattedMessage, useIntl } from 'react-intl'
 import clsx from 'clsx'
-import find from 'lodash/find'
 
 export const summaryCalculator = (type, rows, getValue) => {
   if (type === 'incomeSum') {
