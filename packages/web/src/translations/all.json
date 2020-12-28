@@ -68,6 +68,10 @@
     "defaultMessage": "Pulisci"
   },
   {
+    "id": "common.closedBy",
+    "defaultMessage": "Chiuso da"
+  },
+  {
     "id": "common.covers",
     "defaultMessage": "Coperti"
   },

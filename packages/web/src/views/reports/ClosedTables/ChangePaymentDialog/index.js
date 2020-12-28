@@ -1,5 +1,14 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Dialog, DialogContent, DialogTitle, Grid, IconButton, makeStyles, Typography } from '@material-ui/core'
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  makeStyles,
+  Typography,
+  withWidth
+} from '@material-ui/core'
 import { Redirect, useHistory } from 'react-router'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
@@ -8,7 +17,7 @@ import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import { parentPath } from 'src/utils/urlFunctions'
 import { FormattedMessage } from 'react-intl'
-import ChangePaymentForm from './comps/ChangePaymentForm'
+import { ChangePaymentForm } from './comps'
 import { useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
@@ -50,7 +59,7 @@ const ChangePaymentHeader = memo(function DialogHeader ({ onClose }) {
   )
 })
 const loadingSel = state => ({ setLoading: state.setLoading })
-const ChangePaymentDialog = ({ docId }) => {
+const ChangePaymentDialog = ({ docId, width }) => {
   console.log('%cRENDER_DIALOG_CHANGE_PAYMENT', 'color: orange')
   const classes = useStyles()
   const location = useLocation()
@@ -58,6 +67,7 @@ const ChangePaymentDialog = ({ docId }) => {
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const history = useHistory()
+  const fullScreen = ['sm', 'xs'].includes(width)
   const closeChangePaymentDialog = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname, -2))
   }, [history])
@@ -85,6 +95,7 @@ const ChangePaymentDialog = ({ docId }) => {
         <Dialog
           aria-labelledby="runningTable-dialog-title"
           maxWidth="md"
+          fullScreen={fullScreen}
           onClose={closeChangePaymentDialog}
           open={Boolean(true)}
         >
@@ -106,4 +117,4 @@ const ChangePaymentDialog = ({ docId }) => {
   
 }
 
-export default memo(ChangePaymentDialog)
+export default memo(withWidth()(ChangePaymentDialog))

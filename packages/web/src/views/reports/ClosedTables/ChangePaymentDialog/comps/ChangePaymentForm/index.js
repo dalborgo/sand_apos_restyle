@@ -39,7 +39,7 @@ const ChangePaymentForm = memo(function ChangePaymentForm ({ income, onSubmit })
                     {
                       data.results.map(({ display, _id }) => {
                         return (
-                          <ToggleButton disableFocusRipple key={_id} value={_id}>
+                          <ToggleButton disableFocusRipple key={_id} value={display}> {/*ho il display dalla query ottimizzata*/}
                             {display}
                           </ToggleButton>
                         )

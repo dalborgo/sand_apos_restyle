@@ -7,6 +7,7 @@ import { useHistory } from 'react-router'
 import { useQueryClient } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
+import { buttonQuery } from 'src/utils/reactQueryFunctions'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
 
@@ -45,13 +46,7 @@ const CellBase = props => {
           onClick={
             async () => {
               const queryKey = [`reports/running_table/${docId}`, { owner }]
-              if (!queryClient.getQueryData(queryKey)) {
-                setLoading(true)
-                setIntLoading(true)
-                await queryClient.prefetchQuery(queryKey, { throwOnError: true })
-                setIntLoading(false)
-                setLoading(false)
-              }
+              await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
               history.push(`${window.location.pathname}/${docId}`)
             }
           }

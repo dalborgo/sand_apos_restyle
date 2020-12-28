@@ -12,6 +12,9 @@ const styleToolbar = theme => ({
     padding: theme.spacing(1, 2),
     minHeight: theme.spacing(6),
     borderBottom: 0,
+    [theme.breakpoints.down('sm')]: { //mobile
+      display: 'none',
+    },
   },
 })
 export const SummaryCellBase = props => {

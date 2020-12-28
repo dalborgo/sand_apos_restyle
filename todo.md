@@ -16,7 +16,16 @@
 - new Loader
 - ~~Summary~~
 
+#### Payment Change Dialog
+
+- distribuire bene i tasti in fullscreen
+
 #### Select Code
 
-- togliere select se c'è un'unica opzione.
+- ~~togliere select se c'è un'unica opzione.~~
 
+#### Date Range Selector 
+- per mobile versione specifica
+
+### Table Toolbar search
+- studiare per portarla fuori

@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, colors, makeStyles, withStyles } from '@material-ui/core'
 import React, { useState } from 'react'
 import Box from '@material-ui/core/Box'
-import { VirtualTable } from '@devexpress/dx-react-grid-material-ui'
+import { Grid, Table, TableHeaderRow } from '@devexpress/dx-react-grid-material-ui'
 import { IntegratedSummary } from '@devexpress/dx-react-grid'
 import { useDateTimeFormatter, useMoneyFormatter } from 'src/utils/formatters'
 import { useHistory } from 'react-router'
@@ -12,6 +12,7 @@ import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
 import { messages } from 'src/translations/messages'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { buttonQuery } from 'src/utils/reactQueryFunctions'
 import clsx from 'clsx'
 
 export const summaryCalculator = (type, rows, getValue) => {
@@ -68,7 +69,7 @@ export const SummaryCellBase = props => {
     const { columnSummaries } = children.props || {}
     const [first] = columnSummaries
     return (
-      <VirtualTable.Cell {...props}>
+      <Table.Cell {...props}>
         <Box color="text.primary" fontWeight="bold">
           <FormattedMessage
             defaultMessage="Totale"
@@ -84,15 +85,42 @@ export const SummaryCellBase = props => {
             />: {moneyFormatter(first.value.sc)}
           </Box>
         }
-      </VirtualTable.Cell>
+      </Table.Cell>
     )
   } else {
-    return <VirtualTable.Cell {...props}/>
+    return <Table.Cell {...props}/>
   }
 }
 
+const TypeButtonGroup = ({row, setIntLoading  }) =>{
+  const classes = useStyles()
+  const history = useHistory()
+  const { selectedCode: { code: owner } } = useAuth()
+  const { setLoading } = useGeneralStore(loadingSel, shallow)
+  const queryClient = useQueryClient()
+  return (
+    <ButtonGroup disableFocusRipple size="small" variant="contained">
+      <Button
+        className={clsx(classes.buttonGrouped, classes.buttonGreen)}
+        onClick={
+          async () => {
+            const queryKey = ['types/incomes', { owner }]
+            await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
+            history.push({
+              pathname: `${window.location.pathname}/change-payment-method/${row._id}`,
+              income: row.income,
+            })
+          }
+        }
+      >
+        {row.income}
+      </Button>
+    </ButtonGroup>
+  )
+}
+
 const CellBase = props => {
-  const { column, row, theme } = props
+  const { column, row, theme, value } = props
   const intl = useIntl()
   const dateTimeFormatter = useDateTimeFormatter()
   const moneyFormatter = useMoneyFormatter()
@@ -105,10 +133,21 @@ const CellBase = props => {
   const docId = row._id
   const cellStyle = { paddingLeft: theme.spacing(2) }
   const { payments } = row
-  if (column.name === 'date') {
-    const closedBy = column.getCellValue(row)
+  if (column.name === '_date') {
     return (
-      <VirtualTable.Cell {...props}>
+      <Table.Cell {...props} style={{ paddingLeft: theme.spacing(2) }}>
+        {
+          dateTimeFormatter(row._date, {
+            year: undefined,
+            month: 'short',
+          }, { second: undefined })
+        }
+      </Table.Cell>
+    )
+  }
+  if (column.name === 'date') {
+    return (
+      <Table.Cell {...props}>
         <Button
           classes={
             {
@@ -119,13 +158,7 @@ const CellBase = props => {
           onClick={
             async () => {
               const queryKey = [`reports/closed_table/${docId}`, { owner }]
-              if (!queryClient.getQueryData(queryKey)) {
-                setLoading(true)
-                setIntLoading(true)
-                await queryClient.prefetchQuery(queryKey, { throwOnError: true })
-                setIntLoading(false)
-                setLoading(false)
-              }
+              await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
               history.push(`${window.location.pathname}/${docId}`)
             }
           }
@@ -136,27 +169,27 @@ const CellBase = props => {
             parse(dateTimeFormatter(row.date, {
               year: undefined,
               month: 'short',
-            }, { second: undefined }) + '<br/>' + closedBy)
+            }, { second: undefined }) + '<br/>' + value) //value = close_by in questo caso
           }
         </Button>
-      </VirtualTable.Cell>
+      </Table.Cell>
     )
   }
   if (column.name === 'table_display') {
     return (
-      <VirtualTable.Cell {...props} style={cellStyle}>
+      <Table.Cell {...props} style={cellStyle}>
         <Box>
           {row.table_display}
         </Box>
         <Box>
           {row.room_display}
         </Box>
-      </VirtualTable.Cell>
+      </Table.Cell>
     )
   }
   if (column.name === 'type') {
     return (
-      <VirtualTable.Cell {...props} style={cellStyle}>
+      <Table.Cell {...props} style={cellStyle}>
         {
           Array.isArray(payments) ?
             <Box>
@@ -167,37 +200,31 @@ const CellBase = props => {
               <Box mb={0.5}>
                 {intl.formatMessage(messages[`mode_${payments.mode}`])}
               </Box>
-              <ButtonGroup disableFocusRipple size="small" variant="contained">
-                <Button
-                  className={clsx(classes.buttonGrouped, classes.buttonGreen)}
-                  onClick={
-                    async () => {
-                      const queryKey = ['types/incomes', { owner }]
-                      if (!queryClient.getQueryData(queryKey)) {
-                        setLoading(true)
-                        setIntLoading(true)
-                        await queryClient.prefetchQuery(queryKey, { throwOnError: true })
-                        setIntLoading(false)
-                        setLoading(false)
-                      }
-                      history.push({
-                        pathname: `${window.location.pathname}/change-payment-method/${docId}`,
-                        income: payments.income,
-                      })
-                    }
-                  }
-                >
-                  {payments.income}
-                </Button>
-              </ButtonGroup>
+              <TypeButtonGroup row={payments} setIntLoading={setIntLoading}/>
             </>
         }
-      </VirtualTable.Cell>
+      </Table.Cell>
+    )
+  }
+  if (column.name === 'type_detail') {
+    return (
+      <Table.Cell {...props} style={cellStyle}>
+        {
+          <Box display="flex">
+            <Box mr={1}>
+              {intl.formatMessage(messages[`mode_${row.mode}`])}
+            </Box>
+            <Box>
+              <TypeButtonGroup row={row} setIntLoading={setIntLoading}/>
+            </Box>
+          </Box>
+        }
+      </Table.Cell>
     )
   }
   if (column.name === 'final_price') {
     return (
-      <VirtualTable.Cell {...props} style={cellStyle}>
+      <Table.Cell {...props} style={cellStyle}>
         <Box>
           {moneyFormatter(row.final_price)}
         </Box>
@@ -207,22 +234,77 @@ const CellBase = props => {
             -{moneyFormatter(row.discount_price)}
           </Box>
         }
-      </VirtualTable.Cell>
+      </Table.Cell>
     )
   }
-  return <VirtualTable.Cell {...props} style={cellStyle}/>
+  return <Table.Cell {...props} style={cellStyle}/>
 }
 
-const styles = theme => ({
+const styleCell = theme => ({
   cell: {
     padding: theme.spacing(1, 2),
   },
 })
 
-export const Cell = withStyles(styles, { withTheme: true })(
-  CellBase
+export const Cell = withStyles(styleCell, { withTheme: true })(CellBase)
+
+export const CellSummary = withStyles(styleCell, { withTheme: true })(SummaryCellBase)
+
+//region DETAIL COMPONENT
+const styleDetailCell = theme => ({
+  cell: {
+    padding: theme.spacing(1, 2),
+    border: 0,
+  },
+})
+
+export const InternalDetailCell = withStyles(styleDetailCell, { withTheme: true })(CellBase)
+
+const DetailRowHeader = withStyles(styleDetailCell, { withTheme: true })(
+  ({ theme, children, ...rest }) => (
+    <TableHeaderRow.Cell
+      {...rest}
+      children={children}
+      style={{ paddingLeft: theme.spacing(2) }} //la prima cella prendeva un valore più forte
+    />
+  )
 )
 
-export const CellSummary = withStyles(styles, { withTheme: true })(
-  SummaryCellBase
-)
+const tableDetailColumnExtensions = [
+  { columnName: 'covers', align: 'right' },
+  { columnName: 'final_price', align: 'right' },
+]
+export const GridDetailContainerBase = ({ row }) => {
+  const intl = useIntl()
+  const [detailColumns] = useState([
+    { name: '_date', title: intl.formatMessage(messages['common_date']) },
+    { name: 'closed_by', title: intl.formatMessage(messages['common_closedBy']) },
+    { name: 'type_detail', title: intl.formatMessage(messages['common_type']) },
+    { name: 'covers', title: intl.formatMessage(messages['common_covers']) },
+    { name: 'final_price', title: intl.formatMessage(messages['common_income']) },
+  ])
+  return (
+    <Grid
+      columns={detailColumns}
+      rows={row.payments}
+    >
+      <Table
+        cellComponent={InternalDetailCell}
+        columnExtensions={tableDetailColumnExtensions}
+      />
+      <TableHeaderRow cellComponent={DetailRowHeader}/>
+    </Grid>
+  )
+}
+//endregion
+
+const styleDetail = theme => ({
+  cell: {
+    padding: theme.spacing(0, 2),
+  },
+})
+
+const DetailBase = (props) => <Table.Cell {...props} style={{ paddingLeft: props.theme.spacing(2) }}/>
+
+export const DetailCell = withStyles(styleDetail, { withTheme: true })(DetailBase)
+

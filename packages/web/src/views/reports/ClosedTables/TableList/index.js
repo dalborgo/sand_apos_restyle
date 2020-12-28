@@ -3,20 +3,29 @@ import {
   Grid,
   SearchPanel,
   TableHeaderRow,
+  TableRowDetail,
   TableSummaryRow,
   Toolbar,
+  Table,
   VirtualTable,
 } from '@devexpress/dx-react-grid-material-ui'
-import { Cell, CellSummary, summaryCalculator } from './comps'
+import { Cell, CellSummary, DetailCell, GridDetailContainerBase, summaryCalculator } from './comps'
 import { useGeneralStore } from 'src/zustandStore'
-import { IntegratedFiltering, IntegratedSummary, SearchState, SummaryState } from '@devexpress/dx-react-grid'
+import {
+  IntegratedFiltering,
+  IntegratedSummary,
+  RowDetailState,
+  SearchState,
+  SummaryState,
+} from '@devexpress/dx-react-grid'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { LoadingComponent } from 'src/components/TableComponents'
 import { CellHeader, RootToolbar } from 'src/components/TableComponents/CellBase'
 import { SearchInput } from 'src/components/TableComponents/SearchInput'
 import { useMoneyFormatter } from 'src/utils/formatters'
-import find from 'lodash/find'
+import TableDetailToggleCell from './comps/TableDetailToggleCellBase'
+import { withWidth } from '@material-ui/core'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
@@ -56,13 +65,37 @@ const SearchPanelIntl = memo(function SearchPanelIntl () {
     />
   )
 })
+const SelectiveTable = memo(function SelectiveTable ({ isIdle, isFetching, width }) {
+  const noDataCellComponent = useCallback(({ colSpan }) =>
+    <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])
+  const [isSmall] = useState(() => ['xs','sm'].includes(width)) //lo faccio statico
+  if (isSmall) {
+    return (
+      <Table
+        cellComponent={Cell}
+        columnExtensions={tableColumnExtensions}
+        noDataCellComponent={noDataCellComponent}
+      />
+    )
+  } else {
+    return (
+      <VirtualTable
+        cellComponent={Cell}
+        columnExtensions={tableColumnExtensions}
+        height="auto"
+        noDataCellComponent={noDataCellComponent}
+      />
+    )
+  }
+  
+})
 
-const dateSelect = ({ payments, date }) => {
-  const {closed_by: closedBy} = Array.isArray(payments) ? find(payments, { date }) || {} : payments
+const dateSelect = ({ payments }) => {
+  const { closed_by: closedBy } = Array.isArray(payments) ? payments[0] : payments
   return closedBy
 }
 const tableSelect = ({ table_display: Td, room_display: Rd }) => `${Td}${Rd}`
-const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
+const TableList = memo(function TableList ({ rows, isFetching, isIdle, width }) {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const moneyFormatter = useMoneyFormatter()
   const intl = useIntl()
@@ -70,7 +103,10 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
     const companyData = useGeneralStore.getState().companyData
     const companySelect = ({ owner }) => companyData ? companyData?.[owner]?.name : owner
     const typeSelect = ({ payments }) => Array.isArray(payments) ? '' : `${payments?.income}${intl.formatMessage(messages[`mode_${payments.mode}`])}`
-    const finalPriceSelect = ({ final_price: Fp, discount_price: Dp }) => `${moneyFormatter(Fp)}${Dp ? `-${moneyFormatter(Dp)}` : ''}`
+    const finalPriceSelect = ({
+      final_price: Fp,
+      discount_price: Dp,
+    }) => `${moneyFormatter(Fp)}${Dp ? `-${moneyFormatter(Dp)}` : ''}`
     const columns_ = [
       { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect },
       { name: 'date', title: intl.formatMessage(messages['common_date']), getCellValue: dateSelect },
@@ -86,8 +122,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
     sum: intl.formatMessage(messages['common_total']),
     count: intl.formatMessage(messages['common_total']),
   }))
-  const noDataCellComponent = useCallback(({ colSpan }) =>
-    <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])
+  
   return (
     <Grid
       columns={columns}
@@ -99,16 +134,21 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
       <SummaryState
         totalItems={totalSummaryItems}
       />
+      <RowDetailState/>
       <IntegratedFilteringSel/>
       <IntegratedSummary calculator={summaryCalculator}/>
-      <VirtualTable
-        cellComponent={Cell}
-        columnExtensions={tableColumnExtensions}
-        height="auto"
-        noDataCellComponent={noDataCellComponent}
+      <SelectiveTable
+        isFetching={isFetching}
+        isIdle={isIdle}
+        width={width}
       />
       <TableHeaderRow cellComponent={CellHeader}/>
       <TableSummaryRow messages={messagesSummary} totalCellComponent={CellSummary}/>
+      <TableRowDetail
+        cellComponent={DetailCell}
+        contentComponent={GridDetailContainerBase}
+        toggleCellComponent={TableDetailToggleCell}
+      />
       <Toolbar
         rootComponent={RootToolbar}
       />
@@ -117,4 +157,4 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
   )
 })
 
-export default TableList
+export default withWidth()(TableList)

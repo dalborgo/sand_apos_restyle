@@ -4,6 +4,7 @@ import { translations } from '@adapter/common'
 import { messages } from 'src/translations/messages'
 import moment from 'moment'
 import isDate from 'lodash/isDate'
+import isNumber from 'lodash/isNumber'
 
 export function useMoneyFormatter () {
   const intl = useIntl()
@@ -33,8 +34,9 @@ export function useDateFormatter () {
   const [dateFormatter] = useState(() => {
     return (date, options) => {
       if (!date) {return ''}
-      const date_ = isDate(date) ? date : moment(date, 'YYYYMMDDHHmmssSSS')
-      const options_ = {...defaultDateFormat, ...options}
+      const dateConv = isNumber(date) ? String(Math.abs(date)) : date
+      const date_ = isDate(dateConv) ? dateConv : moment(dateConv, 'YYYYMMDDHHmmssSSS')
+      const options_ = { ...defaultDateFormat, ...options }
       return intl.formatDate(date_, options_)
     }
   })
@@ -46,8 +48,9 @@ export function useTimeFormatter () {
   const [timeFormatter] = useState(() => {
     return (date, options) => {
       if (!date) {return ''}
-      const date_ = isDate(date) ? date : moment(date, 'YYYYMMDDHHmmssSSS')
-      const options_ = {...defaultTimeFormat, ...options}
+      const dateConv = isNumber(date) ? String(Math.abs(date)) : date
+      const date_ = isDate(dateConv) ? dateConv : moment(dateConv, 'YYYYMMDDHHmmssSSS')
+      const options_ = { ...defaultTimeFormat, ...options }
       return intl.formatTime(date_, options_)
     }
   })
@@ -59,9 +62,10 @@ export function useDateTimeFormatter () {
   const [dateTimeFormatter] = useState(() => {
     return (date, dateOptions, timeOptions) => {
       if (!date) {return ''}
-      const date_ = isDate(date) ? date : moment(date, 'YYYYMMDDHHmmssSSS')
-      const dateOptions_ = {...defaultDateFormat, ...dateOptions}
-      const timeOptions_ = {...defaultTimeFormat, ...timeOptions}
+      const dateConv = isNumber(date) ? String(Math.abs(date)) : date
+      const date_ = isDate(dateConv) ? dateConv : moment(dateConv, 'YYYYMMDDHHmmssSSS')
+      const dateOptions_ = { ...defaultDateFormat, ...dateOptions }
+      const timeOptions_ = { ...defaultTimeFormat, ...timeOptions }
       return `${intl.formatDate(date_, dateOptions_)} ${intl.formatTime(date_, timeOptions_)}`
     }
   })

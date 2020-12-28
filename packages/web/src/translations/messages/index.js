@@ -41,6 +41,10 @@ export const messages = defineMessages({
     id: 'common.language',
     defaultMessage: 'Lingua',
   },
+  common_closedBy: {
+    id: 'common.closedBy',
+    defaultMessage: 'Chiuso da',
+  },
   language_it: {
     id: 'language.it',
     defaultMessage: 'Italiano',

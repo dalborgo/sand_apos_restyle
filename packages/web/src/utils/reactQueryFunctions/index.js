@@ -66,3 +66,13 @@ export function useSnackQueryError () {
   })
   return snackQueryError
 }
+
+export async function buttonQuery (queryClient, queryKey, setLoading, setIntLoading) {
+  if (!queryClient.getQueryData(queryKey)) {
+    setLoading(true)
+    setIntLoading(true)
+    await queryClient.prefetchQuery(queryKey, { throwOnError: true })
+    setIntLoading(false)
+    setLoading(false)
+  }
+}

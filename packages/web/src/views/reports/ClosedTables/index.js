@@ -27,9 +27,11 @@ import moment from 'moment'
 import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 import ChangePaymentDialog from './ChangePaymentDialog'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   paper: {
-    height: '100%',
+    [theme.breakpoints.up('md')]: { //mobile
+      height: '100%',
+    },
   },
 }))
 

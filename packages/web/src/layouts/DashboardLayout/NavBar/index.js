@@ -238,7 +238,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
           onOpen={() => setMobileNavOpen(true)}
           open={openMobile}
           style={{ touchAction: 'none' }}
-          swipeAreaWidth={40}
+          swipeAreaWidth={10}
           variant="temporary"
         >
           {content}
