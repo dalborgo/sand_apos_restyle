@@ -88,5 +88,6 @@
   "mode.INVOICE": "",
   "mode.PRECHECK": "",
   "reports.closed_tables.type_of_payment": "",
-  "reports.closed_tables.select_type_of_payment": ""
+  "reports.closed_tables.select_type_of_payment": "",
+  "common.search": ""
 }

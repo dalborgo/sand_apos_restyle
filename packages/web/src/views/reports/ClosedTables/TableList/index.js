@@ -1,12 +1,22 @@
 import React, { memo, useCallback, useState } from 'react'
-import { Grid, TableHeaderRow, TableSummaryRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
+import {
+  Grid,
+  SearchPanel,
+  TableHeaderRow,
+  TableSummaryRow,
+  Toolbar,
+  VirtualTable,
+} from '@devexpress/dx-react-grid-material-ui'
 import { Cell, CellSummary, summaryCalculator } from './comps'
 import { useGeneralStore } from 'src/zustandStore'
-import { IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
+import { IntegratedFiltering, IntegratedSummary, SearchState, SummaryState } from '@devexpress/dx-react-grid'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { LoadingComponent } from 'src/components/TableComponents'
-import { CellHeader } from 'src/components/TableComponents/CellBase'
+import { CellHeader, RootToolbar } from 'src/components/TableComponents/CellBase'
+import { SearchInput } from 'src/components/TableComponents/SearchInput'
+import { useMoneyFormatter } from 'src/utils/formatters'
+import find from 'lodash/find'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
@@ -21,19 +31,53 @@ const totalSummaryItems = [
   { columnName: 'final_price', type: 'incomeSum' },
 ]
 
+const IntegratedFilteringSel = memo(function IntegratedFilteringSel () {
+  const filteringColumnExtensions = ['covers']
+    .map(columnName => ({
+      columnName,
+      predicate: () => false,
+    }))
+  return (
+    <IntegratedFiltering
+      columnExtensions={filteringColumnExtensions}
+    />
+  )
+})
+const SearchPanelIntl = memo(function SearchPanelIntl () {
+  const intl = useIntl()
+  return (
+    <SearchPanel
+      inputComponent={SearchInput}
+      messages={
+        {
+          searchPlaceholder: intl.formatMessage(messages['common_search']),
+        }
+      }
+    />
+  )
+})
+
+const dateSelect = ({ payments, date }) => {
+  const {closed_by: closedBy} = Array.isArray(payments) ? find(payments, { date }) || {} : payments
+  return closedBy
+}
+const tableSelect = ({ table_display: Td, room_display: Rd }) => `${Td}${Rd}`
 const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
+  const moneyFormatter = useMoneyFormatter()
   const intl = useIntl()
   const [columns] = useState(() => {
     const companyData = useGeneralStore.getState().companyData
     const companySelect = ({ owner }) => companyData ? companyData?.[owner]?.name : owner
+    const typeSelect = ({ payments }) => Array.isArray(payments) ? '' : `${payments?.income}${intl.formatMessage(messages[`mode_${payments.mode}`])}`
+    const finalPriceSelect = ({ final_price: Fp, discount_price: Dp }) => `${moneyFormatter(Fp)}${Dp ? `-${moneyFormatter(Dp)}` : ''}`
     const columns_ = [
       { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect },
-      { name: 'date', title: intl.formatMessage(messages['common_date']) },
-      { name: 'table_display', title: intl.formatMessage(messages['common_table']) },
-      { name: 'type', title: intl.formatMessage(messages['common_type']) },
+      { name: 'date', title: intl.formatMessage(messages['common_date']), getCellValue: dateSelect },
+      { name: 'table_display', title: intl.formatMessage(messages['common_table']), getCellValue: tableSelect },
+      { name: 'type', title: intl.formatMessage(messages['common_type']), getCellValue: typeSelect },
       { name: 'covers', title: intl.formatMessage(messages['common_covers']) },
-      { name: 'final_price', title: intl.formatMessage(messages['common_income']) },
+      { name: 'final_price', title: intl.formatMessage(messages['common_income']), getCellValue: finalPriceSelect },
     ]
     if (Object.keys(companyData).length < 2) {columns_.shift()}
     return columns_
@@ -44,7 +88,6 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
   }))
   const noDataCellComponent = useCallback(({ colSpan }) =>
     <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])
-  
   return (
     <Grid
       columns={columns}
@@ -52,9 +95,11 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
       rootComponent={Root}
       rows={rows}
     >
+      <SearchState/>
       <SummaryState
         totalItems={totalSummaryItems}
       />
+      <IntegratedFilteringSel/>
       <IntegratedSummary calculator={summaryCalculator}/>
       <VirtualTable
         cellComponent={Cell}
@@ -64,6 +109,10 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
       />
       <TableHeaderRow cellComponent={CellHeader}/>
       <TableSummaryRow messages={messagesSummary} totalCellComponent={CellSummary}/>
+      <Toolbar
+        rootComponent={RootToolbar}
+      />
+      <SearchPanelIntl/>
     </Grid>
   )
 })

@@ -116,6 +116,10 @@
     "defaultMessage": "Sala"
   },
   {
+    "id": "common.search",
+    "defaultMessage": "Cerca…"
+  },
+  {
     "id": "common.settings",
     "defaultMessage": "Impostazioni"
   },

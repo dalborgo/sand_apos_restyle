@@ -25,6 +25,10 @@ export const messages = defineMessages({
     id: 'common.table',
     defaultMessage: 'Tavolo',
   },
+  common_search: {
+    id: 'common.search',
+    defaultMessage: 'Cerca…',
+  },
   common_type: {
     id: 'common.type',
     defaultMessage: 'Tipo',

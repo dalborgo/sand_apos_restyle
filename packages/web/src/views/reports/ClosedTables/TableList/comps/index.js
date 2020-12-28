@@ -107,7 +107,7 @@ const CellBase = props => {
   const cellStyle = { paddingLeft: theme.spacing(2) }
   const { payments } = row
   if (column.name === 'date') {
-    const { closed_by: closedBy } = Array.isArray(payments) ? find(payments, { date: row.date }) || {} : payments
+    const closedBy = column.getCellValue(row)
     return (
       <VirtualTable.Cell {...props}>
         <Button
