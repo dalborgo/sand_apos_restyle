@@ -33,7 +33,6 @@ const DatePickerField = ({
   const { settings: { locale } } = useSettings()
   const intl = useIntl()
   const prevStart = useRef(null)
-  const prevEnd = useRef(null)
   return (
     <DateRangePicker
       disableAutoMonthSwitching
@@ -49,13 +48,12 @@ const DatePickerField = ({
       onChange={
         date => {
           const [startDate, endDate] = date
-          const isSameDate = moment(startDate).isSame(prevStart.current) && moment(startDate).isSame(endDate) && !moment(endDate).isSame(prevEnd.current)
+          const isSameDate = moment(startDate).isSame(prevStart.current) && moment(startDate).isSame(endDate)
           if (isSameDate) {
             setOpen(false)
             setDateRange(date)
           }
           prevStart.current = startDate
-          prevEnd.current = endDate
           form.setFieldValue(name, date, false)
         }
       }
@@ -84,6 +82,7 @@ const DatePickerField = ({
                 event => {
                   if (!open) {
                     setOpen(true)
+                    prevStart.current = null
                     event.target.select()
                   }
                 }
