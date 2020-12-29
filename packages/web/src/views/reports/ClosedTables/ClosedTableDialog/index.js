@@ -61,7 +61,7 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
 })
 const loadingSel = state => ({ setLoading: state.setLoading })
 const ClosedTableDialog = ({ docId }) => {
-  console.log('%cRENDER_DIALOG_RUNNING_DAY', 'color: orange')
+  console.log('%cRENDER_DIALOG_ENTRIES', 'color: orange')
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
@@ -69,7 +69,7 @@ const ClosedTableDialog = ({ docId }) => {
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))
   }, [history])
-  const { isLoading, data } = useQuery([`reports/running_table/${docId}`, { owner }], {
+  const { isLoading, data } = useQuery([`reports/closed_table/${docId}`, { owner }], {
     notifyOnChangeProps: ['data', 'error'],
     staleTime: 5000, //non chiama due volte il server per richieste ravvicinate
     onSettled: () => {
@@ -85,12 +85,12 @@ const ClosedTableDialog = ({ docId }) => {
     return (
       data.results ?
         <Dialog
-          aria-labelledby="runningTable-dialog-title"
+          aria-labelledby="entries-dialog-title"
           maxWidth="md"
           onClose={onClose}
           open={Boolean(true)}
         >
-          <DialogTitle className={classes.dialogTitle} disableTypography id="runningTable-dialog-title">
+          <DialogTitle className={classes.dialogTitle} disableTypography id="entries-dialog-title">
             <DialogHeader data={data} onClose={onClose}/>
           </DialogTitle>
           <DialogContent className={classes.dialogContent}>

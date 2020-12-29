@@ -117,7 +117,7 @@ const DocList = memo(function DocList ({ data, fetchMore, canFetchMore, isFetchi
   })
   if (data) {
     return (
-      <div>
+      <div style={{height: 0}}> {/*hack per non far muovere le box durante il caricamento*/}
         {
           data.map((page, i) => (
             <React.Fragment key={i}>

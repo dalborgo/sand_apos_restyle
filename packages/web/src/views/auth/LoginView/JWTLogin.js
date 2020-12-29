@@ -83,13 +83,13 @@ const JWTLogin = memo(({ className, ...rest }) => {
         }
       }
       validationSchema={
-        Yup.object().shape({
+        Yup.object().nullable().shape({
           username: Yup.string().required(intl.formatMessage(messages.username_required)),
           password: Yup.string().required(intl.formatMessage(messages.password_required)),
-          code: Yup.object().nullable()
+          code: Yup.object()
             .when('username', {
               is: username => isAsten(username),
-              then: Yup.object().required(intl.formatMessage(messages.installation_required)),
+              then: Yup.object().required(intl.formatMessage(messages.installation_required)).nullable(),
             }),
         })
       }

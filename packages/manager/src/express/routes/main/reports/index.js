@@ -2,6 +2,8 @@ import { couchQueries } from '@adapter/io'
 import moment from 'moment'
 import groupBy from 'lodash/groupBy'
 import concat from 'lodash/concat'
+import find from 'lodash/find'
+import sortBy from 'lodash/sortBy'
 
 const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
@@ -17,6 +19,20 @@ const getMergedEntries = data => {
     return prev
   }, [])
 }
+const getCombinedEntries = data => {
+  const all = data.reduce((prev, curr) => concat(prev, curr.entries), [])
+  return all.reduce((prev, curr) => {
+    const found = find(prev, { id: curr.id })
+    if (found) {
+      found.pro_qta += curr.pro_qta
+      found.amount += curr.amount
+    } else {
+      prev.push(curr)
+    }
+    return prev
+  }, [])
+}
+
 
 function addRouters (router) {
   router.get('/reports/closing_days', async function (req, res) {
@@ -146,7 +162,7 @@ function addRouters (router) {
     const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
     let row = null
     if (data.length) {
-      const entries = getMergedEntries(data)
+      const entries = sortBy(getMergedEntries(data), ['date'])
       const [first] = data
       row = {
         ...first,
@@ -169,14 +185,14 @@ function addRouters (router) {
     const statement = knex
       .from(knex.raw(`${bucketName} buc LEFT NEST ${bucketName} us ON KEYS ARRAY x.\`user\` FOR x IN buc.entries END`))
       .select('buc.table_display', 'buc.room_display')
-      .select(knex.raw('CASE WHEN buc.covers > 0 THEN ARRAY_PREPEND({"id": "common_covers", "date":buc.creation_date, "pro_qta": buc.covers, "amount": buc.cover_price * buc.covers, "user":`user`.`user`, "intl_code": "common_covers"}, arr_entries) ELSE arr_entries END AS entries'))
-      .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.creating_user LET arr_entries = ARRAY {"id": e.id, "pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries END')
+      .select(knex.raw('CASE WHEN buc.covers > 0 THEN ARRAY_PREPEND({"id": "common_covers", "date":buc.date, "pro_qta": buc.covers, "amount": buc.cover_price * buc.covers, "user":`user`.`user`, "intl_code": "common_covers"}, arr_entries) ELSE arr_entries END AS entries'))
+      .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by LET arr_entries = ARRAY {"id": e.product_id, "pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries END')
       .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "PAYMENT" AND buc.\`order\` = "${orderId}" AND buc.archived = TRUE`))
       .toQuery()
     const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
     let row = null
     if (data.length) {
-      const entries = getMergedEntries(data)
+      const entries = sortBy(getCombinedEntries(data), ['date'])
       const [first] = data
       row = {
         ...first,

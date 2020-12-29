@@ -2,6 +2,7 @@ import { couchQueries, couchSwagger, couchViews } from '@adapter/io'
 import Q from 'q'
 
 const { utils } = require(__helpers)
+
 async function allSettled (promises) {
   const output = []
   const results = await Q.allSettled(promises)
@@ -25,8 +26,8 @@ function addRouters (router) {
       const cursor = startkey ? `AND META().cas < ${startkey} ${parsedOwner.queryCondition} ` : ''
       const filter = text ? `AND LOWER(META().id) LIKE '%${text.toLowerCase()}%' AND ${parsedOwner.queryCondition}` : ''
       const params = `${cursor}${filter}`.trim()
-      const queryTotal = `SELECT RAW COUNT(*) total_row from ${connClass.astenposBucketName} WHERE type ${filter}`
-      const queryRows = `SELECT META().id, META().cas \`key\` from ${connClass.astenposBucketName} WHERE type ${params} ORDER BY META().cas DESC LIMIT ${limit}`
+      const queryTotal = `SELECT RAW COUNT(*) total_row from ${connClass.astenposBucketName} WHERE type is not missing ${filter}`
+      const queryRows = `SELECT META().id, META().cas \`key\` from ${connClass.astenposBucketName} WHERE type is not missing ${params} ORDER BY META().cas DESC LIMIT ${limit}`
       const promises = [
         couchQueries.exec(queryRows, connClass.cluster),
         couchQueries.exec(queryTotal, connClass.cluster),
@@ -39,16 +40,21 @@ function addRouters (router) {
       res.send({ ok: true, results: data })
     } else {
       // eslint-disable-next-line no-unused-vars
-      const { owner, ...rest } = query
+      const { owner, startkey, ...rest } = query
+      let cursor = parsedOwner.startOwner
+      if (startkey) {
+        const [str, num] = startkey.split('|')
+        cursor = `${str}|${parseInt(num) + 1}`
+      }
       const filter = `AND ${parsedOwner.queryCondition}`
-      const queryTotal = `SELECT RAW COUNT(*) total_row from ${connClass.astenposBucketName} WHERE type ${filter}`
-      const params = { view: 'list_docs_all', ...rest, ...parsedOwner.limitsInView }
+      const queryTotal = `SELECT RAW COUNT(*) total_row from ${connClass.astenposBucketName} WHERE type is not missing ${filter}`
+      const params = { view: 'list_docs_all', ...rest, startkey: `"${cursor}"` }
       const promises = [
         couchViews.execService(params, connClass.astConnection),
         couchQueries.exec(queryTotal, connClass.cluster),
       ]
       const [data, resp2] = await allSettled(promises)
-      if(data.results && resp2.results){
+      if (data.results && resp2.results) {
         data.results['total_rows'] = resp2.results[0]
       }
       res.send(data)

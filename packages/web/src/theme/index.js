@@ -23,6 +23,9 @@ const baseOptions = {
     MuiIconButton: {
       disableFocusRipple: true,
     },
+    MuiFab: {
+      disableFocusRipple: true,
+    },
     MuiTooltip: {
       arrow: true,
       disableFocusListener: true,

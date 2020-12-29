@@ -166,7 +166,7 @@ const SearchComponent = memo((function SearchComponent (props) {
             </Box>
             <Box style={{ width: 55, marginLeft: 3 }}>
               <Typography display="inline" variant="h6">
-                {props?.data?.[0].results.total_rows ?? '---'}
+                {props?.data?.[0].results?.total_rows ?? '---'}
               </Typography>
             </Box>
             <TimeStats
@@ -250,15 +250,15 @@ const BrowserView = () => {
   const snackQueryError = useSnackQueryError()
   const respList = useInfiniteQuery(['docs/browser', text, selectedCode], fetchList, {
     getNextPageParam: (lastGroup, allGroups) => {
+      if(!lastGroup.ok){
+        snackQueryError(lastGroup.err)
+        return false
+      }
       const { total_rows: totalRows, rows = [] } = lastGroup?.results
       const cursor = rows[rows.length - 1]?.key
       const rowsFetched = allGroups.length * LIMIT
       const isOver = !LIMIT || rowsFetched === totalRows || rows.length < LIMIT
-      return isOver ? false : parseInt(cursor)
-    },
-    onError: err => {
-      snackQueryError(err)
-      text && setText('')
+      return isOver ? false : cursor
     },
   })
   useEffect(() => {
@@ -291,7 +291,7 @@ const BrowserView = () => {
       setBrowserArea(respDoc.data.results, history)
     }
   }, [history, respDoc.data, respDoc.isFetchedAfterMount])
-  const {mutateAsync: mutate} = useMutation(saveMutation, {
+  const { mutateAsync: mutate } = useMutation(saveMutation, {
     onSettled: (data, error, variables) => {
       if (error) {
         enqueueSnackbar(error.message)
@@ -319,7 +319,7 @@ const BrowserView = () => {
       }
     },
   })
-  const {mutateAsync : remove} = useMutation(deleteMutation, {
+  const { mutateAsync: remove } = useMutation(deleteMutation, {
     onSettled: (data) => {
       const { ok, results } = data
       const message = `[DELETED] docId: ${results.docId}`
