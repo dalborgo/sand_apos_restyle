@@ -92,7 +92,7 @@ export const SummaryCellBase = props => {
   }
 }
 
-const TypeButtonGroup = ({row, setIntLoading  }) =>{
+const TypeButtonGroup = ({ payments, setIntLoading, base }) => {
   const classes = useStyles()
   const history = useHistory()
   const { selectedCode: { code: owner } } = useAuth()
@@ -107,13 +107,17 @@ const TypeButtonGroup = ({row, setIntLoading  }) =>{
             const queryKey = ['types/incomes', { owner }]
             await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
             history.push({
-              pathname: `${window.location.pathname}/change-payment-method/${row._id}`,
-              income: row.income,
+              pathname: `${window.location.pathname}/change-payment-method/${payments._id}`,
+              state: {
+                income: payments.income,
+                table: base.table_display,
+                room: base.room_display,
+              },
             })
           }
         }
       >
-        {row.income}
+        {payments.income}
       </Button>
     </ButtonGroup>
   )
@@ -200,7 +204,7 @@ const CellBase = props => {
               <Box mb={0.5}>
                 {intl.formatMessage(messages[`mode_${payments.mode}`])}
               </Box>
-              <TypeButtonGroup row={payments} setIntLoading={setIntLoading}/>
+              <TypeButtonGroup base={row} payments={payments} setIntLoading={setIntLoading}/>
             </>
         }
       </Table.Cell>
@@ -215,7 +219,7 @@ const CellBase = props => {
               {intl.formatMessage(messages[`mode_${row.mode}`])}
             </Box>
             <Box>
-              <TypeButtonGroup row={row} setIntLoading={setIntLoading}/>
+              <TypeButtonGroup payments={row} setIntLoading={setIntLoading}/>
             </Box>
           </Box>
         }

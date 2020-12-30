@@ -60,7 +60,7 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
   )
 })
 const loadingSel = state => ({ setLoading: state.setLoading })
-const ClosedTableDialog = ({ docId }) => {
+const EntriesTableDialog = ({ docId, urlKey }) => {
   console.log('%cRENDER_DIALOG_ENTRIES', 'color: orange')
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
@@ -69,7 +69,7 @@ const ClosedTableDialog = ({ docId }) => {
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))
   }, [history])
-  const { isLoading, data } = useQuery([`reports/closed_table/${docId}`, { owner }], {
+  const { isLoading, data } = useQuery([`${urlKey}/${docId}`, { owner }], {
     notifyOnChangeProps: ['data', 'error'],
     staleTime: 5000, //non chiama due volte il server per richieste ravvicinate
     onSettled: () => {
@@ -108,4 +108,4 @@ const ClosedTableDialog = ({ docId }) => {
   
 }
 
-export default memo(ClosedTableDialog)
+export default memo(EntriesTableDialog)

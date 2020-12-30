@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -7,7 +7,7 @@ import {
   IconButton,
   makeStyles,
   Typography,
-  withWidth
+  withWidth,
 } from '@material-ui/core'
 import { Redirect, useHistory } from 'react-router'
 import { useQuery } from 'react-query'
@@ -18,20 +18,16 @@ import shallow from 'zustand/shallow'
 import { parentPath } from 'src/utils/urlFunctions'
 import { FormattedMessage } from 'react-intl'
 import { ChangePaymentForm } from './comps'
-import { useLocation } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   dialogContent: {
     padding: 0,
   },
   dialogTitle: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(1, 1, 1, 2),
   },
   boldText: {
     fontWeight: 'bold',
-  },
-  divTable: {
-    padding: theme.spacing(0, 1),
   },
   gridHeader: {
     paddingLeft: theme.spacing(1),
@@ -48,8 +44,11 @@ const ChangePaymentHeader = memo(function DialogHeader ({ onClose }) {
       justify="space-between"
     >
       <Grid item>
-        <Typography style={{fontVariant: 'small-caps'}} variant="h4">
-          <FormattedMessage defaultMessage="Seleziona il Tipo di Pagamento" id="reports.closed_tables.select_type_of_payment"/>&nbsp;
+        <Typography style={{ fontVariant: 'small-caps' }} variant="h4">
+          <FormattedMessage
+            defaultMessage="Seleziona il Tipo di Pagamento"
+            id="reports.closed_tables.select_type_of_payment"
+          />&nbsp;
         </Typography>
       </Grid>
       <Grid item>
@@ -62,8 +61,6 @@ const loadingSel = state => ({ setLoading: state.setLoading })
 const ChangePaymentDialog = ({ docId, width }) => {
   console.log('%cRENDER_DIALOG_CHANGE_PAYMENT', 'color: orange')
   const classes = useStyles()
-  const location = useLocation()
-  const [income] = useState(location.income)
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const history = useHistory()
@@ -94,18 +91,16 @@ const ChangePaymentDialog = ({ docId, width }) => {
       data.results ?
         <Dialog
           aria-labelledby="runningTable-dialog-title"
-          maxWidth="md"
           fullScreen={fullScreen}
+          maxWidth="md"
           onClose={closeChangePaymentDialog}
           open={Boolean(true)}
         >
           <DialogTitle className={classes.dialogTitle} disableTypography id="changePaymentForm-dialog-title">
-            <ChangePaymentHeader income={income} onClose={closeChangePaymentDialog}/>
+            <ChangePaymentHeader onClose={closeChangePaymentDialog}/>
           </DialogTitle>
           <DialogContent className={classes.dialogContent}>
-            <div className={classes.divTable}>
-              <ChangePaymentForm income={income} onSubmit={changePaymentSubmit}/>
-            </div>
+            <ChangePaymentForm onSubmit={changePaymentSubmit}/>
           </DialogContent>
         </Dialog>
         :

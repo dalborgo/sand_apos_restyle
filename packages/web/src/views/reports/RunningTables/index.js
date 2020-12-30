@@ -21,12 +21,18 @@ import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
-import RunningTableDialog from './RunningTableDialog'
 import { useParams } from 'react-router'
+import EntriesTableDialog from 'src/components/EntriesTableDialog'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     height: '100%',
+  },
+  container: {
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: { //mobile
+      padding: theme.spacing(0,2),
+    },
   },
 }))
 
@@ -182,7 +188,7 @@ const RunningTables = () => {
     <Page
       title={intl.formatMessage(messages['menu_running_tables'])}
     >
-      <Box p={2}>
+      <div className={classes.container}>
         <StandardHeader
           breadcrumb={
             <StandardBreadcrumb
@@ -211,13 +217,13 @@ const RunningTables = () => {
         <RightDrawer open={openFilter} switchOpen={switchOpenFilter}>
           {FilterFormWr}
         </RightDrawer>
-      </Box>
+      </div>
       <DivContentWrapper>
         <Paper className={classes.paper}>
           <TableList isFetching={effectiveFetching} rows={runningRows}/>
         </Paper>
       </DivContentWrapper>
-      {docId && <RunningTableDialog docId={docId}/>}
+      {docId && <EntriesTableDialog docId={docId} urlKey="reports/running_table"/>}
     </Page>
   )
 }

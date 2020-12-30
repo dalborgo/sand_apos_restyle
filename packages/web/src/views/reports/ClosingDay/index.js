@@ -20,9 +20,15 @@ import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 import { StandardBreadcrumb } from 'src/components/StandardBreadcrumb'
 import IconButtonLoader from 'src/components/IconButtonLoader'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     height: '100%',
+  },
+  container: {
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: { //mobile
+      padding: theme.spacing(0,2),
+    },
   },
 }))
 
@@ -60,7 +66,7 @@ const ClosingDay = () => {
     <Page
       title={intl.formatMessage(messages['menu_closing_day'])}
     >
-      <Box p={2}>
+      <div className={classes.container}>
         <StandardHeader
           breadcrumb={
             <StandardBreadcrumb
@@ -69,7 +75,7 @@ const ClosingDay = () => {
           }
           rightComponent={
             <Box alignItems="center" display="flex">
-              <Box mr={2}>
+              <Box>
                 <IconButtonLoader
                   disabled={!startDate}
                   isFetching={effectiveFetching}
@@ -81,7 +87,7 @@ const ClosingDay = () => {
         >
           <FormattedMessage defaultMessage="Chiusure di giornata" id="reports.closing_day.header_title"/>
         </StandardHeader>
-      </Box>
+      </div>
       <DateRangeFormikWrapper
         endDate={endDate}
         setDateRange={setDateRange}

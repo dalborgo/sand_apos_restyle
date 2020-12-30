@@ -21,16 +21,22 @@ import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
-import ClosedTableDialog from './ClosedTableDialog'
 import { useParams } from 'react-router'
 import moment from 'moment'
 import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 import ChangePaymentDialog from './ChangePaymentDialog'
+import EntriesTableDialog from 'src/components/EntriesTableDialog'
 
 const useStyles = makeStyles(theme => ({
   paper: {
     [theme.breakpoints.up('md')]: { //mobile
       height: '100%',
+    },
+  },
+  container: {
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: { //mobile
+      padding: theme.spacing(0,2),
     },
   },
 }))
@@ -195,7 +201,7 @@ const ClosedTables = () => {
     <Page
       title={intl.formatMessage(messages['menu_closed_tables'])}
     >
-      <Box p={2}>
+      <div className={classes.container}>
         <StandardHeader
           breadcrumb={
             <StandardBreadcrumb
@@ -225,7 +231,7 @@ const ClosedTables = () => {
         <RightDrawer open={openFilter} switchOpen={switchOpenFilter}>
           {FilterFormWr}
         </RightDrawer>
-      </Box>
+      </div>
       <DateRangeFormikWrapper
         endDate={endDate}
         setDateRange={setDateRange}
@@ -236,7 +242,7 @@ const ClosedTables = () => {
           <TableList isFetching={effectiveFetching && !closedRows.length} isIdle={isIdle} rows={closedRows}/>
         </Paper>
       </DivContentWrapper>
-      {docId && <ClosedTableDialog docId={docId}/>}
+      {docId && <EntriesTableDialog docId={docId} urlKey="reports/closed_table"/>}
       {targetDocId && <ChangePaymentDialog docId={targetDocId}/>}
     </Page>
   )

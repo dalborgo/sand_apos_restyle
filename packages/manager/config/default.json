@@ -9,6 +9,7 @@
     "PORT": 7000
   },
   "couchbase": {
+    "APK": 315,
     "CONFIG_TOTAL_TIMEOUT": 250,
     "connections": {
       "astenposServer": {

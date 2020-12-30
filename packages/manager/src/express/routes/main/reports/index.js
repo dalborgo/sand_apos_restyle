@@ -87,7 +87,7 @@ function addRouters (router) {
                        + 'ARRAY_AGG(buc.table_display)[0] table_display, '
                        + 'ARRAY_AGG(buc.room_display)[0] room_display, '
                        + 'ARRAY_AGG(buc.owner)[0] owner, '
-                       + 'CASE WHEN COUNT(*) > 1 THEN ARRAY_SORT(ARRAY_AGG({"_date": -1 * TONUMBER(buc.date), "final_price": buc.final_price, "mode": buc.mode, "covers": buc.covers, "income": income.display, "closed_by": `user`.`user`})) ELSE ARRAY_AGG({"mode": buc.mode, "income": income.display, "closed_by": `user`.`user`})[0] END payments'))
+                       + 'CASE WHEN COUNT(*) > 1 THEN ARRAY_SORT(ARRAY_AGG({"_date": -1 * TONUMBER(buc.date), "final_price": buc.final_price, "_id": META(buc).id, "mode": buc.mode, "covers": buc.covers, "income": income.display, "closed_by": `user`.`user`})) ELSE ARRAY_AGG({"mode": buc.mode, "_id": META(buc).id, "income": income.display, "closed_by": `user`.`user`})[0] END payments'))
       .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by')
       .joinRaw('LEFT JOIN `' + bucketName + '` as income ON KEYS "PAYMENT_INCOME_" || buc.income')
       .whereBetween('buc.date', [startDate, endDate_])

@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflowY: 'hidden',
     overflowX: 'auto',
+    height: 0, //hack si muove al caricamento
   },
   innerFirst: {
     display: 'flex',
