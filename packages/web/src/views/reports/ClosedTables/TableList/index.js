@@ -102,7 +102,10 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle, width }) 
   const [columns] = useState(() => {
     const companyData = useGeneralStore.getState().companyData
     const companySelect = ({ owner }) => companyData ? companyData?.[owner]?.name : owner
-    const typeSelect = ({ payments }) => Array.isArray(payments) ? '' : `${payments?.income}${intl.formatMessage(messages[`mode_${payments.mode}`])}`
+    const typeSelect = ({ payments }) => {
+      const text = messages[`mode_${payments.mode}`] ? intl.formatMessage(messages[`mode_${payments.mode}`]) : payments.mode
+      return Array.isArray(payments) ? '' : `${payments?.income}${text}`
+    }
     const finalPriceSelect = ({
       final_price: Fp,
       discount_price: Dp,

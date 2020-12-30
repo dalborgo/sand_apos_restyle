@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     padding: theme.spacing(2),
     [theme.breakpoints.down('sm')]: { //mobile
-      padding: theme.spacing(0,2),
+      padding: theme.spacing(0, 2),
     },
   },
 }))
@@ -111,7 +111,7 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
                       data.results.map(room => (
                         <option
                           key={room._id}
-                          value={room._id}
+                          value={room.display}
                         >
                           {room.display}
                         </option>

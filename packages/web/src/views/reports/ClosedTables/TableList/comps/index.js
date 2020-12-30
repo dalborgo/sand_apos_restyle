@@ -201,7 +201,7 @@ const CellBase = props => {
             :
             <>
               <Box mb={0.5}>
-                {intl.formatMessage(messages[`mode_${payments.mode}`])}
+                {messages[`mode_${payments.mode}`] ? intl.formatMessage(messages[`mode_${payments.mode}`]) : payments.mode}
               </Box>
               <TypeButtonGroup base={row} payments={payments} setIntLoading={setIntLoading}/>
             </>
@@ -215,7 +215,7 @@ const CellBase = props => {
         {
           <Box display="flex">
             <Box mr={1}>
-              {intl.formatMessage(messages[`mode_${row.mode}`])}
+              {messages[`mode_${row.mode}`] ? intl.formatMessage(messages[`mode_${row.mode}`]) : row.mode}
             </Box>
             <Box>
               <TypeButtonGroup payments={row} setIntLoading={setIntLoading}/>
