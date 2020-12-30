@@ -35,7 +35,7 @@ const CellBase = props => {
   const user = row.user || ''
   if (column.name === 'last_saved_date') {
     return (
-      <VirtualTable.Cell {...props}>
+      <VirtualTable.Cell {...props} style={cellStyle}>
         <Button
           classes={
             {

@@ -1,6 +1,5 @@
-import { Button, ButtonGroup, colors, makeStyles, withStyles } from '@material-ui/core'
 import React, { useState } from 'react'
-import Box from '@material-ui/core/Box'
+import { Button, ButtonGroup, Box, colors, makeStyles, withStyles } from '@material-ui/core'
 import { Grid, Table, TableHeaderRow } from '@devexpress/dx-react-grid-material-ui'
 import { IntegratedSummary } from '@devexpress/dx-react-grid'
 import { useDateTimeFormatter, useMoneyFormatter } from 'src/utils/formatters'
@@ -139,7 +138,7 @@ const CellBase = props => {
   const { payments } = row
   if (column.name === '_date') {
     return (
-      <Table.Cell {...props} style={{ paddingLeft: theme.spacing(2) }}>
+      <Table.Cell {...props} style={cellStyle}>
         {
           dateTimeFormatter(row._date, {
             year: undefined,

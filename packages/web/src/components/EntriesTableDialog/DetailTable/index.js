@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react'
-import { Grid, Table, TableHeaderRow, TableSummaryRow } from '@devexpress/dx-react-grid-material-ui'
+import { Grid, TableHeaderRow, TableSummaryRow, VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { messages } from 'src/translations/messages'
 import { useIntl } from 'react-intl'
 import { Cell } from './comps'
@@ -46,7 +46,7 @@ function DetailTable ({ data }) {
       <MoneyTypeProvider
         for={moneyColumns}
       />
-      <Table
+      <VirtualTable
         cellComponent={Cell}
         columnExtensions={tableColumnExtensions}
       />
