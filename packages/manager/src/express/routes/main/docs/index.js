@@ -17,6 +17,8 @@ async function allSettled (promises) {
   return output
 }
 
+const getEndkey = str => str.substring(0, str.length - 1) + String.fromCharCode(str.charCodeAt(str.length - 1) + 1)
+
 function addRouters (router) {
   router.get('/docs/browser', async function (req, res) {
     const { connClass, query } = req
@@ -41,14 +43,16 @@ function addRouters (router) {
     } else {
       // eslint-disable-next-line no-unused-vars
       const { owner, startkey, ...rest } = query
-      let cursor = parsedOwner.startOwner
+      let cursor = parsedOwner.startOwner, endCursor
       if (startkey) {
         const [str, num] = startkey.split('|')
         cursor = `${str}|${parseInt(num) + 1}`
+        endCursor = getEndkey(str)
       }
+      endCursor = endCursor || getEndkey(cursor)
       const filter = `AND ${parsedOwner.queryCondition}`
       const queryTotal = `SELECT RAW COUNT(*) total_row from ${connClass.astenposBucketName} WHERE type is not missing ${filter}`
-      const params = { view: 'list_docs_all', ...rest, startkey: `"${cursor}"` }
+      const params = { view: 'list_docs_all', ...rest, startkey: `"${cursor}"`, endkey: `"${endCursor}"`}
       const promises = [
         couchViews.execService(params, connClass.astConnection),
         couchQueries.exec(queryTotal, connClass.cluster),

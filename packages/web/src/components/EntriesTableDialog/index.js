@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useMemo } from 'react'
-import { Dialog, DialogContent, DialogTitle, Grid, IconButton, makeStyles, Typography } from '@material-ui/core'
+import { Dialog, DialogContent, DialogTitle, Grid, IconButton, makeStyles, Typography, withWidth } from '@material-ui/core'
 import { Redirect, useHistory } from 'react-router'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
@@ -60,11 +60,12 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
   )
 })
 const loadingSel = state => ({ setLoading: state.setLoading })
-const EntriesTableDialog = ({ docId, urlKey }) => {
+const EntriesTableDialog = ({ docId, urlKey, width }) => {
   console.log('%cRENDER_DIALOG_ENTRIES', 'color: orange')
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
+  const fullScreen = useMemo(()=>['sm', 'xs'].includes(width),[width])
   const history = useHistory()
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))
@@ -86,6 +87,7 @@ const EntriesTableDialog = ({ docId, urlKey }) => {
       data.results ?
         <Dialog
           aria-labelledby="entries-dialog-title"
+          fullScreen={fullScreen}
           maxWidth="md"
           onClose={onClose}
           open={Boolean(true)}
@@ -108,4 +110,4 @@ const EntriesTableDialog = ({ docId, urlKey }) => {
   
 }
 
-export default memo(EntriesTableDialog)
+export default memo(withWidth()(EntriesTableDialog))

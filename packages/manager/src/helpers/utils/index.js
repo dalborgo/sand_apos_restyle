@@ -12,15 +12,8 @@ function parseOwner ({ query, body, headers }, bucketLabel) {
   security.hasAuthorization(headers, ownerArray)
   const [startOwner] = ownerArray
   const endOwner = ownerArray.length > 1 ? ownerArray[ownerArray.length - 1] : startOwner
-  const nextOwner = endOwner
-    ? endOwner.substring(0, endOwner.length - 1) + String.fromCharCode(endOwner.charCodeAt(endOwner.length - 1) + 1)
-    : startOwner
   return {
     endOwner,
-    limitsInView: {
-      startkey: `"${startOwner}"`,
-      endkey: `"${nextOwner}"`,
-    },
     ownerArray,
     queryCondition: `${bucketLabel ? `${bucketLabel}.` : ''}owner IN ${JSON.stringify(ownerArray)}`,
     startOwner,

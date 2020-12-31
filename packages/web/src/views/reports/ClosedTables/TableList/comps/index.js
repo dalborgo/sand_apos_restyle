@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Button, ButtonGroup, Box, colors, makeStyles, withStyles } from '@material-ui/core'
+import React, { useCallback, useState } from 'react'
+import { Box, Button, ButtonGroup, colors, makeStyles, withStyles } from '@material-ui/core'
 import { Grid, Table, TableHeaderRow } from '@devexpress/dx-react-grid-material-ui'
 import { IntegratedSummary } from '@devexpress/dx-react-grid'
 import { useDateTimeFormatter, useMoneyFormatter } from 'src/utils/formatters'
@@ -111,6 +111,8 @@ const TypeButtonGroup = ({ payments, setIntLoading, base }) => {
                 income: payments.income,
                 table: base.table_display,
                 room: base.room_display,
+                date: base.date,
+                amount: base.final_price,
               },
             })
           }
@@ -123,7 +125,7 @@ const TypeButtonGroup = ({ payments, setIntLoading, base }) => {
 }
 
 const CellBase = props => {
-  const { column, row, theme, value } = props
+  const { column, row, theme, value, tableRow: {rowId} } = props
   const intl = useIntl()
   const dateTimeFormatter = useDateTimeFormatter()
   const moneyFormatter = useMoneyFormatter()
@@ -134,7 +136,7 @@ const CellBase = props => {
   const history = useHistory()
   const queryClient = useQueryClient()
   const docId = row._id
-  const cellStyle = { paddingLeft: theme.spacing(2) }
+  const cellStyle = { paddingLeft: theme.spacing(2), overflow: 'auto' }
   const { payments } = row
   if (column.name === '_date') {
     return (
@@ -172,7 +174,7 @@ const CellBase = props => {
             parse(dateTimeFormatter(row.date, {
               year: undefined,
               month: 'short',
-            }, { second: undefined }) + '<br/>' + value) //value = close_by in questo caso
+            }, { second: undefined }) + '<br/>' + value) //value = closed_by in questo caso
           }
         </Button>
       </Table.Cell>
@@ -196,7 +198,19 @@ const CellBase = props => {
         {
           Array.isArray(payments) ?
             <Box>
-              separato
+              <Button
+                className={classes.buttonGrouped}
+                onClick={
+                  () => {
+                    const elem = document.getElementById(`expand${row._id}`)
+                    elem && elem.click()
+                  }
+                }
+                size="small"
+                variant="contained"
+              >
+                {intl.formatMessage(messages['common_separatePayment'])}
+              </Button>
             </Box>
             :
             <>
@@ -210,6 +224,8 @@ const CellBase = props => {
     )
   }
   if (column.name === 'type_detail') {
+    // eslint-disable-next-line camelcase
+    const [room_display, table_display] = rowId.split('|')
     return (
       <Table.Cell {...props} style={cellStyle}>
         {
@@ -218,7 +234,7 @@ const CellBase = props => {
               {messages[`mode_${row.mode}`] ? intl.formatMessage(messages[`mode_${row.mode}`]) : row.mode}
             </Box>
             <Box>
-              <TypeButtonGroup payments={row} setIntLoading={setIntLoading}/>
+              <TypeButtonGroup base={{room_display, table_display, date: row._date, final_price: row.final_price}} payments={row} setIntLoading={setIntLoading}/>
             </Box>
           </Box>
         }
@@ -277,7 +293,11 @@ const tableDetailColumnExtensions = [
   { columnName: 'covers', align: 'right' },
   { columnName: 'final_price', align: 'right' },
 ]
+
 export const GridDetailContainerBase = ({ row }) => {
+  const getRowId = useCallback(row_ => {
+    return `${row.room_display}|${row.table_display}|${row_._id}`
+  },[row.room_display, row.table_display])
   const intl = useIntl()
   const [detailColumns] = useState([
     { name: '_date', title: intl.formatMessage(messages['common_date']) },
@@ -289,6 +309,7 @@ export const GridDetailContainerBase = ({ row }) => {
   return (
     <Grid
       columns={detailColumns}
+      getRowId={getRowId}
       rows={row.payments}
     >
       <Table

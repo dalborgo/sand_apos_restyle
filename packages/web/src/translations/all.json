@@ -124,6 +124,10 @@
     "defaultMessage": "Cerca…"
   },
   {
+    "id": "common.separatePayment",
+    "defaultMessage": "Separato"
+  },
+  {
     "id": "common.settings",
     "defaultMessage": "Impostazioni"
   },

@@ -31,8 +31,8 @@ const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
 
 const tableColumnExtensions = [
-  { columnName: 'covers', align: 'right' },
-  { columnName: 'final_price', align: 'right' },
+  { columnName: 'covers', align: 'right'},
+  { columnName: 'final_price', align: 'right'},
 ]
 const totalSummaryItems = [
   { columnName: 'table_display', type: 'count' },
@@ -87,7 +87,6 @@ const SelectiveTable = memo(function SelectiveTable ({ isIdle, isFetching, width
       />
     )
   }
-  
 })
 
 const dateSelect = ({ payments }) => {
@@ -95,7 +94,8 @@ const dateSelect = ({ payments }) => {
   return closedBy
 }
 const tableSelect = ({ table_display: Td, room_display: Rd }) => `${Td}${Rd}`
-const TableList = memo(function TableList ({ rows, isFetching, isIdle, width }) {
+
+const TableList = ({ rows, isFetching, isIdle, width }) => {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const moneyFormatter = useMoneyFormatter()
   const intl = useIntl()
@@ -151,6 +151,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle, width }) 
         cellComponent={DetailCell}
         contentComponent={GridDetailContainerBase}
         toggleCellComponent={TableDetailToggleCell}
+        toggleColumnWidth={0}
       />
       <Toolbar
         rootComponent={RootToolbar}
@@ -158,6 +159,6 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle, width }) 
       <SearchPanelIntl/>
     </Grid>
   )
-})
+}
 
-export default withWidth()(TableList)
+export default memo(withWidth()(TableList))

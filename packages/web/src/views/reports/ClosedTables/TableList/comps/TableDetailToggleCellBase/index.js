@@ -1,28 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { withStyles } from '@material-ui/core/styles'
-import ExpandLess from '@material-ui/icons/ExpandLess'
-import ExpandMore from '@material-ui/icons/ExpandMore'
-import { IconButton, TableCell } from '@material-ui/core'
+import { TableCell } from '@material-ui/core'
 
-const styles = theme => ({
-  toggleCell: {
-    textAlign: 'center',
-    textOverflow: 'initial',
-    paddingTop: 0.8,
-    paddingBottom: 0,
-    paddingLeft: theme.spacing(1),
-  },
-  toggleCellButton: {
-    height: theme.spacing(5),
-    width: theme.spacing(5),
-  },
-})
-
-const TableDetailToggleCellBase = ({
+const TableDetailToggleCell = ({
   className,
-  classes,
+  // eslint-disable-next-line no-unused-vars
   expanded,
   onToggle,
   row,
@@ -33,24 +15,23 @@ const TableDetailToggleCellBase = ({
   tableRow,
   ...restProps
 }) => {
-  const handleClick = event => {
+  const handleClick = useCallback(event => {
     event.stopPropagation()
     onToggle()
-  }
-  const { payments } = row
+  },[onToggle])
+  const { payments, _id } = row
   if (Array.isArray(payments)) {
     return (
       <TableCell
-        className={clsx(classes.toggleCell, className)}
+        className={className}
         style={style}
         {...restProps}
       >
-        <IconButton
-          className={classes.toggleCellButton}
+        <button
+          id={`expand${_id}`}
           onClick={handleClick}
-        >
-          {expanded ? <ExpandLess/> : <ExpandMore/>}
-        </IconButton>
+          style={{display: 'none'}}
+        />
       </TableCell>
     )
   } else {
@@ -64,8 +45,8 @@ const TableDetailToggleCellBase = ({
   }
 }
 
-TableDetailToggleCellBase.propTypes = {
-  classes: PropTypes.object.isRequired,
+TableDetailToggleCell.propTypes = {
+  classes: PropTypes.object,
   className: PropTypes.string,
   expanded: PropTypes.bool,
   row: PropTypes.object,
@@ -75,7 +56,7 @@ TableDetailToggleCellBase.propTypes = {
   onToggle: PropTypes.func,
 }
 
-TableDetailToggleCellBase.defaultProps = {
+TableDetailToggleCell.defaultProps = {
   style: null,
   expanded: false,
   onToggle: () => {},
@@ -84,9 +65,5 @@ TableDetailToggleCellBase.defaultProps = {
   tableRow: undefined,
   row: undefined,
 }
-
-const TableDetailToggleCell = withStyles(styles, {
-  name: 'TableDetailToggleCell',
-})(TableDetailToggleCellBase)
 
 export default TableDetailToggleCell

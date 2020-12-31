@@ -78,7 +78,7 @@ const ClosingDayDialog = ({ width, docId }) => {
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
-  const fullScreen = ['sm', 'xs'].includes(width)
+  const fullScreen = useMemo(()=>['sm', 'xs'].includes(width),[width])
   const history = useHistory()
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))

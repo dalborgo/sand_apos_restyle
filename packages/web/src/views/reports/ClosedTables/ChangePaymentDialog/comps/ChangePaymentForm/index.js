@@ -9,11 +9,14 @@ import ToggleButton from '@material-ui/lab/ToggleButton'
 import { ToggleButtonGroup } from 'formik-material-ui-lab'
 import { useLocation } from 'react-router-dom'
 import LabeledTypo from 'src/components/LabeledTypo'
+import { useDateFormatter, useMoneyFormatter } from 'src/utils/formatters'
 
 const ChangePaymentForm = memo(function ChangePaymentForm ({ onSubmit }) {
   console.log('%cRENDER_FORM', 'color: pink')
   const theme = useTheme()
-  const { state: { income, room, table } } = useLocation()
+  const { state: { income, room, table, date, amount } } = useLocation()
+  const moneyFormatter = useMoneyFormatter()
+  const dateFormatter = useDateFormatter()
   const { selectedCode: { code: owner } } = useAuth()
   const { isLoading, data } = useQuery(['types/incomes', { owner }], {
     notifyOnChangeProps: ['data', 'error'],
@@ -41,6 +44,16 @@ const ChangePaymentForm = memo(function ChangePaymentForm ({ onSubmit }) {
                   </Grid>
                   <Grid item>
                     <LabeledTypo label="common_table" text={table}/>
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item style={{ margin: theme.spacing(0, 3) }}>
+                <Grid container justify="space-between" style={{width: '100%'}}>
+                  <Grid item>
+                    <LabeledTypo label="common_date" text={dateFormatter(date)}/>
+                  </Grid>
+                  <Grid item>
+                    <LabeledTypo label="common_total" text={moneyFormatter(amount)}/>
                   </Grid>
                 </Grid>
               </Grid>

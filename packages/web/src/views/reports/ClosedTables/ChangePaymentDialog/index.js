@@ -64,7 +64,7 @@ const ChangePaymentDialog = ({ docId, width }) => {
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const history = useHistory()
-  const fullScreen = ['sm', 'xs'].includes(width)
+  const fullScreen = useMemo(()=>['sm', 'xs'].includes(width),[width])
   const closeChangePaymentDialog = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname, -2))
   }, [history])
