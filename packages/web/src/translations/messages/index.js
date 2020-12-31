@@ -113,9 +113,13 @@ export const messages = defineMessages({
     id: 'error.ECONNREFUSED',
     defaultMessage: 'Connessione rifiutata!',
   },
-  MISSINGPARAMETERS: {
-    id: 'error.MISSINGPARAMETERS',
+  MISSING_PARAMETERS: {
+    id: 'error.MISSING_PARAMETERS',
     defaultMessage: 'Parametri obbligatori mancanti: {parameters}',
+  },
+  INVALID_DOC_UPDATE: {
+    id: 'error.INVALID_DOC_UPDATE',
+    defaultMessage: 'Campo "set" o "unset" obbligatorio!',
   },
   common_all: {
     id: 'common.all',

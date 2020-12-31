@@ -40,7 +40,7 @@
   "date_range.end_date": "Fine",
   "date_range.start_date": "Inizio",
   "error.ECONNREFUSED": "Connessione rifiutata!",
-  "error.MISSINGPARAMETERS": "Parametri obbligatori mancanti: {parameters}",
+  "error.MISSING_PARAMETERS": "Parametri obbligatori mancanti: {parameters}",
   "error404.go_back_button": "Torna alla pagina precedente",
   "error404.goto_home_page_description": "Se hai digitato un collegamento nella barra degli indirizzi, prova ad utilizzare il menu di navigazione a\n          sinistra.",
   "error404.wrong_page": "404: La pagina che stai cercando non è qui!",
@@ -91,5 +91,6 @@
   "reports.closed_tables.select_type_of_payment": "Seleziona il Tipo di Pagamento",
   "common.search": "Cerca…",
   "common.closedBy": "Chiuso da",
-  "common.separatePayment": "Separato"
+  "common.separatePayment": "Separato",
+  "error.INVALID_DOC_UPDATE": "Campo \"set\" o \"unset\" obbligatorio!"
 }

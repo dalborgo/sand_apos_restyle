@@ -4,16 +4,14 @@ import config from 'config'
 const { connections } = config.get('couchbase')
 const {
   _bucket: AST_DEFAULT,
-  _manager: MAN_DEFAULT,
   backend: BACKEND_HOST_DEFAULT,
   server: HOST_DEFAULT,
 } = connections['astenposServer']
 
 export default class Couchbase {
-  constructor (cluster, astenpos, manager, backendHost = BACKEND_HOST_DEFAULT) {
+  constructor (cluster, astenpos, backendHost = BACKEND_HOST_DEFAULT) {
     this._cluster = cluster
     this._astenpos = astenpos
-    this._manager = manager
     this._backendHost = backendHost || ''
   }
   
@@ -40,24 +38,12 @@ export default class Couchbase {
     return this._astenpos.name || AST_DEFAULT
   }
   
-  get managerBucketName () {
-    return this._manager.name || MAN_DEFAULT
-  }
-  
   get astenposBucketCollection () {
     return this._astenpos.defaultCollection()
   }
-  
-  get managerBucketCollection () {
-    return this._manager.defaultCollection()
-  }
-  
+
   get astenposBucket () {
     return this._astenpos
-  }
-  
-  get managerBucket () {
-    return this._manager
   }
   
   get astConnection () {
@@ -68,17 +54,6 @@ export default class Couchbase {
       COLLECTION: this.astenposBucketCollection,
       HOST: this.host,
       PASSWORD: this.astenposBucketPassword(),
-    }
-  }
-  
-  get manConnection () {
-    return {
-      BUCKET: this.managerBucket,
-      BUCKET_NAME: this.managerBucketName,
-      CLUSTER: this.cluster,
-      COLLECTION: this.managerBucketCollection,
-      HOST: this.host,
-      PASSWORD: this.managerBucketPassword(),
     }
   }
   
@@ -107,11 +82,6 @@ export default class Couchbase {
   
   astenposBucketPassword () {
     const base = get(this._astenpos, '_cluster._auth')
-    return base.password
-  }
-  
-  managerBucketPassword () {
-    const base = get(this._manager, '_cluster._auth')
     return base.password
   }
   

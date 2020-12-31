@@ -188,7 +188,11 @@
     "defaultMessage": "Connessione rifiutata!"
   },
   {
-    "id": "error.MISSINGPARAMETERS",
+    "id": "error.INVALID_DOC_UPDATE",
+    "defaultMessage": "Campo \"set\" o \"unset\" obbligatorio!"
+  },
+  {
+    "id": "error.MISSING_PARAMETERS",
     "defaultMessage": "Parametri obbligatori mancanti: {parameters}"
   },
   {

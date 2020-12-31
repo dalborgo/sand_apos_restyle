@@ -42,8 +42,8 @@ function addRouters (router) {
     const { username, password, code } = req.body
     const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
                   + getQueryUserField()+', meta(`user`).id _id '
-                  + 'FROM ' + connClass.managerBucketName + ' `user` '
-                  + 'LEFT NEST ' + connClass.managerBucketName + ' setups '
+                  + 'FROM ' + connClass.astenposBucketName + ' `user` '
+                  + 'LEFT NEST ' + connClass.astenposBucketName + ' setups '
                   + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) FOR code IN `user`.codes END '
                   + 'WHERE `user`.type = "USER_MANAGER" '
                   + 'AND LOWER(`user`.`user`) = $1 '
@@ -80,7 +80,7 @@ function addRouters (router) {
     const { userId, codes } = jwt.verify(accessToken, JWT_SECRET)
     const query = 'SELECT '
                   + getQueryUserField()
-                  + 'FROM ' + connClass.managerBucketName + ' `user` USE KEYS "' + userId + '"'
+                  + 'FROM ' + connClass.astenposBucketName + ' `user` USE KEYS "' + userId + '"'
     const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
     if (!ok) {
       log.error('path', path)
@@ -101,7 +101,7 @@ function addRouters (router) {
   })
   router.get('/jwt/codes', async function (req, res) {
     const { connClass, route: { path } } = req
-    const query = `select RAW OBJECT_REMOVE(man, 'type') from ${connClass.managerBucketName} man where type = "INSTALLATION"`
+    const query = `select RAW OBJECT_REMOVE(man, 'type') from ${connClass.astenposBucketName} man where type = "INSTALLATION"`
     const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
     if (!ok) {
       log.error('path', path)

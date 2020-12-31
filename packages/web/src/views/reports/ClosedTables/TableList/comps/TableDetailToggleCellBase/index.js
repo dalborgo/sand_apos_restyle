@@ -1,18 +1,12 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { TableCell } from '@material-ui/core'
+import { Table } from '@devexpress/dx-react-grid-material-ui'
 
 const TableDetailToggleCell = ({
-  className,
   // eslint-disable-next-line no-unused-vars
   expanded,
   onToggle,
   row,
-  style,
-  // eslint-disable-next-line no-unused-vars
-  tableColumn,
-  // eslint-disable-next-line no-unused-vars
-  tableRow,
   ...restProps
 }) => {
   const handleClick = useCallback(event => {
@@ -22,9 +16,7 @@ const TableDetailToggleCell = ({
   const { payments, _id } = row
   if (Array.isArray(payments)) {
     return (
-      <TableCell
-        className={className}
-        style={style}
+      <Table.Cell
         {...restProps}
       >
         <button
@@ -32,13 +24,11 @@ const TableDetailToggleCell = ({
           onClick={handleClick}
           style={{display: 'none'}}
         />
-      </TableCell>
+      </Table.Cell>
     )
   } else {
     return (
-      <TableCell
-        className={className}
-        style={style}
+      <Table.Cell
         {...restProps}
       />
     )

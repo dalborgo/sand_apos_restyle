@@ -29,8 +29,7 @@ async function getDatabase (key) {
     log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const astenpos = astenpos_.bucket(results.key)
-    const manager = astenpos_.bucket(results.key)
-    __buckets[key] = new Couchbase(astenpos_, astenpos, manager, results.backendUrl) //first parameter for cluster
+    __buckets[key] = new Couchbase(astenpos_, astenpos, results.backendUrl) //first parameter for cluster
     return __buckets[key]
   } catch (err) {
     log.error(err)

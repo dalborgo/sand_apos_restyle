@@ -23,26 +23,7 @@ void (async () => {
     log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const astenpos = astenpos_.bucket(connection._bucket)
-    const manager = astenpos_.bucket(connection._manager) //manager in same bucket of astenpos
-    /*
-    const optionsManager = {
-      username: connection._manager,
-      password: connection._password_manager,
-      logFunc: connections_.logFunc,
-    }
-    const manager_ = new couchbase.Cluster(connStr, optionsManager)
-    const manager = manager_.bucket(connection._manager)
-    */
-    /*
-    const optionsArchive = {
-       username: connection._archivio,
-       password: connection._password_archivio,
-       logFunc: connections_.logFunc,
-     }
-     const archive_ = new couchbase.Cluster(connStr, optionsArchive)
-     const archive = archive_.bucket(connection._archivio)
-     */
-    __buckets[key] = new Couchbase(astenpos_, astenpos, manager) //first parameter for cluster
+    __buckets[key] = new Couchbase(astenpos_, astenpos) //first parameter for cluster
     //region CONNECTION INSTANCE CONFIGURATION
     if (key === 'astenposServer') {
       const conn = __buckets[key]

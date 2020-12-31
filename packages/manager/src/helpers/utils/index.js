@@ -3,8 +3,7 @@ import { security } from '../'
 
 /**
  *
- * @param req: {owner, headers}
- * @param bucketLabel = identificativo per la query condition se richiede di un essere ambigua (es. JOIN)
+ * bucketLabel = identificativo per la query condition se richiede di un essere ambigua (es. JOIN)
  */
 function parseOwner ({ query, body, headers }, bucketLabel) {
   const {owner} = Object.assign({}, body, query)
@@ -30,7 +29,7 @@ function controlParameters (query, requiredKeys) {
   }
   if (out.length) {
     errors = out.join(', ')
-    throw new BadRequest('MISSINGPARAMETERS', { parameters: errors })
+    throw new BadRequest('MISSING_PARAMETERS', { parameters: errors })
   }
 }
 

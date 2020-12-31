@@ -33,7 +33,6 @@ const getCombinedEntries = data => {
   }, [])
 }
 
-
 function addRouters (router) {
   router.get('/reports/closing_days', async function (req, res) {
     const { connClass, query } = req

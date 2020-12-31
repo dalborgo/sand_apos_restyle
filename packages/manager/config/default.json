@@ -17,7 +17,6 @@
         "backend": "127.0.0.1",
         "_bucket": "astenpos",
         "_archivio": "archivio",
-        "_manager": "manager",
         "_password_bucket": "astenpos",
         "_password_archivio": "archivio"
       }

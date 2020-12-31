@@ -40,7 +40,7 @@
   "date_range.end_date": "",
   "date_range.start_date": "",
   "error.ECONNREFUSED": "",
-  "error.MISSINGPARAMETERS": "",
+  "error.MISSING_PARAMETERS": "",
   "error404.go_back_button": "",
   "error404.goto_home_page_description": "",
   "error404.wrong_page": "",
@@ -91,5 +91,6 @@
   "reports.closed_tables.select_type_of_payment": "",
   "common.search": "",
   "common.closedBy": "",
-  "common.separatePayment": ""
+  "common.separatePayment": "",
+  "error.INVALID_DOC_UPDATE": ""
 }
