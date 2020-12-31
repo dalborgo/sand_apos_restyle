@@ -71,12 +71,22 @@ function objToQueryString (obj, prependQuestionMark = false) {
   return prependQuestionMark && output ? `?${output}` : output
 }
 
+
+const escapeN1qlObj = val => {
+  const divided = val.split('.')
+  const mapped = divided.map(val_ => {
+    return `\`${val_}\``
+  })
+  return mapped.join('.')
+}
+
 export default {
   camelDeburr,
   checkDuplicate,
   createChain,
   cursorPaginator: paginator.cursorPaginator,
   cursorPaginatorBoost: paginator.cursorPaginatorBoost,
+  escapeN1qlObj,
   filterQueryString,
   fromBase64,
   generateString,

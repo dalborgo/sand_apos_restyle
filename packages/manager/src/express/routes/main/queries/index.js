@@ -1,4 +1,5 @@
 import { couchQueries } from '@adapter/io'
+import { cFunctions } from '@adapter/common'
 import isObject from 'lodash/isObject'
 import isString from 'lodash/isString'
 import get from 'lodash/get'
@@ -16,7 +17,7 @@ async function queryByType (req, res) {
     columns,
     withMeta = false,
     bucketName = connClass.astenposBucketName,
-    options
+    options,
   } = Object.assign({}, body, query)
   const knex_ = knex({ buc: bucketName }).where({ type }).where(knex.raw(parsedOwner.queryCondition)).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
@@ -44,27 +45,30 @@ async function queryById (req, res) {
   res.send({ ok, results: data.length ? data[0] : null })
 }
 
+
 function createSetStatement (val) {
   const toSet = []
   for (let key in dot.dot(val)) {
     let value = get(val, key)
     value = isString(value) ? `"${value}"` : value
-    toSet.push(`${key} = ${value}`)
+    toSet.push(`${cFunctions.escapeN1qlObj(key)} = ${value}`)
   }
   return `SET ${toSet.join(', ')}`
 }
 
 function createUnsetStatement (val) {
   let toUnset
-  if (isObject(val)) {
-    toUnset = Object.keys(dot.dot(val))
-  }
-  else if (Array.isArray(val)) {
+  if (Array.isArray(val)) {
     toUnset = val
-  }else{
+  } else if (isObject(val)) {
+    toUnset = Object.keys(dot.dot(val))
+  } else {
     toUnset = [String(val)]
   }
-  return `UNSET ${toUnset.join(', ')}`
+  const toUnset_ = toUnset.map(val_ => {
+    return cFunctions.escapeN1qlObj(val_)
+  })
+  return `UNSET ${toUnset_.join(', ')}`
 }
 
 function addRouters (router) {
@@ -120,13 +124,14 @@ function addRouters (router) {
       throw new BadRequest('INVALID_DOC_UPDATE')
     }
     utils.parseOwner(req) //security check
-    const { id, values, bucketName = connClass.astenposBucketName, options } = body
-    const toSet = createSetStatement(values.set)
-    const toUnset = createUnsetStatement(values.unset)
-    const statement = `UPDATE ${bucketName} USE KEYS "${id}" ${toSet}${toUnset} RETURNING *`
+    const { id, set, unset, bucketName = connClass.astenposBucketName, options } = body
+    let conditions = ''
+    if (set) {conditions += createSetStatement(set)}
+    if (unset) {conditions += ` ${createUnsetStatement(unset)}`}
+    const statement = `UPDATE ${bucketName} USE KEYS "${id}" ${conditions.trim()} RETURNING *`
     const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, info })}
-    res.send({ ok, results: data })
+    res.send({ ok, results: data.length ? data[0] : null })
   })
 }
 
