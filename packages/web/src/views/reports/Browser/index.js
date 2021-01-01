@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 export let responseTimeInMilli
 const fetchList = async ({queryKey, pageParam: cursor}) => {
   const [_key, text ] = queryKey
-  const { data, config } = await axiosLocalInstance(`/api/${_key}`, {
+  const { data, config } = await axiosLocalInstance(_key, {
     params: {
       limit: LIMIT,
       startkey: cursor,
@@ -108,13 +108,13 @@ const fetchList = async ({queryKey, pageParam: cursor}) => {
 }
 
 const saveMutation = async (docs) => {
-  const { data } = await axiosLocalInstance.post('/api/docs/bulk', {
+  const { data } = await axiosLocalInstance.post('docs/bulk', {
     docs: [docs],
   })
   return data
 }
 const deleteMutation = async (docId) => {
-  const { data } = await axiosLocalInstance.delete('/api/docs/remove', {
+  const { data } = await axiosLocalInstance.delete('docs/remove', {
     data: {
       docId,
     },

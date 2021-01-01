@@ -21,7 +21,7 @@ const ChangePaymentForm = memo(function ChangePaymentForm ({ onSubmit, data, isL
       onSubmit={onSubmit}
     >
       {
-        ({ dirty }) => (
+        ({ dirty, values }) => (
           <Form style={{ height: '100%' }}>
             <Grid
               alignItems="stretch"
@@ -80,7 +80,7 @@ const ChangePaymentForm = memo(function ChangePaymentForm ({ onSubmit, data, isL
                 }
               </Grid>
               <Grid item style={{ margin: theme.spacing(2, 3), marginTop: theme.spacing(1) }}>
-                <Button color="secondary" disabled={!dirty} fullWidth type="submit" variant="contained">
+                <Button color="secondary" disabled={!dirty || !values['income']} fullWidth type="submit" variant="contained">
                   <FormattedMessage defaultMessage="Applica" id="common.apply"/>
                 </Button>
               </Grid>

@@ -117,7 +117,7 @@ export const AuthProvider = ({ children }) => {
   const queryClient = useQueryClient()
   const { saveSettings, settings } = useSettings()
   const login = async (username, password, code) => {
-    const response = await axiosLocalInstance.post('/api/jwt/login', { username, password, code })
+    const response = await axiosLocalInstance.post('jwt/login', { username, password, code })
     const { accessToken, user, codes, locales } = response.data
     if (locales.length) {
       const [locale] = locales
@@ -162,7 +162,7 @@ export const AuthProvider = ({ children }) => {
         const accessToken = window.localStorage.getItem('accessToken')
         if (accessToken && isValidToken(accessToken)) {
           setSession({ accessToken })
-          const response = await axiosLocalInstance.get('/api/jwt/me')
+          const response = await axiosLocalInstance.get('jwt/me')
           let { user, codes, locales } = response.data
           let selectedCode = window.localStorage.getItem('selectedCode')
           if (selectedCode) {selectedCode = JSON.parse(selectedCode)}

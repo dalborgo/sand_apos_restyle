@@ -10,7 +10,7 @@ import { expandError } from 'src/utils/errors'
 import log from '@adapter/common/src/log'
 
 export const axiosLocalInstance = axios.create({
-  baseURL: envConfig.BACKEND_HOST,
+  baseURL: `${envConfig.BACKEND_HOST}/api/`,
   params: {
     _key: 'astenposServer',
   },
@@ -40,7 +40,7 @@ export const defaultQueryFn = async ({ queryKey }) => {
   //viene già injectato questo parametro (owner) di default e se viene passato è solo per questioni di chiave della cache
   // eslint-disable-next-line no-unused-vars
   const [_key, { owner, ...params } = {}] = queryKey //passo i parametri come oggetto
-  const { data } = await axiosLocalInstance(`/api/${_key}`, {
+  const { data } = await axiosLocalInstance(_key, {
     params,
   })
   return data

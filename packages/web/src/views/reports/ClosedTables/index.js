@@ -27,6 +27,7 @@ import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 import ChangePaymentDialog from './ChangePaymentDialog'
 import EntriesTableDialog from 'src/components/EntriesTableDialog'
 import find from 'lodash/find'
+import cloneDeep from 'lodash/cloneDeep'
 import { parentPath } from 'src/utils/urlFunctions'
 import { useSnackbar } from 'notistack'
 
@@ -143,10 +144,28 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
 })
 
 const changePaymentMutation = async values => {
-  const { data } = await axiosLocalInstance.put('/api/queries/update_by_id', {
+  const { data } = await axiosLocalInstance.put('queries/update_by_id', {
     ...values,
   })
   return data
+}
+
+function changePayment (closedRows, _id, income) {
+  const newRows = cloneDeep(closedRows)
+  let payment
+  find(newRows, row => {
+    if (Array.isArray(row.payments)) {
+      payment = find(row.payments, { _id })
+      return payment
+    } else {
+      if (row.payments._id === _id) {
+        payment = row.payments
+        return true
+      }
+    }
+  })
+  payment.income = income
+  return newRows
 }
 
 const ClosedTables = () => {
@@ -171,14 +190,14 @@ const ClosedTables = () => {
     roomFilter,
     submitFilter,
   } = useClosedTablesStore(closedTableSelector, shallow)
-  
-  const { refetch, isIdle, ...rest } = useQuery(['reports/closed_tables', {
+  const fetchKey = useMemo(() => ['reports/closed_tables', {
     startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
     endDateInMillis: endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined,
     owner,
     roomFilter,
     tableFilter,
-  }], {
+  }], [endDate, owner, roomFilter, startDate, tableFilter])
+  const { refetch, isIdle, ...rest } = useQuery(fetchKey, {
     onError: snackQueryError,
     enabled: Boolean(startDate && endDate),
     onSettled: data => { //fa risparmiare un expensive rendere al primo caricamento rispetto a useEffect
@@ -202,15 +221,15 @@ const ClosedTables = () => {
   const closeChangePaymentDialog = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname, -2))
   }, [history])
-  
   const changePaymentSubmit = useCallback(values => {
     const { results: incomes } = queryClient.getQueryData(['types/incomes', { owner }])
     const { _id: income } = find(incomes, { display: values.income })
     mutation.mutate({ id: targetDocId, set: { income } })
-    console.log('closedRows:', closedRows)
+    const newRows = changePayment(closedRows, targetDocId, values.income)
+    queryClient.setQueryData(fetchKey, { ok: true, results: newRows })
     closeChangePaymentDialog()
     return values
-  }, [closeChangePaymentDialog, closedRows, mutation, owner, queryClient, targetDocId])
+  }, [closeChangePaymentDialog, closedRows, fetchKey, mutation, owner, queryClient, targetDocId])
   
   useEffect(() => {
     async function fetchData () {
