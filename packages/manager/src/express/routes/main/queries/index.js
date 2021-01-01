@@ -45,7 +45,6 @@ async function queryById (req, res) {
   res.send({ ok, results: data.length ? data[0] : null })
 }
 
-
 function createSetStatement (val) {
   const toSet = []
   for (let key in dot.dot(val)) {
@@ -117,7 +116,7 @@ function addRouters (router) {
    *   oppure unset: ['prova']
    * }
    */
-  router.put('/queries/update_by_id', async function (req, res) {
+  router.put('/queries/update_by_id_', async function (req, res) {
     const { connClass, body } = req
     utils.controlParameters(body, ['owner', 'id'])
     if (!isObject(body.set) && !body.unset) {
@@ -128,10 +127,14 @@ function addRouters (router) {
     let conditions = ''
     if (set) {conditions += createSetStatement(set)}
     if (unset) {conditions += ` ${createUnsetStatement(unset)}`}
-    const statement = `UPDATE ${bucketName} USE KEYS "${id}" ${conditions.trim()} RETURNING *`
+    const statement = `UPDATE ${bucketName} USE KEYS "${id}" ${conditions.trim()} RETURNING meta().id`
     const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, info })}
     res.send({ ok, results: data.length ? data[0] : null })
+  })
+  router.put('/queries/update_by_id', async function (req, res) {
+    console.log('body:', req.body)
+    res.send({ ok: true, results: { id: 'PAYMENT_75ddd0b2-4072-4b9a-bbd7-b3ded0f25d9c' } })
   })
 }
 

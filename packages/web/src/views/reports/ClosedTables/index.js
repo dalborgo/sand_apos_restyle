@@ -7,10 +7,10 @@ import StandardHeader from 'src/components/StandardHeader'
 import IconButtonLoader from 'src/components/IconButtonLoader'
 import { StandardBreadcrumb } from 'src/components/StandardBreadcrumb'
 import RightDrawer from 'src/components/RightDrawer'
-import { useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import shallow from 'zustand/shallow'
 import { getEffectiveFetching } from 'src/utils/logics'
-import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
+import { axiosLocalInstance, useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import useAuth from 'src/hooks/useAuth'
 import useClosedTablesStore from 'src/zustandStore/useClosedTablesStore'
 import { FastField, Form, Formik } from 'formik'
@@ -21,11 +21,14 @@ import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import Paper from '@material-ui/core/Paper'
 import TableList from './TableList'
-import { useParams } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import moment from 'moment'
 import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 import ChangePaymentDialog from './ChangePaymentDialog'
 import EntriesTableDialog from 'src/components/EntriesTableDialog'
+import find from 'lodash/find'
+import { parentPath } from 'src/utils/urlFunctions'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -139,13 +142,22 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
   )
 })
 
+const changePaymentMutation = async values => {
+  const { data } = await axiosLocalInstance.put('/api/queries/update_by_id', {
+    ...values,
+  })
+  return data
+}
+
 const ClosedTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const { docId, targetDocId } = useParams()
+  const { enqueueSnackbar } = useSnackbar()
+  const history = useHistory()
+  const queryClient = useQueryClient()
   const intl = useIntl()
   const [, setState] = useState()
-  const queryClient = useQueryClient()
   const snackQueryError = useSnackQueryError()
   const {
     startDate,
@@ -159,6 +171,7 @@ const ClosedTables = () => {
     roomFilter,
     submitFilter,
   } = useClosedTablesStore(closedTableSelector, shallow)
+  
   const { refetch, isIdle, ...rest } = useQuery(['reports/closed_tables', {
     startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
     endDateInMillis: endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined,
@@ -174,6 +187,31 @@ const ClosedTables = () => {
       }
     },
   })
+  
+  const mutation = useMutation(changePaymentMutation, {
+    onSettled: data => {
+      const { ok, results, messages } = data
+      if (ok) {
+        console.log('data:', results)
+      } else {
+        enqueueSnackbar(messages)
+      }
+    },
+  })
+  
+  const closeChangePaymentDialog = useMemo(() => {
+    return () => history.push(parentPath(history.location.pathname, -2))
+  }, [history])
+  
+  const changePaymentSubmit = useCallback(values => {
+    const { results: incomes } = queryClient.getQueryData(['types/incomes', { owner }])
+    const { _id: income } = find(incomes, { display: values.income })
+    mutation.mutate({ id: targetDocId, set: { income } })
+    console.log('closedRows:', closedRows)
+    closeChangePaymentDialog()
+    return values
+  }, [closeChangePaymentDialog, closedRows, mutation, owner, queryClient, targetDocId])
+  
   useEffect(() => {
     async function fetchData () {
       await queryClient.prefetchQuery(['types/rooms', {
@@ -183,6 +221,7 @@ const ClosedTables = () => {
     
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryClient])
+  
   useEffect(() => {
     if (rest?.data?.ok && !rest.isFetchedAfterMount) { //necessario per triggerare quando legge dalla cache
       console.log('%c***USE_EFFECT', 'color: cyan')
@@ -243,7 +282,7 @@ const ClosedTables = () => {
         </Paper>
       </DivContentWrapper>
       {docId && <EntriesTableDialog docId={docId} urlKey="reports/closed_table"/>}
-      {targetDocId && <ChangePaymentDialog docId={targetDocId}/>}
+      {targetDocId && <ChangePaymentDialog close={closeChangePaymentDialog} onSubmit={changePaymentSubmit}/>}
     </Page>
   )
 }

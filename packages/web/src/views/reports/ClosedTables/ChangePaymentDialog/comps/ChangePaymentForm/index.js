@@ -1,7 +1,5 @@
 import React, { memo } from 'react'
-import useAuth from 'src/hooks/useAuth'
 import { FormattedMessage } from 'react-intl'
-import { useQuery } from 'react-query'
 import { FastField, Form, Formik } from 'formik'
 import { Button, Grid, useTheme } from '@material-ui/core'
 import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
@@ -11,17 +9,12 @@ import { useLocation } from 'react-router-dom'
 import LabeledTypo from 'src/components/LabeledTypo'
 import { useDateFormatter, useMoneyFormatter } from 'src/utils/formatters'
 
-const ChangePaymentForm = memo(function ChangePaymentForm ({ onSubmit }) {
+const ChangePaymentForm = memo(function ChangePaymentForm ({ onSubmit, data, isLoading }) {
   console.log('%cRENDER_FORM', 'color: pink')
   const theme = useTheme()
   const { state: { income, room, table, date, amount } } = useLocation()
   const moneyFormatter = useMoneyFormatter()
   const dateFormatter = useDateFormatter()
-  const { selectedCode: { code: owner } } = useAuth()
-  const { isLoading, data } = useQuery(['types/incomes', { owner }], {
-    notifyOnChangeProps: ['data', 'error'],
-    staleTime: Infinity, //non aggiorna la cache delle stanze ogni volta che si apre la drawer (richiesto refresh)
-  })
   return (
     <Formik
       initialValues={{ income }}
@@ -38,7 +31,7 @@ const ChangePaymentForm = memo(function ChangePaymentForm ({ onSubmit }) {
               style={{ height: '100%' }}
             >
               <Grid item style={{ margin: theme.spacing(0, 3) }}>
-                <Grid container justify="space-between" style={{width: '100%'}}>
+                <Grid container justify="space-between" style={{ width: '100%' }}>
                   <Grid item>
                     <LabeledTypo label="common_room" text={room}/>
                   </Grid>
@@ -48,7 +41,7 @@ const ChangePaymentForm = memo(function ChangePaymentForm ({ onSubmit }) {
                 </Grid>
               </Grid>
               <Grid item style={{ margin: theme.spacing(0, 3) }}>
-                <Grid container justify="space-between" style={{width: '100%'}}>
+                <Grid container justify="space-between" style={{ width: '100%' }}>
                   <Grid item>
                     <LabeledTypo label="common_date" text={dateFormatter(date)}/>
                   </Grid>
