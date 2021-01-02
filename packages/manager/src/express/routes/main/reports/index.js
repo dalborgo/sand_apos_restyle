@@ -53,8 +53,8 @@ function addRouters (router) {
       .select('owner', 'date', 'pu_totale_sc', 'pu_totale_st', 'pu_totale_nc', 'pu_totale_totale')
       .orderBy('date', 'desc')
       .toQuery()
-    const { ok, results, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
-    if (!ok) {return res.send({ ok, message, info })}
+    const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+    if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results })
   })
 
@@ -158,7 +158,7 @@ function addRouters (router) {
       .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.creating_user LET arr_entries = ARRAY {"id": e.id, "pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries END')
       .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "ORDER" AND buc.order_id = "${orderId}"`))
       .toQuery()
-    const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
+    const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
     let row = null
     if (data.length) {
       const entries = sortBy(getMergedEntries(data), ['date'])
@@ -168,7 +168,7 @@ function addRouters (router) {
         entries,
       }
     }
-    if (!ok) {return res.send({ ok, message, info })}
+    if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results: row })
   })
   router.get('/reports/closed_table/:orderId', async function (req, res) {
@@ -188,7 +188,7 @@ function addRouters (router) {
       .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by LET arr_entries = ARRAY {"id": e.product_id, "pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries END')
       .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "PAYMENT" AND buc.\`order\` = "${orderId}" AND buc.archived = TRUE`))
       .toQuery()
-    const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
+    const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
     let row = null
     if (data.length) {
       const entries = sortBy(getCombinedEntries(data), ['date'])
@@ -198,7 +198,7 @@ function addRouters (router) {
         entries,
       }
     }
-    if (!ok) {return res.send({ ok, message, info })}
+    if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results: row })
   })
 }

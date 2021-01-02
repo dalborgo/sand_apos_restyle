@@ -22,8 +22,8 @@ async function queryByType (req, res) {
   const knex_ = knex({ buc: bucketName }).where({ type }).where(knex.raw(parsedOwner.queryCondition)).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = knex_.toQuery()
-  const { ok, results, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
-  if (!ok) {return res.send({ ok, message, info })}
+  const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+  if (!ok) {return res.send({ ok, message, err })}
   res.send({ ok, results })
 }
 
@@ -40,8 +40,8 @@ async function queryById (req, res) {
   const knex_ = knex({ buc: bucketName }).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = `${knex_.toQuery()} USE KEYS "${id}" WHERE ${parsedOwner.queryCondition}`
-  const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
-  if (!ok) {return res.send({ ok, message, info })}
+  const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+  if (!ok) {return res.send({ ok, message, err })}
   res.send({ ok, results: data.length ? data[0] : null })
 }
 
@@ -75,8 +75,8 @@ function addRouters (router) {
     const { connClass, body } = req
     utils.parseOwner(req) //security check
     const { statement, options } = body
-    const { ok, results: data, message } = await couchQueries.exec(statement, connClass.cluster, options)
-    if (!ok) {return res.send({ ok, message })}
+    const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+    if (!ok) {return res.send({ ok, message, err })}
     const [results] = data
     res.send({ ok, results })
   })
@@ -116,7 +116,7 @@ function addRouters (router) {
    *   oppure unset: ['prova']
    * }
    */
-  router.put('/queries/update_by_id_', async function (req, res) {
+  router.put('/queries/update_by_id', async function (req, res) {
     const { connClass, body } = req
     utils.controlParameters(body, ['owner', 'id'])
     if (!isObject(body.set) && !body.unset) {
@@ -128,14 +128,14 @@ function addRouters (router) {
     if (set) {conditions += createSetStatement(set)}
     if (unset) {conditions += ` ${createUnsetStatement(unset)}`}
     const statement = `UPDATE ${bucketName} USE KEYS "${id}" ${conditions.trim()} RETURNING meta().id`
-    const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
-    if (!ok) {return res.send({ ok, message, info })}
+    const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+    if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results: data.length ? data[0] : null })
   })
-  router.put('/queries/update_by_id', async function (req, res) {
+ /* router.put('/queries/update_by_id', async function (req, res) {
     console.log('body:', req.body)
     res.send({ ok: true, results: { id: 'PAYMENT_75ddd0b2-4072-4b9a-bbd7-b3ded0f25d9c' } })
-  })
+  })*/
 }
 
 export default {

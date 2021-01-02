@@ -17,8 +17,8 @@ function addRouters (router) {
       .where(knex.raw(parsedOwner.queryCondition))
       .select(knex.raw('raw max([pu_totale_totale, date, owner])'))
       .toQuery()
-    const { ok, results: data, message, info } = await couchQueries.exec(statement, connClass.cluster, options)
-    if (!ok) {return res.send({ ok, message, info })}
+    const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+    if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results: data.length ? data[0] : null })
   })
 }

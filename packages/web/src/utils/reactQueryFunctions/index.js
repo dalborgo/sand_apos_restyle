@@ -5,9 +5,10 @@ import { useIntl } from 'react-intl'
 import { useState } from 'react'
 import moment from 'moment'
 import { envConfig } from 'src/init'
-import qs from 'qs'
 import { expandError } from 'src/utils/errors'
 import log from '@adapter/common/src/log'
+import isString from 'lodash/isString'
+import qs from 'qs'
 
 export const axiosLocalInstance = axios.create({
   baseURL: `${envConfig.BACKEND_HOST}/api/`,
@@ -51,6 +52,7 @@ export function useSnackQueryError () {
   const intl = useIntl()
   const [snackQueryError] = useState(() => {
     return err => {
+      if (isString(err)) {err = { message: err }}
       const { message, isNetworkError, responseData } = expandError(err)
       if (isNetworkError) {
         enqueueSnackbar(intl.formatMessage(messages['network_error']), { variant: 'default' })

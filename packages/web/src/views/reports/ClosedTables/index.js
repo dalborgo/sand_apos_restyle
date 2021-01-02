@@ -29,7 +29,6 @@ import EntriesTableDialog from 'src/components/EntriesTableDialog'
 import find from 'lodash/find'
 import cloneDeep from 'lodash/cloneDeep'
 import { parentPath } from 'src/utils/urlFunctions'
-import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -152,19 +151,20 @@ const changePaymentMutation = async values => {
 
 function changePayment (closedRows, _id, income) {
   const newRows = cloneDeep(closedRows)
-  let payment
   find(newRows, row => {
     if (Array.isArray(row.payments)) {
-      payment = find(row.payments, { _id })
-      return payment
+      const payment = find(row.payments, { _id })
+      if (payment) {
+        payment.income = income
+        return payment
+      }
     } else {
       if (row.payments._id === _id) {
-        payment = row.payments
+        row.payments.income = income
         return true
       }
     }
   })
-  payment.income = income
   return newRows
 }
 
@@ -172,7 +172,6 @@ const ClosedTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const { docId, targetDocId } = useParams()
-  const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
   const queryClient = useQueryClient()
   const intl = useIntl()
@@ -208,13 +207,20 @@ const ClosedTables = () => {
   })
   
   const mutation = useMutation(changePaymentMutation, {
-    onSettled: data => {
-      const { ok, results, messages } = data
-      if (ok) {
-        console.log('data:', results)
-      } else {
-        enqueueSnackbar(messages)
+    onMutate: async ({ id, display }) => {
+      await queryClient.cancelQueries(fetchKey)
+      const previousRows = queryClient.getQueryData(fetchKey)
+      const newRows = changePayment(closedRows, id, display)
+      queryClient.setQueryData(fetchKey, { ok: true, results: newRows })
+      return { previousRows }
+    },
+    onSettled: (data, error, variables, context) => {
+      const { ok, message, err } = data || {}
+      if (!ok || error) {
+        queryClient.setQueryData(fetchKey, context.previousRows)
+        snackQueryError(err || message || error)
       }
+      queryClient.invalidateQueries(fetchKey).then()
     },
   })
   
@@ -224,12 +230,10 @@ const ClosedTables = () => {
   const changePaymentSubmit = useCallback(values => {
     const { results: incomes } = queryClient.getQueryData(['types/incomes', { owner }])
     const { _id: income } = find(incomes, { display: values.income })
-    mutation.mutate({ id: targetDocId, set: { income } })
-    const newRows = changePayment(closedRows, targetDocId, values.income)
-    queryClient.setQueryData(fetchKey, { ok: true, results: newRows })
+    mutation.mutate({ id: targetDocId, set: { income }, owner, display: values.income }) //display serve in onMutate
     closeChangePaymentDialog()
     return values
-  }, [closeChangePaymentDialog, closedRows, fetchKey, mutation, owner, queryClient, targetDocId])
+  }, [closeChangePaymentDialog, mutation, owner, queryClient, targetDocId])
   
   useEffect(() => {
     async function fetchData () {
@@ -237,7 +241,6 @@ const ClosedTables = () => {
         owner,
       }], { throwOnError: true })
     }
-    
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryClient])
   

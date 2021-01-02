@@ -74,7 +74,7 @@ function addRouters (router) {
     const { docId } = query
     const parsedOwner = utils.parseOwner(req)
     if (!docId) {return res.send({ ok: false, message: 'docId undefined!' })}
-    const { ok, results: data, message } = await couchQueries.exec(
+    const { ok, results: data, message, err } = await couchQueries.exec(
       'SELECT '
       + 'meta(ast).id _id, '
       + 'meta(ast).xattrs._sync.rev _rev, '
@@ -85,7 +85,7 @@ function addRouters (router) {
       connClass.cluster
     )
     if (!ok) {
-      return res.send(ok, message)
+      return res.send(ok, message, err)
     }
     const [results] = data
     res.send({ ok, results })
@@ -95,7 +95,7 @@ function addRouters (router) {
     const { type } = query
     const parsedOwner = utils.parseOwner(req)
     if (!type) {return res.send({ ok: false, message: 'type undefined!' })}
-    const { ok, results: data, message } = await couchQueries.exec(
+    const { ok, results: data, message, err } = await couchQueries.exec(
       'SELECT '
       + 'meta(ast).id _id, '
       + 'meta(ast).xattrs._sync.rev _rev, '
@@ -106,7 +106,7 @@ function addRouters (router) {
       connClass.cluster
     )
     if (!ok) {
-      return res.send(ok, message)
+      return res.send(ok, message, err)
     }
     const [results] = data
     res.send({ ok, results })
