@@ -154,7 +154,7 @@ function addRouters (router) {
     const statement = knex
       .from(knex.raw(`${bucketName} buc LEFT NEST ${bucketName} us ON KEYS ARRAY x.\`user\` FOR x IN buc.entries END`))
       .select('buc.table_display', 'buc.room_display')
-      .select(knex.raw('CASE WHEN buc.covers > 0 THEN ARRAY_PREPEND({"id": "common_covers", "date":buc.creation_date, "pro_qta": buc.covers, "amount": buc.cover_price * buc.covers, "user":`user`.`user`, "intl_code": "common_covers"}, arr_entries) ELSE arr_entries END AS entries'))
+      .select(knex.raw('CASE WHEN buc.covers > 0 THEN ARRAY_PREPEND({"id": "common_covers", "date": "", "pro_qta": buc.covers, "amount": buc.cover_price * buc.covers, "user":`user`.`user`, "intl_code": "common_covers"}, arr_entries) ELSE arr_entries END AS entries'))
       .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.creating_user LET arr_entries = ARRAY {"id": e.id, "pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries END')
       .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "ORDER" AND buc.order_id = "${orderId}"`))
       .toQuery()
@@ -184,7 +184,7 @@ function addRouters (router) {
     const statement = knex
       .from(knex.raw(`${bucketName} buc LEFT NEST ${bucketName} us ON KEYS ARRAY x.\`user\` FOR x IN buc.entries END`))
       .select('buc.table_display', 'buc.room_display')
-      .select(knex.raw('CASE WHEN buc.covers > 0 THEN ARRAY_PREPEND({"id": "common_covers", "date":buc.date, "pro_qta": buc.covers, "amount": buc.cover_price * buc.covers, "user":`user`.`user`, "intl_code": "common_covers"}, arr_entries) ELSE arr_entries END AS entries'))
+      .select(knex.raw('CASE WHEN buc.covers > 0 THEN ARRAY_PREPEND({"id": "common_covers", "date": "", "pro_qta": buc.covers, "amount": buc.cover_price * buc.covers, "user":`user`.`user`, "intl_code": "common_covers"}, arr_entries) ELSE arr_entries END AS entries'))
       .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by LET arr_entries = ARRAY {"id": e.product_id, "pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries END')
       .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "PAYMENT" AND buc.\`order\` = "${orderId}" AND buc.archived = TRUE`))
       .toQuery()

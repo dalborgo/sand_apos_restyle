@@ -19,7 +19,6 @@ const totalSummaryItems = [
 
 const getUnitPrice = ({ amount, pro_qta: proQta }) => amount / proQta
 const moneyColumns = ['amount', 'unit_price']
-
 const SelectiveTable = memo(function SelectiveTable ({ width }) {
   const [isSmall] = useState(() => ['xs','sm'].includes(width)) //lo faccio statico
   if (isSmall) {
@@ -34,7 +33,6 @@ const SelectiveTable = memo(function SelectiveTable ({ width }) {
       <VirtualTable
         cellComponent={Cell}
         columnExtensions={tableColumnExtensions}
-        height="auto"
       />
     )
   }

@@ -132,10 +132,6 @@ function addRouters (router) {
     if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results: data.length ? data[0] : null })
   })
- /* router.put('/queries/update_by_id', async function (req, res) {
-    console.log('body:', req.body)
-    res.send({ ok: true, results: { id: 'PAYMENT_75ddd0b2-4072-4b9a-bbd7-b3ded0f25d9c' } })
-  })*/
 }
 
 export default {
