@@ -92,5 +92,9 @@
   "common.search": "Cerca…",
   "common.closedBy": "Chiuso da",
   "common.separatePayment": "Separato",
-  "error.INVALID_DOC_UPDATE": "Campo \"set\" o \"unset\" obbligatorio!"
+  "error.INVALID_DOC_UPDATE": "Campo \"set\" o \"unset\" obbligatorio!",
+  "common.export": "Menu esportazione dati",
+  "common.exportAll": "Esporta tabella",
+  "common.exportMenu": "Menu esportazione dati",
+  "common.exportTable": "Esporta tabella"
 }

@@ -9,7 +9,7 @@ const styleCell = theme => ({
 })
 const styleToolbar = theme => ({
   toolbar: {
-    padding: theme.spacing(1, 2),
+    padding: theme.spacing(0),
     minHeight: theme.spacing(6),
     borderBottom: 0,
     [theme.breakpoints.down('sm')]: { //mobile

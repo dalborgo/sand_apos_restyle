@@ -29,6 +29,14 @@ export const messages = defineMessages({
     id: 'common.search',
     defaultMessage: 'Cerca…',
   },
+  common_exportMenu: {
+    id: 'common.exportMenu',
+    defaultMessage: 'Menu esportazione dati',
+  },
+  common_exportTable: {
+    id: 'common.exportTable',
+    defaultMessage: 'Esporta tabella',
+  },
   common_type: {
     id: 'common.type',
     defaultMessage: 'Tipo',

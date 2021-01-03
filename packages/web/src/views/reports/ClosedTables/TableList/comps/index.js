@@ -125,7 +125,7 @@ const TypeButtonGroup = ({ payments, setIntLoading, base }) => {
 }
 
 const CellBase = props => {
-  const { column, row, theme, value, tableRow: {rowId} } = props
+  const { column, row, theme, tableRow: {rowId} } = props
   const intl = useIntl()
   const dateTimeFormatter = useDateTimeFormatter()
   const moneyFormatter = useMoneyFormatter()
@@ -151,6 +151,7 @@ const CellBase = props => {
     )
   }
   if (column.name === 'date') {
+    const { closed_by: closedBy } = Array.isArray(payments) ? payments[0] : payments
     return (
       <Table.Cell {...props}>
         <Button
@@ -174,7 +175,7 @@ const CellBase = props => {
             parse(dateTimeFormatter(row.date, {
               year: undefined,
               month: 'short',
-            }, { second: undefined }) + '<br/>' + value) //value = closed_by in questo caso
+            }, { second: undefined }) + '<br/>' + closedBy)
           }
         </Button>
       </Table.Cell>

@@ -92,5 +92,9 @@
   "common.search": "",
   "common.closedBy": "",
   "common.separatePayment": "",
-  "error.INVALID_DOC_UPDATE": ""
+  "error.INVALID_DOC_UPDATE": "",
+  "common.export": "",
+  "common.exportAll": "",
+  "common.exportMenu": "",
+  "common.exportTable": ""
 }

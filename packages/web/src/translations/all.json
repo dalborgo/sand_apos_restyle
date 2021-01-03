@@ -84,6 +84,22 @@
     "defaultMessage": "Sconti"
   },
   {
+    "id": "common.export",
+    "defaultMessage": "Menu esportazione dati"
+  },
+  {
+    "id": "common.exportAll",
+    "defaultMessage": "Esporta tabella"
+  },
+  {
+    "id": "common.exportMenu",
+    "defaultMessage": "Menu esportazione dati"
+  },
+  {
+    "id": "common.exportTable",
+    "defaultMessage": "Esporta tabella"
+  },
+  {
     "id": "common.filters",
     "defaultMessage": "Filtri"
   },
