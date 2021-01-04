@@ -86,7 +86,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
         Yup.object().nullable().shape({
           username: Yup.string().required(intl.formatMessage(messages.username_required)),
           password: Yup.string().required(intl.formatMessage(messages.password_required)),
-          code: Yup.object()
+          code: Yup.object().nullable()
             .when('username', {
               is: username => isAsten(username),
               then: Yup.object().required(intl.formatMessage(messages.installation_required)).nullable(),

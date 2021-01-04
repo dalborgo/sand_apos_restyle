@@ -21,7 +21,6 @@ const totalSummaryItems = [
   { columnName: 'covers', type: 'sum' },
   { columnName: 'income', type: 'sum' },
 ]
-
 const moneyColumns = ['income']
 const TableList = memo(function TableList ({ rows, isFetching }) {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')

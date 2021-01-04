@@ -32,7 +32,7 @@ import { parentPath } from 'src/utils/urlFunctions'
 import SaveIcon from '@material-ui/icons/Save'
 import ExcelJS from 'exceljs'
 import saveAs from 'file-saver'
-import { useGeneralStore } from '../../../zustandStore'
+import { useGeneralStore } from 'src/zustandStore'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -171,6 +171,32 @@ function changePayment (closedRows, _id, income) {
   })
   return newRows
 }
+const hasOneCompany = useGeneralStore.getState().hasOneCompany //viene eseguita quindi può star fuori
+function createExcel (intl, closedRows) {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet('Dati')
+  const columns_ = [
+    { name: 'owner', title: intl.formatMessage(messages['common_building']) },
+    { key: 'date', header: intl.formatMessage(messages['common_date']) },
+    { key: 'table_display', header: intl.formatMessage(messages['common_table']) },
+    { key: 'type', header: intl.formatMessage(messages['common_type']) },
+    { key: 'covers', header: intl.formatMessage(messages['common_covers']) },
+    { key: 'final_price', header: intl.formatMessage(messages['common_income']) },
+  ]
+  if (hasOneCompany()) {columns_.shift()}
+  worksheet.columns = columns_
+  const rows_ = []
+  for (let row of closedRows) {
+    rows_.push({
+      date: moment(row.date, 'YYYYMMDDHHmmssSSS').format('DD/MM/YYYY'),
+    })
+  }
+  worksheet.addRows(rows_)
+  workbook.xlsx.writeBuffer().then(buffer => {
+    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx')
+  })
+}
+
 
 const ClosedTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
@@ -181,7 +207,6 @@ const ClosedTables = () => {
   const intl = useIntl()
   const [, setState] = useState()
   const snackQueryError = useSnackQueryError()
-  const hasOneCompany = useGeneralStore.getState().hasOneCompany
   const {
     startDate,
     endDate,
@@ -266,29 +291,8 @@ const ClosedTables = () => {
   const effectiveFetching = getEffectiveFetching(rest)
   
   const onSave = useCallback(() => {
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Dati')
-    const columns_ = [
-      { name: 'owner', title: intl.formatMessage(messages['common_building']) },
-      { key: 'date', header: intl.formatMessage(messages['common_date']) },
-      { key: 'table_display', header: intl.formatMessage(messages['common_table']) },
-      { key: 'type', header: intl.formatMessage(messages['common_type']) },
-      { key: 'covers', header: intl.formatMessage(messages['common_covers']) },
-      { key: 'final_price', header: intl.formatMessage(messages['common_income']) },
-    ]
-    if (hasOneCompany()) {columns_.shift()}
-    worksheet.columns = columns_
-    const rows_ = []
-    for (let row of closedRows) {
-      rows_.push({
-        date: moment(row.date, 'YYYYMMDDHHmmssSSS').format('DD/MM/YYYY'),
-      })
-    }
-    worksheet.addRows(rows_)
-    workbook.xlsx.writeBuffer().then(buffer => {
-      saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx')
-    })
-  }, [closedRows, hasOneCompany, intl])
+    createExcel(intl, closedRows)
+  }, [closedRows, intl])
   
   return (
     <Page
