@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Box, Button, makeStyles, TextField as TF } from '@material-ui/core'
+import { Box, Button, IconButton, makeStyles, TextField as TF, Tooltip } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import Page from 'src/components/Page'
@@ -29,6 +29,10 @@ import EntriesTableDialog from 'src/components/EntriesTableDialog'
 import find from 'lodash/find'
 import cloneDeep from 'lodash/cloneDeep'
 import { parentPath } from 'src/utils/urlFunctions'
+import SaveIcon from '@material-ui/icons/Save'
+import ExcelJS from 'exceljs'
+import saveAs from 'file-saver'
+import { useGeneralStore } from '../../../zustandStore'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -177,6 +181,7 @@ const ClosedTables = () => {
   const intl = useIntl()
   const [, setState] = useState()
   const snackQueryError = useSnackQueryError()
+  const hasOneCompany = useGeneralStore.getState().hasOneCompany
   const {
     startDate,
     endDate,
@@ -241,6 +246,7 @@ const ClosedTables = () => {
         owner,
       }], { throwOnError: true })
     }
+    
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryClient])
   
@@ -258,6 +264,32 @@ const ClosedTables = () => {
     <FilterForm onSubmit={onFilterSubmit} roomFilter={roomFilter} tableFilter={tableFilter}/>
   ), [roomFilter, onFilterSubmit, tableFilter])
   const effectiveFetching = getEffectiveFetching(rest)
+  
+  const onSave = useCallback(() => {
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Dati')
+    const columns_ = [
+      { name: 'owner', title: intl.formatMessage(messages['common_building']) },
+      { key: 'date', header: intl.formatMessage(messages['common_date']) },
+      { key: 'table_display', header: intl.formatMessage(messages['common_table']) },
+      { key: 'type', header: intl.formatMessage(messages['common_type']) },
+      { key: 'covers', header: intl.formatMessage(messages['common_covers']) },
+      { key: 'final_price', header: intl.formatMessage(messages['common_income']) },
+    ]
+    if (hasOneCompany()) {columns_.shift()}
+    worksheet.columns = columns_
+    const rows_ = []
+    for (let row of closedRows) {
+      rows_.push({
+        date: moment(row.date, 'YYYYMMDDHHmmssSSS').format('DD/MM/YYYY'),
+      })
+    }
+    worksheet.addRows(rows_)
+    workbook.xlsx.writeBuffer().then(buffer => {
+      saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx')
+    })
+  }, [closedRows, hasOneCompany, intl])
+  
   return (
     <Page
       title={intl.formatMessage(messages['menu_closed_tables'])}
@@ -293,11 +325,22 @@ const ClosedTables = () => {
           {FilterFormWr}
         </RightDrawer>
       </div>
-      <DateRangeFormikWrapper
-        endDate={endDate}
-        setDateRange={setDateRange}
-        startDate={startDate}
-      />
+      <Box alignItems="center" display="flex" p={2} pt={1}>
+        <Box flexGrow={1}>
+          <DateRangeFormikWrapper
+            endDate={endDate}
+            setDateRange={setDateRange}
+            startDate={startDate}
+          />
+        </Box>
+        <Box>
+          <Tooltip title={intl.formatMessage(messages['common_exportTable'])}>
+            <IconButton onClick={onSave} size="small">
+              <SaveIcon/>
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Box>
       <DivContentWrapper>
         <Paper className={classes.paper}>
           <TableList isFetching={effectiveFetching && !closedRows.length} isIdle={isIdle} rows={closedRows}/>

@@ -9,8 +9,9 @@ const initialState = {
   priority: 0,
 }
 
-const useGeneralStore = create(immerMiddleware(set => ({
+const useGeneralStore = create(immerMiddleware((set, get) => ({
   ...initialState,
+  hasOneCompany: () => Object.keys(get().companyData).length < 2,
   switchAllIn: () => set(state => {
     state.allIn = !state.allIn
   }),

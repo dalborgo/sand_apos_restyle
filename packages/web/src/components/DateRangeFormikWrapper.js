@@ -13,7 +13,7 @@ const DateRangeFormikWrapper = memo((function DateRangeFormikWrapper ({
   const startDateRef = useRef(null)
   const [open, setOpen] = useState(false)
   return (
-    <Box alignItems="center" display="flex" p={2} pt={1}>
+    <Box alignItems="center" display="flex">
       <Box mr={2}>
         <Formik
           initialValues={{ dateRange: [startDate, endDate] }}

@@ -32,6 +32,7 @@ const baseOptions = {
       transformOrigin:
         {
           vertical: -40,
+          horizontal: 'center',
         },
     },
     MuiTooltip: {
