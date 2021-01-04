@@ -26,6 +26,14 @@ const baseOptions = {
     MuiFab: {
       disableFocusRipple: true,
     },
+    MuiMenu: {
+      disableAutoFocusItem: true,
+      transitionDuration: 0,
+      transformOrigin:
+        {
+          vertical: -40,
+        },
+    },
     MuiTooltip: {
       arrow: true,
       disableFocusListener: true,

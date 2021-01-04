@@ -67,13 +67,6 @@ const Account = () => {
       </Box>
       <Menu
         anchorEl={ref.current}
-        anchorOrigin={
-          {
-            vertical: 'bottom',
-            horizontal: 'center',
-          }
-        }
-        disableAutoFocusItem
         getContentAnchorEl={null}
         keepMounted
         onClose={handleClose}
