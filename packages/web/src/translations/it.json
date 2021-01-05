@@ -91,7 +91,7 @@
   "reports.closed_tables.select_type_of_payment": "Seleziona il Tipo di Pagamento",
   "common.search": "Cerca…",
   "common.closedBy": "Chiuso da",
-  "common.separatePayment": "Separato",
+  "common.dividedPayment": "Separato",
   "error.INVALID_DOC_UPDATE": "Campo \"set\" o \"unset\" obbligatorio!",
   "common.export": "Menu esportazione dati",
   "common.exportAll": "Esporta tabella",

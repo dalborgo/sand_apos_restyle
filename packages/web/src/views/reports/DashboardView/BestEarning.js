@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const { companySelect, hasSingleCompany } = useGeneralStore.getState()
 const BestEarning = () => {
   console.log('%cRENDER_BEST', 'color: pink')
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
-  const companyData = useGeneralStore.getState().companyData
   const intl = useIntl()
   const moneyFormatter = useMoneyFormatter()
   const dateFormatter = useDateFormatter()
@@ -37,7 +37,6 @@ const BestEarning = () => {
     notifyOnChangeProps: ['data', 'error'],
     suspense: true,
   })
-  const isSingleCompany = Object.keys(companyData).length < 2
   if (data?.ok) {
     const [value, date, owner] = data.results || [0]
     return (
@@ -57,7 +56,7 @@ const BestEarning = () => {
             color="textPrimary"
             variant="h6"
           >
-            {isSingleCompany ? intl.formatMessage(messages['common_total']) : companyData?.[owner]?.name}
+            {hasSingleCompany() ? intl.formatMessage(messages['common_total']) : companySelect(owner)}
           </Typography>
           <Typography
             color="textPrimary"

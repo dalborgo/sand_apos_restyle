@@ -18,19 +18,19 @@ const tableColumnExtensions = [
 const totalSummaryItems = [
   { columnName: 'income', type: 'incomeSum' },
 ]
+const { companySelect, hasSingleCompany } = useGeneralStore.getState()
 const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const intl = useIntl()
   const [columns] = useState(() => {
-    const companyData = useGeneralStore.getState().companyData
-    const companySelect = ({ owner }) => companyData ? companyData?.[owner]?.name : owner
+    const companySelect_ = ({ owner }) => companySelect(owner)
     const columns_ = [
-      { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect },
+      { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect_ },
       { name: 'date', title: intl.formatMessage(messages['common_date']) },
       { name: 'pu_totale_nc', title: intl.formatMessage(messages['common_covers']) },
       { name: 'income', title: intl.formatMessage(messages['common_income']) },
     ]
-    if (Object.keys(companyData).length < 2) {columns_.shift()}
+    if (hasSingleCompany()) {columns_.shift()}
     return columns_
   })
   

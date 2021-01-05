@@ -11,7 +11,8 @@ const initialState = {
 
 const useGeneralStore = create(immerMiddleware((set, get) => ({
   ...initialState,
-  hasOneCompany: () => Object.keys(get().companyData).length < 2,
+  hasSingleCompany: () => Object.keys(get().companyData).length < 2,
+  companySelect: owner => get().companyData ? get().companyData?.[owner]?.name : owner,
   switchAllIn: () => set(state => {
     state.allIn = !state.allIn
   }),

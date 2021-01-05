@@ -33,6 +33,7 @@ import SaveIcon from '@material-ui/icons/Save'
 import ExcelJS from 'exceljs'
 import saveAs from 'file-saver'
 import { useGeneralStore } from 'src/zustandStore'
+import { useDateTimeFormatter } from 'src/utils/formatters'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -171,24 +172,35 @@ function changePayment (closedRows, _id, income) {
   })
   return newRows
 }
-const hasOneCompany = useGeneralStore.getState().hasOneCompany //viene eseguita quindi può star fuori
-function createExcel (intl, closedRows) {
+
+const { hasSingleCompany, companySelect } = useGeneralStore.getState() //viene eseguita quindi può star fuori
+
+function createExcel (intl, dateTimeFormatter, closedRows, owner) {
   const workbook = new ExcelJS.Workbook()
   const worksheet = workbook.addWorksheet('Dati')
   const columns_ = [
     { name: 'owner', title: intl.formatMessage(messages['common_building']) },
-    { key: 'date', header: intl.formatMessage(messages['common_date']) },
-    { key: 'table_display', header: intl.formatMessage(messages['common_table']) },
+    { key: 'date', header: intl.formatMessage(messages['common_date']), width: 20 },
+    { key: 'table', header: intl.formatMessage(messages['common_table']) },
+    { key: 'room', header: intl.formatMessage(messages['common_room']) },
     { key: 'type', header: intl.formatMessage(messages['common_type']) },
+    { key: 'payment', header: intl.formatMessage(messages['common_type_payment']), width: 20 },
     { key: 'covers', header: intl.formatMessage(messages['common_covers']) },
     { key: 'final_price', header: intl.formatMessage(messages['common_income']) },
   ]
-  if (hasOneCompany()) {columns_.shift()}
+  if (hasSingleCompany()) {columns_.shift()}
   worksheet.columns = columns_
   const rows_ = []
+  console.log('closedRows:', closedRows)
   for (let row of closedRows) {
+    const first = row.payments
     rows_.push({
-      date: moment(row.date, 'YYYYMMDDHHmmssSSS').format('DD/MM/YYYY'),
+      owner: hasSingleCompany() ? companySelect(owner) : undefined,
+      date: dateTimeFormatter(row.date),
+      table: row.table_display,
+      room: row.room_display,
+      type: Array.isArray(row.payments) ? intl.formatMessage(messages['common_dividedPayment']) : intl.formatMessage(messages[`mode_${first.mode}`]),
+      payment: Array.isArray(row.payments) ? row.payments.map(row=>row.income).join(', ') : first.income,
     })
   }
   worksheet.addRows(rows_)
@@ -196,7 +208,6 @@ function createExcel (intl, closedRows) {
     saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx')
   })
 }
-
 
 const ClosedTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
@@ -207,6 +218,7 @@ const ClosedTables = () => {
   const intl = useIntl()
   const [, setState] = useState()
   const snackQueryError = useSnackQueryError()
+  const dateTimeFormatter = useDateTimeFormatter()
   const {
     startDate,
     endDate,
@@ -291,8 +303,8 @@ const ClosedTables = () => {
   const effectiveFetching = getEffectiveFetching(rest)
   
   const onSave = useCallback(() => {
-    createExcel(intl, closedRows)
-  }, [closedRows, intl])
+    createExcel(intl, dateTimeFormatter, closedRows, owner)
+  }, [closedRows, dateTimeFormatter, intl, owner])
   
   return (
     <Page

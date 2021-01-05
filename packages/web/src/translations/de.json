@@ -91,7 +91,7 @@
   "reports.closed_tables.select_type_of_payment": "",
   "common.search": "",
   "common.closedBy": "",
-  "common.separatePayment": "",
+  "common.dividedPayment": "",
   "error.INVALID_DOC_UPDATE": "",
   "common.export": "",
   "common.exportAll": "",

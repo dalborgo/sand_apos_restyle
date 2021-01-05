@@ -84,6 +84,10 @@
     "defaultMessage": "Sconti"
   },
   {
+    "id": "common.dividedPayment",
+    "defaultMessage": "Separato"
+  },
+  {
     "id": "common.export",
     "defaultMessage": "Menu esportazione dati"
   },
@@ -138,10 +142,6 @@
   {
     "id": "common.search",
     "defaultMessage": "Cerca…"
-  },
-  {
-    "id": "common.separatePayment",
-    "defaultMessage": "Separato"
   },
   {
     "id": "common.settings",

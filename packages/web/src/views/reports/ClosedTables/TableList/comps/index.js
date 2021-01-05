@@ -210,7 +210,7 @@ const CellBase = props => {
                 size="small"
                 variant="contained"
               >
-                {intl.formatMessage(messages['common_separatePayment'])}
+                {intl.formatMessage(messages['common_dividedPayment'])}
               </Button>
             </Box>
             :

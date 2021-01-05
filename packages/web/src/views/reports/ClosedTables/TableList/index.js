@@ -88,35 +88,34 @@ const SelectiveTable = memo(function SelectiveTable ({ isIdle, isFetching, width
     )
   }
 })
-
 const tableSelect = ({ table_display: Td, room_display: Rd, payments }) => {
   const { closed_by: closedBy } = Array.isArray(payments) ? payments[0] : payments
   return `${Td}${Rd}${closedBy}`
 }
+const { companySelect, hasSingleCompany } = useGeneralStore.getState()
 const TableList = ({ rows, isFetching, isIdle, width }) => {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const moneyFormatter = useMoneyFormatter()
   const intl = useIntl()
   const [columns] = useState(() => {
-    const companyData = useGeneralStore.getState().companyData
-    const companySelect = ({ owner }) => companyData ? companyData?.[owner]?.name : owner
+    const companySelect_ = ({ owner }) => companySelect(owner)
     const typeSelect = ({ payments }) => {
       const text = messages[`mode_${payments.mode}`] ? intl.formatMessage(messages[`mode_${payments.mode}`]) : payments.mode
-      return Array.isArray(payments) ? intl.formatMessage(messages['common_separatePayment']) : `${payments?.income}${text}`
+      return Array.isArray(payments) ? intl.formatMessage(messages['common_dividedPayment']) : `${payments?.income}${text}`
     }
     const finalPriceSelect = ({
       final_price: Fp,
       discount_price: Dp,
     }) => `${moneyFormatter(Fp)}${Dp ? `-${moneyFormatter(Dp)}` : ''}`
     const columns_ = [
-      { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect },
+      { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect_ },
       { name: 'date', title: intl.formatMessage(messages['common_date']) },
       { name: 'table_display', title: intl.formatMessage(messages['common_table']), getCellValue: tableSelect },
       { name: 'type', title: intl.formatMessage(messages['common_type']), getCellValue: typeSelect },
       { name: 'covers', title: intl.formatMessage(messages['common_covers']) },
       { name: 'final_price', title: intl.formatMessage(messages['common_income']), getCellValue: finalPriceSelect },
     ]
-    if (Object.keys(companyData).length < 2) {columns_.shift()}
+    if (hasSingleCompany()) {columns_.shift()}
     return columns_
   })
   const [messagesSummary] = useState(() => ({

@@ -49,8 +49,8 @@ export const messages = defineMessages({
     id: 'common.language',
     defaultMessage: 'Lingua',
   },
-  common_separatePayment: {
-    id: 'common.separatePayment',
+  common_dividedPayment: {
+    id: 'common.dividedPayment',
     defaultMessage: 'Separato',
   },
   common_closedBy: {
