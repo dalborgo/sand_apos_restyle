@@ -305,7 +305,7 @@ export const GridDetailContainerBase = ({ row }) => {
     { name: 'closed_by', title: intl.formatMessage(messages['common_closedBy']) },
     { name: 'type_detail', title: intl.formatMessage(messages['common_type']) },
     { name: 'covers', title: intl.formatMessage(messages['common_covers']) },
-    { name: 'final_price', title: intl.formatMessage(messages['common_income']) },
+    { name: 'final_price', title: intl.formatMessage(messages['common_cashed']) },
   ])
   return (
     <Grid

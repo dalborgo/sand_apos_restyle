@@ -33,7 +33,7 @@ import SaveIcon from '@material-ui/icons/Save'
 import ExcelJS from 'exceljs'
 import saveAs from 'file-saver'
 import { useGeneralStore } from 'src/zustandStore'
-import { useDateTimeFormatter } from 'src/utils/formatters'
+import { ctol, useDateTimeFormatter } from 'src/utils/formatters'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -173,37 +173,58 @@ function changePayment (closedRows, _id, income) {
   return newRows
 }
 
-const { hasSingleCompany, companySelect } = useGeneralStore.getState() //viene eseguita quindi può star fuori
+const companySelect = useGeneralStore.getState().companySelect //viene eseguita quindi può star fuori
 
 function createExcel (intl, dateTimeFormatter, closedRows, owner) {
   const workbook = new ExcelJS.Workbook()
-  const worksheet = workbook.addWorksheet('Dati')
-  const columns_ = [
-    { name: 'owner', title: intl.formatMessage(messages['common_building']) },
+  const ws = workbook.addWorksheet('Dati')
+  ws.columns = [
+    { key: 'owner', header: intl.formatMessage(messages['common_building']), width: 15 },
     { key: 'date', header: intl.formatMessage(messages['common_date']), width: 20 },
-    { key: 'table', header: intl.formatMessage(messages['common_table']) },
-    { key: 'room', header: intl.formatMessage(messages['common_room']) },
-    { key: 'type', header: intl.formatMessage(messages['common_type']) },
+    { key: 'table', header: intl.formatMessage(messages['common_table']), width: 15 },
+    { key: 'room', header: intl.formatMessage(messages['common_room']), width: 15 },
+    { key: 'type', header: intl.formatMessage(messages['common_type']), width: 15 },
     { key: 'payment', header: intl.formatMessage(messages['common_type_payment']), width: 20 },
     { key: 'covers', header: intl.formatMessage(messages['common_covers']) },
-    { key: 'final_price', header: intl.formatMessage(messages['common_income']) },
+    { key: 'amount', header: intl.formatMessage(messages['common_cashed']), style: { numFmt: '0.00' } },
+    { key: 'discount', header: intl.formatMessage(messages['common_discounts']), style: { numFmt: '0.00' } },
   ]
-  if (hasSingleCompany()) {columns_.shift()}
-  worksheet.columns = columns_
-  const rows_ = []
-  console.log('closedRows:', closedRows)
+  const letter = ctol(ws.columns)
+  ws.getCell(`${letter['covers']}1`).alignment = { horizontal: 'right' }
+  ws.getCell(`${letter['amount']}1`).alignment = { horizontal: 'right' }
+  ws.getCell(`${letter['discount']}1`).alignment = { horizontal: 'right' }
+  let fpTotal = 0, dsTotal = 0, covTotal = 0, count = 1
   for (let row of closedRows) {
+    count++
     const first = row.payments
-    rows_.push({
-      owner: hasSingleCompany() ? companySelect(owner) : undefined,
+    const fp = row.final_price / 1000
+    const ds = row.discount_price / 1000
+    covTotal += row.covers
+    fpTotal += fp
+    dsTotal += ds
+    const isDivided = Array.isArray(row.payments)
+    const row_ = {
+      owner: companySelect(owner),
       date: dateTimeFormatter(row.date),
       table: row.table_display,
       room: row.room_display,
-      type: Array.isArray(row.payments) ? intl.formatMessage(messages['common_dividedPayment']) : intl.formatMessage(messages[`mode_${first.mode}`]),
-      payment: Array.isArray(row.payments) ? row.payments.map(row=>row.income).join(', ') : first.income,
-    })
+      type: isDivided ? intl.formatMessage(messages['common_dividedPayment']) : intl.formatMessage(messages[`mode_${first.mode}`]),
+      payment: Array.isArray(row.payments) ? row.payments.map(row => row.income).join(', ') : first.income,
+      covers: row.covers,
+      amount: fp,
+      discount: ds || '',
+    }
+    ws.addRow(row_)
+    if (isDivided) {
+      ws.getCell(`${letter['type']}${count}`).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E1E1E1' } }
+    }
   }
-  worksheet.addRows(rows_)
+  const rl = closedRows.length + 1
+  ws.addRow({
+    covers: { formula: `SUM(${letter['covers']}2:${letter['covers']}${rl})`, result: covTotal || '' },
+    amount: { formula: `SUM(${letter['amount']}2:${letter['amount']}${rl})`, result: fpTotal || '' },
+    discount: { formula: `SUM(${letter['discount']}2:${letter['discount']}${rl})`, result: dsTotal || '' },
+  })
   workbook.xlsx.writeBuffer().then(buffer => {
     saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx')
   })

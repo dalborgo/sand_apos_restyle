@@ -153,7 +153,7 @@ export const messages = defineMessages({
     id: 'common.building',
     defaultMessage: 'Struttura',
   },
-  common_income: {
+  common_cashed: {
     id: 'common.income',
     defaultMessage: 'Incassato',
   },

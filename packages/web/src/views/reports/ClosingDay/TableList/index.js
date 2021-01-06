@@ -28,7 +28,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
       { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect_ },
       { name: 'date', title: intl.formatMessage(messages['common_date']) },
       { name: 'pu_totale_nc', title: intl.formatMessage(messages['common_covers']) },
-      { name: 'income', title: intl.formatMessage(messages['common_income']) },
+      { name: 'income', title: intl.formatMessage(messages['common_cashed']) },
     ]
     if (hasSingleCompany()) {columns_.shift()}
     return columns_

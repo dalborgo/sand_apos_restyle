@@ -5,6 +5,7 @@ import { messages } from 'src/translations/messages'
 import moment from 'moment'
 import isDate from 'lodash/isDate'
 import isNumber from 'lodash/isNumber'
+import numberToLetter from 'number-to-letter'
 
 export function useMoneyFormatter () {
   const intl = useIntl()
@@ -70,6 +71,15 @@ export function useDateTimeFormatter () {
     }
   })
   return dateTimeFormatter
+}
+
+export function ctol (columns) {
+  const output = {}
+  for (let column of columns) {
+    const idCol = column._number - 1
+    output[column._key] = numberToLetter(idCol)
+  }
+  return output
 }
 
 export function useRoleFormatter () {
