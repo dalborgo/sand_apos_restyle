@@ -2,6 +2,7 @@ import queries from './queries'
 import docs from './docs'
 import info from './info'
 import jwt from './jwt'
+import routines from './routines'
 import reports from './reports'
 import stats from './stats'
 import types from './types'
@@ -15,6 +16,7 @@ docs.addRouters(router)
 info.addRouters(router)
 jwt.addRouters(router)
 reports.addRouters(router)
+routines.addRouters(router)
 stats.addRouters(router)
 types.addRouters(router)
 
