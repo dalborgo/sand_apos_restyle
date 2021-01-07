@@ -178,7 +178,7 @@ const companySelect = useGeneralStore.getState().companySelect //viene eseguita 
 function createExcel (intl, dateTimeFormatter, closedRows, owner) {
   const workbook = new ExcelJS.Workbook()
   const ws = workbook.addWorksheet('Dati')
-  ws.columns = [
+  const columns = [
     { key: 'owner', header: intl.formatMessage(messages['common_building']), width: 15 },
     { key: 'date', header: intl.formatMessage(messages['common_date']), width: 20 },
     { key: 'table', header: intl.formatMessage(messages['common_table']), width: 15 },
@@ -189,7 +189,8 @@ function createExcel (intl, dateTimeFormatter, closedRows, owner) {
     { key: 'amount', header: intl.formatMessage(messages['common_cashed']), style: { numFmt: '0.00' } },
     { key: 'discount', header: intl.formatMessage(messages['common_discounts']), style: { numFmt: '0.00' } },
   ]
-  const letter = ctol(ws.columns)
+  ws.columns = columns
+  const letter = ctol(columns)
   ws.getCell(`${letter['covers']}1`).alignment = { horizontal: 'right' }
   ws.getCell(`${letter['amount']}1`).alignment = { horizontal: 'right' }
   ws.getCell(`${letter['discount']}1`).alignment = { horizontal: 'right' }
