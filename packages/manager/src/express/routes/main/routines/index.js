@@ -109,15 +109,12 @@ function addRouters (router) {
       findVal(doc, keys, token)
     }
     //endregion
-    const file = fs.createWriteStream(path_, {
-      flags: 'a',
-    })
+    const file = fs.createWriteStream(path_, { flags: 'a' })
     //region modifica `_meta_id` e aggiunge `token`
     let cont = 0
     for (let doc of docsAstenpos) {
-      cont++
       doc['_meta_id'] = `${doc['_meta_id']}_${token}`
-      file.write(JSON.stringify(doc) + (cont < docsAstenpos.length ? '\n' : ''))
+      file.write(JSON.stringify(doc) + (++cont < docsAstenpos.length ? '\n' : ''))
     }
     file.end()
     //endregion
