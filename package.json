@@ -6,8 +6,7 @@
   "license": "MIT",
   "scripts": {
     "test": "lerna run test",
-    "update-version": "lerna version patch --no-git-tag-version --no-push --yes",
-    "typeface": "del node_modules\\fontsource-roboto\\files\\*.* /Q&&del node_modules\\fontsource-roboto\\*.* /Q&&xcopy e:\\scripts\\fontsource-roboto node_modules\\fontsource-roboto /Y /E"
+    "update-version": "lerna version patch --no-git-tag-version --no-push --yes"
   },
   "name": "astenpos",
   "devDependencies": {

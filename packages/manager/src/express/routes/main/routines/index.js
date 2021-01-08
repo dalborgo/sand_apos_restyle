@@ -5,6 +5,27 @@ import get from 'lodash/get'
 import isString from 'lodash/isString'
 import isPlainObject from 'lodash/isPlainObject'
 import isArray from 'lodash/isArray'
+import { createLogger, format, transports } from 'winston'
+import moment from 'moment'
+
+const { printf, combine } = format
+const logPath = path.join(__dirname, 'files', 'migration.log')
+
+const myFormat = printf(info => {
+  let { message } = info
+  return `${message}`
+})
+
+const logToFile = createLogger({
+  transports: [
+    new transports.File({
+      filename: logPath,
+      format: combine(
+        myFormat
+      ),
+    }),
+  ],
+})
 
 async function processArchive () {
   const prechecks = [], closings = [], keys = {}
@@ -28,6 +49,7 @@ async function processArchive () {
         for (let paymentExpanded of paymentsExpanded) {
           if (paymentExpanded.mode === 'PRECHECK') {
             prechecks.push(paymentExpanded)
+            logToFile.info(`Precheck found in archive: ${paymentExpanded._id} in ${doc._meta_id}`)
           }
         }
         break
@@ -67,7 +89,7 @@ async function processMerged (closings, prechecks, closingKeys) {
   for (let precheck of prechecks) {
     const { _id, ...rest } = precheck
     docs.push({ _meta_id: _id, ...rest })
-    keys[precheck._id] = cont++
+    keys[_id] = cont++
   }
   return { docs, keys }
 }
@@ -76,16 +98,22 @@ const checkString = (val, key) => val && isString(val) && key !== '_meta_id'
 const checkObject = val => val && isPlainObject(val)
 const checkArray = val => val && isArray(val)
 
-function findVal (node, keys, token) {
+function findVal (node, keys, token, keyLog, sp = '') {
+  if (node['_meta_id']) {
+    logToFile.info(`\n*** SEARCHING IN: ${node['_meta_id']}`)
+  }
+  if (keyLog) {logToFile.info(`${sp.replace('  ','')}${keyLog}`)}
   if (checkArray(node)) {
     let cont = 0
     for (let arrVal of node) {
       if (checkArray(arrVal)) {
-        findVal(arrVal, keys, token)
+        findVal(arrVal, keys, token, `${keyLog}[${cont++}]`, sp+'  ')
       } else if (checkObject(arrVal)) {
-        findVal(arrVal, keys, token)
+        findVal(arrVal, keys, token, `${keyLog}[${cont++}]`, sp+'  ')
       } else if (checkString(arrVal)) {
         if (keys[arrVal]) {
+          const input = `${arrVal}_${token}`
+          logToFile.info(`${sp}+++ Changed key in ${keyLog}[${cont}]: ${node[cont]} with ${input}`)
           node[cont++] = `${arrVal}_${token}`
         }
       }
@@ -93,14 +121,17 @@ function findVal (node, keys, token) {
   } else {
     Object.keys(node).forEach(function (key) {
       if (checkString(node[key], key)) {
+        logToFile.info(`${sp}${key}`)
         const val = node[key]
         if (keys[val]) {
-          node[key] = `${val}_${token}`
+          const input = `${val}_${token}`
+          logToFile.info(`${sp}+++ Changed key: ${node[key]} with ${input}`)
+          node[key] = input
         }
       } else if (checkArray(node[key])) {
-        findVal(node[key], keys, token)
+        findVal(node[key], keys, token, `ARRAY: ${key}`, sp+ '  ')
       } else if (checkObject(node[key])) {
-        findVal(node[key], keys, token)
+        findVal(node[key], keys, token, `OBJECT: ${key}`, sp+ '  ')
       }
     })
   }
@@ -109,27 +140,29 @@ function findVal (node, keys, token) {
 function addRouters (router) {
   router.get('/routines/migration', async function (req, res) {
     const token = 'prova'
-    const path_ = path.join(__dirname, 'files', 'merged.json')
-    if (fs.existsSync(path_)) {fs.unlinkSync(path_)}
+    const outputPath = path.join(__dirname, 'files', 'merged.json')
+    if (fs.existsSync(outputPath)) {fs.unlinkSync(outputPath)}
+    if (fs.existsSync(logPath)) {fs.truncateSync(logPath)}
+    logToFile.info(`${moment().format('DD-MM-YYYY HH:mm:ss')} - token: ${token}`)
     const { closings, prechecks, keys: closingKeys } = await processArchive()
-    const { docs: docsAstenpos, keys } = await processMerged(closings, prechecks, closingKeys)
+    const { docs, keys } = await processMerged(closings, prechecks, closingKeys)
     
     //region ricerca chiavi negli oggetti e aggiunge `token`
-    for (let doc of docsAstenpos) {
+    for (let doc of docs) {
       findVal(doc, keys, token)
     }
     //endregion
-    const file = fs.createWriteStream(path_, { flags: 'a' })
-    //region modifica `_meta_id` e aggiunge `token`
+    //region modifica `_meta_id` e aggiunge `token`: scrive file `merged.json`
+    const file = fs.createWriteStream(outputPath, { flags: 'a' })
     let cont = 0
-    for (let doc of docsAstenpos) {
+    for (let doc of docs) {
       doc['_meta_id'] = `${doc['_meta_id']}_${token}`
-      file.write(JSON.stringify(doc) + (++cont < docsAstenpos.length ? '\n' : ''))
+      file.write(JSON.stringify(doc) + (++cont < docs.length ? '\n' : ''))
     }
     file.end()
     //endregion
     
-    res.send({ ok: true, results: docsAstenpos })
+    res.send({ ok: true, results: docs })
   })
 }
 
