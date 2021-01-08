@@ -2,6 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import readline from 'readline'
 import get from 'lodash/get'
+import isString from 'lodash/isString'
+import isPlainObject from 'lodash/isPlainObject'
+import isArray from 'lodash/isArray'
 
 async function processArchive () {
   const prechecks = [], closings = [], keys = {}
@@ -69,31 +72,38 @@ async function processMerged (closings, prechecks, closingKeys) {
   return { docs, keys }
 }
 
-const checkString = (val, key) => val && typeof val === 'string' && key !== '_meta_id'
-const checkObject = val => val && typeof val === 'object'
+const checkString = (val, key) => val && isString(val) && key !== '_meta_id'
+const checkObject = val => val && isPlainObject(val)
+const checkArray = val => val && isArray(val)
 
-function findVal (object, keys, token) {
-  Object.keys(object).forEach(function (key) {
-    if (checkString(object[key], key)) {
-      const val = object[key]
-      if (keys[val]) {
-        object[key] = `${val}_${token}`
-      }
-    } else if (object[key] && Array.isArray(object[key])) {
-      let cont = 0
-      for (let arrVal of object[key]) {
-        if (checkObject(object[key])) {
-          findVal(arrVal, keys, token)
-        } else if (checkString(arrVal, key)) {
-          if (keys[arrVal]) {
-            object[key][cont++] = `${arrVal}_${token}`
-          }
+function findVal (node, keys, token) {
+  if (checkArray(node)) {
+    let cont = 0
+    for (let arrVal of node) {
+      if (checkArray(arrVal)) {
+        findVal(arrVal, keys, token)
+      } else if (checkObject(arrVal)) {
+        findVal(arrVal, keys, token)
+      } else if (checkString(arrVal)) {
+        if (keys[arrVal]) {
+          node[cont++] = `${arrVal}_${token}`
         }
       }
-    } else if (checkObject(object[key])) {
-      findVal(object[key], keys, token)
     }
-  })
+  } else {
+    Object.keys(node).forEach(function (key) {
+      if (checkString(node[key], key)) {
+        const val = node[key]
+        if (keys[val]) {
+          node[key] = `${val}_${token}`
+        }
+      } else if (checkArray(node[key])) {
+        findVal(node[key], keys, token)
+      } else if (checkObject(node[key])) {
+        findVal(node[key], keys, token)
+      }
+    })
+  }
 }
 
 function addRouters (router) {
