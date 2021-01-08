@@ -7,10 +7,10 @@ import isPlainObject from 'lodash/isPlainObject'
 import isArray from 'lodash/isArray'
 import { createLogger, format, transports } from 'winston'
 import moment from 'moment'
-
+import log from '@adapter/common/src/winston'
 const { printf, combine } = format
 const logPath = path.join(__dirname, 'files', 'migration.log')
-
+import Q from 'q'
 const myFormat = printf(info => {
   let { message } = info
   return `${message}`
@@ -29,7 +29,7 @@ const logToFile = createLogger({
 
 async function processArchive () {
   const prechecks = [], closings = [], keys = {}
-  const path_ = path.join(__dirname, 'files', 'archivio_short.json')
+  const path_ = path.join(__dirname, 'files', 'archivio.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
@@ -54,8 +54,6 @@ async function processArchive () {
         }
         break
       }
-      default:
-        return
     }
   }
   return { closings, prechecks, keys }
@@ -63,7 +61,7 @@ async function processArchive () {
 
 async function processMerged (closings, prechecks, closingKeys) {
   const docs = [], keys = {}
-  const path_ = path.join(__dirname, 'files', 'astenpos_short.json')
+  const path_ = path.join(__dirname, 'files', 'astenpos.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
@@ -123,6 +121,11 @@ function findVal (node, keys, token, keyLog, sp = '') {
       if (checkString(node[key], key)) {
         logToFile.info(`${sp}${key}`)
         const val = node[key]
+        if(key === 'pruduct_custom_id'){
+          node['product_custom_id'] = val
+          delete node[key]
+          key = 'product_custom_id'
+        }
         if (keys[val]) {
           const input = `${val}_${token}`
           logToFile.info(`${sp}+++ Changed key: ${node[key]} with ${input}`)
@@ -139,10 +142,12 @@ function findVal (node, keys, token, keyLog, sp = '') {
 
 function addRouters (router) {
   router.get('/routines/migration', async function (req, res) {
+    log.verbose('start script')
     const token = 'prova'
+    log.hint('Running...')
     const outputPath = path.join(__dirname, 'files', 'merged.json')
-    if (fs.existsSync(outputPath)) {fs.unlinkSync(outputPath)}
-    if (fs.existsSync(logPath)) {fs.truncateSync(logPath)}
+    if (fs.existsSync(outputPath)) {await Q.ninvoke(fs, 'unlink', outputPath)}
+    if (fs.existsSync(logPath)) {await Q.ninvoke(fs, 'truncate', logPath)}
     logToFile.info(`${moment().format('DD-MM-YYYY HH:mm:ss')} - token: ${token}`)
     const { closings, prechecks, keys: closingKeys } = await processArchive()
     const { docs, keys } = await processMerged(closings, prechecks, closingKeys)
@@ -157,11 +162,13 @@ function addRouters (router) {
     let cont = 0
     for (let doc of docs) {
       doc['_meta_id'] = `${doc['_meta_id']}_${token}`
+      doc.owner = token
+      delete doc['_id']
       file.write(JSON.stringify(doc) + (++cont < docs.length ? '\n' : ''))
     }
     file.end()
     //endregion
-    
+    log.verbose('end script')
     res.send({ ok: true, results: docs })
   })
 }
