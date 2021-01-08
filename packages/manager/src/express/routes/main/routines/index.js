@@ -102,14 +102,14 @@ function findVal (node, keys, token, keyLog, sp = '') {
   if (node['_meta_id']) {
     logToFile.info(`\n*** SEARCHING IN: ${node['_meta_id']}`)
   }
-  if (keyLog) {logToFile.info(`${sp.replace('  ','')}${keyLog}`)}
+  if (keyLog) {logToFile.info(`${sp.replace('  ', '')}${keyLog}`)}
   if (checkArray(node)) {
     let cont = 0
     for (let arrVal of node) {
       if (checkArray(arrVal)) {
-        findVal(arrVal, keys, token, `${keyLog}[${cont++}]`, sp+'  ')
+        findVal(arrVal, keys, token, `${keyLog}[${cont++}]`, sp + '  ')
       } else if (checkObject(arrVal)) {
-        findVal(arrVal, keys, token, `${keyLog}[${cont++}]`, sp+'  ')
+        findVal(arrVal, keys, token, `${keyLog}[${cont++}]`, sp + '  ')
       } else if (checkString(arrVal)) {
         if (keys[arrVal]) {
           const input = `${arrVal}_${token}`
@@ -129,9 +129,9 @@ function findVal (node, keys, token, keyLog, sp = '') {
           node[key] = input
         }
       } else if (checkArray(node[key])) {
-        findVal(node[key], keys, token, `ARRAY: ${key}`, sp+ '  ')
+        findVal(node[key], keys, token, `ARRAY: ${key}`, sp + '  ')
       } else if (checkObject(node[key])) {
-        findVal(node[key], keys, token, `OBJECT: ${key}`, sp+ '  ')
+        findVal(node[key], keys, token, `OBJECT: ${key}`, sp + '  ')
       }
     })
   }
