@@ -4,6 +4,7 @@ import { Divider, makeStyles, Table, TableBody, TableCell, TableRow, useTheme } 
 import { useMoneyFormatter } from 'src/utils/formatters'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
+import { useGeneralStore } from '../../../../../zustandStore'
 
 const useStyles = makeStyles(() => ({
   table: {
@@ -90,14 +91,16 @@ const WrapperRows = ({ closing, values, title, pre, post }) => {
     </>
   )
 }
-
+const selAllIn = state => state.allIn
 function ClosingTable ({ data }) {
   const classes = useStyles()
+  const allIn = useGeneralStore(selAllIn)
   const closing = data?.results
   const intl = useIntl()
   const theme = useTheme()
-  const { payment_incomes: incomes, modes, operators } = closing
-  const elab = calculateClosingTable(closing)
+  const side = allIn ? 'red' : 'blue'
+  const { payment_incomes: incomes, modes, operators } = closing?.[side]
+  const elab = calculateClosingTable(closing?.[side])
   const moneyFormatter = useMoneyFormatter()
   const intlTotal = intl.formatMessage(messages['common_total'])
   return (

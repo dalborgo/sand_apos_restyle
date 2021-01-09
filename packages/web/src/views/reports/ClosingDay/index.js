@@ -19,6 +19,7 @@ import DivContentWrapper from 'src/components/DivContentWrapper'
 import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 import { StandardBreadcrumb } from 'src/components/StandardBreadcrumb'
 import IconButtonLoader from 'src/components/IconButtonLoader'
+import { useGeneralStore } from 'src/zustandStore'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     padding: theme.spacing(2),
     [theme.breakpoints.down('sm')]: { //mobile
-      padding: theme.spacing(0,2),
+      padding: theme.spacing(0, 2),
     },
   },
 }))
@@ -40,18 +41,22 @@ const closingSelector = state => ({
   startDate: state.startDate,
 })
 
+
+const selAllIn = state => state.allIn
 const ClosingDay = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const { docId } = useParams()
   const classes = useStyles()
   const snackQueryError = useSnackQueryError()
+  const allIn = useGeneralStore(selAllIn)
   const intl = useIntl()
   /* useEffect(() => {return () => {reset()}}, [reset])*/
   const { startDate, endDate, setDateRange, closingRows, setClosingRows } = useClosingDayStore(closingSelector, shallow)
   const { isIdle, refetch, ...rest } = useQuery(['reports/closing_days', {
-    startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
+    allIn,
     endDateInMillis: endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined,
     owner,
+    startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
   }], {
     onError: snackQueryError,
     enabled: Boolean(startDate && endDate),
@@ -88,11 +93,13 @@ const ClosingDay = () => {
           <FormattedMessage defaultMessage="Chiusure di giornata" id="reports.closing_day.header_title"/>
         </StandardHeader>
       </div>
-      <DateRangeFormikWrapper
-        endDate={endDate}
-        setDateRange={setDateRange}
-        startDate={startDate}
-      />
+      <Box alignItems="center" display="flex" p={2} pt={1}>
+        <DateRangeFormikWrapper
+          endDate={endDate}
+          setDateRange={setDateRange}
+          startDate={startDate}
+        />
+      </Box>
       <DivContentWrapper>
         <Paper className={classes.paper}>
           <TableList isFetching={effectiveFetching && !closingRows.length} isIdle={isIdle} rows={closingRows}/>

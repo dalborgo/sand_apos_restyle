@@ -11,7 +11,7 @@ export function useMoneyFormatter () {
   const intl = useIntl()
   const [moneyFormatter] = useState(() => {
     return (value, currency) =>
-      intl.formatNumber(value / 1000, {
+      intl.formatNumber(value / 1000 || 0, {
         style: 'currency',
         currency: currency ? currency : translations.getLocaleCurrency(intl.locale) || 'EUR',
       })

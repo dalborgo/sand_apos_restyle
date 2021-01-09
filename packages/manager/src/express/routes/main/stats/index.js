@@ -9,13 +9,15 @@ function addRouters (router) {
     utils.controlParameters(query, ['owner'])
     const parsedOwner = utils.parseOwner(req)
     const {
+      allIn,
       bucketName = connClass.astenposBucketName,
       options,
     } = query
+    const side = utils.checkSide(allIn) ? 'red' : 'blue'
     const statement = knex(bucketName)
       .where({ type: 'CLOSING_DAY' })
       .where(knex.raw(parsedOwner.queryCondition))
-      .select(knex.raw('raw max([pu_totale_totale, date, owner])'))
+      .select(knex.raw(`raw max([${side}.pu_totale_totale, date, owner])`))
       .toQuery()
     const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, err })}

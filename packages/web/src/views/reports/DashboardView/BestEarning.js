@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const { companySelect, hasSingleCompany } = useGeneralStore.getState()
+const selAllIn = state => state.allIn
 const BestEarning = () => {
   console.log('%cRENDER_BEST', 'color: pink')
   const { selectedCode: { code: owner } } = useAuth()
@@ -33,7 +34,8 @@ const BestEarning = () => {
   const intl = useIntl()
   const moneyFormatter = useMoneyFormatter()
   const dateFormatter = useDateFormatter()
-  const { data } = useQuery(['stats/best_earning', { owner }], {
+  const allIn = useGeneralStore(selAllIn)
+  const { data } = useQuery(['stats/best_earning', { owner, allIn }], {
     notifyOnChangeProps: ['data', 'error'],
     suspense: true,
   })

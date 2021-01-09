@@ -16,9 +16,9 @@ import { messages } from 'src/translations/messages'
 export const summaryCalculator = (type, rows, getValue) => {
   if (type === 'incomeSum') {
     return rows.reduce((prev, curr) => {
-      prev.tot += curr.pu_totale_totale
-      prev.sc += curr.pu_totale_sc
-      prev.st += curr.pu_totale_st
+      prev.tot += curr.pu_totale_totale || 0
+      prev.sc += curr.pu_totale_sc || 0
+      prev.st += curr.pu_totale_st || 0
       return prev
     }, { tot: 0, sc: 0, st: 0 })
   } else {
@@ -102,7 +102,7 @@ const CellBase = props => {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
         <Button
-          disabled={intLoading}
+          disabled={intLoading || !row.pu_totale_totale}
           onClick={
             async () => {
               const queryKey = ['queries/query_by_id', { id: docId, owner }]

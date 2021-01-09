@@ -72,7 +72,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function extracted (morseState, user, switchAllIn, allin) {
+function calculateMorse (morseState, user, switchAllIn, allin) {
   let dt = new Date().getTime()
   let { count: count_, serie: serie_, time: time_ } = morseState.current
   const values = user.morse
@@ -144,7 +144,7 @@ const TopBar = ({
   const divRef = useRef(null)
   const morseState = useRef({ count: 0, time: 0, serie: 0 })
   const handleMorse = useCallback(() => {
-    extracted(morseState, user, switchAllIn, allIn_)
+    calculateMorse(morseState, user, switchAllIn, allIn_)
   }, [user, switchAllIn, allIn_])
   
   useEffect(() => {

@@ -19,6 +19,8 @@ function parseOwner ({ query, body, headers }, bucketLabel) {
   }
 }
 
+const checkSide = allIn => Boolean(allIn === 'true' || allIn === true)
+
 function controlParameters (query, requiredKeys) {
   const out = []
   let errors
@@ -34,6 +36,7 @@ function controlParameters (query, requiredKeys) {
 }
 
 export default {
+  checkSide,
   controlParameters,
   parseOwner,
 }

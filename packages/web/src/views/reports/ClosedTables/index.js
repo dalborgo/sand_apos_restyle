@@ -230,10 +230,11 @@ function createExcel (intl, dateTimeFormatter, closedRows, owner) {
     saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx')
   })
 }
-
+const selAllIn = state => state.allIn
 const ClosedTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
+  const allIn = useGeneralStore(selAllIn)
   const { docId, targetDocId } = useParams()
   const history = useHistory()
   const queryClient = useQueryClient()
@@ -254,12 +255,13 @@ const ClosedTables = () => {
     submitFilter,
   } = useClosedTablesStore(closedTableSelector, shallow)
   const fetchKey = useMemo(() => ['reports/closed_tables', {
-    startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
+    allIn,
     endDateInMillis: endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined,
     owner,
     roomFilter,
+    startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
     tableFilter,
-  }], [endDate, owner, roomFilter, startDate, tableFilter])
+  }], [allIn, endDate, owner, roomFilter, startDate, tableFilter])
   const { refetch, isIdle, ...rest } = useQuery(fetchKey, {
     onError: snackQueryError,
     enabled: Boolean(startDate && endDate),
