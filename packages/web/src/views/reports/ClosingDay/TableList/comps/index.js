@@ -102,7 +102,7 @@ const CellBase = props => {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
         <Button
-          disabled={intLoading || !row.pu_totale_totale}
+          disabled={intLoading}
           onClick={
             async () => {
               const queryKey = ['queries/query_by_id', { id: docId, owner }]

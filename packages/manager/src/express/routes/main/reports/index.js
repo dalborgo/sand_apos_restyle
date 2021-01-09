@@ -49,6 +49,7 @@ function addRouters (router) {
     const statement = knex(bucketName)
       .where({ type: 'CLOSING_DAY' })
       .where(knex.raw(parsedOwner.queryCondition))
+      .where(`${side}.pu_totale_totale`, '>', 0)
       .whereBetween('date', [startDate, endDate_])
       .select(knex.raw('meta().id _id'))
       .select('owner', 'date', `${side}.pu_totale_sc`, `${side}.pu_totale_st`, `${side}.pu_totale_nc`, `${side}.pu_totale_totale`)
