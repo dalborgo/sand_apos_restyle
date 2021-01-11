@@ -8,6 +8,7 @@ import isArray from 'lodash/isArray'
 import moment from 'moment'
 import log from '@adapter/common/src/winston'
 import Q from 'q'
+
 const { utils } = require(__helpers)
 
 const logPath = path.join(__dirname, 'files', 'migration.log')
@@ -129,7 +130,7 @@ function findVal (node, keys, token, keyLog, sp = '') {
 
 function addRouters (router) {
   router.get('/routines/migration', async function (req, res) {
-    log.verbose('start script')
+    log.verbose('Start script')
     const { query } = req
     utils.controlParameters(query, ['token'])
     const token = query.token
@@ -147,19 +148,22 @@ function addRouters (router) {
     }
     //endregion
     //region modifica `_meta_id` e aggiunge `token`: scrive file `merged.json`
-    const file = fs.createWriteStream(outputPath, { flags: 'a' })
-    let cont = 0
+    //const file = fs.createWriteStream(outputPath, { flags: 'a' })
+    let cont = 0, lines = ''
     for (let doc of docs) {
       doc['_meta_id'] = `${doc['_meta_id']}_${token}`
       doc.owner = token
       delete doc['_id']
-      file.write(JSON.stringify(doc) + (++cont < docs.length ? '\n' : ''))
+      //file.write(JSON.stringify(doc) + (++cont < docs.length ? '\n' : ''))
+      lines += JSON.stringify(doc) + (++cont < docs.length ? '\n' : '')
     }
-    file.end()
+    //file.end()
+    await Q.ninvoke(fs, 'writeFile', outputPath, lines)
     await Q.ninvoke(fs, 'writeFile', logPath, fileLog)
     //endregion
-    log.verbose('end script')
-    res.send({ ok: true, results: docs })
+    log.verbose('End script')
+    log.hint('End script')
+    res.send({ ok: true })
   })
 }
 
