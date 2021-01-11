@@ -5,7 +5,7 @@ import Couchbase from './class'
 import { cFunctions } from '@adapter/common'
 
 const { connections: connections_ } = require(__helpers)
-const { connections, utility, CONFIG_TOTAL_TIMEOUT } = config.get('couchbase')
+const { connections, CONFIG_TOTAL_TIMEOUT } = config.get('couchbase')
 
 let connInstance
 
@@ -15,7 +15,7 @@ void (async () => {
     const connection = connections[key]
     const optionsAstenpos = {
       username: connection._bucket,
-      password: connection._password_bucket,
+      password: connection._password_bucket || connection._bucket,
       logFunc: connections_.logFunc,
     }
     const queryString = cFunctions.objToQueryString({ config_total_timeout: CONFIG_TOTAL_TIMEOUT }, true)
@@ -24,17 +24,8 @@ void (async () => {
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const astenpos = astenpos_.bucket(connection._bucket)
     __buckets[key] = new Couchbase(astenpos_, astenpos) //first parameter for cluster
-    //region CONNECTION INSTANCE CONFIGURATION
-    if (key === 'astenposServer') {
-      const conn = __buckets[key]
-      connInstance = conn.archiveBucketCollection
-    } else {
-      const options = { username: utility.user, password: utility.password, logFunc: connections_.logFunc }
-      const cluster = new couchbase.Cluster(`couchbase://${utility.couchbase}`, options)
-      const bucket = cluster.bucket(utility.session)
-      connInstance = bucket.defaultCollection()
-    }
-    //endregion
+    const conn = __buckets[key]
+    connInstance = conn.archiveBucketCollection
   } catch (err) {
     log.error('CB connection error:', err)
     err.cause && log.error('code:', err.cause.code)

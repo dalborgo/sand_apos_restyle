@@ -22,7 +22,7 @@ const sections = [
       {
         title: 'Browser',
         exact: false,
-        private: [4, 3],
+        private: 4,
         icon: ListIcon,
         href: '/app/reports/browser',
       },

@@ -56,18 +56,7 @@ export default class Couchbase {
       PASSWORD: this.astenposBucketPassword(),
     }
   }
-  
-  get oldConnection () {
-    return {
-      _bucket: this.astenposBucketName,
-      _password_bucket: this.astenposBucketPassword(),
-      backend: this.backendHost,
-      bucket: this.astenposBucketCollection,
-      cluster: this.cluster,
-      server: this.host,
-    }
-  }
-  
+
   connHost () {
     const base = get(this._astenpos, '_cluster._connStr', HOST_DEFAULT)
     const regex = /couchbase:\/\/([a-z\d.]+)\??/

@@ -40,16 +40,13 @@ const setSession = ({ codes, accessToken, selectedCode }) => {
       if (jsonObj) {selectedCode_ = JSON.parse(jsonObj)}
     }
     axiosLocalInstance.defaults.params = {
-      _key: 'astenposServer',
       owner: selectedCode_?.code !== NO_SELECTED_CODE ? selectedCode_.code : codes?.map(code => code.code),
     }
   } else {
     window.localStorage.removeItem('accessToken')
     window.localStorage.removeItem('selectedCode')
     delete axiosLocalInstance.defaults.headers.common.Authorization
-    axiosLocalInstance.defaults.params = { //reset to default
-      _key: 'astenposServer',
-    }
+    axiosLocalInstance.defaults.params = {}
   }
 }
 

@@ -16,17 +16,8 @@
         "server": "127.0.0.1",
         "backend": "127.0.0.1",
         "_bucket": "astenpos",
-        "_archivio": "archivio",
-        "_password_bucket": "astenpos",
-        "_password_archivio": "archivio"
+        "_password_bucket": "astenpos"
       }
-    },
-    "utility": { //compatibilità con vecchio astenpos express
-      "manager": "",
-      "couchbase": "127.0.0.1",
-      "session": "manager",
-      "user": "manager",
-      "password": "manager"
     }
   }
 }

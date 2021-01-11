@@ -143,7 +143,7 @@ function findVal (node, keys, token, keyLog, sp = '') {
 function addRouters (router) {
   router.get('/routines/migration', async function (req, res) {
     log.verbose('start script')
-    const token = 'prova'
+    const { token = '' } = req.query
     log.hint('Running...')
     const outputPath = path.join(__dirname, 'files', 'merged.json')
     if (fs.existsSync(outputPath)) {await Q.ninvoke(fs, 'unlink', outputPath)}

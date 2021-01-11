@@ -8,15 +8,13 @@ import { envConfig } from 'src/init'
 import { expandError } from 'src/utils/errors'
 import log from '@adapter/common/src/log'
 import isString from 'lodash/isString'
+import mapValues from 'lodash/mapValues'
 import qs from 'qs'
 
 export const axiosLocalInstance = axios.create({
   baseURL: `${envConfig.BACKEND_HOST}/api/`,
-  params: {
-    _key: 'astenposServer',
-  },
   paramsSerializer: params => {
-    return qs.stringify(params)
+    return qs.stringify(mapValues(params, val => val === '' ? undefined : val))
   },
   validateStatus: function (status) {
     return (status >= 200 && status < 300) || status === 412 //il 412 lo uso come identificativo di una risposta errata

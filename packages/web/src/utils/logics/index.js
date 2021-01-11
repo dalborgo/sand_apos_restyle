@@ -1,7 +1,9 @@
 export const isMenuLinkToShow = (item, payload = {}) => {
   const { priority } = payload
-  const isPrivate = Array.isArray(item.private)
-  return !isPrivate || item.private.includes(priority)
+  let { private: private_ } = item
+  const isPrivate = Boolean(private_)
+  private_ = private_ && Array.isArray(private_) ? private_ : [private_]
+  return !isPrivate || private_.includes(priority)
 }
 
 export const getEffectiveFetching = ({
