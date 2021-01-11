@@ -197,15 +197,25 @@ const SearchComponent = memo((function SearchComponent (props) {
 
 const DisplayComponent = memo(function DisplayComponent (props) {
   const { enqueueSnackbar } = useSnackbar()
+  const { selectedCode: { code: owner } } = useAuth()
   const save = useCallback(async () => {
     try {
       const textArea = document.getElementById('browserDisplayArea')
       const docs = JSON.parse(textArea.value)
+      if(!docs.owner){
+        docs.owner = owner
+      }
+      if(!docs.type){
+        return enqueueSnackbar('Type mandatory!')
+      }
+      if(docs.owner !== owner){
+        return enqueueSnackbar(`"owner" must be equal to "${owner}"!`)
+      }
       await props.mutate(docs)
     } catch (err) {
       enqueueSnackbar(err.message)
     }
-  }, [enqueueSnackbar, props])
+  }, [enqueueSnackbar, owner, props])
   return (
     <Paper className={props.classes.editDoc} elevation={2}>
       {

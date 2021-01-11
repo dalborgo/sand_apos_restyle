@@ -7,9 +7,6 @@
       "astenposServer": {
         "server": "192.168.15.251"
       }
-    },
-    "utility": {
-      "couchbase": "192.168.15.251"
     }
   }
 }

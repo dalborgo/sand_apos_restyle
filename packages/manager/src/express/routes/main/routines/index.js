@@ -5,27 +5,14 @@ import get from 'lodash/get'
 import isString from 'lodash/isString'
 import isPlainObject from 'lodash/isPlainObject'
 import isArray from 'lodash/isArray'
-import { createLogger, format, transports } from 'winston'
 import moment from 'moment'
 import log from '@adapter/common/src/winston'
-const { printf, combine } = format
-const logPath = path.join(__dirname, 'files', 'migration.log')
 import Q from 'q'
-const myFormat = printf(info => {
-  let { message } = info
-  return `${message}`
-})
+const { utils } = require(__helpers)
 
-const logToFile = createLogger({
-  transports: [
-    new transports.File({
-      filename: logPath,
-      format: combine(
-        myFormat
-      ),
-    }),
-  ],
-})
+const logPath = path.join(__dirname, 'files', 'migration.log')
+
+let fileLog = ''
 
 async function processArchive () {
   const prechecks = [], closings = [], keys = {}
@@ -49,7 +36,7 @@ async function processArchive () {
         for (let paymentExpanded of paymentsExpanded) {
           if (paymentExpanded.mode === 'PRECHECK') {
             prechecks.push(paymentExpanded)
-            logToFile.info(`Precheck found in archive: ${paymentExpanded._id} in ${doc._meta_id}`)
+            fileLog += `\nPrecheck found in archive: ${paymentExpanded._id} in ${doc._meta_id}`
           }
         }
         break
@@ -98,9 +85,9 @@ const checkArray = val => val && isArray(val)
 
 function findVal (node, keys, token, keyLog, sp = '') {
   if (node['_meta_id']) {
-    logToFile.info(`\n*** SEARCHING IN: ${node['_meta_id']}`)
+    fileLog += `\n\n*** SEARCHING IN: ${node['_meta_id']}`
   }
-  if (keyLog) {logToFile.info(`${sp.replace('  ', '')}${keyLog}`)}
+  if (keyLog) {fileLog += `\n${sp.replace('  ', '')}${keyLog}`}
   if (checkArray(node)) {
     let cont = 0
     for (let arrVal of node) {
@@ -111,7 +98,7 @@ function findVal (node, keys, token, keyLog, sp = '') {
       } else if (checkString(arrVal)) {
         if (keys[arrVal]) {
           const input = `${arrVal}_${token}`
-          logToFile.info(`${sp}+++ Changed key in ${keyLog}[${cont}]: ${node[cont]} with ${input}`)
+          fileLog += `\n${sp}+++ Changed key in ${keyLog}[${cont}]: ${node[cont]} with ${input}`
           node[cont++] = `${arrVal}_${token}`
         }
       }
@@ -119,16 +106,16 @@ function findVal (node, keys, token, keyLog, sp = '') {
   } else {
     Object.keys(node).forEach(function (key) {
       if (checkString(node[key], key)) {
-        logToFile.info(`${sp}${key}`)
+        fileLog += `\n${sp}${key}`
         const val = node[key]
-        if(key === 'pruduct_custom_id'){
+        if (key === 'pruduct_custom_id') {
           node['product_custom_id'] = val
           delete node[key]
           key = 'product_custom_id'
         }
         if (keys[val]) {
           const input = `${val}_${token}`
-          logToFile.info(`${sp}+++ Changed key: ${node[key]} with ${input}`)
+          fileLog += `\n${sp}+++ Changed key: ${node[key]} with ${input}`
           node[key] = input
         }
       } else if (checkArray(node[key])) {
@@ -143,12 +130,14 @@ function findVal (node, keys, token, keyLog, sp = '') {
 function addRouters (router) {
   router.get('/routines/migration', async function (req, res) {
     log.verbose('start script')
-    const { token = '' } = req.query
+    const { query } = req
+    utils.controlParameters(query, ['token'])
+    const token = query.token
     log.hint('Running...')
     const outputPath = path.join(__dirname, 'files', 'merged.json')
     if (fs.existsSync(outputPath)) {await Q.ninvoke(fs, 'unlink', outputPath)}
-    if (fs.existsSync(logPath)) {await Q.ninvoke(fs, 'truncate', logPath)}
-    logToFile.info(`${moment().format('DD-MM-YYYY HH:mm:ss')} - token: ${token}`)
+    if (fs.existsSync(logPath)) {await Q.ninvoke(fs, 'unlink', logPath)}
+    fileLog += `${moment().format('DD-MM-YYYY HH:mm:ss')} - token: ${token}`
     const { closings, prechecks, keys: closingKeys } = await processArchive()
     const { docs, keys } = await processMerged(closings, prechecks, closingKeys)
     
@@ -167,6 +156,7 @@ function addRouters (router) {
       file.write(JSON.stringify(doc) + (++cont < docs.length ? '\n' : ''))
     }
     file.end()
+    await Q.ninvoke(fs, 'writeFile', logPath, fileLog)
     //endregion
     log.verbose('end script')
     res.send({ ok: true, results: docs })
