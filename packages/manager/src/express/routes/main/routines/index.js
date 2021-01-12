@@ -16,8 +16,8 @@ const logPath = path.join(__dirname, 'files', 'migration.log')
 let fileLog = ''
 
 async function processArchive () {
-  const prechecks = [], closings = [], keys = {}
-  const path_ = path.join(__dirname, 'files', 'archivio.json')
+  const prechecks = [], closings = [], keys = {}, paymentClosingDates = {}
+  const path_ = path.join(__dirname, 'files', 'archivio_short.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
@@ -28,6 +28,12 @@ async function processArchive () {
       case 'CLOSING_DAY': {
         // eslint-disable-next-line no-unused-vars
         const { _id, _meta_id, type, ...rest } = doc
+        for (let payment of doc.payments) {
+          if(!paymentClosingDates[payment]){
+            paymentClosingDates[payment] = doc.close_date
+          }
+        }
+        
         closings.push(rest)
         keys[doc._meta_id] = cont++
         break
@@ -44,12 +50,12 @@ async function processArchive () {
       }
     }
   }
-  return { closings, prechecks, keys }
+  return { closings, prechecks, keys, paymentClosingDates }
 }
 
-async function processMerged (closings, prechecks, closingKeys) {
+async function processMerged (closings, prechecks, closingKeys, paymentClosingDates, token) {
   const docs = [], keys = {}
-  const path_ = path.join(__dirname, 'files', 'astenpos.json')
+  const path_ = path.join(__dirname, 'files', 'astenpos_short.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
@@ -67,14 +73,22 @@ async function processMerged (closings, prechecks, closingKeys) {
         red: get(closings, closingKeys[_meta_id]),
         type,
       })
+    } else if(doc.type === 'PAYMENT') {
+      const newOrderId = `${doc.order}_${token}`
+      doc.date_closing = doc.date_closing || paymentClosingDates[doc._meta_id]
+      doc.archived = true
+      docs.push({ ...doc, order: newOrderId, order_id: newOrderId })
     } else {
       docs.push(doc)
     }
     keys[doc._meta_id] = cont++
   }
   for (let precheck of prechecks) {
-    const { _id, ...rest } = precheck
-    docs.push({ _meta_id: _id, ...rest })
+    const { _id, order, ...rest } = precheck
+    const newOrderId = `${order}_${token}`
+    rest.date_closing = rest.date_closing || paymentClosingDates[_id]
+    rest.archived = true
+    docs.push({ _meta_id: _id, ...rest, order: newOrderId, order_id: newOrderId })
     keys[_id] = cont++
   }
   return { docs, keys }
@@ -139,8 +153,8 @@ function addRouters (router) {
     if (fs.existsSync(outputPath)) {await Q.ninvoke(fs, 'unlink', outputPath)}
     if (fs.existsSync(logPath)) {await Q.ninvoke(fs, 'unlink', logPath)}
     fileLog += `${moment().format('DD-MM-YYYY HH:mm:ss')} - token: ${token}`
-    const { closings, prechecks, keys: closingKeys } = await processArchive()
-    const { docs, keys } = await processMerged(closings, prechecks, closingKeys)
+    const { closings, prechecks, keys: closingKeys, paymentClosingDates } = await processArchive()
+    const { docs, keys } = await processMerged(closings, prechecks, closingKeys, paymentClosingDates, token)
     
     //region ricerca chiavi negli oggetti e aggiunge `token`
     for (let doc of docs) {
