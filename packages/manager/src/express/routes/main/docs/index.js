@@ -1,4 +1,4 @@
-import { couchQueries, couchSwagger, couchViews } from '@adapter/io'
+import { couchQueries, couchViews } from '@adapter/io'
 import Q from 'q'
 
 const { utils, axios } = require(__helpers)
@@ -110,12 +110,6 @@ function addRouters (router) {
     }
     const [results] = data
     res.send({ ok, results })
-  })
-  router.post('/docs/bulk_admin', async function (req, res) {
-    const { connClass, body } = req
-    const { docs } = body
-    const data = await couchSwagger.postDbBulkDocs(docs, connClass.astConnection)
-    res.send(data)
   })
   router.post('/docs/bulk', async function (req, res) {
     const { connClass, body } = req
