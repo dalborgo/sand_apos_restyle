@@ -61,11 +61,14 @@ function addRouters (router) {
       })
       log.debug('Response apiRest', data)
     }
+    // eslint-disable-next-line no-unused-vars
+    const { force, ...profile } = body
     const toSave = {
       code,
       p2pPassword: getUUID(),
       p2pUser: `${code}${getUUID()}`,
       password: body.password,
+      profile,
       sgPassword: password,
       sgUser: code,
       type: 'INSTALLATION',
