@@ -27,7 +27,7 @@ async function processArchive () {
     switch (doc.type) {
       case 'CLOSING_DAY': {
         // eslint-disable-next-line no-unused-vars
-        const { _id, _meta_id, type, ...rest } = doc
+        const { _id, meta_id, type, ...rest } = doc
         for (let payment of doc.payments) {
           if(!paymentClosingDates[payment]){
             paymentClosingDates[payment] = doc.close_date
@@ -35,7 +35,7 @@ async function processArchive () {
         }
         
         closings.push(rest)
-        keys[doc._meta_id] = cont++
+        keys[doc.meta_id] = cont++
         break
       }
       case 'ARCHIVE': {
@@ -43,7 +43,7 @@ async function processArchive () {
         for (let paymentExpanded of paymentsExpanded) {
           if (paymentExpanded.mode === 'PRECHECK') {
             prechecks.push(paymentExpanded)
-            fileLog += `\nPrecheck found in archive: ${paymentExpanded._id} in ${doc._meta_id}`
+            fileLog += `\nPrecheck found in archive: ${paymentExpanded._id} in ${doc.meta_id}`
           }
         }
         break
@@ -62,45 +62,46 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
   let cont = 0
   for await (const line of rl) {
     const doc = JSON.parse(line)
-    if (doc._meta_id.startsWith('_sync:')) {continue}
+    if (doc.meta_id.startsWith('_sync:')) {continue}
     if (doc.type === 'CLOSING_DAY') {
-      const { _meta_id, close_date, date, type, ...rest } = doc
+      const { meta_id, close_date, date, type, ...rest } = doc
       docs.push({
-        _meta_id,
         blue: { close_date, date, ...rest },
         close_date,
         date,
-        red: get(closings, closingKeys[_meta_id]),
+        meta_id,
+        red: get(closings, closingKeys[meta_id]),
         type,
       })
     } else if(doc.type === 'PAYMENT') {
       const newOrderId = `${doc.order}_${token}`
-      doc.date_closing = doc.date_closing || paymentClosingDates[doc._meta_id]
+      doc.date_closing = doc.date_closing || paymentClosingDates[doc.meta_id]
       doc.archived = true
       docs.push({ ...doc, order: newOrderId, order_id: newOrderId })
     } else {
-      docs.push(doc)
+      const isValid = doc.type && doc.type !== 'ARCHIVE'
+      isValid && docs.push(doc) //skip if type missing or is 'ARCHIVE'
     }
-    keys[doc._meta_id] = cont++
+    keys[doc.meta_id] = cont++
   }
   for (let precheck of prechecks) {
     const { _id, order, ...rest } = precheck
     const newOrderId = `${order}_${token}`
     rest.date_closing = rest.date_closing || paymentClosingDates[_id]
     rest.archived = true
-    docs.push({ _meta_id: _id, ...rest, order: newOrderId, order_id: newOrderId })
+    docs.push({ meta_id: _id, ...rest, order: newOrderId, order_id: newOrderId })
     keys[_id] = cont++
   }
   return { docs, keys }
 }
 
-const checkString = (val, key) => val && isString(val) && key !== '_meta_id'
+const checkString = (val, key) => val && isString(val) && key !== 'meta_id'
 const checkObject = val => val && isPlainObject(val)
 const checkArray = val => val && isArray(val)
 
 function findVal (node, keys, token, keyLog, sp = '') {
-  if (node['_meta_id']) {
-    fileLog += `\n\n*** SEARCHING IN: ${node['_meta_id']}`
+  if (node['meta_id']) {
+    fileLog += `\n\n*** SEARCHING IN: ${node['meta_id']}`
   }
   if (keyLog) {fileLog += `\n${sp.replace('  ', '')}${keyLog}`}
   if (checkArray(node)) {
@@ -161,11 +162,11 @@ function addRouters (router) {
       findVal(doc, keys, token)
     }
     //endregion
-    //region modifica `_meta_id` e aggiunge `token`: scrive file `merged.json`
+    //region modifica `meta_id` e aggiunge `token`: scrive file `merged.json`
     //const file = fs.createWriteStream(outputPath, { flags: 'a' })
     let cont = 0, lines = ''
     for (let doc of docs) {
-      doc['_meta_id'] = `${doc['_meta_id']}_${token}`
+      doc['meta_id'] = `${doc['meta_id']}_${token}`
       doc.owner = token
       delete doc['_id']
       //file.write(JSON.stringify(doc) + (++cont < docs.length ? '\n' : ''))

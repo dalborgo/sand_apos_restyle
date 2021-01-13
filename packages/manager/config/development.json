@@ -3,6 +3,7 @@
     "MAXAGE_MINUTES": 120
   },
   "couchbase": {
+    "SYNC_AUTH_TOKEN": "Ym9iOnBhc3N3b3Jk",
     "connections": {
       "astenposServer": {
         "server": "192.168.15.251"

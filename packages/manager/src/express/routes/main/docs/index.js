@@ -1,7 +1,7 @@
 import { couchQueries, couchSwagger, couchViews } from '@adapter/io'
 import Q from 'q'
 
-const { utils } = require(__helpers)
+const { utils, axios } = require(__helpers)
 
 async function allSettled (promises) {
   const output = []
@@ -52,7 +52,7 @@ function addRouters (router) {
       endCursor = endCursor || getEndkey(cursor)
       const filter = `AND ${parsedOwner.queryCondition}`
       const queryTotal = `SELECT RAW COUNT(*) total_row from ${connClass.astenposBucketName} WHERE type is not missing ${filter}`
-      const params = { view: 'list_docs_all', ...rest, startkey: `"${cursor}"`, endkey: `"${endCursor}"`}
+      const params = { view: 'list_docs_all', ...rest, startkey: `"${cursor}"`, endkey: `"${endCursor}"` }
       const promises = [
         couchViews.execService(params, connClass.astConnection),
         couchQueries.exec(queryTotal, connClass.cluster),
@@ -111,10 +111,16 @@ function addRouters (router) {
     const [results] = data
     res.send({ ok, results })
   })
-  router.post('/docs/bulk', async function (req, res) {
+  router.post('/docs/bulk_admin', async function (req, res) {
     const { connClass, body } = req
     const { docs } = body
     const data = await couchSwagger.postDbBulkDocs(docs, connClass.astConnection)
+    res.send(data)
+  })
+  router.post('/docs/bulk', async function (req, res) {
+    const { connClass, body } = req
+    const connection = { HOST: connClass.host }
+    const { data } = await axios.restApiInstance(connection).post('/astenpos/_bulk_docs', { docs: body.docs })
     res.send(data)
   })
   router.put('/docs/upsert', async function (req, res) {

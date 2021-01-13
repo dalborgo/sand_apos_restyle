@@ -89,6 +89,7 @@ function getInterceptedResponse (message) {
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   log.error(err)
+  err.isAxiosError && log.error('Is an axios error!')
   const { interceptedResponseStatus, hasToRestartServer } = getInterceptedResponse(err.message)
   if (hasToRestartServer && cFunctions.isProd()) {
     setTimeout(() => {

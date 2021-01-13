@@ -94,8 +94,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 export let responseTimeInMilli
-const fetchList = async ({queryKey, pageParam: cursor}) => {
-  const [_key, text ] = queryKey
+const fetchList = async ({ queryKey, pageParam: cursor }) => {
+  const [_key, text] = queryKey
   const { data, config } = await axiosLocalInstance(_key, {
     params: {
       limit: LIMIT,
@@ -260,7 +260,7 @@ const BrowserView = () => {
   const snackQueryError = useSnackQueryError()
   const respList = useInfiniteQuery(['docs/browser', text, selectedCode], fetchList, {
     getNextPageParam: (lastGroup, allGroups) => {
-      if(!lastGroup.ok){
+      if (!lastGroup.ok) {
         snackQueryError(lastGroup.err)
         return false
       }
@@ -303,9 +303,7 @@ const BrowserView = () => {
   }, [history, respDoc.data, respDoc.isFetchedAfterMount])
   const { mutateAsync: mutate } = useMutation(saveMutation, {
     onSettled: (data, error, variables) => {
-      if (error) {
-        enqueueSnackbar(error.message)
-      } else if (data?.ok === false) {
+      if (data?.ok === false) {
         snackQueryError(data.err)
       } else {
         if (data?.results) {

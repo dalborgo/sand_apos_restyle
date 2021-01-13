@@ -2,6 +2,7 @@ import axios from 'axios'
 import config from 'config'
 
 const { PORT, NAMESPACE } = config.get('express')
+const { SYNC_AUTH_TOKEN = '' } = config.get('couchbase')
 
 const localInstance = axios.create({
   baseURL: `http://127.0.0.1:${PORT}/${NAMESPACE}`,
@@ -10,8 +11,12 @@ const localInstance = axios.create({
   },
 })
 
-const restApiInstance = ({ PROTOCOL = 'http', HOST, PORT }) => axios.create({
+const restApiInstance = ({ PROTOCOL = 'http', HOST, PORT = 4984 }) => axios.create({
   baseURL: `${PROTOCOL}://${HOST}:${PORT}`,
+  headers: {
+    Authorization: `Basic ${SYNC_AUTH_TOKEN}`,
+    'Content-Type': 'application/json',
+  },
   validateStatus: function (status) {
     return (status >= 200 && status < 300)
   },

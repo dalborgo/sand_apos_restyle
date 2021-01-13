@@ -5,7 +5,7 @@ import spec from './json/sgadmin20'
 
 Bluebird.config({ cancellation: true })
 const SWAGGER_TIMEOUT = 120000
-const API_ADMIN_PORT = '4985'
+const API_PORT = '4985'
 
 const getTimeout = (ms = SWAGGER_TIMEOUT) => new Bluebird((resolve, reject, onCancel) => {
   const id = setTimeout(resolve, ms, { ok: false, statusText: `swagger execute timeout ${ms} ms` })
@@ -13,7 +13,7 @@ const getTimeout = (ms = SWAGGER_TIMEOUT) => new Bluebird((resolve, reject, onCa
 })
 
 const getClient = (host) => {
-  spec.host = `${host}:${API_ADMIN_PORT}`
+  spec.host = `${host}:${API_PORT}`
   return new Swagger({ spec }) //return promise
 }
 
