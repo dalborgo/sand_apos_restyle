@@ -114,7 +114,7 @@ function addRouters (router) {
   router.post('/docs/bulk', async function (req, res) {
     const { connClass, body } = req
     const connection = { HOST: connClass.host }
-    const { data } = await axios.restApiInstance(connection).post('/astenpos/_bulk_docs', { docs: body.docs })
+    const { data } = await axios.restApiInstance(connection).post(`/${connClass.astenposBucketName}/_bulk_docs`, { docs: body.docs })
     res.send(data)
   })
   router.put('/docs/upsert', async function (req, res) {

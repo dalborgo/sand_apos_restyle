@@ -1,4 +1,21 @@
 {
+  "email": {
+    "TITLE": "Next Astenpos",
+    "EMAIL_FROM": "test@astenpos.it",
+    "TRANSPORTER": {
+      "host": "mail.asten.it",
+      "port": 465,
+      "secure": true,
+      "auth": {
+        "user": "support@astenpos.it",
+        "pass": "0456600492!"
+      },
+      "tls": {
+        "rejectUnauthorized": false,
+        "secureProtocol": "TLSv1_method"
+      }
+    }
+  },
   "express": {
     "AUTH": "boobs",
     "BODY_LIMIT": "500kb",

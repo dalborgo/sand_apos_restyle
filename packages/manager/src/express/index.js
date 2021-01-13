@@ -8,6 +8,7 @@ import path from 'path'
 import cors from 'cors'
 import favicon from 'serve-favicon'
 import config from 'config'
+import get from 'lodash/get'
 
 const { connInstance } = require(__db)
 const morgan = require('morgan')
@@ -98,7 +99,8 @@ app.use((err, req, res, next) => {
     }, 1000)
   }
   res.status(interceptedResponseStatus || err.status || 500)
-  res.send({ ok: false, message: err.message, err })
+  const couchErrorCode = get(err, 'cause.code')
+  res.send({ ok: false, message: err.message, err, errorCode: couchErrorCode })
 })
 
 app.use(function (req, res) {

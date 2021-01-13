@@ -1,6 +1,7 @@
 import queries from './queries'
 import docs from './docs'
 import info from './info'
+import installations from './installations'
 import jwt from './jwt'
 import routines from './routines'
 import reports from './reports'
@@ -14,6 +15,7 @@ require('express-async-errors')
 queries.addRouters(router)
 docs.addRouters(router)
 info.addRouters(router)
+installations.addRouters(router)
 jwt.addRouters(router)
 reports.addRouters(router)
 routines.addRouters(router)

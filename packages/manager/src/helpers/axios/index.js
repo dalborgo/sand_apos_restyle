@@ -2,7 +2,7 @@ import axios from 'axios'
 import config from 'config'
 
 const { PORT, NAMESPACE } = config.get('express')
-const { SYNC_AUTH_TOKEN = '' } = config.get('couchbase')
+const { SYNC_AUTH_TOKEN } = config.get('couchbase')
 
 const localInstance = axios.create({
   baseURL: `http://127.0.0.1:${PORT}/${NAMESPACE}`,
@@ -11,19 +11,28 @@ const localInstance = axios.create({
   },
 })
 
-const restApiInstance = ({ PROTOCOL = 'http', HOST, PORT = 4984 }) => axios.create({
-  baseURL: `${PROTOCOL}://${HOST}:${PORT}`,
-  headers: {
-    Authorization: `Basic ${SYNC_AUTH_TOKEN}`,
-    'Content-Type': 'application/json',
-  },
-  validateStatus: function (status) {
-    return (status >= 200 && status < 300)
-  },
-  transformResponse: function (data) {
-    return { ok: true, results: JSON.parse(data) }
-  },
-})
+const isJsonParsable = data => {
+  try {
+    return JSON.parse(data)
+  } catch (err) {
+    return false
+  }
+}
+
+const restApiInstance = ({ PROTOCOL = 'http', HOST, PORT = 4984 }) => {
+  const headers = { 'Content-Type': 'application/json' }
+  if (SYNC_AUTH_TOKEN) {headers.Authorization = `Basic ${SYNC_AUTH_TOKEN}`}
+  return axios.create({
+    baseURL: `${PROTOCOL}://${HOST}:${PORT}`,
+    headers,
+    validateStatus: function (status) {
+      return (status >= 200 && status < 300)
+    },
+    transformResponse: function (data) {
+      return { ok: true, results: isJsonParsable(data) || data }
+    },
+  })
+}
 
 export default {
   localInstance,

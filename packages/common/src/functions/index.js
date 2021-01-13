@@ -5,11 +5,10 @@ import camelCase from 'lodash/camelCase'
 import deburr from 'lodash/deburr'
 import isNil from 'lodash/isNil'
 import omitBy from 'lodash/omitBy'
+import generator from 'generate-password'
 
 const isProd = () => process.env.NODE_ENV === 'production'
-const generator = require('generate-password')
-
-const getUUID = (length = 21, alphabet = urlAlphabet) => customAlphabet(alphabet, length)
+const getUUID = (length = 21, alphabet = urlAlphabet) => customAlphabet(alphabet, length) //ritorna una funzione
 const getAuth = (user, password) => `Basic ${new Buffer.from(`${user}:${password}`).toString('base64')}`
 const toBase64 = str => Buffer.from(str).toString('base64')
 const fromBase64 = b64Encoded => Buffer.from(b64Encoded, 'base64').toString()

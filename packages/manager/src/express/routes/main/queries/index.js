@@ -17,9 +17,12 @@ async function queryByType (req, res) {
     columns,
     withMeta = false,
     bucketName = connClass.astenposBucketName,
+    where,
     options,
   } = Object.assign({}, body, query)
-  const knex_ = knex({ buc: bucketName }).where({ type }).where(knex.raw(parsedOwner.queryCondition)).select(columns || 'buc.*')
+  const knex_ = knex({ buc: bucketName }).where({ type }).select(columns || 'buc.*')
+  if (where) {knex_.where(where)}
+  if (parsedOwner.queryCondition) {knex_.where(knex.raw(parsedOwner.queryCondition))}
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = knex_.toQuery()
   const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
