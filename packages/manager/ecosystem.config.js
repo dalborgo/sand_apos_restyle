@@ -3,10 +3,11 @@ module.exports = {
     {
       env: {
         NODE_ENV: 'production',
+        NODE_OPTIONS: '--max-old-space-size=4096',
       },
       log_date_format: 'DD-MM-YYYY HH:mm',
       name: 'Back Next Astenpos',
-      node_args: ['--max_old_space_size=500', '-r esm'],
+      node_args: '-r esm',
       restart_delay: 4000,
       script: 'src/index.js',
     },
