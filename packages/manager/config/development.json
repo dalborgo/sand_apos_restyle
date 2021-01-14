@@ -6,7 +6,7 @@
     "SYNC_AUTH_TOKEN": "Ym9iOnBhc3N3b3Jk",
     "connections": {
       "astenposServer": {
-        "server": "10.0.0.183"
+        "server": "192.168.15.251"
       }
     }
   }

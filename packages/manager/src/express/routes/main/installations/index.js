@@ -1,8 +1,9 @@
 import { email } from '@adapter/io'
 import log from '@adapter/common/src/winston'
 import { cFunctions } from '@adapter/common'
+import { queryById } from '../queries'
 
-const { axios } = require(__helpers)
+const { axios, utils } = require(__helpers)
 
 function getSignUpMail (name, code) {
   return `<pre>Conferma registrazione struttura: ${name}
@@ -11,22 +12,20 @@ Codice Login: ${code}
 }
 
 function addRouters (router) {
-  router.get('/installations/signup', async function (req, res) {
-    const body = {
-      address: 'via',
-      city: 'Garda',
-      email: 'test@astenpos.it',
-      force: true,
-      iva: '123456',
-      name: 'NUOVO',
-      password: '1234',
-      prov: 'VR',
-      ragSoc: 'MERLONERO',
-      state: 'IT',
-      tel: '00000',
-      zip_code: '37131',
-    }
+  router.post('/installations/login', async function (req, res) {
+  
+  })
+  router.post('/installations/loginQR', async function (req, res) {
+  
+  })
+  router.post('/installations/sendInstallationCode', async function (req, res) {
+    const { body } = req
+    utils.controlParameters(body, ['code'])
     
+  })
+  router.post('/installations/signup', async function (req, res) {
+    const { body } = req
+    utils.controlParameters(body, ['iva', 'password', 'ragSoc'])
     const { data } = await axios.localInstance.post('/queries/query_by_type', {
       type: 'INSTALLATION',
       columns: ['iva', 'name', 'code'],
@@ -35,10 +34,10 @@ function addRouters (router) {
     const partial = {}
     {
       const { ok, message, results, err } = data
-      if (!ok) {return res.send({ ok, message, err, errorCode: err.code || '500' })}
+      if (!ok) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
       partial.installations = results || []
     }
-    if (!body.force) {
+    if (!body.forceNew) {
       if (partial.installations.length) {
         const results = {}
         for (let installation of partial.installations) {
@@ -62,7 +61,7 @@ function addRouters (router) {
       log.debug('Response apiRest', data)
     }
     // eslint-disable-next-line no-unused-vars
-    const { force, ...profile } = body
+    const { forceNew, ...profile } = body
     const toSave = {
       code,
       p2pPassword: getUUID(),

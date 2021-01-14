@@ -1,6 +1,5 @@
 const { BadRequest } = require(__errors)
-import { security, connections } from '../'
-import log from '@adapter/common/src/winston'
+import { security } from '../'
 
 /**
  *
@@ -8,11 +7,8 @@ import log from '@adapter/common/src/winston'
  */
 function parseOwner ({ query, body, headers }, bucketLabel) {
   const { owner } = Object.assign({}, body, query)
+  if (!owner) {return {}}
   const ownerArray = Array.isArray(owner) ? owner : [owner]
-  if (connections.isInternal(headers)) {
-    log.silly('internal call')
-    return {}
-  }
   security.hasAuthorization(headers, ownerArray)
   const [startOwner] = ownerArray
   const endOwner = ownerArray.length > 1 ? ownerArray[ownerArray.length - 1] : startOwner

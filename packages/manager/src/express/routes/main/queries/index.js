@@ -9,7 +9,7 @@ const { BadRequest } = require(__errors)
 const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
 
-async function queryByType (req, res) {
+async function queryByType (req) {
   const { connClass, body, query } = req
   const parsedOwner = utils.parseOwner(req)
   const {
@@ -20,17 +20,18 @@ async function queryByType (req, res) {
     where,
     options,
   } = Object.assign({}, body, query)
+  utils.controlParameters({ type }, ['type'])
   const knex_ = knex({ buc: bucketName }).where({ type }).select(columns || 'buc.*')
   if (where) {knex_.where(where)}
   if (parsedOwner.queryCondition) {knex_.where(knex.raw(parsedOwner.queryCondition))}
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = knex_.toQuery()
   const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
-  if (!ok) {return res.send({ ok, message, err })}
-  res.send({ ok, results })
+  if (!ok) {return { ok, message, err }}
+  return { ok, results }
 }
 
-async function queryById (req, res) {
+export async function queryById (req, extra) {
   const { connClass, body, query } = req
   const parsedOwner = utils.parseOwner(req)
   const {
@@ -39,13 +40,15 @@ async function queryById (req, res) {
     withMeta = false,
     bucketName = connClass.astenposBucketName,
     options,
-  } = Object.assign({}, body, query)
+  } = Object.assign({}, body, query, extra)
+  utils.controlParameters({ id }, ['id'])
+  const conditions = parsedOwner.queryCondition ? ` WHERE ${parsedOwner.queryCondition}` : '' //impedisce di accedere ad altri docs da portale
   const knex_ = knex({ buc: bucketName }).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
-  const statement = `${knex_.toQuery()} USE KEYS "${id}" WHERE ${parsedOwner.queryCondition}`
+  const statement = `${knex_.toQuery()} USE KEYS "${id}"${conditions}`
   const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
-  if (!ok) {return res.send({ ok, message, err })}
-  res.send({ ok, results: data.length ? data[0] : null })
+  if (!ok) {return { ok, message, err }}
+  return { ok, results: data.length ? data[0] : null }
 }
 
 function createSetStatement (val) {
@@ -96,16 +99,16 @@ function addRouters (router) {
     res.send({ ok, results })
   })
   router.post('/queries/query_by_id', async function (req, res) {
-    return await queryById(req, res)
+    res.send(await queryById(req))
   })
   router.get('/queries/query_by_id', async function (req, res) {
-    return await queryById(req, res)
+    res.send(await queryById(req))
   })
   router.post('/queries/query_by_type', async function (req, res) {
-    return await queryByType(req, res)
+    res.send(await queryByType(req))
   })
   router.get('/queries/query_by_type', async function (req, res) {
-    return await queryByType(req, res)
+    res.send(await queryByType(req))
   })
   /**
    * body con almeno un campo tra `set` e `unset` con i valori da modificare

@@ -1,5 +1,6 @@
 import { couchQueries, couchViews } from '@adapter/io'
 import Q from 'q'
+import { queryById } from '../queries'
 
 const { utils, axios } = require(__helpers)
 
@@ -70,46 +71,8 @@ function addRouters (router) {
     res.send(data)
   })
   router.get('/docs/get_by_id', async function (req, res) {
-    const { connClass, query } = req
-    const { docId } = query
-    const parsedOwner = utils.parseOwner(req)
-    if (!docId) {return res.send({ ok: false, message: 'docId undefined!' })}
-    const { ok, results: data, message, err } = await couchQueries.exec(
-      'SELECT '
-      + 'meta(ast).id _id, '
-      + 'meta(ast).xattrs._sync.rev _rev, '
-      + 'ast.* '
-      + 'FROM ' + connClass.astenposBucketName + ' ast '
-      + 'USE KEYS "' + docId + '" '
-      + 'WHERE ' + parsedOwner.queryCondition,
-      connClass.cluster
-    )
-    if (!ok) {
-      return res.send(ok, message, err)
-    }
-    const [results] = data
-    res.send({ ok, results })
-  })
-  router.get('/docs/get_by_type', async function (req, res) {
-    const { connClass, query } = req
-    const { type } = query
-    const parsedOwner = utils.parseOwner(req)
-    if (!type) {return res.send({ ok: false, message: 'type undefined!' })}
-    const { ok, results: data, message, err } = await couchQueries.exec(
-      'SELECT '
-      + 'meta(ast).id _id, '
-      + 'meta(ast).xattrs._sync.rev _rev, '
-      + 'ast.* '
-      + 'FROM ' + connClass.astenposBucketName + ' ast '
-      + 'WHERE type = "' + type + '" '
-      + 'AND ' + parsedOwner.queryCondition,
-      connClass.cluster
-    )
-    if (!ok) {
-      return res.send(ok, message, err)
-    }
-    const [results] = data
-    res.send({ ok, results })
+    const { docId: id } = req.query
+    res.send(await queryById(req, {withMeta: true, id}))
   })
   router.post('/docs/bulk', async function (req, res) {
     const { connClass, body } = req

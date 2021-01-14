@@ -2,13 +2,13 @@ import jwt from 'jsonwebtoken'
 import config from 'config'
 import keyBy from 'lodash/keyBy'
 import { cFunctions } from '@adapter/common'
-
+import { connections } from '../'
 const { Unauthorized } = require(__errors)
 const { AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
 
 function hasAuthorization (headers, checkCodes) {
-  if (!cFunctions.isProd()) {return}
+  if (connections.isInternal(headers) || !cFunctions.isProd()) {return}
   const { authorization } = headers
   if (!authorization) {throw new Unauthorized()}
   const accessToken = authorization.split(' ')[1]
