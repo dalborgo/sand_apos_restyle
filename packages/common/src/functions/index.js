@@ -70,7 +70,17 @@ function objToQueryString (obj, prependQuestionMark = false) {
   return prependQuestionMark && output ? `?${output}` : output
 }
 
-
+function flattenObj(obj, parent, res = {}){
+  for(let key in obj){
+    let propName = parent ? parent + '_' + key : key;
+    if(typeof obj[key] == 'object'){
+      flattenObj(obj[key], propName, res);
+    } else {
+      res[propName] = obj[key];
+    }
+  }
+  return res;
+}
 const escapeN1qlObj = val => {
   const divided = val.split('.')
   const mapped = divided.map(val_ => {
@@ -87,6 +97,7 @@ export default {
   cursorPaginatorBoost: paginator.cursorPaginatorBoost,
   escapeN1qlObj,
   filterQueryString,
+  flattenObj,
   fromBase64,
   generateString,
   getAuth,

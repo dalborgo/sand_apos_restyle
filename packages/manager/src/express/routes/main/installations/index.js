@@ -2,21 +2,50 @@ import { mailer } from '@adapter/io'
 import log from '@adapter/common/src/winston'
 import { cFunctions } from '@adapter/common'
 import emailDefinitions from './emailDefinitions'
+
 const { axios, utils } = require(__helpers)
 
 function addRouters (router) {
   router.post('/installations/login', async function (req, res) {
-    
+    const { body } = req
+    utils.controlParameters(body, ['code', 'password'])
+    const partial = {}
+    {
+      const { data } = await axios.localInstance.post('/queries/query_by_id', {
+        id: `general_configuration_${body.code}`,
+        owner: body.code,
+        columns: ['type'],
+      })
+      const { ok, message, results, err } = data
+      if (!ok) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
+      partial.hasGeneralConfig = Boolean(results)
+    }
+    {
+      const { data } = await axios.localInstance.post('/queries/query_by_id', {
+        id: `INSTALLATION|${body.code}`,
+      })
+      const { ok, message, results, err } = data
+      if (!ok) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
+      partial.installation = results
+    }
+    if (body.password === partial.installation.profile.password) {
+      partial.results = cFunctions.flattenObj(partial.installation)
+      partial.results.profile_password = undefined
+      partial.results.exists = partial.hasGeneralConfig
+    }else{
+      return res.send({ ok: 'false', message: 'Not authorized!', errorCode: 401 })
+    }
+    res.send({ ok: true, results: partial.results })
   })
   router.post('/installations/sendInstallationCode', async function (req, res) {
     const { body } = req
     utils.controlParameters(body, ['code'])
-    const { data } = await axios.localInstance.post('/queries/query_by_id', {
-      id: `INSTALLATION|${body.code}`,
-      columns: ['name', 'profile.email', 'profile.state'],
-    })
     const partial = {}
     {
+      const { data } = await axios.localInstance.post('/queries/query_by_id', {
+        id: `INSTALLATION|${body.code}`,
+        columns: ['name', 'profile.email', 'profile.state'],
+      })
       const { ok, message, results, err } = data
       if (!ok) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
       partial.installation = results
