@@ -2,6 +2,7 @@ import { mailer } from '@adapter/io'
 import log from '@adapter/common/src/winston'
 import { cFunctions } from '@adapter/common'
 import emailDefinitions from './emailDefinitions'
+import get from 'lodash/get'
 
 const { axios, utils } = require(__helpers)
 
@@ -28,11 +29,11 @@ function addRouters (router) {
       if (!ok) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
       partial.installation = results
     }
-    if (body.password === partial.installation.profile.password) {
+    if (partial.installation && body.password === get(partial.installation, 'profile.password')) {
       partial.results = cFunctions.flattenObj(partial.installation)
       partial.results.profile_password = undefined
       partial.results.exists = partial.hasGeneralConfig
-    }else{
+    } else {
       return res.send({ ok: 'false', message: 'Not authorized!', errorCode: 401 })
     }
     res.send({ ok: true, results: partial.results })
@@ -90,7 +91,7 @@ function addRouters (router) {
       const { data } = await axios.restApiInstance(connection).post(`/${connClass.astenposBucketName}/_user/`, {
         name: code,
         password,
-        admin_channels: ['*'],
+        admin_channels: [code],
       })
       log.debug('Response apiRest', data)
     }
