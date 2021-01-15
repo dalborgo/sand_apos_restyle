@@ -102,7 +102,6 @@ function addRouters (router) {
       name,
       p2pPassword: getUUID(),
       p2pUser: `${code}${getUUID()}`,
-      password: body.password,
       profile,
       sgPassword: password,
       sgUser: code,
