@@ -143,6 +143,7 @@ const SearchComponent = memo((function SearchComponent (props) {
   return (
     <Paper className={props.classes.docList} elevation={2}>
       <SearchBox
+        hasDoc={props.hasDoc}
         isFetchedAfterMountList={props.isFetchedAfterMountList}
         isFetchingDoc={props.isFetchingDoc}
         isFetchingList={props.isFetchingList}
@@ -202,13 +203,13 @@ const DisplayComponent = memo(function DisplayComponent (props) {
     try {
       const textArea = document.getElementById('browserDisplayArea')
       const docs = JSON.parse(textArea.value)
-      if(!docs.owner){
+      if (!docs.owner) {
         docs.owner = owner
       }
-      if(!docs.type){
+      if (!docs.type) {
         return enqueueSnackbar('Type mandatory!')
       }
-      if(docs.owner !== owner){
+      if (docs.owner !== owner) {
         return enqueueSnackbar(`"owner" must be equal to "${owner}"!`)
       }
       await props.mutate(docs)
@@ -261,7 +262,7 @@ const BrowserView = () => {
   const respList = useInfiniteQuery(['docs/browser', text, selectedCode], fetchList, {
     getNextPageParam: (lastGroup, allGroups) => {
       if (!lastGroup.ok) {
-        snackQueryError(lastGroup.err)
+        snackQueryError(lastGroup.err, { preventDuplicate: true })
         return false
       }
       const { total_rows: totalRows, rows = [] } = lastGroup?.results
@@ -340,21 +341,22 @@ const BrowserView = () => {
     classes,
     data: respList.data?.pages,
     fetchMore: respList.fetchNextPage,
-    isFetchingList: respList.isFetching,
-    isFetchingDoc: respDoc.isFetching,
+    hasDoc: Boolean(docId),
     isFetchedAfterMountList: respList.isFetchedAfterMount,
     isFetching: respList.isFetching || respDoc.isFetching,
+    isFetchingDoc: respDoc.isFetching,
+    isFetchingList: respList.isFetching,
     isFetchingMore: respList.isFetchingNextPage,
     isLoading: respList.isLoading,
-    isSuccessList: respList.isSuccess,
     isSuccessDoc: respDoc.isSuccess,
+    isSuccessList: respList.isSuccess,
+    locked,
     refetch: respList.refetch,
     refetchLine: respDoc.refetch,
     remove,
+    setLocked,
     setText,
     text,
-    locked,
-    setLocked,
   }
   
   const displayBody = {

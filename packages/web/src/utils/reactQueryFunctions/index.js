@@ -49,18 +49,18 @@ export function useSnackQueryError () {
   const { enqueueSnackbar } = useSnackbar()
   const intl = useIntl()
   const [snackQueryError] = useState(() => {
-    return err => {
+    return (err, options) => {
       if (isString(err)) {err = { message: err }}
       const { message, isNetworkError, responseData } = expandError(err)
       if (isNetworkError) {
-        enqueueSnackbar(intl.formatMessage(messages['network_error']), { variant: 'default' })
+        enqueueSnackbar(intl.formatMessage(messages['network_error']), { variant: 'default', ...options })
       } else if (responseData) {
         const { values, code: errCode } = responseData.err || {}
         const message = messages[responseData.code || errCode]
-        enqueueSnackbar(message ? intl.formatMessage(message, values) : responseData.message)
+        enqueueSnackbar(message ? intl.formatMessage(message, values) : responseData.message, {...options})
       } else {
         log.debug('error code:', err.code)
-        enqueueSnackbar(messages[err.code] ? intl.formatMessage(messages[err.code]) : message)
+        enqueueSnackbar(messages[err.code] ? intl.formatMessage(messages[err.code]) : message, {...options})
       }
     }
   })

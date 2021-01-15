@@ -9,10 +9,11 @@ const {
 } = connections['astenposServer']
 
 export default class Couchbase {
-  constructor (cluster, astenpos, backendHost = BACKEND_HOST_DEFAULT) {
+  constructor (cluster, astenpos, options, backendHost = BACKEND_HOST_DEFAULT) {
     this._cluster = cluster
     this._astenpos = astenpos
     this._backendHost = backendHost || ''
+    this._op = options || {}
   }
   
   get cluster () {
@@ -21,6 +22,26 @@ export default class Couchbase {
   
   get host () {
     return this.connHost()
+  }
+  
+  get sgAdmin () {
+    return this._op['sgAdmin'] || `http://${HOST_DEFAULT}:4985` //ok with port
+  }
+  
+  get sgAdminToken () {
+    return this._op['sgAdminToken'] || ''
+  }
+  
+  get sgPublic () {
+    return this._op['sgPublic'] || `http://${HOST_DEFAULT}:4984` //ok with port
+  }
+  
+  get sgPublicToken () {
+    return this._op['sgPublicToken'] || ''
+  }
+  
+  get serviceRestProtocol () {
+    return this._op['serviceRestProtocol']
   }
   
   get backendHost () {
@@ -41,7 +62,7 @@ export default class Couchbase {
   get astenposBucketCollection () {
     return this._astenpos.defaultCollection()
   }
-
+  
   get astenposBucket () {
     return this._astenpos
   }
@@ -54,9 +75,14 @@ export default class Couchbase {
       COLLECTION: this.astenposBucketCollection,
       HOST: this.host,
       PASSWORD: this.astenposBucketPassword(),
+      SERVICE_REST_PROTOCOL: this.serviceRestProtocol,
+      SG_ADMIN: this.sgAdmin,
+      SG_ADMIN_TOKEN: this.sgAdminToken,
+      SG_PUBLIC: this.sgPublic,
+      SG_PUBLIC_TOKEN: this.sgPublicToken,
     }
   }
-
+  
   connHost () {
     const base = get(this._astenpos, '_cluster._connStr', HOST_DEFAULT)
     const regex = /couchbase:\/\/([a-z\d.]+)\??/

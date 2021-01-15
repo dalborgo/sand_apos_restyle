@@ -15,9 +15,9 @@ const QUERY_SCAN_CONSISTENCY = {
 async function exec (statement, cluster, options_ = {}) {
   const options = Object.assign({}, options_)
   try {
-    log.debug('query', statement)
+    log.debug('Query', statement)
     const { meta, rows } = await cluster.query(statement, options)
-    log.debug('executionTime', `${meta.metrics.executionTime} ms`)
+    log.debug('ExecutionTime', `${meta.metrics.executionTime} ms`)
     return { ok: true, results: rows }
   } catch (err) {
     log.error('Query error', err)
@@ -30,8 +30,11 @@ async function exec (statement, cluster, options_ = {}) {
  * - [N1Ql rest api](https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html)
  */
 async function execByService (statement, connection = {}, options = {}) {
-  const { HOST, PASSWORD, BUCKET_NAME } = connection
+  const { HOST, PASSWORD, BUCKET_NAME, SERVICE_REST_PROTOCOL = 'http' } = connection
   const auth = cFunctions.getAuth(BUCKET_NAME, PASSWORD)
+  const port = SERVICE_REST_PROTOCOL === 'http' ? '8093' : '18093'
+  const url = `${SERVICE_REST_PROTOCOL}://${HOST}:${port}/query/service`
+  log.debug('Query service url', url)
   try {
     const params = {
       data: {
@@ -40,11 +43,11 @@ async function execByService (statement, connection = {}, options = {}) {
       },
       headers: { Authorization: auth },
       method: 'POST',
-      url: `http://${HOST}:8093/query/service`,
+      url,
     }
-    log.verbose('query service', statement)
+    log.verbose('Query service', statement)
     const { data: { results } } = await axios(params)
-    log.verbose('end query service execution') //metrics non attendibili
+    log.verbose('End query service execution') //metrics non attendibili
     return { ok: true, results }
   } catch (err) {
     const info = get(err, 'response.data.errors')

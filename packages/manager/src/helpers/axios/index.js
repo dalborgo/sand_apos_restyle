@@ -2,7 +2,6 @@ import axios from 'axios'
 import config from 'config'
 
 const { PORT, NAMESPACE } = config.get('express')
-const { SYNC_AUTH_TOKEN } = config.get('couchbase')
 
 const localInstance = axios.create({
   baseURL: `http://127.0.0.1:${PORT}/${NAMESPACE}`,
@@ -20,11 +19,11 @@ const isJsonParsable = data => {
   }
 }
 
-const restApiInstance = ({ PROTOCOL = 'http', HOST, PORT = 4984 }) => {
+const restApiInstance = (baseURL, token) => {
   const headers = { 'Content-Type': 'application/json' }
-  if (SYNC_AUTH_TOKEN) {headers.Authorization = `Basic ${SYNC_AUTH_TOKEN}`}
+  if (token) {headers.Authorization = `Basic ${token}`}
   return axios.create({
-    baseURL: `${PROTOCOL}://${HOST}:${PORT}`,
+    baseURL,
     headers,
     validateStatus: function (status) {
       return (status >= 200 && status < 300)

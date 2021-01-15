@@ -1,5 +1,6 @@
 import { couchQueries } from '@adapter/io'
 import { cFunctions } from '@adapter/common'
+import { reqAuthPost } from '../../basicAuth'
 import isObject from 'lodash/isObject'
 import isString from 'lodash/isString'
 import get from 'lodash/get'
@@ -77,16 +78,21 @@ function createUnsetStatement (val) {
 }
 
 function addRouters (router) {
-  router.post('/queries/raw_query', async function (req, res) {
+  /**
+  * query generica, che non dovrebbe essere usata dal portale, ma da app che vogliono collegarsi (richiede basicAuth sempre).
+  */
+  router.post('/queries/raw_query', reqAuthPost, async function (req, res) {
     const { connClass, body } = req
-    utils.parseOwner(req) //security check
     const { statement, options } = body
     const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, err })}
     const [results] = data
     res.send({ ok, results })
   })
-  router.post('/queries/raw_query_service', async function (req, res) {
+  /**
+   * query generica, che non dovrebbe essere usata dal portale, ma da app che vogliono collegarsi (richiede basicAuth sempre).
+   */
+  router.post('/queries/raw_query_service', reqAuthPost, async function (req, res) {
     const { connClass, body } = req
     const { statement, options } = body
     const {
@@ -133,7 +139,7 @@ function addRouters (router) {
     let conditions = ''
     if (set) {conditions += createSetStatement(set)}
     if (unset) {conditions += ` ${createUnsetStatement(unset)}`}
-    const statement = `UPDATE ${bucketName} USE KEYS "${id}" ${conditions.trim()} RETURNING meta().id`
+    const statement = `UPDATE \`${bucketName}\` USE KEYS "${id}" ${conditions.trim()} RETURNING meta().id`
     const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results: data.length ? data[0] : null })

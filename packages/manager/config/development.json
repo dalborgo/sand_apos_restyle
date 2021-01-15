@@ -3,10 +3,30 @@
     "MAXAGE_MINUTES": 120
   },
   "couchbase": {
-    "SYNC_AUTH_TOKEN": "Ym9iOnBhc3N3b3Jk",
     "connections": {
       "astenposServer": {
-        "server": "192.168.15.251"
+        "server": "dev-cluster-02.cloudservice.mobilebridge.it",
+        "sg_admin": "https://admin.sg.dev-zone-01.cloudservice.mobilebridge.it",
+        "sg_admin_token": "YXN0ZW4tYWRtaW46Zkx0TDZkYmZjTmR0clJCejR4",
+        "sg_public": "https://sg.dev-zone-01.cloudservice.mobilebridge.it",
+        "sg_public_token": "YXN0ZW46eThVaXZ2b2p6RmFFb2huUTlm",
+        "service_rest_protocol": "https",
+        "_certpath": "dev-CA.pem",
+        "_bucket": "ast-20006-dev",
+        "_user_bucket": "asten-admin",
+        "_password_bucket": "fLtL6dbfcNdtrRBz4x"
+      },
+      "251": {
+        "server": "192.168.15.251",
+        "sg_admin": "",
+        "sg_admin_token": "",
+        "sg_public": "",
+        "sg_public_token": "",
+        "service_rest_protocol": "",
+        "_certpath": "",
+        "_bucket": "astenpos",
+        "_user_bucket": "astenpos",
+        "_password_bucket": "astenpos"
       }
     }
   }

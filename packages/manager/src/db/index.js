@@ -11,19 +11,27 @@ let connInstance
 
 void (async () => {
   try {
-    let [key] = Object.keys(connections)
+    const key = 'astenposServer'
     const connection = connections[key]
     const optionsAstenpos = {
-      username: connection._bucket,
+      username: connection._user_bucket || connection._bucket,
       password: connection._password_bucket || connection._bucket,
       logFunc: connections_.logFunc,
     }
-    const queryString = cFunctions.objToQueryString({ config_total_timeout: CONFIG_TOTAL_TIMEOUT }, true)
-    const connStr = `couchbase://${connection.server}${queryString}`
+    const extraOptions = {
+      serviceRestProtocol: connection.service_rest_protocol || 'http',
+      sgAdmin: connection.sg_admin,
+      sgAdminToken: connection.sg_admin_token,
+      sgPublic: connection.sg_public,
+      sgPublicToken: connection.sg_public_token,
+    }
+    const queryString = cFunctions.objToQueryString({ certpath: connection._certpath, config_total_timeout: CONFIG_TOTAL_TIMEOUT }, true)
+    const prefix = connection._certpath ? 'couchbases' : 'couchbase'
+    const connStr = `${prefix}://${connection.server}${queryString}`
     log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const astenpos = astenpos_.bucket(connection._bucket)
-    __buckets[key] = new Couchbase(astenpos_, astenpos) //first parameter for cluster
+    __buckets[key] = new Couchbase(astenpos_, astenpos, extraOptions) //first parameter for cluster
     const conn = __buckets[key]
     connInstance = conn.archiveBucketCollection
   } catch (err) {

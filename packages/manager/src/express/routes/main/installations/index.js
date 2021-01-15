@@ -86,9 +86,8 @@ function addRouters (router) {
     const code = cFunctions.generateString()
     const password = getUUID()
     {
-      const connection = { HOST: connClass.host, PORT: 4985 }
       //serve lo slash in fondo
-      const { data } = await axios.restApiInstance(connection).post(`/${connClass.astenposBucketName}/_user/`, {
+      const { data } = await axios.restApiInstance(connClass.sgAdmin, connClass.sgAdminToken).post(`/${connClass.astenposBucketName}/_user/`, {
         name: code,
         password,
         admin_channels: [code],

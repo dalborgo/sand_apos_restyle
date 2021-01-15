@@ -81,6 +81,7 @@ const InputText = memo(function BrowserInputText ({ text, setText }) {
 })
 
 const SearchBox = memo(function SearchBox ({
+  hasDoc,
   isFetchedAfterMountList,
   isFetchingDoc,
   isFetchingList,
@@ -140,7 +141,7 @@ const SearchBox = memo(function SearchBox ({
                 color="secondary"
                 onClick={
                   () => {
-                    refetchLine()
+                    hasDoc && refetchLine()
                     refetch().then(() => {
                       const elem = document.getElementById('BrowserSpan')
                       if (elem) {elem.innerText = `${responseTimeInMilli} ms`}
