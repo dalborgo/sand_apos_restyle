@@ -207,10 +207,18 @@ const DisplayComponent = memo(function DisplayComponent (props) {
         docs.owner = owner
       }
       if (!docs.type) {
-        return enqueueSnackbar('Type mandatory!')
+        return enqueueSnackbar('"type" is required!')
       }
       if (docs.owner !== owner) {
         return enqueueSnackbar(`"owner" must be equal to "${owner}"!`)
+      }
+      if (!docs._id) {
+        return enqueueSnackbar('"_id" is required!')
+      }
+      const ownerToken = docs._id.split('_').pop()
+      if (ownerToken !== owner) {
+        enqueueSnackbar(`"${owner}" added to "_id"`, { variant: 'warning' })
+        docs._id += `_${owner}`
       }
       await props.mutate(docs)
     } catch (err) {
