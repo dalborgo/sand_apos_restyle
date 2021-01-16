@@ -4,7 +4,7 @@ const basicAuth = require('express-basic-auth')
 const unauthorizedResponse = req => {
   return req.auth
     ? { ok: false, message: `Credentials ${req.auth.user}:${req.auth.password} rejected!` }
-    : { ok: false, message: 'No credentials provided!' }
+    : { ok: false, message: 'basicAuth required!' }
 }
 export const reqAuthPost = AUTH
   ? basicAuth({

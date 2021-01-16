@@ -5,10 +5,10 @@
   "license": "MIT",
   "dependencies": {
     "currency-symbol-map": "^4.0.4",
-    "generate-password": "^1.5.1",
+    "dot-object": "^2.1.4",
+    "generate-password": "^1.6.0",
     "locale-currency": "^0.0.2",
     "loglevel": "^1.7.1",
-    "dot-object": "^2.1.4",
     "moment": "^2.29.1",
     "moment-range": "^4.0.2",
     "nanoid": "^3.1.20",
