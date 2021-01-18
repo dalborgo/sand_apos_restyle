@@ -215,10 +215,14 @@ const DisplayComponent = memo(function DisplayComponent (props) {
       if (!docs._id) {
         return enqueueSnackbar('"_id" is required!')
       }
-      const ownerToken = docs._id.split('_').pop()
-      if (ownerToken !== owner) {
-        enqueueSnackbar(`"${owner}" added to "_id"`, { variant: 'warning' })
-        docs._id += `_${owner}`
+      const idOwnerToken = docs._id.split('_').pop()
+      if (idOwnerToken !== owner) {
+        if(!docs._rev) {
+          enqueueSnackbar(`"${owner}" added to "_id"`, { variant: 'warning' })
+          docs._id += `_${owner}`
+        } else {
+          enqueueSnackbar(`"The "_id" is not terminated with "_${owner}"`, { variant: 'warning' })
+        }
       }
       await props.mutate(docs)
     } catch (err) {

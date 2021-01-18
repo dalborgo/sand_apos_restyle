@@ -4,7 +4,7 @@
   },
   "couchbase": {
     "connections": {
-      "astenposServer": {
+      "molo": {
         "server": "dev-cluster-02.cloudservice.mobilebridge.it",
         "sg_admin": "https://admin.sg.dev-zone-01.cloudservice.mobilebridge.it",
         "sg_admin_token": "YXN0ZW4tYWRtaW46Zkx0TDZkYmZjTmR0clJCejR4",
@@ -18,6 +18,18 @@
       },
       "251": {
         "server": "192.168.15.251",
+        "sg_admin": "",
+        "sg_admin_token": "",
+        "sg_public": "",
+        "sg_public_token": "",
+        "service_rest_protocol": "",
+        "_certpath": "",
+        "_bucket": "astenpos",
+        "_user_bucket": "astenpos",
+        "_password_bucket": "astenpos"
+      },
+      "astenposServer": {
+        "server": "10.0.0.183",
         "sg_admin": "",
         "sg_admin_token": "",
         "sg_public": "",

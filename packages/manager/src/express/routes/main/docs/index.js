@@ -120,6 +120,9 @@ function addRouters (router) {
       res.send(data)
     }
   })
+  /**
+   * (`owner`,`type`,lower((meta(self).`id`)),meta(self).`cas` DESC,to_boolean((`date_closing`)))
+   */
   router.get('/docs/browser', async function (req, res) {
     const { connClass, query } = req
     const parsedOwner = utils.parseOwner(req)
@@ -128,7 +131,7 @@ function addRouters (router) {
     const filter = text ? `AND LOWER(META().id) LIKE '%${text.toLowerCase()}%' AND ${parsedOwner.queryCondition}` : `AND ${parsedOwner.queryCondition}`
     const params = `${cursor}${filter}`
     const queryTotal = `SELECT RAW COUNT(*) total_row from \`${connClass.astenposBucketName}\` WHERE type is not missing ${filter}`
-    const queryRows = `SELECT META().id, META().cas \`key\` from \`${connClass.astenposBucketName}\` WHERE type is not missing ${params} ORDER BY META().cas DESC LIMIT ${limit}`
+    const queryRows = `SELECT META().id, META().cas \`key\`, TOBOOLEAN(date_closing) noChannel from \`${connClass.astenposBucketName}\` WHERE type is not missing ${params} ORDER BY META().cas DESC LIMIT ${limit}`
     const promises = [
       couchQueries.exec(queryRows, connClass.cluster),
       couchQueries.exec(queryTotal, connClass.cluster),

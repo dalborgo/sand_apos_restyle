@@ -7,6 +7,7 @@ import { testParams } from 'src/utils/urlFunctions'
 import { FormattedMessage } from 'react-intl'
 import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
+import useAuth from '../../../../hooks/useAuth'
 
 const BG_COLOR = '#c0efdd'
 
@@ -39,8 +40,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }), { name: 'MuiBrowserElem' })
 
-const ListElem = withWidth()(({ text, value, remove, locked, isSingleRow, width }) => {
+const ListElem = withWidth()(({ text, value, remove, noChannel, locked, isSingleRow, width }) => {
   const classes = useStyles()
+  const { selectedCode: { code: owner } } = useAuth()
   const history = useHistory()
   const baseUrl = '/app/reports/browser'
   const handleSelect = useCallback(event => {
@@ -74,10 +76,10 @@ const ListElem = withWidth()(({ text, value, remove, locked, isSingleRow, width 
   let linkClasses = clsx(classes.link)
   let containerClasses = clsx(classes.container, { [classes.containerSelected]: params && params['docId'] === text })
   if (value) {
-    const [first] = value
-    linkClasses += ` ${clsx(first.includes('phone') ? classes.linkPhone : classes.linkServer)}`
+    const [first] = value || []
+    linkClasses += ` ${clsx(first.includes(owner) ? classes.linkPhone : classes.linkServer)}`
   } else {
-    linkClasses += ` ${clsx(classes.linkStandard)}`
+    linkClasses += ` ${clsx(noChannel ? classes.linkServer : classes.linkPhone)}`
   }
   return (
     <Box alignItems="center" className={containerClasses} display="flex" id={text} onClick={handleSelect}>
@@ -127,6 +129,7 @@ const DocList = memo(function DocList ({ data, fetchMore, canFetchMore, isFetchi
                     isSingleRow={page.results.rows.length === 1 && i === 0}
                     key={elem.id}
                     locked={locked}
+                    noChannel={elem.noChannel}
                     remove={remove}
                     text={elem.id}
                     value={elem.value}
