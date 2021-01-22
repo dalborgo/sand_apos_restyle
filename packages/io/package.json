@@ -10,6 +10,6 @@
     "couchbase": "^3.1.1",
     "http-message-parser": "^0.0.34",
     "nodemailer": "^6.4.17",
-    "swagger-client": "^3.12.1"
+    "swagger-client": "^3.12.2"
   }
 }

@@ -10,5 +10,4 @@
 /packages/web/build/
 yarn.lock
 /packages/web/.eslintcache
-/packages/manager/src/db/dev-CA.pem
 /packages/manager/dev-CA.pem

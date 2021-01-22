@@ -123,7 +123,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
                 }
               }
               fullWidth
-              label="Nome Utente"
+              label={intl.formatMessage(messages.common_username)}
               margin="normal"
               name="username"
               onChange={handleChange}

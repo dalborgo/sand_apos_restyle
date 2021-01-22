@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     justifyContent: 'center',
     left: 0,
-    padding: theme.spacing(3),
     position: 'fixed',
     top: 0,
     width: '100%',
@@ -18,15 +17,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SlashScreen = () => {
+const SplashScreen = () => {
   const classes = useStyles()
   return (
     <div className={classes.root}>
-      <Box width={400}>
+      <Box width="90%">
         <LinearProgress />
       </Box>
     </div>
   )
 }
 
-export default SlashScreen
+export default SplashScreen

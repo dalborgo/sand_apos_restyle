@@ -21,6 +21,10 @@ export const messages = defineMessages({
     id: 'common.tot',
     defaultMessage: 'Tot',
   },
+  common_username: {
+    id: 'common.username',
+    defaultMessage: 'Nome Utente',
+  },
   common_table: {
     id: 'common.table',
     defaultMessage: 'Tavolo',

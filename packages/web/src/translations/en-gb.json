@@ -96,5 +96,6 @@
   "common.export": "",
   "common.exportAll": "",
   "common.exportMenu": "",
-  "common.exportTable": ""
+  "common.exportTable": "",
+  "common.username": ""
 }

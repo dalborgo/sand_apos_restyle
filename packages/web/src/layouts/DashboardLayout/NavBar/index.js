@@ -135,7 +135,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
       height="100%"
     >
       <PerfectScrollbar options={{ suppressScrollX: true }} ref={PerfectScrollbarRef}>
-        <Box p={2}>
+        <Box p={2} pt={3}>
           <Box
             display="flex"
             justifyContent="center"
@@ -171,7 +171,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
           </Box>
         </Box>
         <Divider/>
-        <Box p={2}>
+        <Box p={2} pt={1}>
           {
             sections.map(section => (
               <List
