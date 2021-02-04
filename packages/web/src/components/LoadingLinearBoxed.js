@@ -14,4 +14,8 @@ LoadingLinearBoxed.propTypes = {
   boxHeight: PropTypes.number.isRequired,
 }
 
+LoadingLinearBoxed.defaultProps = {
+  boxHeight: 0,
+}
+
 export default LoadingLinearBoxed

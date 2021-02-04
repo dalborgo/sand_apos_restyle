@@ -3,7 +3,6 @@ import https from 'https'
 
 async function getVersion (connection = {}) {
   const { DASHBOARD_URL } = connection.astConnection
-  console.log(DASHBOARD_URL)
   const { data: results } = await axios.get(`${DASHBOARD_URL}/versions`,
     {
       httpsAgent: new https.Agent({

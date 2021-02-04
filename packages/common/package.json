@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "license": "MIT",
   "dependencies": {
-    "currency-symbol-map": "^4.0.4",
+    "currency-symbol-map": "^5.0.1",
     "dot-object": "^2.1.4",
     "generate-password": "^1.6.0",
     "locale-currency": "^0.0.2",
@@ -13,7 +13,7 @@
     "moment-range": "^4.0.2",
     "nanoid": "^3.1.20",
     "numeral": "^2.0.6",
-    "pm2": "^4.5.1",
+    "pm2": "^4.5.4",
     "winston": "^3.3.3",
     "yup": "^0.32.8"
   }

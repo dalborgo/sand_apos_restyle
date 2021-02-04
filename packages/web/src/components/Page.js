@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import useAuth from 'src/hooks/useAuth'
 import { LinearProgress, makeStyles } from '@material-ui/core'
 import { useGeneralStore } from 'src/zustandStore'
-
+import startCase from 'lodash/startCase'
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -22,7 +22,7 @@ const Page = forwardRef(({
 }, ref) => {
   const { selectedCode, user } = useAuth()
   const loading = useGeneralStore(state => state.loading)
-  const prefix = selectedCode?.name || user?.display
+  const prefix = startCase(selectedCode?.name || user?.display)
   const classes = useStyles()
   return (
     <div
