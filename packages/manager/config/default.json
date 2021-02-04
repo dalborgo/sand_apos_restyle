@@ -19,11 +19,10 @@
   "express": {
     "AUTH": "boobs",
     "BODY_LIMIT": "500kb",
-    "IP": "127.0.0.1",
     "REQ_ID": "astenpos",
     "NAMESPACE": "api",
     "MAXAGE_MINUTES": 30,
-    "PORT": 7000
+    "PORT": 9020
   },
   "couchbase": {
     "APK": 315,
@@ -31,12 +30,12 @@
     "connections": {
       "astenposServer": {
         "server": "dev-cluster-02.cloudservice.mobilebridge.it",
-        "backend": "127.0.0.1",
-        "sg_admin": "https://admin.sg.dev-zone-01.cloudservice.mobilebridge.it",
+        "server_protocol": "https",
+        "dashboard_url": "https://console.dev-cluster-02.cloudservice.mobilebridge.it:18091",
+        "sg_admin": "https://admin.sg.dev-cluster-02.cloudservice.mobilebridge.it",
         "sg_admin_token": "YXN0ZW4tYWRtaW46Zkx0TDZkYmZjTmR0clJCejR4",
-        "sg_public": "https://sg.dev-zone-01.cloudservice.mobilebridge.it",
+        "sg_public": "https://sg.dev-cluster-02.cloudservice.mobilebridge.it",
         "sg_public_token": "YXN0ZW46eThVaXZ2b2p6RmFFb2huUTlm",
-        "service_rest_protocol": "https",
         "_certpath": "dev-CA.pem",
         "_bucket": "ast-20006-dev",
         "_user_bucket": "asten-admin",

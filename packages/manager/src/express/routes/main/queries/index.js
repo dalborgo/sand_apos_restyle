@@ -10,7 +10,7 @@ const { BadRequest } = require(__errors)
 const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
 
-async function queryByType (req) {
+export async function queryByType (req) {
   const { connClass, body, query } = req
   const parsedOwner = utils.parseOwner(req)
   const {
@@ -49,7 +49,7 @@ export async function queryById (req, extra) {
   const statement = `${knex_.toQuery()} USE KEYS "${id}"${conditions}`
   const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
   if (!ok) {return { ok, message, err }}
-  return { ok, results: data.length ? data[0] : null }
+  return data.length ? { ok, results: data.length ? data[0] : null } : { ok: false, message: 'not found', errCode: 404, id }
 }
 
 function createSetStatement (val) {
@@ -79,8 +79,8 @@ function createUnsetStatement (val) {
 
 function addRouters (router) {
   /**
-  * query generica, che non dovrebbe essere usata dal portale, ma da app che vogliono collegarsi (richiede basicAuth sempre).
-  */
+   * query generica, che non dovrebbe essere usata dal portale, ma da app che vogliono collegarsi (richiede basicAuth sempre).
+   */
   router.post('/queries/raw_query', reqAuthPost, async function (req, res) {
     const { connClass, body } = req
     const { statement, options } = body

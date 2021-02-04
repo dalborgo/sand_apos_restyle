@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start web rewired": "set PORT=7001&&react-app-rewired start",
-    "start web": "set PORT=7001&&react-scripts start",
+    "start web rewired": "set PORT=9021&&react-app-rewired start",
+    "start web": "set PORT=9021&&react-scripts start",
     "build": "react-scripts build"
   },
   "browserslist": {

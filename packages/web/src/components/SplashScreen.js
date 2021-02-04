@@ -21,7 +21,7 @@ const SplashScreen = () => {
   const classes = useStyles()
   return (
     <div className={classes.root}>
-      <Box width="90%">
+      <Box width="50%">
         <LinearProgress />
       </Box>
     </div>

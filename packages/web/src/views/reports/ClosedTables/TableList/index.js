@@ -1,7 +1,6 @@
 import React, { memo, useCallback, useState } from 'react'
 import {
   Grid,
-  SearchPanel,
   Table,
   TableHeaderRow,
   TableRowDetail,
@@ -22,9 +21,9 @@ import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { LoadingComponent } from 'src/components/TableComponents'
 import { CellHeader, RootToolbar } from 'src/components/TableComponents/CellBase'
-import { SearchInput } from 'src/components/TableComponents/SearchInput'
 import { useMoneyFormatter } from 'src/utils/formatters'
 import TableDetailToggleCell from './comps/TableDetailToggleCellBase'
+import SearchPanelIntl from 'src/components/TableComponents/SearchPanelIntl'
 import { withWidth } from '@material-ui/core'
 
 const getRowId = row => row._id
@@ -52,19 +51,7 @@ const IntegratedFilteringSel = memo(function IntegratedFilteringSel () {
     />
   )
 })
-const SearchPanelIntl = memo(function SearchPanelIntl () {
-  const intl = useIntl()
-  return (
-    <SearchPanel
-      inputComponent={SearchInput}
-      messages={
-        {
-          searchPlaceholder: intl.formatMessage(messages['common_search']),
-        }
-      }
-    />
-  )
-})
+
 const SelectiveTable = memo(function SelectiveTable ({ isIdle, isFetching, width }) {
   const noDataCellComponent = useCallback(({ colSpan }) =>
     <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])

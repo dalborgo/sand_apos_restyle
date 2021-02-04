@@ -6,9 +6,9 @@
     "connections": {
       "molo": {
         "server": "dev-cluster-02.cloudservice.mobilebridge.it",
-        "sg_admin": "https://admin.sg.dev-zone-01.cloudservice.mobilebridge.it",
+        "sg_admin": "https://admin.sg.dev-cluster-02.cloudservice.mobilebridge.it",
         "sg_admin_token": "YXN0ZW4tYWRtaW46Zkx0TDZkYmZjTmR0clJCejR4",
-        "sg_public": "https://sg.dev-zone-01.cloudservice.mobilebridge.it",
+        "sg_public": "https://sg.dev-cluster-02.cloudservice.mobilebridge.it",
         "sg_public_token": "YXN0ZW46eThVaXZ2b2p6RmFFb2huUTlm",
         "service_rest_protocol": "https",
         "_certpath": "dev-CA.pem",
@@ -18,6 +18,8 @@
       },
       "251": {
         "server": "192.168.15.251",
+        "server_protocol": "http",
+        "dashboard_url": "",
         "sg_admin": "",
         "sg_admin_token": "",
         "sg_public": "",
@@ -28,8 +30,10 @@
         "_user_bucket": "astenpos",
         "_password_bucket": "astenpos"
       },
-      "astenposServer": {
+      "183": {
         "server": "10.0.0.183",
+        "server_protocol": "http",
+        "dashboard_url": "",
         "sg_admin": "",
         "sg_admin_token": "",
         "sg_public": "",

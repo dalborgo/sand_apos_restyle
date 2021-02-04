@@ -1,8 +1,15 @@
 import axios from 'axios'
+import https from 'https'
 
 async function getVersion (connection = {}) {
-  const { HOST } = connection
-  const { data: results } = await axios.get(`http://${HOST}:8091/versions`)
+  const { DASHBOARD_URL } = connection.astConnection
+  console.log(DASHBOARD_URL)
+  const { data: results } = await axios.get(`${DASHBOARD_URL}/versions`,
+    {
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false,
+      }),
+    })
   return { ok: true, results }
 }
 

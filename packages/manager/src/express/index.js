@@ -1,4 +1,4 @@
-import { cDate, numeric, cFunctions } from '@adapter/common'
+import { cDate, cFunctions, numeric } from '@adapter/common'
 import log from '@adapter/common/src/winston'
 import indexRouter from './routes'
 import appRouter from './routes/main'
@@ -90,7 +90,17 @@ function getInterceptedResponse (message) {
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   log.error(err)
-  err.isAxiosError && log.error('Is an axios error!')
+  let responseAxiosError
+  if (err.isAxiosError) {
+    log.error('Is an axios error!')
+    if (err.response) {
+      responseAxiosError = {
+        data: err.response.data,
+        status: err.response.status,
+        headers: err.response.headers,
+      }
+    }
+  }
   const { interceptedResponseStatus, hasToRestartServer } = getInterceptedResponse(err.message)
   if (hasToRestartServer && cFunctions.isProd()) {
     setTimeout(() => {
@@ -100,7 +110,13 @@ app.use((err, req, res, next) => {
   }
   res.status(interceptedResponseStatus || err.status || 500)
   const couchErrorCode = get(err, 'cause.code')
-  res.send({ ok: false, message: err.message, err, errorCode: couchErrorCode || err.code })
+  res.send({
+    cause: couchErrorCode || err.code,
+    err,
+    message: err.message,
+    ok: false,
+    responseAxiosError,
+  })
 })
 
 app.use(function (req, res) {

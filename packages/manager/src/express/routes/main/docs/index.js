@@ -53,7 +53,7 @@ function addRouters (router) {
       endCursor = endCursor || getEndkey(cursor)
       const filter = `AND ${parsedOwner.queryCondition}`
       const queryTotal = `SELECT RAW COUNT(*) total_row from \`${connClass.astenposBucketName}\` WHERE type is not missing ${filter}`
-      const protocol = connClass.serviceRestProtocol
+      const protocol = connClass.serverProtocol
       const params = {
         ...rest,
         endkey: `"${endCursor}"`,

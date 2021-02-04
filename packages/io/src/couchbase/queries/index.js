@@ -30,10 +30,10 @@ async function exec (statement, cluster, options_ = {}) {
  * - [N1Ql rest api](https://docs.couchbase.com/server/current/n1ql/n1ql-rest-api/index.html)
  */
 async function execByService (statement, connection = {}, options = {}) {
-  const { HOST, PASSWORD, BUCKET_NAME, SERVICE_REST_PROTOCOL = 'http' } = connection
+  const { HOST, PASSWORD, BUCKET_NAME, SERVER_PROTOCOL = 'http' } = connection
   const auth = cFunctions.getAuth(BUCKET_NAME, PASSWORD)
-  const port = SERVICE_REST_PROTOCOL === 'http' ? '8093' : '18093'
-  const url = `${SERVICE_REST_PROTOCOL}://${HOST}:${port}/query/service`
+  const port = SERVER_PROTOCOL === 'https' ? '18093' : '8093'
+  const url = `${SERVER_PROTOCOL}://${HOST}:${port}/query/service`
   log.debug('Query service url', url)
   try {
     const params = {

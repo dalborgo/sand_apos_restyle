@@ -8,6 +8,7 @@ import { envConfig } from 'src/init'
 import { expandError } from 'src/utils/errors'
 import log from '@adapter/common/src/log'
 import isString from 'lodash/isString'
+import isObject from 'lodash/isObject'
 import mapValues from 'lodash/mapValues'
 import qs from 'qs'
 
@@ -54,9 +55,9 @@ export function useSnackQueryError () {
       const { message, isNetworkError, responseData } = expandError(err)
       if (isNetworkError) {
         enqueueSnackbar(intl.formatMessage(messages['network_error']), { variant: 'default', ...options })
-      } else if (responseData) {
+      } else if (responseData && isObject(responseData)) {
         const { values, code: errCode } = responseData.err || {}
-        const message = messages[responseData.code || errCode]
+        const message = messages[responseData.code || `cause_${responseData.cause}` || errCode]
         enqueueSnackbar(message ? intl.formatMessage(message, values) : responseData.message, {...options})
       } else {
         log.debug('error code:', err.code)

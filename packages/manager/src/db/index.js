@@ -18,15 +18,21 @@ void (async () => {
       password: connection._password_bucket || connection._bucket,
       logFunc: connections_.logFunc,
     }
+    const serverProtocol = connection.server_protocol || 'http'
+    const couchbasePort = serverProtocol === 'https' ? '18091' : '8091'
     const extraOptions = {
-      serviceRestProtocol: connection.service_rest_protocol || 'http',
+      dashboardUrl: connection.dashboard_url || `${serverProtocol}://${connection.server}:${couchbasePort}`,
+      serverProtocol,
       sgAdmin: connection.sg_admin,
       sgAdminToken: connection.sg_admin_token,
       sgPublic: connection.sg_public,
       sgPublicToken: connection.sg_public_token,
     }
-    const queryString = cFunctions.objToQueryString({ certpath: connection._certpath, config_total_timeout: CONFIG_TOTAL_TIMEOUT }, true)
-    const prefix = connection._certpath ? 'couchbases' : 'couchbase'
+    const queryString = cFunctions.objToQueryString({
+      certpath: connection._certpath,
+      config_total_timeout: CONFIG_TOTAL_TIMEOUT,
+    }, true)
+    const prefix = connection.server_protocol === 'https' ? 'couchbases' : 'couchbase'
     const connStr = `${prefix}://${connection.server}${queryString}`
     log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)

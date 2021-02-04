@@ -1,5 +1,6 @@
 import queries from './queries'
 import docs from './docs'
+import hotel from './hotel'
 import info from './info'
 import installations from './installations'
 import jwt from './jwt'
@@ -14,6 +15,7 @@ require('express-async-errors')
 
 queries.addRouters(router)
 docs.addRouters(router)
+hotel.addRouters(router)
 info.addRouters(router)
 installations.addRouters(router)
 jwt.addRouters(router)

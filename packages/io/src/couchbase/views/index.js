@@ -14,7 +14,7 @@ async function execService (params, connection = {}) {
   const { ddoc, view, protocol = 'http', ...rest } = params
   const params_ = { stale: false, ...rest }
   const auth = cFunctions.getAuth(BUCKET_NAME, PASSWORD)
-  const port = protocol === 'http' ? 8092 : 18092
+  const port = protocol === 'https' ? '18092' : '8092'
   try {
     const queryString = cFunctions.objToQueryString(params_)
     const url = `${protocol}://${HOST}:${port}/${BUCKET_NAME}/_design/${ddoc || BUCKET_NAME}/_view/${view}?${queryString}`

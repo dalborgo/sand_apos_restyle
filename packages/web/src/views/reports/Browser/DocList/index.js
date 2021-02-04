@@ -7,7 +7,7 @@ import { testParams } from 'src/utils/urlFunctions'
 import { FormattedMessage } from 'react-intl'
 import CloseIcon from '@material-ui/icons/Close'
 import IconButton from '@material-ui/core/IconButton'
-import useAuth from '../../../../hooks/useAuth'
+import useAuth from 'src/hooks/useAuth'
 
 const BG_COLOR = '#c0efdd'
 

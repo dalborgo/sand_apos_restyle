@@ -4,15 +4,13 @@ import config from 'config'
 const { connections } = config.get('couchbase')
 const {
   _bucket: AST_DEFAULT,
-  backend: BACKEND_HOST_DEFAULT,
   server: HOST_DEFAULT,
 } = connections['astenposServer']
 
 export default class Couchbase {
-  constructor (cluster, astenpos, options, backendHost = BACKEND_HOST_DEFAULT) {
+  constructor (cluster, astenpos, options) {
     this._cluster = cluster
     this._astenpos = astenpos
-    this._backendHost = backendHost || ''
     this._op = options || {}
   }
   
@@ -22,6 +20,10 @@ export default class Couchbase {
   
   get host () {
     return this.connHost()
+  }
+  
+  get dashboardUrl () {
+    return this._op['dashboardUrl']
   }
   
   get sgAdmin () {
@@ -40,20 +42,10 @@ export default class Couchbase {
     return this._op['sgPublicToken'] || ''
   }
   
-  get serviceRestProtocol () {
-    return this._op['serviceRestProtocol']
+  get serverProtocol () {
+    return this._op['serverProtocol']
   }
-  
-  get backendHost () {
-    return this._backendHost
-  }
-  
-  get connJSON () {
-    return {
-      HOST: this.host,
-      BACKEND_HOST: this.backendHost,
-    }
-  }
+
   
   get astenposBucketName () {
     return this._astenpos.name || AST_DEFAULT
@@ -73,9 +65,10 @@ export default class Couchbase {
       BUCKET_NAME: this.astenposBucketName,
       CLUSTER: this.cluster,
       COLLECTION: this.astenposBucketCollection,
+      DASHBOARD_URL: this.dashboardUrl,
       HOST: this.host,
       PASSWORD: this.astenposBucketPassword(),
-      SERVICE_REST_PROTOCOL: this.serviceRestProtocol,
+      SERVER_PROTOCOL: this.serverProtocol,
       SG_ADMIN: this.sgAdmin,
       SG_ADMIN_TOKEN: this.sgAdminToken,
       SG_PUBLIC: this.sgPublic,

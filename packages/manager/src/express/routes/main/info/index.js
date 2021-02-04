@@ -10,12 +10,12 @@ function addRouters (router) {
     res.send(data)
   })
   router.get('/info/couch_server', async function (req, res) {
-    const { connJSON } = req
-    const data = await couchServer.getVersion(connJSON)
+    const { connClass } = req
+    const data = await couchServer.getVersion(connClass)
     res.send(data)
   })
-  router.get('/apk/version', async function (req, res) {
-    res.send(String(APK))
+  router.get('/info/apk_version', async function (req, res) {
+    res.send({ok: true, results: APK})
   })
 }
 

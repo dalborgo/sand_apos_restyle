@@ -9,7 +9,6 @@ require('express-async-errors')
 router.use(async function (req, res, next) {
   const connections_ = await connections.getDatabase()
   req.connClass = connections_
-  req.connJSON = connections_.connJSON
   next()
 })
 
