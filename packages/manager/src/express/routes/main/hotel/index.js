@@ -4,8 +4,14 @@ import get from 'lodash/get'
 import log from '@adapter/common/src/winston'
 import findIndex from 'lodash/findIndex'
 import { reqAuthGet } from '../../basicAuth'
+import keyBy from 'lodash/keyBy'
+import template from 'lodash/template'
+import reduce from 'lodash/reduce'
+import moment from 'moment'
 
 const { utils } = require(__helpers)
+
+const formatString = val => val.charAt(0) + val.slice(1)
 
 function addRouters (router) {
   router.get('/hotel/movements', reqAuthGet, async function (req, res) {
@@ -88,6 +94,139 @@ function addRouters (router) {
       }
     }
     res.send({ ok: true, results: results })
+  })
+
+  router.post('/hotel/charge', async function (req, res) {
+    const { connClass, body } = req
+    utils.controlParameters(body, ['item', 'owner'])
+    const { item = {}, owner } = body
+    const COVERS_LABEL = 'Coperti', FALLBACK_LABEL = 'stelle_fallback', charges = []
+    const { ok, message, results: gc, ...extra } = await queryById({
+      connClass,
+      body: {
+        columns: ['customize_stelle_options'],
+        id: `general_configuration_${owner}`,
+      },
+    })
+    if (!ok) {return res.send({ ok, message, ...extra })}
+    const {
+      generic_product: genericProduct,
+      hotel_code: hotelCode,
+      hotel_server: hotelServer,
+      macro_display_covers: macroDisplayCovers_,
+      path_charges: pathCharges,
+      port = '',
+      print_stelle_price_0: printStellePriceZero_,
+      protocol = 'http',
+      split_total_per_cover,
+      token,
+    } = get(gc, 'customize_stelle_options', {})
+    const splitTotalPerCover = Boolean(split_total_per_cover)
+    const printStellePriceZero = Boolean(printStellePriceZero_)
+    const macroDisplayCovers = macroDisplayCovers_ || COVERS_LABEL
+    const fallbackForTemplate = get(genericProduct, 'fallback', '')
+    const groupByMacro = get(genericProduct, 'group_by_macro', false)
+    const fallbackCode = fallback.match(/<%=\s*room\s*%>/) ? item._id : FALLBACK_LABEL
+    const compiled = template(fallbackForTemplate)
+    const fallback = compiled({ room: item.room_name }).trim()
+    const entities = keyBy(get(item, 'entries'), 'id')
+    console.log('entities:', entities)
+    const income = {
+      charge_id: String(item.number),
+      room_code: item.stelle_room,
+      date: moment().toISOString(),
+    }
+    if (item.pms_customer_id) {income.pms_customer_id = parseInt(item.pms_customer_id, 10)}
+    
+    const saleItems = []
+    const groupItems = {}
+    let total = item.cover_price * item.covers
+    if (total) {
+      saleItems.push({
+        quantity: item.covers,
+        product_description: 'Coperti',
+        product_code: 'cover', // hardcoded
+        unit_price: parseFloat((item.cover_price / 1000).toString()),
+      })
+      groupItems[macroDisplayCovers] = {
+        quantity: 1,
+        unit_price: parseFloat((item.cover_price * item.covers / 1000).toString()),
+        id: 'covers', // hardcoded
+      }
+    }
+    for (let entity in entities) {
+      if (entities[entity].product_qta === 0) {continue}
+      let item = {}
+      let c1 = {
+        qta_prod: entities[entity].product_qta + ' ' + formatString(entities[entity].product_display),
+        qta: entities[entity].product_qta,
+        id: entities[entity].id,
+        price: entities[entity].product_price * entities[entity].product_qta,
+      }
+      let c2 = {
+        var: entities[entity].orderVariants,
+        totale: reduce(entities[entity].orderVariants, function (sum, curr) {
+          return curr.variant_price * curr.variant_qta * entities[entity].product_qta + sum
+        }, 0),
+      }
+      total += c1.price + c2.totale
+      item.quantity = entities[entity].product_qta
+      item.product_description = entities[entity].product_display
+      item.product_code = entities[entity].product_id
+      const totPrice = entities[entity].product_price + c2.totale / entities[entity].product_qta
+      item.unit_price = parseFloat((totPrice / 1000).toString())
+      if (totPrice || printStellePriceZero) {
+        saleItems.push(item)
+        if (groupItems[entities[entity].product_macro_display]) {
+          groupItems[entities[entity].product_macro_display].quantity = 1 // altrimenti moltiplica per il unit_price
+          groupItems[entities[entity].product_macro_display].unit_price += item.unit_price * item.quantity
+          groupItems[entities[entity].product_macro_display].id = entities[entity].product_macro_display
+        } else {
+          groupItems[entities[entity].product_macro_display] = {
+            quantity: 1,
+            unit_price: item.unit_price * item.quantity,
+            id: entities[entity].product_macro_display,
+          }
+        }
+      }
+    }
+    let saleItemsCorp = []
+    for (let group in groupItems) {
+      saleItemsCorp.push({
+        quantity: splitTotalPerCover && item.covers > 1 ? item.covers : groupItems[group].quantity,
+        product_description: group,
+        product_code: groupItems[group].id,
+        unit_price: splitTotalPerCover && item.covers > 1 ? groupItems[group].unit_price / item.covers : groupItems[group].unit_price,
+      })
+    }
+    income.sale_items = saleItems
+    income.final_amount = parseFloat((item.final_price / 1000).toString())
+    if (fallback) {
+      income.sale_items = []
+      if (splitTotalPerCover && item.covers > 1) {
+        income.sale_items.push({
+          product_description: fallback,
+          product_code: fallbackCode,
+          quantity: item.covers,
+          unit_price: parseFloat((item.final_price / (item.covers * 1000)).toString()),
+        })
+      } else {
+        income.sale_items = [{
+          product_description: fallback,
+          product_code: fallbackCode,
+          quantity: 1,
+          unit_price: income.final_amount,
+        }]
+      }
+    }
+    if (groupByMacro) {
+      income.sale_items = saleItemsCorp
+    }
+    charges.push(income)
+    log.info('charges', JSON.stringify({ charges }, null, 2))
+    const url = `${protocol}://${hotelServer}${port}${pathCharges}`
+    console.log('url:', url)
+    res.send({ ok: true })
   })
 }
 
