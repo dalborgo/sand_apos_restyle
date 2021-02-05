@@ -11,8 +11,6 @@ import moment from 'moment'
 
 const { utils } = require(__helpers)
 
-const formatString = val => val.charAt(0) + val.slice(1)
-
 function addRouters (router) {
   router.get('/hotel/movements', reqAuthGet, async function (req, res) {
     const { connClass, query } = req
@@ -28,13 +26,13 @@ function addRouters (router) {
     })
     if (!ok) {return res.send({ ok, message, ...extra })}
     const {
-      protocol,
       cast_movements_in_array: castInArray,
-      headers,
+      headers = { 'Content-Type': 'application/json' },
       hotel_code: hotelCode,
       hotel_server: hotelServer,
       path_movements: path,
-      port,
+      port = '',
+      protocol = 'http',
       sgs,
       token: clientToken,
     } = get(gc, 'customize_stelle_options', {})
@@ -45,20 +43,10 @@ function addRouters (router) {
       add_extra: true,
     }
     if (castInArray) {getMovements = [getMovements]}
-    const data =
-      {
-        clientToken,
-        hotelCode,
-        get_movements: getMovements,
-      }
+    const data = { clientToken, hotelCode, get_movements: getMovements }
     const url = `${protocol}://${hotelServer}${port ? `:${port}` : ''}${path}`
     log.debug('hotel url:', url)
-    const config = {
-      method: 'post',
-      url,
-      headers,
-      data,
-    }
+    const config = { method: 'post', url, headers, data }
     const results = []
     const { data: { movements } } = await axios(config)
     for (let movement of movements) {
@@ -95,11 +83,11 @@ function addRouters (router) {
     }
     res.send({ ok: true, results: results })
   })
-
+  
   router.post('/hotel/charge', async function (req, res) {
     const { connClass, body } = req
     utils.controlParameters(body, ['item', 'owner'])
-    const { item = {}, owner } = body
+    const { item: printDoc, owner } = body
     const COVERS_LABEL = 'Coperti', FALLBACK_LABEL = 'stelle_fallback', charges = []
     const { ok, message, results: gc, ...extra } = await queryById({
       connClass,
@@ -111,69 +99,65 @@ function addRouters (router) {
     if (!ok) {return res.send({ ok, message, ...extra })}
     const {
       generic_product: genericProduct,
+      headers = { 'Content-Type': 'application/json' },
       hotel_code: hotelCode,
       hotel_server: hotelServer,
       macro_display_covers: macroDisplayCovers_,
-      path_charges: pathCharges,
+      path_charges: path,
       port = '',
       print_stelle_price_0: printStellePriceZero_,
       protocol = 'http',
       split_total_per_cover,
-      token,
+      token: clientToken,
     } = get(gc, 'customize_stelle_options', {})
     const splitTotalPerCover = Boolean(split_total_per_cover)
     const printStellePriceZero = Boolean(printStellePriceZero_)
     const macroDisplayCovers = macroDisplayCovers_ || COVERS_LABEL
-    const fallbackForTemplate = get(genericProduct, 'fallback', '')
+    const fallbackTemplate = get(genericProduct, 'fallback', '')
     const groupByMacro = get(genericProduct, 'group_by_macro', false)
-    const fallbackCode = fallback.match(/<%=\s*room\s*%>/) ? item._id : FALLBACK_LABEL
-    const compiled = template(fallbackForTemplate)
-    const fallback = compiled({ room: item.room_name }).trim()
-    const entities = keyBy(get(item, 'entries'), 'id')
-    console.log('entities:', entities)
+    const fallbackCode = fallbackTemplate.match(/<%=\s*room\s*%>/) ? printDoc._id : FALLBACK_LABEL
+    const compiled = template(fallbackTemplate)
+    const fallback = compiled({ room: printDoc.room_name }).trim()
+    const entities = keyBy(get(printDoc, 'entries'), 'id')
     const income = {
-      charge_id: String(item.number),
-      room_code: item.stelle_room,
+      charge_id: String(printDoc.number),
+      room_code: printDoc.stelle_room,
       date: moment().toISOString(),
     }
-    if (item.pms_customer_id) {income.pms_customer_id = parseInt(item.pms_customer_id, 10)}
+    if (printDoc.pms_customer_id) {income.pms_customer_id = parseInt(printDoc.pms_customer_id, 10)}
     
     const saleItems = []
     const groupItems = {}
-    let total = item.cover_price * item.covers
+    let total = printDoc.cover_price * printDoc.covers
     if (total) {
       saleItems.push({
-        quantity: item.covers,
+        quantity: printDoc.covers,
         product_description: 'Coperti',
         product_code: 'cover', // hardcoded
-        unit_price: parseFloat((item.cover_price / 1000).toString()),
+        unit_price: parseFloat((printDoc.cover_price / 1000).toString()),
       })
       groupItems[macroDisplayCovers] = {
         quantity: 1,
-        unit_price: parseFloat((item.cover_price * item.covers / 1000).toString()),
+        unit_price: parseFloat((printDoc.cover_price * printDoc.covers / 1000).toString()),
         id: 'covers', // hardcoded
       }
     }
     for (let entity in entities) {
       if (entities[entity].product_qta === 0) {continue}
       let item = {}
-      let c1 = {
-        qta_prod: entities[entity].product_qta + ' ' + formatString(entities[entity].product_display),
-        qta: entities[entity].product_qta,
-        id: entities[entity].id,
+      const c1 = {
         price: entities[entity].product_price * entities[entity].product_qta,
       }
-      let c2 = {
-        var: entities[entity].orderVariants,
-        totale: reduce(entities[entity].orderVariants, function (sum, curr) {
+      const c2 = {
+        total: reduce(entities[entity].orderVariants, function (sum, curr) {
           return curr.variant_price * curr.variant_qta * entities[entity].product_qta + sum
         }, 0),
       }
-      total += c1.price + c2.totale
+      total += c1.price + c2.total
       item.quantity = entities[entity].product_qta
       item.product_description = entities[entity].product_display
       item.product_code = entities[entity].product_id
-      const totPrice = entities[entity].product_price + c2.totale / entities[entity].product_qta
+      const totPrice = entities[entity].product_price + c2.total / entities[entity].product_qta
       item.unit_price = parseFloat((totPrice / 1000).toString())
       if (totPrice || printStellePriceZero) {
         saleItems.push(item)
@@ -193,22 +177,22 @@ function addRouters (router) {
     let saleItemsCorp = []
     for (let group in groupItems) {
       saleItemsCorp.push({
-        quantity: splitTotalPerCover && item.covers > 1 ? item.covers : groupItems[group].quantity,
+        quantity: splitTotalPerCover && printDoc.covers > 1 ? printDoc.covers : groupItems[group].quantity,
         product_description: group,
         product_code: groupItems[group].id,
-        unit_price: splitTotalPerCover && item.covers > 1 ? groupItems[group].unit_price / item.covers : groupItems[group].unit_price,
+        unit_price: splitTotalPerCover && printDoc.covers > 1 ? groupItems[group].unit_price / printDoc.covers : groupItems[group].unit_price,
       })
     }
     income.sale_items = saleItems
-    income.final_amount = parseFloat((item.final_price / 1000).toString())
+    income.final_amount = parseFloat((printDoc.final_price / 1000).toString())
     if (fallback) {
       income.sale_items = []
-      if (splitTotalPerCover && item.covers > 1) {
+      if (splitTotalPerCover && printDoc.covers > 1) {
         income.sale_items.push({
           product_description: fallback,
           product_code: fallbackCode,
-          quantity: item.covers,
-          unit_price: parseFloat((item.final_price / (item.covers * 1000)).toString()),
+          quantity: printDoc.covers,
+          unit_price: parseFloat((printDoc.final_price / (printDoc.covers * 1000)).toString()),
         })
       } else {
         income.sale_items = [{
@@ -219,14 +203,48 @@ function addRouters (router) {
         }]
       }
     }
-    if (groupByMacro) {
-      income.sale_items = saleItemsCorp
-    }
+    if (groupByMacro) {income.sale_items = saleItemsCorp}
     charges.push(income)
-    log.info('charges', JSON.stringify({ charges }, null, 2))
-    const url = `${protocol}://${hotelServer}${port}${pathCharges}`
-    console.log('url:', url)
-    res.send({ ok: true })
+    log.info('charges', charges)
+    const url = `${protocol}://${hotelServer}${port}${path}`
+    log.debug('charge url:', url)
+    const data = { charges, clientToken, hotelCode }
+    const config = { method: 'post', url, headers, data }
+    const { data: response = {} } = await axios(config)
+    if (Array.isArray(response.received_charges)) {
+      const [receivedCharges] = response.received_charges
+      log.info('charge response', receivedCharges)
+      const [firstCharge] = charges
+      const result = receivedCharges[firstCharge.charge_id]
+      const errCode = result
+      let errObj
+      switch (result) {
+        case '1':
+          return res.send({ ok: true })
+        case '2':
+          errObj = { ok: false, message: 'Default product not set!', errCode }
+          break
+        case '3':
+          errObj = {
+            ok: false,
+            message: `No checked in reservation was found in the room (no. ${firstCharge.room_code}) the extra was charged to!`,
+            errCode,
+          }
+          break
+        case '4':
+          errObj = { ok: false, message: `Date is older than 24 hours: ${firstCharge.date}`, errCode }
+          break
+        case '5':
+          errObj = { ok: false, message: 'Internal Server Error, charge not saved!', errCode }
+          break
+        default:
+          errObj = { ok: false, message: 'Undefined charge error!', errCode }
+      }
+      log.error('Error charge response', JSON.stringify(errObj, null, 2)) // stringify cause inside reserved `message` word 
+      return res.send(errObj)
+    } else {
+      return res.send({ ok: false, message: 'Invalid charge response!', errCode: '100' })
+    }
   })
 }
 
