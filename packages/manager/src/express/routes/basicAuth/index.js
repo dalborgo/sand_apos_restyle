@@ -3,8 +3,8 @@ const { NAMESPACE, AUTH } = config.get('express')
 const basicAuth = require('express-basic-auth')
 const unauthorizedResponse = req => {
   return req.auth
-    ? { ok: false, message: `Credentials ${req.auth.user}:${req.auth.password} rejected!` }
-    : { ok: false, message: 'basicAuth required!' }
+    ? { ok: false, message: `Credentials ${req.auth.user}:${req.auth.password} rejected!`, errCode: 401 }
+    : { ok: false, message: 'basicAuth required!', errCode: 401 }
 }
 export const reqAuthPost = AUTH
   ? basicAuth({

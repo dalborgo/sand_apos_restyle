@@ -3,7 +3,7 @@ import axios from 'axios'
 import get from 'lodash/get'
 import log from '@adapter/common/src/winston'
 import findIndex from 'lodash/findIndex'
-import { reqAuthGet } from '../../basicAuth'
+import { reqAuthGet, reqAuthPost } from '../../basicAuth'
 import keyBy from 'lodash/keyBy'
 import template from 'lodash/template'
 import reduce from 'lodash/reduce'
@@ -84,7 +84,7 @@ function addRouters (router) {
     res.send({ ok: true, results: results })
   })
   
-  router.post('/hotel/charge', async function (req, res) {
+  router.post('/hotel/charge', reqAuthPost, async function (req, res) {
     const { connClass, body } = req
     utils.controlParameters(body, ['item', 'owner'])
     const { item: printDoc, owner } = body
@@ -145,9 +145,7 @@ function addRouters (router) {
     for (let entity in entities) {
       if (entities[entity].product_qta === 0) {continue}
       let item = {}
-      const c1 = {
-        price: entities[entity].product_price * entities[entity].product_qta,
-      }
+      const c1 = { price: entities[entity].product_price * entities[entity].product_qta }
       const c2 = {
         total: reduce(entities[entity].orderVariants, function (sum, curr) {
           return curr.variant_price * curr.variant_qta * entities[entity].product_qta + sum
@@ -207,13 +205,13 @@ function addRouters (router) {
     charges.push(income)
     log.info('charges', charges)
     const url = `${protocol}://${hotelServer}${port}${path}`
-    log.debug('charge url:', url)
+    log.debug('Charge url:', url)
     const data = { charges, clientToken, hotelCode }
     const config = { method: 'post', url, headers, data }
     const { data: response = {} } = await axios(config)
     if (Array.isArray(response.received_charges)) {
       const [receivedCharges] = response.received_charges
-      log.info('charge response', receivedCharges)
+      log.info('Charge response', receivedCharges)
       const [firstCharge] = charges
       const result = receivedCharges[firstCharge.charge_id]
       const errCode = result
@@ -240,7 +238,7 @@ function addRouters (router) {
         default:
           errObj = { ok: false, message: 'Undefined charge error!', errCode }
       }
-      log.error('Error charge response', JSON.stringify(errObj, null, 2)) // stringify cause inside reserved `message` word 
+      log.error('Error charge response', JSON.stringify(errObj, null, 2)) // stringify cause inside there's the reserved `message` word
       return res.send(errObj)
     } else {
       return res.send({ ok: false, message: 'Invalid charge response!', errCode: '100' })
