@@ -85,9 +85,10 @@ function addRouters (router) {
   })
   
   router.post('/hotel/charge', reqAuthPost, async function (req, res) {
-    const { connClass, body } = req
-    utils.controlParameters(body, ['item', 'owner'])
-    const { item: printDoc, owner } = body
+    const { connClass, body, query } = req
+    const allParams = Object.assign(body, query)
+    utils.controlParameters(allParams, ['item', 'owner'])
+    const { item: printDoc, owner } = allParams
     const COVERS_LABEL = 'Coperti', FALLBACK_LABEL = 'stelle_fallback', charges = []
     const { ok, message, results: gc, ...extra } = await queryById({
       connClass,

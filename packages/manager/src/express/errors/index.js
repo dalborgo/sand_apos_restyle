@@ -1,5 +1,5 @@
 export class BadRequest extends Error {
-  constructor (code, values = [], message = 'Bad Request') {
+  constructor (code, values = [], message = 'Bad request') {
     super(message)
     this.status = 400
     this.code = code

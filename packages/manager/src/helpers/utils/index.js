@@ -32,7 +32,7 @@ function controlParameters (query, requiredKeys) {
   }
   if (out.length) {
     errors = out.join(', ')
-    throw new BadRequest('MISSING_PARAMETERS', { parameters: errors })
+    throw new BadRequest('MISSING_PARAMETERS', { parameters: errors }, `Bad request. Missing parameters: ${errors.join(', ')}`)
   }
 }
 
