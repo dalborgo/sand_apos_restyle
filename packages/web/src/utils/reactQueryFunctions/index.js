@@ -10,6 +10,8 @@ import log from '@adapter/common/src/log'
 import isString from 'lodash/isString'
 import isObject from 'lodash/isObject'
 import mapValues from 'lodash/mapValues'
+import { useHistory } from 'react-router'
+import useAuth from 'src/hooks/useAuth'
 import qs from 'qs'
 
 export const axiosLocalInstance = axios.create({
@@ -48,6 +50,8 @@ export const defaultQueryFn = async ({ queryKey }) => {
 
 export function useSnackQueryError () {
   const { enqueueSnackbar } = useSnackbar()
+  const history = useHistory()
+  const { logout } = useAuth()
   const intl = useIntl()
   const [snackQueryError] = useState(() => {
     return (err, options) => {
@@ -56,12 +60,20 @@ export function useSnackQueryError () {
       if (isNetworkError) {
         enqueueSnackbar(intl.formatMessage(messages['network_error']), { variant: 'default', ...options })
       } else if (responseData && isObject(responseData)) {
-        const { values, code: errCode } = responseData.err || {}
-        const message = messages[responseData.code || `cause_${responseData.cause}` || errCode]
-        enqueueSnackbar(message ? intl.formatMessage(message, values) : responseData.message, {...options})
+        const { values, code: errCode, name: errName } = responseData.err || {}
+        const message = messages[responseData.code || `cause_${responseData.cause || errName}` || errCode]
+        const isSessionExpired = errName === 'TokenExpiredError'
+        enqueueSnackbar(message ? intl.formatMessage(message, values) : responseData.message, {
+          variant: isSessionExpired ? 'info' : 'error',
+          ...options,
+        })
+        if (isSessionExpired) {
+          logout()
+          history.push('/login')
+        }
       } else {
         log.debug('error code:', err.code)
-        enqueueSnackbar(messages[err.code] ? intl.formatMessage(messages[err.code]) : message, {...options})
+        enqueueSnackbar(messages[err.code] ? intl.formatMessage(messages[err.code]) : message, { ...options })
       }
     }
   })

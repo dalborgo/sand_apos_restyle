@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  cause_TokenExpiredError: {
+    id: 'cause.TokenExpiredError',
+    defaultMessage: 'Sessione scaduta!',
+  },
   mode_INVOICE: {
     id: 'mode.INVOICE',
     defaultMessage: 'Fattura',

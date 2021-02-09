@@ -272,6 +272,7 @@ const BrowserView = () => {
   const prevDocID = useRef(null)
   const snackQueryError = useSnackQueryError()
   const respList = useInfiniteQuery(['docs/browser', text, selectedCode], fetchList, {
+    onError: snackQueryError,
     getNextPageParam: (lastGroup, allGroups) => {
       if (!lastGroup.ok) {
         snackQueryError(lastGroup.err, { preventDuplicate: true })
@@ -304,6 +305,7 @@ const BrowserView = () => {
   }, [text])
   const respDoc = useQuery(['docs/get_by_id', { docId }], {
     enabled: Boolean(docId),
+    onError: snackQueryError,
     onSuccess: ({ ok, results }) => {
       ok && setBrowserArea(results, history)
     },

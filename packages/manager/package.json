@@ -27,6 +27,7 @@
     "morgan": "^1.10.0",
     "node-schedule": "^2.0.0",
     "serve-favicon": "^2.5.0",
+    "soap": "^0.36.0",
     "websocket": "^1.0.33"
   },
   "devDependencies": {

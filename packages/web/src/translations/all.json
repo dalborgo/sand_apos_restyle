@@ -36,6 +36,10 @@
     "defaultMessage": "Nome utente o password errati!"
   },
   {
+    "id": "cause.TokenExpiredError",
+    "defaultMessage": "Sessione scaduta!"
+  },
+  {
     "id": "closing_day.discounts",
     "defaultMessage": "Sconti"
   },

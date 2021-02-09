@@ -7,8 +7,7 @@ const { NAMESPACE } = config.get('express')
 const { connections } = require(__helpers)
 require('express-async-errors')
 router.use(async function (req, res, next) {
-  const connections_ = await connections.getDatabase()
-  req.connClass = connections_
+  req.connClass = await connections.getDatabase()
   next()
 })
 

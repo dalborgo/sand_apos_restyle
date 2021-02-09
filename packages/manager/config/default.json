@@ -21,7 +21,7 @@
     "BODY_LIMIT": "500kb",
     "REQ_ID": "astenpos",
     "NAMESPACE": "api",
-    "MAXAGE_MINUTES": 30,
+    "MAXAGE_MINUTES": 60,
     "PORT": 9020
   },
   "couchbase": {

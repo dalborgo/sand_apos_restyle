@@ -97,5 +97,6 @@
   "common.exportAll": "",
   "common.exportMenu": "",
   "common.exportTable": "",
-  "common.username": ""
+  "common.username": "",
+  "cause.TokenExpiredError": ""
 }

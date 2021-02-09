@@ -97,5 +97,6 @@
   "common.exportAll": "Esporta tabella",
   "common.exportMenu": "Menu esportazione dati",
   "common.exportTable": "Esporta tabella",
-  "common.username": "Nome Utente"
+  "common.username": "Nome Utente",
+  "cause.TokenExpiredError": "Sessione scaduta!"
 }

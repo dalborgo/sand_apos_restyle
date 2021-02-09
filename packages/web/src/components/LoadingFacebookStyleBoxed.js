@@ -31,7 +31,7 @@ function LoadingFacebookStyleBoxed(props) {
       <div className={classes.root}>
         <CircularProgress
           className={classes.bottom}
-          size={60}
+          size={50}
           thickness={3.5}
           variant="determinate"
           {...props}
@@ -45,7 +45,7 @@ function LoadingFacebookStyleBoxed(props) {
           }
           className={classes.top}
           disableShrink
-          size={60}
+          size={50}
           thickness={3.5}
           {...props}
         />
