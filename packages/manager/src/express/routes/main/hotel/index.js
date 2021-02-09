@@ -8,6 +8,7 @@ import keyBy from 'lodash/keyBy'
 import template from 'lodash/template'
 import reduce from 'lodash/reduce'
 import moment from 'moment'
+import { getHotelMetadata, getHotelOptions, saveHotelMenu } from './utils'
 
 const { utils } = require(__helpers)
 
@@ -17,25 +18,19 @@ function addRouters (router) {
     utils.controlParameters(query, ['date_from', 'date_to', 'owner'])
     const { date_from: dateFrom, date_to: dateTo, active_checkins_only: activeOnly_, owner } = query
     const activeOnly = activeOnly_ && activeOnly_ !== 'false'
-    const { ok, message, results: gc, ...extra } = await queryById({
-      connClass,
-      body: {
-        columns: ['customize_stelle_options'],
-        id: `general_configuration_${owner}`,
-      },
-    })
-    if (!ok) {return res.send({ ok, message, ...extra })}
+    const hotelOptionsResponse = await getHotelOptions(connClass, owner)
+    if (!hotelOptionsResponse.ok) {return res.send(hotelOptionsResponse)}
     const {
-      cast_movements_in_array: castInArray,
-      headers = { 'Content-Type': 'application/json' },
-      hotel_code: hotelCode,
-      hotel_server: hotelServer,
+      castInArray,
+      clientToken,
+      headers,
+      hotelCode,
+      hotelServer,
       path_movements: path,
-      port = '',
-      protocol = 'http',
+      port,
+      protocol,
       sgs,
-      token: clientToken,
-    } = get(gc, 'customize_stelle_options', {})
+    } = hotelOptionsResponse.results
     let getMovements = {
       active_checkins_only: Boolean(activeOnly),
       date_from: dateFrom,
@@ -45,7 +40,7 @@ function addRouters (router) {
     if (castInArray) {getMovements = [getMovements]}
     const data = { clientToken, hotelCode, get_movements: getMovements }
     const url = `${protocol}://${hotelServer}${port ? `:${port}` : ''}${path}`
-    log.debug('hotel url:', url)
+    log.debug('hotel movements url:', url)
     const config = { method: 'post', url, headers, data }
     const results = []
     const { data: { movements } } = await axios(config)
@@ -244,6 +239,43 @@ function addRouters (router) {
     } else {
       return res.send({ ok: false, message: 'Invalid charge response!', errCode: '100' })
     }
+  })
+  
+  router.post('/hotel/save_menu', reqAuthPost, async function (req, res) {
+    const { connClass, body, query } = req
+    const allParams = Object.assign(body, query)
+    utils.controlParameters(allParams, ['data', 'conf', 'owner'])
+    const { data: items, conf: saveConf, owner } = allParams
+    if (!Array.isArray(items) || !items.length) {return res.send({ ok: true, results: [] })}
+    const toUpdate = [], toDelete = []
+    for (let item of items) {
+      const { to_save: toSave, delete: isDeleted } = item
+      if (toSave) {
+        const row = {
+          category_id: item.category_id,
+          code: item.ext_code || '',
+          department_id: item.department_id,
+          id: item.id,
+          status: item.status,
+        }
+        if (saveConf.save_price) { row.net_price = item.net_price }
+        if (saveConf.save_description) {row.description = item.description}
+        if (isDeleted) {
+          toDelete.push(row)
+        } else {
+          toUpdate.push(row)
+        }
+      }
+    }
+    const { data: results } = await saveHotelMenu(connClass, owner, toUpdate, toDelete)
+    res.send({ ok: true, results })
+  })
+  router.get('/hotel/metadata', reqAuthGet, async function (req, res) {
+    const { connClass, query } = req
+    utils.controlParameters(query, ['owner'])
+    const { owner } = query
+    const response = await getHotelMetadata(connClass, owner)
+    res.send(response)
   })
 }
 

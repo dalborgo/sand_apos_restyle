@@ -10,6 +10,21 @@ const localInstance = axios.create({
     return (status >= 200 && status < 300) || status === 412 //il 412 lo uso come identificativo di una risposta errata
   },
 })
+const getHotelInstance = async conf => {
+  const {
+    headers,
+    hotelServer,
+    port,
+    protocol,
+  } = conf
+  return axios.create({
+    baseURL:`${protocol}://${hotelServer}${port ? `:${port}` : ''}`,
+    headers,
+    validateStatus: function (status) {
+      return (status >= 200 && status < 300) || status === 412 //il 412 lo uso come identificativo di una risposta errata
+    },
+  })
+}
 
 const isJsonParsable = data => {
   try {
@@ -35,6 +50,7 @@ const restApiInstance = (baseURL, token) => {
 }
 
 export default {
+  getHotelInstance,
   localInstance,
   restApiInstance,
 }

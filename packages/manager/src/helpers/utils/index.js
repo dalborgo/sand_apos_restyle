@@ -1,3 +1,5 @@
+import Q from 'q'
+
 const { BadRequest } = require(__errors)
 import { security } from '../'
 
@@ -36,7 +38,22 @@ function controlParameters (query, requiredKeys) {
   }
 }
 
+async function allSettled (promises) {
+  const output = []
+  const results = await Q.allSettled(promises)
+  results.forEach(result => {
+    const { state, value } = result
+    if (state === 'fulfilled') {
+      output.push(value)
+    } else {
+      output.push(null)
+    }
+  })
+  return output
+}
+
 export default {
+  allSettled,
   checkSide,
   controlParameters,
   parseOwner,

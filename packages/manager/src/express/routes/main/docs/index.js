@@ -1,22 +1,7 @@
 import { couchQueries, couchViews } from '@adapter/io'
-import Q from 'q'
 import { queryById } from '../queries'
 
 const { utils, axios } = require(__helpers)
-
-async function allSettled (promises) {
-  const output = []
-  const results = await Q.allSettled(promises)
-  results.forEach(result => {
-    const { state, value } = result
-    if (state === 'fulfilled') {
-      output.push(value)
-    } else {
-      output.push(null)
-    }
-  })
-  return output
-}
 
 const getEndkey = str => str.substring(0, str.length - 1) + String.fromCharCode(str.charCodeAt(str.length - 1) + 1)
 
@@ -35,7 +20,7 @@ function addRouters (router) {
         couchQueries.exec(queryRows, connClass.cluster),
         couchQueries.exec(queryTotal, connClass.cluster),
       ]
-      const [resp1, resp2] = await allSettled(promises)
+      const [resp1, resp2] = await utils.allSettled(promises)
       const data = {
         rows: resp1.results || [],
         total_rows: resp2.results[0],
@@ -65,7 +50,7 @@ function addRouters (router) {
         couchViews.execService(params, connClass.astConnection),
         couchQueries.exec(queryTotal, connClass.cluster),
       ]
-      const [data, resp2] = await allSettled(promises)
+      const [data, resp2] = await utils.allSettled(promises)
       if (data.results && resp2.results) {
         data.results['total_rows'] = resp2.results[0]
       }
@@ -86,7 +71,7 @@ function addRouters (router) {
         couchQueries.exec(queryRows, connClass.cluster),
         couchQueries.exec(queryTotal, connClass.cluster),
       ]
-      const [resp1, resp2] = await allSettled(promises)
+      const [resp1, resp2] = await utils.allSettled(promises)
       const data = {
         rows: resp1.results || [],
         total_rows: resp2.results[0],
@@ -113,7 +98,7 @@ function addRouters (router) {
         couchViews.exec(connClass.astenposBucketName, 'list_docs_all', connClass.astenposBucket, options),
         couchQueries.exec(queryTotal, connClass.cluster),
       ]
-      const [data, resp2] = await allSettled(promises)
+      const [data, resp2] = await utils.allSettled(promises)
       if (data.results && resp2.results) {
         data.results['total_rows'] = resp2.results[0]
       }
@@ -136,7 +121,7 @@ function addRouters (router) {
       couchQueries.exec(queryRows, connClass.cluster),
       couchQueries.exec(queryTotal, connClass.cluster),
     ]
-    const [resp1, resp2] = await allSettled(promises)
+    const [resp1, resp2] = await utils.allSettled(promises)
     const data = {
       rows: resp1.results || [],
       total_rows: resp2.results[0],
