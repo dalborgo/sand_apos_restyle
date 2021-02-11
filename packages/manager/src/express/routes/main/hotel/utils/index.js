@@ -70,7 +70,7 @@ export async function saveHotelMenu (connClass, owner, toUpdate = [], toDelete =
   } = options
   
   const hotelInstance = await axios.getHotelInstance(options)
-  const { data: results } = await hotelInstance.post(path, { clientToken, hotelCode })
+  const { data: results } = await hotelInstance.post(path, { clientToken, hotelCode, updateMode: 'byId', products })
   return { ok: true, results }
 }
 

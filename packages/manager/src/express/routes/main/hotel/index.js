@@ -240,7 +240,6 @@ function addRouters (router) {
       return res.send({ ok: false, message: 'Invalid charge response!', errCode: '100' })
     }
   })
-  
   router.post('/hotel/save_menu', reqAuthPost, async function (req, res) {
     const { connClass, body, query } = req
     const allParams = Object.assign(body, query)
