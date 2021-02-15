@@ -2,6 +2,7 @@ import axios from 'axios'
 import config from 'config'
 
 const { PORT, NAMESPACE } = config.get('express')
+const { baseURL: DEFAULT_BASE_URL } = config.get('e_invoice')
 
 const localInstance = axios.create({
   baseURL: `http://127.0.0.1:${PORT}/${NAMESPACE}`,
@@ -18,7 +19,7 @@ const getHotelInstance = async conf => {
     protocol,
   } = conf
   return axios.create({
-    baseURL:`${protocol}://${hotelServer}${port ? `:${port}` : ''}`,
+    baseURL: `${protocol}://${hotelServer}${port ? `:${port}` : ''}`,
     headers,
     validateStatus: function (status) {
       return (status >= 200 && status < 300) || status === 412 //il 412 lo uso come identificativo di una risposta errata
@@ -34,6 +35,21 @@ const isJsonParsable = data => {
   }
 }
 
+const eInvoiceInstance = (baseURL = DEFAULT_BASE_URL, token) => {
+  const headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+  if (token) {headers.Authorization = `Bearer ${token}`}
+  return axios.create({
+    baseURL,
+    headers,
+    validateStatus: function (status) {
+      return (status >= 200 && status < 500)
+    },
+    transformResponse: function (data) {
+      const results = isJsonParsable(data) || data
+      return !results || results.error ? { ok: false, results, errCode: results.error || 'invalid_token' } : { ok: true, results }
+    },
+  })
+}
 const restApiInstance = (baseURL, token) => {
   const headers = { 'Content-Type': 'application/json' }
   if (token) {headers.Authorization = `Basic ${token}`}
@@ -50,6 +66,7 @@ const restApiInstance = (baseURL, token) => {
 }
 
 export default {
+  eInvoiceInstance,
   getHotelInstance,
   localInstance,
   restApiInstance,
