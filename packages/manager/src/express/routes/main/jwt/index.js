@@ -3,6 +3,7 @@ import { couchQueries } from '@adapter/io'
 import config from 'config'
 import get from 'lodash/get'
 import log from '@adapter/common/src/winston'
+const { security } = require(__helpers)
 
 const { MAXAGE_MINUTES = 30, AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
@@ -28,9 +29,9 @@ function getQueryUserField () {
   return '`user`.`user`, `user`.`role`, `user`.`type`, `user`.`morse`, `user`.`locales` '
 }
 
-async function getInitialData (connClass) {
+async function getInitialData (connClass, owner) {
   const collection = connClass.astenposBucketCollection
-  const { content } = await collection.get('general_configuration')
+  const { content } = await collection.get(`general_configuration_${owner}`)
   return {
     companyName: get(content, 'company_data.name'),
   }
@@ -108,6 +109,10 @@ function addRouters (router) {
       throw Error(err.context ? err.context.first_error_message : message)
     }
     res.send(results)
+  })
+  router.get('/jwt/check_session', async function (req, res) {
+    security.hasAuthorization(req.headers)
+    res.send({ ok: true })
   })
 }
 

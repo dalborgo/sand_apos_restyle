@@ -2,6 +2,12 @@
   "express": {
     "MAXAGE_MINUTES": 120
   },
+  e_invoice: {
+    authenticationBaseUrl: 'https://demoauth.fatturazioneelettronica.aruba.it',
+    baseUrl: 'https://demows.fatturazioneelettronica.aruba.it',
+    user: 'PREMIUM000000000174',
+    password: 'Aplocandie1#'
+  },
   "couchbase": {
     "connections": {
       "molo": {
