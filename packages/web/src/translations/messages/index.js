@@ -109,6 +109,10 @@ export const messages = defineMessages({
     id: 'menu.closing_day',
     defaultMessage: 'Chiusure di giornata',
   },
+  menu_e_invoices: {
+    id: 'menu.e_invoices',
+    defaultMessage: 'Fatture elettroniche',
+  },
   menu_running_tables: {
     id: 'menu.running_tables',
     defaultMessage: 'Tavoli in corso',

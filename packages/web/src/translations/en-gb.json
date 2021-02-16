@@ -98,5 +98,7 @@
   "common.exportMenu": "",
   "common.exportTable": "",
   "common.username": "",
-  "cause.TokenExpiredError": ""
+  "cause.TokenExpiredError": "",
+  "menu.e_invoices": "",
+  "reports.e_invoices.header_title": ""
 }

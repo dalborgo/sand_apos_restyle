@@ -52,7 +52,7 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
   const intl = useIntl()
   const { isLoading, data } = useQuery(['types/rooms', { owner }], {
     notifyOnChangeProps: ['data', 'error'],
-    staleTime: Infinity, //non aggiorna la cache delle stanze ogni volta che si apre la drawer (richiesto refresh)
+    staleTime: Infinity, // non aggiorna la cache delle stanze ogni volta che si apre la drawer (richiesto refresh)
   })
   return (
     <Formik
@@ -154,7 +154,7 @@ const RunningTables = () => {
     tableFilter,
   }], {
     onError: snackQueryError,
-    onSettled: data => { //fa risparmiare un expensive rendere al primo caricamento rispetto a useEffect
+    onSettled: data => {// fa risparmiare un expensive rendere al primo caricamento rispetto a useEffect
       if (data?.ok) {
         setRunningRows(data.results)
       }
@@ -170,7 +170,7 @@ const RunningTables = () => {
     fetchData().then().catch(error => {setState(() => {throw error})})
   }, [owner, queryClient])
   useEffect(() => {
-    if (rest?.data?.ok && !rest.isFetchedAfterMount) { //necessario per triggerare quando legge dalla cache
+    if (rest?.data?.ok && !rest.isFetchedAfterMount) {// necessario per triggerare quando legge dalla cache
       console.log('%c***USE_EFFECT', 'color: cyan')
       setRunningRows(rest.data.results)
     }

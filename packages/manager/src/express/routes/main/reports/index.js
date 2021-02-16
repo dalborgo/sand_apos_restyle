@@ -44,7 +44,7 @@ function addRouters (router) {
       startDateInMillis: startDate,
       endDateInMillis: endDate,
     } = query
-    const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') //end day
+    const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
     const side = utils.checkSide(allIn) ? 'red' : 'blue'
     const statement = knex(bucketName)
       .where({ type: 'CLOSING_DAY' })
@@ -53,6 +53,31 @@ function addRouters (router) {
       .whereBetween('date', [startDate, endDate_])
       .select(knex.raw('meta().id _id'))
       .select('owner', 'date', `${side}.pu_totale_sc`, `${side}.pu_totale_st`, `${side}.pu_totale_nc`, `${side}.pu_totale_totale`)
+      .orderBy('date', 'desc')
+      .toQuery()
+    const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+    if (!ok) {return res.send({ ok, message, err })}
+    res.send({ ok, results })
+  })
+  router.get('/reports/e_invoices', async function (req, res) {
+    const { connClass, query } = req
+    utils.controlParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
+    const parsedOwner = utils.parseOwner(req)
+    const {
+      bucketName = connClass.astenposBucketName,
+      options,
+      startDateInMillis: startDate,
+      endDateInMillis: endDate,
+    } = query
+    const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
+    const statement = knex(bucketName)
+      .where({ type: 'PAYMENT' })
+      .where({ mode: 'INVOICE' })
+      .where({ archived: true })
+      .where(knex.raw(parsedOwner.queryCondition))
+      .whereBetween('date', [startDate, endDate_])
+      .select(knex.raw('meta().id _id'))
+      .select('owner', 'date')
       .orderBy('date', 'desc')
       .toQuery()
     const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
@@ -77,7 +102,7 @@ function addRouters (router) {
       startDateInMillis: startDate,
       endDateInMillis: endDate,
     } = query
-    const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') //end day
+    const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
     const side = utils.checkSide(allIn) ? '' : ' AND buc.mode != "PRECHECK"'
     const statement = knex({ buc: bucketName }).where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "PAYMENT"${side} AND buc.archived = TRUE`))
     roomFilter && statement.where('buc.room_display', roomFilter)

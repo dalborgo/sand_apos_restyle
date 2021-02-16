@@ -60,21 +60,21 @@ async function userInfo () {
 }
 
 function addRouters (router) {
-  router.get('/e-invoice/signin', async function (req, res) {
+  router.get('/e-invoices/signin', async function (req, res) {
     security.hasAuthorization(req.headers)
     res.send(await refresh(getAuth()))
   })
-  router.get('/e-invoice/refresh', async function (req, res) {
+  router.get('/e-invoices/refresh', async function (req, res) {
     const { query } = req
     utils.controlParameters(query, ['refreshToken'])
     const { refreshToken } = query
     res.send(await refresh(refreshToken))
   })
-  router.get('/e-invoice/userInfo', async function (req, res) {
+  router.get('/e-invoices/userInfo', async function (req, res) {
     security.hasAuthorization(req.headers)
     res.send(await userInfo())
   })
-  router.get('/e-invoice/create_xml', async function (req, res) {
+  router.get('/e-invoices/create_xml', async function (req, res) {
     security.hasAuthorization(req.headers)
     const { connClass, query } = req
     utils.controlParameters(query, ['owner', 'paymentId'])

@@ -2,6 +2,7 @@ import {
   BarChart as BarChartIcon,
   Clock as ClockIcon,
   FileText as FileTextIcon,
+  Inbox as InboxIcon,
   DollarSign as DollarSignIcon,
   Edit as EditIcon,
   Folder as FolderIcon,
@@ -43,6 +44,12 @@ const sections = [
         exact: false,
         icon: FileTextIcon,
         href: '/app/reports/closed-tables',
+      },
+      {
+        title: 'e_invoices',
+        exact: false,
+        icon: InboxIcon,
+        href: '/app/reports/e-invoices',
       },
       {
         title: 'Dashboard',

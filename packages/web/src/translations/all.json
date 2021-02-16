@@ -284,6 +284,10 @@
     "defaultMessage": "Chiusure di giornata"
   },
   {
+    "id": "menu.e_invoices",
+    "defaultMessage": "Fatture elettroniche"
+  },
+  {
     "id": "menu.running_tables",
     "defaultMessage": "Tavoli in corso"
   },
@@ -351,6 +355,10 @@
   {
     "id": "reports.dashboard.best_earning",
     "defaultMessage": "Miglior Guadagno"
+  },
+  {
+    "id": "reports.e_invoices.header_title",
+    "defaultMessage": "Fatture elettroniche"
   },
   {
     "id": "reports.header.list_documents",

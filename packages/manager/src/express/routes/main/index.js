@@ -1,6 +1,6 @@
 import queries from './queries'
 import docs from './docs'
-import eInvoice from './e-invoice'
+import eInvoices from './e-invoices'
 import hotel from './hotel'
 import info from './info'
 import installations from './installations'
@@ -17,7 +17,7 @@ require('express-async-errors')
 
 queries.addRouters(router)
 docs.addRouters(router)
-eInvoice.addRouters(router)
+eInvoices.addRouters(router)
 hotel.addRouters(router)
 info.addRouters(router)
 installations.addRouters(router)

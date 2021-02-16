@@ -176,6 +176,13 @@ const routes = [
       },
       {
         exact: true,
+        path: [
+          '/app/reports/e-invoices',
+        ],
+        component: lazy(() => import('src/views/reports/EInvoices')),
+      },
+      {
+        exact: true,
         path: '/app/reports/dashboard',
         component: lazy(() => import('src/views/reports/DashboardView')),
       },
