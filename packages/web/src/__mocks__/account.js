@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken-refresh'
 import mock from 'src/utils/mock'
 import wait from 'src/utils/wait'
 

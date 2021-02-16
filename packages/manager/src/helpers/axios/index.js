@@ -35,8 +35,12 @@ const isJsonParsable = data => {
   }
 }
 
-const eInvoiceInstance = (baseURL = DEFAULT_BASE_URL, token) => {
-  const headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+const eInvoiceInstance = (baseURL = DEFAULT_BASE_URL, token, headers_ = {}) => {
+  const defaultHeaders = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json;charset=UTF-8',
+  }
+  const headers = Object.assign(defaultHeaders, headers_)
   if (token) {headers.Authorization = `Bearer ${token}`}
   return axios.create({
     baseURL,

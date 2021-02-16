@@ -1,8 +1,9 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken-refresh'
 import config from 'config'
 import keyBy from 'lodash/keyBy'
 import { cFunctions } from '@adapter/common'
 import { connections } from '../'
+
 const { Unauthorized } = require(__errors)
 const { AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH

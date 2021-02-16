@@ -10,9 +10,9 @@
   },
   "name": "astenpos",
   "devDependencies": {
-    "chai": "^4.2.0",
+    "chai": "^4.3.0",
     "lerna": "^3.22.1",
-    "mocha": "^8.2.1",
+    "mocha": "^8.3.0",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
     "plop": "^2.7.4"

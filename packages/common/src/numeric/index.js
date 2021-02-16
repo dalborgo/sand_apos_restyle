@@ -2,7 +2,7 @@ import numeral from 'numeral'
 import cFunctions from '../functions'
 import compose from 'lodash/fp/compose'
 
-numeral.register('locale', 'it', {
+/*numeral.register('locale', 'en', {
   delimiters: {
     thousands: '.',
     decimal: ',',
@@ -10,8 +10,8 @@ numeral.register('locale', 'it', {
   currency: {
     symbol: '€',
   },
-})
-numeral.locale('it')
+})*/
+//numeral.locale('it')
 
 const printMoney = (value, fd = 2) => printDecimal(value, fd, true)
 const printByte = value => numeral(parseInt(value, 10)).format('0b')

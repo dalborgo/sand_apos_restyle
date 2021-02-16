@@ -1,9 +1,10 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken-refresh'
 import { couchQueries } from '@adapter/io'
 import config from 'config'
 import get from 'lodash/get'
 import log from '@adapter/common/src/winston'
-const { security } = require(__helpers)
+
+const { security, utils } = require(__helpers)
 
 const { MAXAGE_MINUTES = 30, AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
@@ -25,6 +26,7 @@ function selectUserFields (identity) {
     priority: setPriority(identity.role),
   }
 }
+
 function getQueryUserField () {
   return '`user`.`user`, `user`.`role`, `user`.`type`, `user`.`morse`, `user`.`locales` '
 }
@@ -42,7 +44,7 @@ function addRouters (router) {
     const { connClass, route: { path } } = req
     const { username, password, code } = req.body
     const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
-                  + getQueryUserField()+', meta(`user`).id _id '
+                  + getQueryUserField() + ', meta(`user`).id _id '
                   + 'FROM `' + connClass.astenposBucketName + '` `user` '
                   + 'LEFT NEST `' + connClass.astenposBucketName + '` setups '
                   + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) FOR code IN `user`.codes END '
@@ -50,7 +52,12 @@ function addRouters (router) {
                   + 'AND LOWER(`user`.`user`) = $1 '
                   + 'AND `user`.`password` = $2'
     
-    const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster, { parameters: [username.toLowerCase().trim(), String(password).trim()] })
+    const {
+      ok,
+      results,
+      message,
+      err,
+    } = await couchQueries.exec(query, connClass.cluster, { parameters: [username.toLowerCase().trim(), String(password).trim()] })
     if (!ok) {
       log.error('path', path)
       throw Error(err.context ? err.context.first_error_message : message)
@@ -113,6 +120,12 @@ function addRouters (router) {
   router.get('/jwt/check_session', async function (req, res) {
     security.hasAuthorization(req.headers)
     res.send({ ok: true })
+  })
+  router.get('/jwt/refresh_token', async function (req, res) {
+    const { authorization } = req.headers
+    const accessToken = authorization.split(' ')[1]
+    const newAccessToken = jwt.refresh(accessToken, '30 minutes', JWT_SECRET)
+    res.send({ ok: true, results: newAccessToken })
   })
 }
 
