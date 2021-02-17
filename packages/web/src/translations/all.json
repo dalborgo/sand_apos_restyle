@@ -80,6 +80,10 @@
     "defaultMessage": "Coperti"
   },
   {
+    "id": "common.customer",
+    "defaultMessage": "Cliente"
+  },
+  {
     "id": "common.date",
     "defaultMessage": "Data"
   },
@@ -122,6 +126,10 @@
   {
     "id": "common.loading",
     "defaultMessage": "Caricamento..."
+  },
+  {
+    "id": "common.number",
+    "defaultMessage": "Numero"
   },
   {
     "id": "common.price",
@@ -359,6 +367,10 @@
   {
     "id": "reports.e_invoices.header_title",
     "defaultMessage": "Fatture elettroniche"
+  },
+  {
+    "id": "reports.e_invoices_customer_vat",
+    "defaultMessage": "P.Iva"
   },
   {
     "id": "reports.header.list_documents",

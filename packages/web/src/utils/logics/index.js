@@ -11,3 +11,9 @@ export const getEffectiveFetching = ({
   isSuccess,
   isFetchedAfterMount,
 }) => isFetching && (!isSuccess || isFetchedAfterMount)
+
+export const getEffectiveFetchingWithPrev = ({
+  isFetching,
+  isSuccess,
+  isPreviousData,
+}, isRefetch = true) => (isFetching && (!isSuccess || isPreviousData)) || isRefetch

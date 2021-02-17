@@ -176,7 +176,7 @@ const Settings = () => {
                           {messages[`language_${val}`] ? intl.formatMessage(messages[`language_${val}`]) : ''}
                         </Grid>
                         <Grid item>
-                          <ReactCountryFlag countryCode={to2Chars(val)}/>
+                          <ReactCountryFlag cdnUrl="/static/images/flags/" countryCode={to2Chars(val)} svg/>
                         </Grid>
                       </Grid>
                     </MenuItem>

@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  reports_e_invoices_customer_vat: {
+    id: 'reports.e_invoices_customer_vat',
+    defaultMessage: 'P.Iva',
+  },
   cause_TokenExpiredError: {
     id: 'cause.TokenExpiredError',
     defaultMessage: 'Sessione scaduta!',
@@ -28,6 +32,10 @@ export const messages = defineMessages({
   common_username: {
     id: 'common.username',
     defaultMessage: 'Nome Utente',
+  },
+  common_customer: {
+    id: 'common.customer',
+    defaultMessage: 'Cliente',
   },
   common_table: {
     id: 'common.table',
@@ -60,6 +68,10 @@ export const messages = defineMessages({
   common_dividedPayment: {
     id: 'common.dividedPayment',
     defaultMessage: 'Separato',
+  },
+  common_number: {
+    id: 'common.number',
+    defaultMessage: 'Numero',
   },
   common_closedBy: {
     id: 'common.closedBy',

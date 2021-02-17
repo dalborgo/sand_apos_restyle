@@ -8,7 +8,7 @@ require('moment/locale/it')
 
 export const maskMap = {
   de: '__.__.____',
-  en: '__/__/____',
+  'en-gb': '__/__/____',
   it: '__/__/____',
 }
 export const to2Chars = (val = '') => val.split('-')[1] || val

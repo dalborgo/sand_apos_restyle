@@ -4,7 +4,7 @@ import config from 'config'
 import get from 'lodash/get'
 import log from '@adapter/common/src/winston'
 
-const { security, utils } = require(__helpers)
+const { security } = require(__helpers)
 
 const { MAXAGE_MINUTES = 30, AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
@@ -124,7 +124,7 @@ function addRouters (router) {
   router.get('/jwt/refresh_token', async function (req, res) {
     const { authorization } = req.headers
     const accessToken = authorization.split(' ')[1]
-    const newAccessToken = jwt.refresh(accessToken, '30 minutes', JWT_SECRET)
+    const newAccessToken = jwt.refresh(accessToken, JWT_EXPIRES_IN, JWT_SECRET)
     res.send({ ok: true, results: newAccessToken })
   })
 }

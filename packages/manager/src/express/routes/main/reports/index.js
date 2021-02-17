@@ -59,31 +59,6 @@ function addRouters (router) {
     if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results })
   })
-  router.get('/reports/e_invoices', async function (req, res) {
-    const { connClass, query } = req
-    utils.controlParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
-    const parsedOwner = utils.parseOwner(req)
-    const {
-      bucketName = connClass.astenposBucketName,
-      options,
-      startDateInMillis: startDate,
-      endDateInMillis: endDate,
-    } = query
-    const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
-    const statement = knex(bucketName)
-      .where({ type: 'PAYMENT' })
-      .where({ mode: 'INVOICE' })
-      .where({ archived: true })
-      .where(knex.raw(parsedOwner.queryCondition))
-      .whereBetween('date', [startDate, endDate_])
-      .select(knex.raw('meta().id _id'))
-      .select('owner', 'date')
-      .orderBy('date', 'desc')
-      .toQuery()
-    const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
-    if (!ok) {return res.send({ ok, message, err })}
-    res.send({ ok, results })
-  })
   
   /**
    *  covered index
@@ -97,14 +72,18 @@ function addRouters (router) {
       allIn,
       bucketName = connClass.astenposBucketName,
       tableFilter,
+      modeFilter,
       roomFilter,
       options,
       startDateInMillis: startDate,
       endDateInMillis: endDate,
     } = query
     const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
+    const mode = modeFilter ? ` AND buc.mode = "${modeFilter}"` : ''
     const side = utils.checkSide(allIn) ? '' : ' AND buc.mode != "PRECHECK"'
-    const statement = knex({ buc: bucketName }).where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "PAYMENT"${side} AND buc.archived = TRUE`))
+    const statement = knex({ buc: bucketName })
+      .from(knex.raw(`\`${bucketName}\` buc USE INDEX (adv_covered_closed_tables USING GSI)`))
+      .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "PAYMENT"${side}${mode} AND buc.archived = TRUE`))
     roomFilter && statement.where('buc.room_display', roomFilter)
     tableFilter && statement.whereRaw(`LOWER(buc.table_display) like "%${tableFilter.toLowerCase()}%"`)
     statement.column({ _id: 'buc.order' })
@@ -115,7 +94,7 @@ function addRouters (router) {
                        + 'ARRAY_AGG(buc.table_display)[0] table_display, '
                        + 'ARRAY_AGG(buc.room_display)[0] room_display, '
                        + 'ARRAY_AGG(buc.owner)[0] owner, '
-                       + 'CASE WHEN COUNT(*) > 1 THEN ARRAY_SORT(ARRAY_AGG({"number":buc.`number`, "_date": -1 * TONUMBER(buc.date), "final_price": buc.final_price, "_id": META(buc).id, "mode": buc.mode, "covers": buc.covers, "income": income.display, "closed_by": `user`.`user`})) ELSE ARRAY_AGG({"number":buc.`number`, "mode": buc.mode, "_id": META(buc).id, "income": income.display, "closed_by": `user`.`user`})[0] END payments'))
+                       + 'CASE WHEN COUNT(*) > 1 THEN ARRAY_SORT(ARRAY_AGG({"company_id":buc.`customer`._id, "company":buc.`customer`.company, "number":buc.`number`, "_date": -1 * TONUMBER(buc.date), "final_price": buc.final_price, "_id": META(buc).id, "mode": buc.mode, "covers": buc.covers, "income": income.display, "closed_by": `user`.`user`})) ELSE ARRAY_AGG({"company_id":buc.`customer`._id, "company":buc.`customer`.company, "number":buc.`number`, "mode": buc.mode, "_id": META(buc).id, "income": income.display, "closed_by": `user`.`user`})[0] END payments'))
       .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by')
       .joinRaw('LEFT JOIN `' + bucketName + '` as income ON KEYS buc.income')
       .whereBetween('buc.date', [startDate, endDate_])

@@ -338,7 +338,7 @@ const BrowserView = () => {
           }
         }
         queryClient.invalidateQueries('docs/browser').then()
-        queryClient.invalidateQueries(['docs/get_by_id', docId]).then()
+        queryClient.invalidateQueries(['docs/get_by_id', { docId }]).then()
       }
     },
   })

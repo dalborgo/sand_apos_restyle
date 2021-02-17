@@ -100,5 +100,8 @@
   "common.username": "",
   "cause.TokenExpiredError": "",
   "menu.e_invoices": "",
-  "reports.e_invoices.header_title": ""
+  "reports.e_invoices.header_title": "",
+  "common.number": "",
+  "reports.e_invoices_customer_vat": "",
+  "common.customer": ""
 }
