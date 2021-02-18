@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core'
 import { Redirect } from 'react-router'
 import { useQuery } from 'react-query'
-import useAuth from 'src/hooks/useAuth'
 import CloseIcon from '@material-ui/icons/Close'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'

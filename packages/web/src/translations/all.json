@@ -365,12 +365,16 @@
     "defaultMessage": "Miglior Guadagno"
   },
   {
+    "id": "reports.e_invoices.change_customer_data",
+    "defaultMessage": "Modifica anagrafica cliente"
+  },
+  {
     "id": "reports.e_invoices.header_title",
     "defaultMessage": "Fatture elettroniche"
   },
   {
     "id": "reports.e_invoices_customer_vat",
-    "defaultMessage": "P.Iva"
+    "defaultMessage": "Partiva iva"
   },
   {
     "id": "reports.header.list_documents",

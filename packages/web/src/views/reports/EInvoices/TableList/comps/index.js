@@ -96,7 +96,17 @@ const CellBase = props => {
             async () => {
               const queryKey = ['docs/get_by_id', { docId }]
               await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
-              history.push(`${window.location.pathname}/change-customer-data/${payments.company_id}`)
+              history.push({
+                pathname: `${window.location.pathname}/change-customer-data/${payments.company_id}`,
+                state: {
+                  company: payments.company,
+                  number: payments.number,
+                  table: row.table_display,
+                  room: row.room_display,
+                  date: row.date,
+                  amount: row.final_price,
+                },
+              })
             }
           }
           size="small"

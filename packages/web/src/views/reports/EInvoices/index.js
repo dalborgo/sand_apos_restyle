@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import Page from 'src/components/Page'
 import { Box, makeStyles, Paper } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -16,8 +16,10 @@ import { useQuery } from 'react-query'
 import moment from 'moment'
 import { getEffectiveFetchingWithPrev } from 'src/utils/logics'
 import TableList from './TableList'
-import { useParams } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 import EntriesTableDialog from 'src/components/EntriesTableDialog'
+import { parentPath } from 'src/utils/urlFunctions'
+import ChangeCustomerDialog from './ChangeCustomerDialog'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,6 +43,7 @@ const EInvoices = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const snackQueryError = useSnackQueryError()
+  const history = useHistory()
   const [isRefetch, setIsRefetch] = useState(false)
   const { docId, targetDocId } = useParams()
   const intl = useIntl()
@@ -62,6 +65,12 @@ const EInvoices = () => {
     setIsRefetch(false)
   }, [refetch])
   console.log('data:', data)
+  const closeChangeCustomerDialog = useMemo(() => {
+    return () => history.push(parentPath(history.location.pathname, -2))
+  }, [history])
+  const changeCustomerSubmit = useCallback(values => {
+    console.log('values:', values)
+  }, [])
   const effectiveFetching = getEffectiveFetchingWithPrev(rest, isRefetch)
   return (
     <Page
@@ -106,6 +115,7 @@ const EInvoices = () => {
         </Paper>
       </DivContentWrapper>
       {docId && <EntriesTableDialog docId={docId} urlKey="reports/closed_table"/>}
+      {targetDocId && <ChangeCustomerDialog close={closeChangeCustomerDialog} docId={targetDocId} onSubmit={changeCustomerSubmit}/>}
     </Page>
   )
 }

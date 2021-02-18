@@ -102,6 +102,7 @@
   "menu.e_invoices": "Fatture elettroniche",
   "reports.e_invoices.header_title": "Fatture elettroniche",
   "common.number": "Numero",
-  "reports.e_invoices_customer_vat": "P.Iva",
-  "common.customer": "Cliente"
+  "reports.e_invoices_customer_vat": "Partiva iva",
+  "common.customer": "Cliente",
+  "reports.e_invoices.change_customer_data": "Modifica anagrafica cliente"
 }

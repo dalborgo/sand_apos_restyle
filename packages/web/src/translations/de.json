@@ -103,5 +103,6 @@
   "reports.e_invoices.header_title": "",
   "common.number": "",
   "reports.e_invoices_customer_vat": "",
-  "common.customer": ""
+  "common.customer": "",
+  "reports.e_invoices.change_customer_data": ""
 }
