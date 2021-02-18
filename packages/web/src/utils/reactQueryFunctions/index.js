@@ -14,8 +14,10 @@ import { useHistory } from 'react-router'
 import useAuth from 'src/hooks/useAuth'
 import qs from 'qs'
 
+export const baseURL =  `${envConfig.BACKEND_HOST}/api/`
+
 export const axiosLocalInstance = axios.create({
-  baseURL: `${envConfig.BACKEND_HOST}/api/`,
+  baseURL,
   paramsSerializer: params => {
     return qs.stringify(mapValues(params, val => val === '' ? undefined : val))
   },

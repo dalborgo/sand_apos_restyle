@@ -374,7 +374,15 @@
   },
   {
     "id": "reports.e_invoices_customer_vat",
-    "defaultMessage": "Partiva iva"
+    "defaultMessage": "Partita iva"
+  },
+  {
+    "id": "reports.e_invoices_download_xml",
+    "defaultMessage": "Scarica xml"
+  },
+  {
+    "id": "reports.e_invoices_download_xml_zip",
+    "defaultMessage": "Scarica zip"
   },
   {
     "id": "reports.header.list_documents",

@@ -8,15 +8,11 @@ import { messages } from 'src/translations/messages'
 import { MoneyTypeProvider } from 'src/utils/tableFormatters'
 import { LoadingComponent } from 'src/components/TableComponents'
 import { CellHeader, CellSummary } from 'src/components/TableComponents/CellBase'
+import { IconButton, SvgIcon, Tooltip } from '@material-ui/core'
+import { Package as PackageIcon } from 'react-feather'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
-
-const TitleComponent = ({ children: columnTitle }) => (
-  <TableHeaderRow.Title>
-    {columnTitle === 'download' ? null : columnTitle}
-  </TableHeaderRow.Title>
-)
 
 const tableColumnExtensions = [
   { columnName: 'download', width: 80 },
@@ -28,7 +24,7 @@ const totalSummaryItems = [
 ]
 const moneyColumns = ['final_price']
 const { companySelect, hasSingleCompany } = useGeneralStore.getState()
-const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
+const TableList = memo(function TableList ({ rows, isFetching, isIdle, exportZip }) {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const intl = useIntl()
   const [columns] = useState(() => {
@@ -50,6 +46,31 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
   }))
   const noDataCellComponent = useCallback(({ colSpan }) =>
     <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])
+  
+  const TitleComponent = useCallback(({ children: columnTitle }) => {
+    return (
+      <TableHeaderRow.Title>
+        {
+          columnTitle === 'download' ?
+            Boolean(rows.length) &&
+            <Tooltip
+              title={intl.formatMessage(messages['reports_e_invoices_download_xml_zip'])}
+            >
+              <IconButton
+                color="secondary"
+                onClick={exportZip}
+              >
+                <SvgIcon fontSize="small">
+                  <PackageIcon/>
+                </SvgIcon>
+              </IconButton>
+            </Tooltip>
+            :
+            columnTitle
+        }
+      </TableHeaderRow.Title>
+    )
+  }, [exportZip, intl, rows.length])
   
   return (
     <Grid

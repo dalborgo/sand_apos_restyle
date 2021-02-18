@@ -10,7 +10,7 @@ import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 import shallow from 'zustand/shallow'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import useAuth from 'src/hooks/useAuth'
-import { axiosLocalInstance, useSnackQueryError } from 'src/utils/reactQueryFunctions'
+import { axiosLocalInstance, baseURL, useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import useEInvoiceStore from 'src/zustandStore/useEInvoiceStore'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import moment from 'moment'
@@ -56,11 +56,13 @@ const EInvoices = () => {
   const { docId, targetCustomerId } = useParams()
   const intl = useIntl()
   const { startDate, endDate, setDateRange } = useEInvoiceStore(eInvoiceSelector, shallow)
+  const endDateInMillis = useMemo(() => endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined, [endDate])
+  const startDateInMillis = useMemo(() => startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined, [startDate])
   const fetchKey = useMemo(() => ['reports/e_invoices', {
-    endDateInMillis: endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined,
+    endDateInMillis,
     owner,
-    startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
-  }], [endDate, owner, startDate])
+    startDateInMillis,
+  }], [endDateInMillis, owner, startDateInMillis])
   const targetCustomerKey = useMemo(() => ['docs/get_by_id', { docId: targetCustomerId }], [targetCustomerId])
   const { data, refetch, ...rest } = useQuery(fetchKey, {
     keepPreviousData: true,
@@ -73,7 +75,6 @@ const EInvoices = () => {
     await refetch()
     setIsRefetch(false)
   }, [refetch])
-  console.log('data:', data)
   const closeChangeCustomerDialog = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname, -2))
   }, [history])
@@ -97,11 +98,16 @@ const EInvoices = () => {
   })
   
   const changeCustomerSubmit = useCallback(values => {
-    console.log('values:', values)
     changeCustomerMutation.mutate({ id: targetCustomerId, set: { ...values }, owner })
     closeChangeCustomerDialog()
     return values
   }, [closeChangeCustomerDialog, changeCustomerMutation, owner, targetCustomerId])
+  const exportZip = useCallback(() => {
+    const labelEnd = endDateInMillis && moment(endDateInMillis, 'YYYYMMDDHHmmssSSS').format('DD-MM-YYYY')
+    const labelStart = startDateInMillis && moment(startDateInMillis, 'YYYYMMDDHHmmssSSS').format('DD-MM-YYYY')
+    const fileName = `xml_${labelStart !== labelEnd ? `${labelStart}_${labelEnd}` : labelStart}.zip`
+    window.open(`${baseURL}e-invoices/create_zip/${fileName}?owner=${owner}&startDateInMillis=${startDateInMillis}&endDateInMillis=${endDateInMillis}`, '_self')
+  }, [endDateInMillis, owner, startDateInMillis])
   const effectiveFetching = getEffectiveFetchingWithPrev(rest, isRefetch)
   return (
     <Page
@@ -139,6 +145,7 @@ const EInvoices = () => {
       <DivContentWrapper>
         <Paper className={classes.paper}>
           <TableList
+            exportZip={exportZip}
             isFetching={effectiveFetching && !data?.results?.length}
             isIdle={rest.isIdle}
             rows={data?.results || []}

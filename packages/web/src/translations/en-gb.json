@@ -104,5 +104,7 @@
   "common.number": "",
   "reports.e_invoices_customer_vat": "",
   "common.customer": "",
-  "reports.e_invoices.change_customer_data": ""
+  "reports.e_invoices.change_customer_data": "",
+  "reports.e_invoices_download_xml": "",
+  "reports.e_invoices_download_xml_zip": ""
 }

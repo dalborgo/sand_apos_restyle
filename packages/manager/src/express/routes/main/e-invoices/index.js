@@ -3,7 +3,12 @@ import eInvoiceAuth, { authStates } from './eInvoiceClass'
 import { createEInvoiceXML } from './utils'
 import log from '@adapter/common/src/winston'
 import stream from 'stream'
+import { couchQueries } from '@adapter/io'
+import moment from 'moment'
+import { cFunctions } from '@adapter/common'
+import archiver from 'archiver'
 
+const knex = require('knex')({ client: 'mysql' })
 const { security, utils } = require(__helpers)
 const qs = require('qs')
 const { authenticationBaseUrl, username, password } = config.get('e_invoice')
@@ -74,17 +79,51 @@ function addRouters (router) {
     security.hasAuthorization(req.headers)
     res.send(await userInfo())
   })
-  router.get('/e-invoices/create_xml', async function (req, res) {
+  router.get('/e-invoices/create_xml/:paymentId', async function (req, res) {
     security.hasAuthorization(req.headers)
-    const { connClass, query } = req
-    utils.controlParameters(query, ['owner', 'paymentId'])
-    const { owner, paymentId } = query
-    const {id: eInvoiceId, buf: eInvoiceContent} = await createEInvoiceXML(connClass, owner, paymentId)
+    const { connClass, query, params } = req
+    const params_ = { ...query, ...params }
+    utils.controlParameters(params_, ['owner', 'paymentId'])
+    const { owner, paymentId } = params_
+    const { id: eInvoiceId, buf: eInvoiceContent } = await createEInvoiceXML(connClass, owner, paymentId)
     const readStream = new stream.PassThrough()
     readStream.end(eInvoiceContent)
     res.set('Content-disposition', `attachment; filename=${eInvoiceId}.xml`)
     res.set('Content-Type', 'application/xml')
     readStream.pipe(res)
+  })
+  const appendToZip = (invoice, owner, connClass, zip) => async () => {
+    const { _id } = invoice
+    const { id: eInvoiceId, buf: eInvoiceContent } = await createEInvoiceXML(connClass, owner, _id)
+    zip.append(eInvoiceContent, { name: `${eInvoiceId}.xml` })
+    return true
+  }
+  router.get('/e-invoices/create_zip/:filename', async function (req, res) {
+    const { connClass, query } = req
+    utils.controlParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
+    const parsedOwner = utils.parseOwner(req, 'buc')
+    const {
+      owner,
+      bucketName = connClass.astenposBucketName,
+      options,
+      startDateInMillis: startDate,
+      endDateInMillis: endDate,
+    } = query
+    const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
+    const statement = knex({ buc: bucketName })
+      .select(knex.raw('meta(buc).id _id'))
+      .where({ 'buc.type': 'PAYMENT' })
+      .where({ 'buc.mode': 'INVOICE' })
+      .where({ 'buc.archived': true })
+      .where(knex.raw(parsedOwner.queryCondition))
+      .whereBetween('buc.date', [startDate, endDate_])
+      .toQuery()
+    const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+    if (!ok) {return res.send({ ok, message, err })}
+    const zip = archiver('zip', {})
+    zip.pipe(res)
+    await cFunctions.createChain(results, [owner, connClass, zip], appendToZip)
+    await zip.finalize()
   })
 }
 

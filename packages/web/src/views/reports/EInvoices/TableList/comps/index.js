@@ -1,4 +1,4 @@
-import { Button, colors, IconButton, makeStyles, SvgIcon, withStyles } from '@material-ui/core'
+import { Button, colors, IconButton, makeStyles, SvgIcon, Tooltip, withStyles } from '@material-ui/core'
 import React, { useState } from 'react'
 import Box from '@material-ui/core/Box'
 import { VirtualTable } from '@devexpress/dx-react-grid-material-ui'
@@ -7,7 +7,7 @@ import { useHistory } from 'react-router'
 import { useQueryClient } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
-import { buttonQuery } from 'src/utils/reactQueryFunctions'
+import { baseURL, buttonQuery } from 'src/utils/reactQueryFunctions'
 import { Download as DownloadIcon } from 'react-feather'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
@@ -47,11 +47,18 @@ const CellBase = props => {
   if (column.name === 'download') {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
-        <IconButton color="secondary">
-          <SvgIcon fontSize="small">
-            <DownloadIcon/>
-          </SvgIcon>
-        </IconButton>
+        <Tooltip
+          title={intl.formatMessage(messages['reports_e_invoices_download_xml'])}
+        >
+          <IconButton
+            color="secondary"
+            onClick={() => window.open(`${baseURL}e-invoices/create_xml/${docId}?owner=${owner}`, '_self')}
+          >
+            <SvgIcon fontSize="small">
+              <DownloadIcon/>
+            </SvgIcon>
+          </IconButton>
+        </Tooltip>
       </VirtualTable.Cell>
     )
   }

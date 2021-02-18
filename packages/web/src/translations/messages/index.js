@@ -3,7 +3,15 @@ import { defineMessages } from 'react-intl'
 export const messages = defineMessages({
   reports_e_invoices_customer_vat: {
     id: 'reports.e_invoices_customer_vat',
-    defaultMessage: 'Partiva iva',
+    defaultMessage: 'Partita iva',
+  },
+  reports_e_invoices_download_xml: {
+    id: 'reports.e_invoices_download_xml',
+    defaultMessage: 'Scarica xml',
+  },
+  reports_e_invoices_download_xml_zip: {
+    id: 'reports.e_invoices_download_xml_zip',
+    defaultMessage: 'Scarica zip',
   },
   cause_TokenExpiredError: {
     id: 'cause.TokenExpiredError',
