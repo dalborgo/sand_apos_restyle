@@ -8,7 +8,7 @@ import { useQueryClient } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import { baseURL, buttonQuery } from 'src/utils/reactQueryFunctions'
-import { Download as DownloadIcon } from 'react-feather'
+import { Download as DownloadIcon, Send as SendIcon } from 'react-feather'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
 import { messages } from 'src/translations/messages'
@@ -55,7 +55,25 @@ const CellBase = props => {
             onClick={() => window.open(`${baseURL}e-invoices/create_xml/${docId}?owner=${owner}`, '_self')}
           >
             <SvgIcon fontSize="small">
-              <DownloadIcon/>
+              <DownloadIcon />
+            </SvgIcon>
+          </IconButton>
+        </Tooltip>
+      </VirtualTable.Cell>
+    )
+  }
+  if (column.name === 'action') {
+    return (
+      <VirtualTable.Cell {...props} style={cellStyle}>
+        <Tooltip
+          title={intl.formatMessage(messages['reports_e_invoices_send'])}
+        >
+          <IconButton
+            color="secondary"
+            onClick={() => null}
+          >
+            <SvgIcon fontSize="small">
+              <SendIcon/>
             </SvgIcon>
           </IconButton>
         </Tooltip>

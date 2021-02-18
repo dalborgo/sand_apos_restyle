@@ -385,6 +385,10 @@
     "defaultMessage": "Scarica zip"
   },
   {
+    "id": "reports.e_invoices_send",
+    "defaultMessage": "Invia"
+  },
+  {
     "id": "reports.header.list_documents",
     "defaultMessage": "Lista Documenti"
   },

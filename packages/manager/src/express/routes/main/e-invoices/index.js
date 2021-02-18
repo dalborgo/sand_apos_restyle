@@ -5,7 +5,6 @@ import log from '@adapter/common/src/winston'
 import stream from 'stream'
 import { couchQueries } from '@adapter/io'
 import moment from 'moment'
-import { cFunctions } from '@adapter/common'
 import archiver from 'archiver'
 
 const knex = require('knex')({ client: 'mysql' })
@@ -92,12 +91,7 @@ function addRouters (router) {
     res.set('Content-Type', 'application/xml')
     readStream.pipe(res)
   })
-  const appendToZip = (invoice, owner, connClass, zip) => async () => {
-    const { _id } = invoice
-    const { id: eInvoiceId, buf: eInvoiceContent } = await createEInvoiceXML(connClass, owner, _id)
-    zip.append(eInvoiceContent, { name: `${eInvoiceId}.xml` })
-    return true
-  }
+
   router.get('/e-invoices/create_zip/:filename', async function (req, res) {
     const { connClass, query } = req
     utils.controlParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
@@ -111,18 +105,22 @@ function addRouters (router) {
     } = query
     const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
     const statement = knex({ buc: bucketName })
-      .select(knex.raw('meta(buc).id _id'))
+      .select(knex.raw('buc.*, mode.payment_mode'))
+      .joinRaw(`LEFT JOIN \`${bucketName}\` mode ON KEYS buc.income`)
       .where({ 'buc.type': 'PAYMENT' })
       .where({ 'buc.mode': 'INVOICE' })
       .where({ 'buc.archived': true })
-      .where(knex.raw(parsedOwner.queryCondition))
       .whereBetween('buc.date', [startDate, endDate_])
+      .where(knex.raw(parsedOwner.queryCondition))
       .toQuery()
     const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, err })}
     const zip = archiver('zip', {})
     zip.pipe(res)
-    await cFunctions.createChain(results, [owner, connClass, zip], appendToZip)
+    for (let payment of results) {
+      const { id: eInvoiceId, buf: eInvoiceContent } = await createEInvoiceXML(connClass, owner, payment)
+      zip.append(eInvoiceContent, { name: `${eInvoiceId}.xml` })
+    }
     await zip.finalize()
   })
 }

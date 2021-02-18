@@ -17,6 +17,7 @@ const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
 const tableColumnExtensions = [
   { columnName: 'download', width: 80 },
   { columnName: 'final_price', align: 'right' },
+  { columnName: 'action', align: 'right', width: 80 },
 ]
 const totalSummaryItems = [
   { columnName: 'table_display', type: 'count' },
@@ -36,6 +37,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle, exportZip
       { name: 'table_display', title: intl.formatMessage(messages['common_table']) },
       { name: 'type', title: intl.formatMessage(messages['common_customer']) },
       { name: 'final_price', title: intl.formatMessage(messages['common_cashed']) },
+      { name: 'action' },
     ]
     if (hasSingleCompany()) {columns_.splice(1, 1)}
     return columns_
@@ -66,7 +68,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle, exportZip
               </IconButton>
             </Tooltip>
             :
-            columnTitle
+            columnTitle === 'action'? null : columnTitle
         }
       </TableHeaderRow.Title>
     )

@@ -106,5 +106,6 @@
   "common.customer": "",
   "reports.e_invoices.change_customer_data": "",
   "reports.e_invoices_download_xml": "",
-  "reports.e_invoices_download_xml_zip": ""
+  "reports.e_invoices_download_xml_zip": "",
+  "reports.e_invoices_send": ""
 }

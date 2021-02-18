@@ -9,6 +9,10 @@ export const messages = defineMessages({
     id: 'reports.e_invoices_download_xml',
     defaultMessage: 'Scarica xml',
   },
+  reports_e_invoices_send: {
+    id: 'reports.e_invoices_send',
+    defaultMessage: 'Invia',
+  },
   reports_e_invoices_download_xml_zip: {
     id: 'reports.e_invoices_download_xml_zip',
     defaultMessage: 'Scarica zip',

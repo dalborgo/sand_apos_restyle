@@ -1,6 +1,7 @@
 import { couchQueries } from '@adapter/io'
 import get from 'lodash/get'
 import reduce from 'lodash/reduce'
+import isString from 'lodash/isString'
 import moment from 'moment'
 import xmlbuilder from 'xmlbuilder'
 import { numeric } from '@adapter/common'
@@ -8,28 +9,35 @@ import { numeric } from '@adapter/common'
 const knex = require('knex')({ client: 'mysql' })
 
 /* eslint-disable sort-keys */
-export async function createEInvoiceXML (connClass, owner, paymentId) {
+export async function createEInvoiceXML (connClass, owner, paymentObj) {
   const collection = connClass.astenposBucketCollection
   const bucketName = connClass.astenposBucketName
   const { content } = await collection.get(`general_configuration_${owner}`)
   const companyData = get(content, 'company_data')
-  const statement = knex
-    .from(knex.raw(`\`${bucketName}\` buc USE KEYS '${paymentId}'`))
-    .select(knex.raw('buc.*, mode.payment_mode'))
-    .joinRaw(`LEFT JOIN \`${bucketName}\` mode ON KEYS buc.income`)
-  const {
-    ok,
-    results,
-    message,
-    info,
-  } = await couchQueries.exec(statement.toQuery(), connClass.cluster)
-  if (!ok) {return { ok, message, info }}
+  let payment
+  if (isString(paymentObj)) {
+    const statement = knex
+      .from(knex.raw(`\`${bucketName}\` buc USE KEYS '${paymentObj}'`))
+      .select(knex.raw('buc.*, mode.payment_mode'))
+      .joinRaw(`LEFT JOIN \`${bucketName}\` mode ON KEYS buc.income`)
+    const {
+      ok,
+      results,
+      message,
+      info,
+    } = await couchQueries.exec(statement.toQuery(), connClass.cluster)
+    if (!ok) {return { ok, message, info }}
+    const [firstPayment] = results
+    if (!firstPayment) {return { ok: false, message: 'not found', errCode: 404 }}
+    payment = firstPayment
+  } else {
+    payment = paymentObj
+  }
   const longDecimal = 7
-  const [payment] = results
-  if (!payment) {return { ok: false, message: 'not found', errCode: 404, paymentId }}
   if (!companyData) {return { ok: false, message: 'company data missing', errCode: 404 }}
-  const { fte, pedix: postfix = '', prefix = '', useSDI } = companyData
+  const { fte } = companyData
   if (!fte) {return { ok: false, message: 'fte missing', errCode: 404 }}
+  const { pedix: postfix = '', prefix = '', useSDI } = fte
   const { date, number, customer } = payment
   const year = parseInt(date.substring(0, 4), 10)
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'Z']
@@ -151,8 +159,8 @@ export async function createEInvoiceXML (connClass, owner, paymentId) {
     let fullSinglePrice = entry.product_price
     let c2 = {
       var: entry.orderVariants,
-      totale: reduce(entry.orderVariants, function (sum, n) {
-        return (n.variant_price * n.variant_qta) + sum
+      totale: reduce(entry.orderVariants, function (sum, num) {
+        return (num.variant_price * num.variant_qta) + sum
       }, 0),
     }
     fullSinglePrice += c2.totale
@@ -260,6 +268,7 @@ export async function createEInvoiceXML (connClass, owner, paymentId) {
     },
   }
   const feed = xmlbuilder.create(xml, { encoding: 'UTF-8' })
-  return { buf: new Buffer(feed.toString()), id: `IT${companyData.iva}_${sendingCounter}` }
+  return { buf: new Buffer.from(feed.toString()), id: `IT${companyData.iva}_${sendingCounter}` }
 }
+
 /* eslint-enable  */
