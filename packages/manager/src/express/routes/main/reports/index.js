@@ -60,6 +60,33 @@ function addRouters (router) {
     res.send({ ok, results })
   })
   
+  router.get('/reports/e_invoices', async function (req, res) {
+    const { connClass, query } = req
+    utils.controlParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
+    const parsedOwner = utils.parseOwner(req, 'buc')
+    const {
+      bucketName = connClass.astenposBucketName,
+      options,
+      startDateInMillis: startDate,
+      endDateInMillis: endDate,
+    } = query
+    const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
+    const statement = knex({ buc: bucketName })
+      .where({ 'buc.type': 'PAYMENT' })
+      .where({ 'buc.mode': 'INVOICE' })
+      .where({ 'buc.archived': true })
+      .where(knex.raw(parsedOwner.queryCondition))
+      .whereBetween('buc.date', [startDate, endDate_])
+      .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by')
+      .select(knex.raw('meta(buc).id _id, buc.customer.company, buc.customer._id company_id, `user`.`user` closed_by'))
+      .select('buc.owner', 'buc.date', 'buc.number', 'buc.final_price', 'buc.room_display', 'buc.table_display')
+      .orderBy('buc.date', 'desc')
+      .toQuery()
+    const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+    if (!ok) {return res.send({ ok, message, err })}
+    res.send({ ok, results })
+  })
+  
   /**
    *  covered index
    *  CREATE INDEX adv_covered_closed_tables ON `astenpos`(`archived`,`date`,`mode`,`final_price`,`room_display`,`order`,`discount_price`,`income`,`closed_by`,`table_display`,`covers`,`owner`,`number`) WHERE (`type` = 'PAYMENT')
@@ -94,7 +121,7 @@ function addRouters (router) {
                        + 'ARRAY_AGG(buc.table_display)[0] table_display, '
                        + 'ARRAY_AGG(buc.room_display)[0] room_display, '
                        + 'ARRAY_AGG(buc.owner)[0] owner, '
-                       + 'CASE WHEN COUNT(*) > 1 THEN ARRAY_SORT(ARRAY_AGG({"company_id":buc.`customer`._id, "company":buc.`customer`.company, "number":buc.`number`, "_date": -1 * TONUMBER(buc.date), "final_price": buc.final_price, "_id": META(buc).id, "mode": buc.mode, "covers": buc.covers, "income": income.display, "closed_by": `user`.`user`})) ELSE ARRAY_AGG({"company_id":buc.`customer`._id, "company":buc.`customer`.company, "number":buc.`number`, "mode": buc.mode, "_id": META(buc).id, "income": income.display, "closed_by": `user`.`user`})[0] END payments'))
+                       + 'CASE WHEN COUNT(*) > 1 THEN ARRAY_SORT(ARRAY_AGG({"number":buc.`number`, "_date": -1 * TONUMBER(buc.date), "final_price": buc.final_price, "_id": META(buc).id, "mode": buc.mode, "covers": buc.covers, "income": income.display, "closed_by": `user`.`user`})) ELSE ARRAY_AGG({"number":buc.`number`, "mode": buc.mode, "_id": META(buc).id, "income": income.display, "closed_by": `user`.`user`})[0] END payments'))
       .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by')
       .joinRaw('LEFT JOIN `' + bucketName + '` as income ON KEYS buc.income')
       .whereBetween('buc.date', [startDate, endDate_])
@@ -204,6 +231,34 @@ function addRouters (router) {
       row = {
         ...first,
         entries,
+      }
+    }
+    if (!ok) {return res.send({ ok, message, err })}
+    res.send({ ok, results: row })
+  })
+  router.get('/reports/e_invoice/:paymentId', async function (req, res) {
+    const { connClass, query, params } = req
+    utils.controlParameters(query, ['owner'])
+    utils.controlParameters(params, ['paymentId'])
+    const { paymentId } = params
+    const parsedOwner = utils.parseOwner(req, 'buc')
+    const {
+      bucketName = connClass.astenposBucketName,
+      options,
+    } = query
+    const statement = knex
+      .from(knex.raw(`\`${bucketName}\` buc USE KEYS '${paymentId}' LEFT NEST \`${bucketName}\` us ON KEYS ARRAY x.\`user\` FOR x IN buc.entries END`))
+      .select('buc.table_display', 'buc.room_display')
+      .select(knex.raw('CASE WHEN buc.covers > 0 THEN ARRAY_PREPEND({"id": "common_covers", "date": "", "pro_qta": buc.covers, "amount": buc.cover_price * buc.covers, "user":`user`.`user`, "intl_code": "common_covers"}, arr_entries) ELSE arr_entries END AS entries'))
+      .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by LET arr_entries = ARRAY {"id": e.product_id, "pro_qta": e.product_qta, "pro_display": e.product_display, "cat_display": e.product_category_display, "date": e.date, "user": FIRST v.`user` FOR v IN us WHEN META(v).id = e.`user` END, "amount": (e.product_price + ARRAY_SUM(ARRAY o.variant_qta * o.variant_price FOR o IN e.orderVariants END)) * e.product_qta} FOR e IN buc.entries END')
+      .where(knex.raw(`${parsedOwner.queryCondition} AND buc.type = "PAYMENT" AND buc.archived = TRUE`))
+      .toQuery()
+    const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+    let row = null
+    if (data.length) {
+      const [first] = data
+      row = {
+        ...first,
       }
     }
     if (!ok) {return res.send({ ok, message, err })}

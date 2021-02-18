@@ -12,7 +12,14 @@ import { CellHeader, CellSummary } from 'src/components/TableComponents/CellBase
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
 
+const TitleComponent = ({ children: columnTitle }) => (
+  <TableHeaderRow.Title>
+    {columnTitle === 'download' ? null : columnTitle}
+  </TableHeaderRow.Title>
+)
+
 const tableColumnExtensions = [
+  { columnName: 'download', width: 80 },
   { columnName: 'final_price', align: 'right' },
 ]
 const totalSummaryItems = [
@@ -27,13 +34,14 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
   const [columns] = useState(() => {
     const companySelect_ = ({ owner }) => companySelect(owner)
     const columns_ = [
+      { name: 'download' },
       { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect_ },
       { name: 'date', title: intl.formatMessage(messages['common_date']) },
       { name: 'table_display', title: intl.formatMessage(messages['common_table']) },
       { name: 'type', title: intl.formatMessage(messages['common_customer']) },
       { name: 'final_price', title: intl.formatMessage(messages['common_cashed']) },
     ]
-    if (hasSingleCompany()) {columns_.shift()}
+    if (hasSingleCompany()) {columns_.splice(1, 1)}
     return columns_
   })
   const [messagesSummary] = useState(() => ({
@@ -63,7 +71,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
         height="auto"
         noDataCellComponent={noDataCellComponent}
       />
-      <TableHeaderRow cellComponent={CellHeader}/>
+      <TableHeaderRow cellComponent={CellHeader} titleComponent={TitleComponent}/>
       <TableSummaryRow messages={messagesSummary} totalCellComponent={CellSummary}/>
     </Grid>
   )

@@ -10,9 +10,9 @@ import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 import shallow from 'zustand/shallow'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import useAuth from 'src/hooks/useAuth'
-import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
+import { axiosLocalInstance, useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import useEInvoiceStore from 'src/zustandStore/useEInvoiceStore'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import moment from 'moment'
 import { getEffectiveFetchingWithPrev } from 'src/utils/logics'
 import TableList from './TableList'
@@ -39,21 +39,30 @@ const eInvoiceSelector = state => ({
   startDate: state.startDate,
 })
 
+const changeCustomerMutation_ = async values => {
+  const { data } = await axiosLocalInstance.put('queries/update_by_id', {
+    ...values,
+  })
+  return data
+}
+
 const EInvoices = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const snackQueryError = useSnackQueryError()
   const history = useHistory()
+  const queryClient = useQueryClient()
   const [isRefetch, setIsRefetch] = useState(false)
-  const { docId, targetDocId } = useParams()
+  const { docId, targetCustomerId } = useParams()
   const intl = useIntl()
   const { startDate, endDate, setDateRange } = useEInvoiceStore(eInvoiceSelector, shallow)
-  const { data, refetch, ...rest } = useQuery(['reports/closed_tables', {
-    modeFilter: 'INVOICE',
+  const fetchKey = useMemo(() => ['reports/e_invoices', {
     endDateInMillis: endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined,
     owner,
     startDateInMillis: startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined,
-  }], {
+  }], [endDate, owner, startDate])
+  const targetCustomerKey = useMemo(() => ['docs/get_by_id', { docId: targetCustomerId }], [targetCustomerId])
+  const { data, refetch, ...rest } = useQuery(fetchKey, {
     keepPreviousData: true,
     notifyOnChangeProps: ['data', 'error'],
     onError: snackQueryError,
@@ -68,9 +77,31 @@ const EInvoices = () => {
   const closeChangeCustomerDialog = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname, -2))
   }, [history])
+  
+  const changeCustomerMutation = useMutation(changeCustomerMutation_, {
+    onMutate: async ({ set }) => {
+      await queryClient.cancelQueries(targetCustomerKey)
+      const { results: customer } = queryClient.getQueryData(targetCustomerKey)
+      const newCustomer = { ...customer, ...set }
+      queryClient.setQueryData(targetCustomerKey, { ok: true, results: newCustomer })
+      return { previousData: customer }
+    },
+    onSettled: (data, error, variables, context) => {
+      const { ok, message, err } = data || {}
+      if (!ok || error) {
+        queryClient.setQueryData(targetCustomerKey, context.previousData)
+        snackQueryError(err || message || error)
+      }
+      queryClient.invalidateQueries(targetCustomerKey).then()
+    },
+  })
+  
   const changeCustomerSubmit = useCallback(values => {
     console.log('values:', values)
-  }, [])
+    changeCustomerMutation.mutate({ id: targetCustomerId, set: { ...values }, owner })
+    closeChangeCustomerDialog()
+    return values
+  }, [closeChangeCustomerDialog, changeCustomerMutation, owner, targetCustomerId])
   const effectiveFetching = getEffectiveFetchingWithPrev(rest, isRefetch)
   return (
     <Page
@@ -114,8 +145,15 @@ const EInvoices = () => {
           />
         </Paper>
       </DivContentWrapper>
-      {docId && <EntriesTableDialog docId={docId} urlKey="reports/closed_table"/>}
-      {targetDocId && <ChangeCustomerDialog close={closeChangeCustomerDialog} docId={targetDocId} onSubmit={changeCustomerSubmit}/>}
+      {docId && <EntriesTableDialog docId={docId} urlKey="reports/e_invoice"/>}
+      {
+        targetCustomerId &&
+        <ChangeCustomerDialog
+          close={closeChangeCustomerDialog}
+          docId={targetCustomerId}
+          onSubmit={changeCustomerSubmit}
+        />
+      }
     </Page>
   )
 }

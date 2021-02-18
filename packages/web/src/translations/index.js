@@ -6,11 +6,11 @@ require('moment/locale/de')
 require('moment/locale/en-gb')
 require('moment/locale/it')
 
-export const maskMap = {
+const maskMap = {
   de: '__.__.____',
-  'en-gb': '__/__/____',
   it: '__/__/____',
 }
+export const getMaskMap = locale => maskMap[locale] || maskMap['it']
 export const to2Chars = (val = '') => val.split('-')[1] || val
 const translations = {
   'en-gb': messagesGB,

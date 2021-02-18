@@ -85,7 +85,7 @@ const ChangeCustomerForm = memo(function ChangeCustomerForm ({ onSubmit, data, i
                   <Grid item style={{ margin: theme.spacing(2, 3), marginTop: theme.spacing(1) }}>
                     <Button
                       color="secondary"
-                      disabled={!dirty || !values['income']}
+                      disabled={!dirty || !values['iva']}
                       fullWidth
                       type="submit"
                       variant="contained"

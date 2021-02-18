@@ -70,7 +70,7 @@ const ChangePaymentDialog = ({ width, onSubmit, close }) => {
       isLoading && setLoading(false)
     },
   })
-  
+  console.log('data:', data)
   useEffect(() => {
     if (isLoading) {
       setLoading(true)

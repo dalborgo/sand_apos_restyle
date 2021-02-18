@@ -296,11 +296,10 @@ const ClosedTables = () => {
   const changePaymentSubmit = useCallback(values => {
     const { results: incomes } = queryClient.getQueryData(['types/incomes', { owner }])
     const { _id: income } = find(incomes, { display: values.income })
-    mutation.mutate({ id: targetDocId, set: { income }, owner, display: values.income }) //display serve in onMutate
+    mutation.mutate({ id: targetDocId, set: { income }, owner, display: values.income }) // display serve in onMutate
     closeChangePaymentDialog()
     return values
   }, [closeChangePaymentDialog, mutation, owner, queryClient, targetDocId])
-  
   useEffect(() => {
     async function fetchData () {
       await queryClient.prefetchQuery(['types/rooms', {

@@ -6,7 +6,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import moment from 'moment'
 import { messages } from 'src/translations/messages'
 import useSettings from 'src/hooks/useSettings'
-import { maskMap } from 'src/translations'
+import { getMaskMap } from 'src/translations'
 
 const useStyles = makeStyles(theme => ({
   delimiterRoot: {
@@ -38,7 +38,7 @@ const DatePickerField = ({
       disableAutoMonthSwitching
       disableFuture
       endText={intl.formatMessage(messages.date_range_end)}
-      mask={maskMap[locale]}
+      mask={getMaskMap(locale)}
       onAccept={
         date => {
           prevStart.current = date[0]

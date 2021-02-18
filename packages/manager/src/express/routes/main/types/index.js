@@ -3,10 +3,14 @@ import { couchQueries } from '@adapter/io'
 const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
 
+/**
+ * @param params_: {_id, order} -> `id` consents di scegliere un altro campo come id
+ */
+
 function execTypesQuery (req, type, params_ = {}) {
   const { connClass, query } = req
   const { params } = query || {}
-  const {_id, order} = {...params_, ...params}
+  const { _id, order } = { ...params_, ...params }
   utils.controlParameters(query, ['owner'])
   const parsedOwner = utils.parseOwner(req)
   const {
@@ -31,7 +35,7 @@ function addRouters (router) {
     res.send({ ok, results: data })
   })
   router.get('/types/incomes', async function (req, res) {
-    const { ok, results: data, message, info } = await execTypesQuery(req, 'PAYMENT_INCOME', { _id: 'key', order: 'index' })
+    const { ok, results: data, message, info } = await execTypesQuery(req, 'PAYMENT_INCOME', { order: 'index' })
     if (!ok) {return res.send({ ok, message, info })}
     res.send({ ok, results: data })
   })

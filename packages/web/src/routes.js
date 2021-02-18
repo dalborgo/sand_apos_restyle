@@ -179,7 +179,7 @@ const routes = [
         path: [
           '/app/reports/e-invoices',
           '/app/reports/e-invoices/:docId',
-          '/app/reports/e-invoices/change-customer-data/:targetDocId',
+          '/app/reports/e-invoices/change-customer-data/:targetCustomerId',
         ],
         component: lazy(() => import('src/views/reports/EInvoices')),
       },

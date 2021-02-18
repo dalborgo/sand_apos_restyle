@@ -1,4 +1,4 @@
-import { Button, makeStyles, withStyles } from '@material-ui/core'
+import { Button, colors, IconButton, makeStyles, SvgIcon, withStyles } from '@material-ui/core'
 import React, { useState } from 'react'
 import Box from '@material-ui/core/Box'
 import { VirtualTable } from '@devexpress/dx-react-grid-material-ui'
@@ -8,10 +8,12 @@ import { useQueryClient } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import { buttonQuery } from 'src/utils/reactQueryFunctions'
+import { Download as DownloadIcon } from 'react-feather'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
 import { messages } from 'src/translations/messages'
 import { useIntl } from 'react-intl'
+import clsx from 'clsx'
 
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
@@ -20,6 +22,13 @@ const useStyles = makeStyles(() => ({
     textTransform: 'none',
     lineHeight: '18px',
     textAlign: 'left',
+  },
+  buttonGreen: {
+    color: 'rgba(0, 0, 0, 0.87)',
+    backgroundColor: colors.green[100],
+    '&:hover': {
+      backgroundColor: colors.green[200],
+    },
   },
 }))
 
@@ -35,9 +44,18 @@ const CellBase = props => {
   const queryClient = useQueryClient()
   const docId = row._id
   const cellStyle = { paddingLeft: theme.spacing(2) }
-  const { payments } = row
+  if (column.name === 'download') {
+    return (
+      <VirtualTable.Cell {...props} style={cellStyle}>
+        <IconButton color="secondary">
+          <SvgIcon fontSize="small">
+            <DownloadIcon/>
+          </SvgIcon>
+        </IconButton>
+      </VirtualTable.Cell>
+    )
+  }
   if (column.name === 'date') {
-    const { closed_by: closedBy } = Array.isArray(payments) ? payments[0] : payments
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
         <Button
@@ -49,7 +67,7 @@ const CellBase = props => {
           disabled={intLoading}
           onClick={
             async () => {
-              const queryKey = [`reports/closed_table/${docId}`, { owner }]
+              const queryKey = [`reports/e_invoice/${docId}`, { owner }]
               await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
               history.push(`${window.location.pathname}/${docId}`)
             }
@@ -61,7 +79,7 @@ const CellBase = props => {
             parse(dateTimeFormatter(row.date, {
               year: undefined,
               month: 'short',
-            }, { second: undefined }) + '<br/>' + closedBy)
+            }, { second: undefined }) + '<br/>' + row.closed_by)
           }
         </Button>
       </VirtualTable.Cell>
@@ -80,27 +98,28 @@ const CellBase = props => {
     )
   }
   if (column.name === 'type') {
-    const company = payments.company || ''
-    const docId = payments.company_id
-    const number = intl.formatMessage(messages['mode_INVOICE']) + (payments.number ? ` ${payments.number}` : '')
+    const company = row.company || ''
+    const companyId = row.company_id
+    const number = intl.formatMessage(messages['mode_INVOICE']) + (row.number ? ` ${row.number}` : '')
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
         <Button
           classes={
             {
-              root: classes.buttonRoot,
+              root: clsx(classes.buttonRoot, classes.buttonGreen),
             }
           }
+          color="primary"
           disabled={intLoading}
           onClick={
             async () => {
-              const queryKey = ['docs/get_by_id', { docId }]
+              const queryKey = ['docs/get_by_id', { docId: companyId }]
               await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
               history.push({
-                pathname: `${window.location.pathname}/change-customer-data/${payments.company_id}`,
+                pathname: `${window.location.pathname}/change-customer-data/${companyId}`,
                 state: {
-                  company: payments.company,
-                  number: payments.number,
+                  company: row.company,
+                  number: row.number,
                   table: row.table_display,
                   room: row.room_display,
                   date: row.date,
