@@ -78,7 +78,7 @@ function addRouters (router) {
       .where(knex.raw(parsedOwner.queryCondition))
       .whereBetween('buc.date', [startDate, endDate_])
       .joinRaw('LEFT JOIN `' + bucketName + '` as `user` ON KEYS buc.closed_by')
-      .select(knex.raw('meta(buc).id _id, buc.customer.company, buc.customer._id company_id, `user`.`user` closed_by'))
+      .select(knex.raw('buc.fatt_elett.res_invoice_upload.uploadFileName filename, buc.fatt_elett.status.status_code statusCode, meta(buc).id _id, buc.customer.company, buc.customer._id company_id, `user`.`user` closed_by'))
       .select('buc.owner', 'buc.date', 'buc.number', 'buc.final_price', 'buc.room_display', 'buc.table_display')
       .orderBy('buc.date', 'desc')
       .toQuery()

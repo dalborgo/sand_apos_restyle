@@ -57,9 +57,7 @@ const CellBase = props => {
             onClick={
               async () => {
                 try {
-                  const data = {
-                    owner,
-                  }
+                  const data = { owner }
                   setLoading(true)
                   const response = await axiosLocalInstance(`e-invoices/create_xml/${docId}`, {
                     data,
@@ -68,7 +66,7 @@ const CellBase = props => {
                   setLoading(false)
                   const { base64, filename } = response.data
                   saveAs(`data:application/xml;base64,${base64}`, filename)
-                } catch ({message}) {
+                } catch ({ message }) {
                   enqueueSnackbar(message)
                 }
               }
@@ -90,11 +88,41 @@ const CellBase = props => {
         >
           <IconButton
             color="secondary"
-            onClick={() => null}
+            onClick={
+              async () => {
+                try {
+                  const data = { owner }
+                  setLoading(true)
+                  const response = await axiosLocalInstance(`e-invoices/send_xml/${docId}`, {
+                    data,
+                    method: 'post',
+                  })
+                  console.log('response.data:', response.data)
+                  setLoading(false)
+                } catch ({ message }) {
+                  enqueueSnackbar(message)
+                }
+              }
+            }
           >
-            <SvgIcon fontSize="small">
-              <SendIcon/>
-            </SvgIcon>
+            {
+              (statusCode => {
+                switch(statusCode) {
+                  case 1:        
+                    return null
+                  case 0:
+                    return (
+                      <Button>PROVA</Button>
+                    )
+                  default:
+                    return  (
+                      <SvgIcon fontSize="small">
+                        <SendIcon/>
+                      </SvgIcon>
+                    )
+                }  
+              })(row.statusCode)
+            }
           </IconButton>
         </Tooltip>
       </VirtualTable.Cell>

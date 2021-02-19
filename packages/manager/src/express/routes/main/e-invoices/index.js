@@ -9,7 +9,7 @@ import archiver from 'archiver'
 const knex = require('knex')({ client: 'mysql' })
 const { utils } = require(__helpers)
 const qs = require('qs')
-const { authenticationBaseUrl, username, password } = config.get('e_invoice')
+const { authenticationBaseUrl, baseUrl, username, password } = config.get('e_invoice')
 
 const { axios } = require(__helpers)
 
@@ -48,7 +48,7 @@ async function manageRequest (params, method = 'post') {
   let cont = 0
   do {
     if (cont) {await eInvoiceAuth.setAuth()}
-    const base = axios.eInvoiceInstance(authenticationBaseUrl, eInvoiceAuth.accessToken)
+    const base = axios.eInvoiceInstance(baseUrl, eInvoiceAuth.accessToken)
     const { data, status } = await base[method](...params)
     partial.data = data
     partial.status = status
@@ -57,8 +57,8 @@ async function manageRequest (params, method = 'post') {
   return partial
 }
 
-async function userInfo () {
-  const partial = await manageRequest(['/auth/userInfo'], 'get')
+async function sendXml (dataFile) {
+  const partial = await manageRequest(['/services/invoice/upload', { dataFile }])
   return partial.data
 }
 
@@ -71,7 +71,6 @@ async function createXml (req) {
   return createEInvoiceXML(connClass, owner, paymentId)
 }
 
-
 function addRouters (router) {
   router.get('/e-invoices/signin', async function (req, res) {
     utils.checkSecurity(req)
@@ -83,10 +82,6 @@ function addRouters (router) {
     const { refreshToken } = query
     res.send(await refresh(refreshToken))
   })
-  router.get('/e-invoices/userInfo', async function (req, res) {
-    utils.checkSecurity(req)
-    res.send(await userInfo())
-  })
   router.post('/e-invoices/create_xml/:paymentId', async function (req, res) {
     const { id: eInvoiceId, buffer: eInvoiceContent } = await createXml(req)
     res.send({ filename: `${eInvoiceId}.xml`, base64: eInvoiceContent.toString('base64') })
@@ -94,7 +89,7 @@ function addRouters (router) {
   router.post('/e-invoices/send_xml/:paymentId', async function (req, res) {
     const { buffer: eInvoiceContent } = await createXml(req)
     const dataFile = eInvoiceContent.toString('base64')
-    res.send({ ok: true, data: dataFile })
+    res.send(await sendXml(dataFile))
   })
   router.post('/e-invoices/create_zip', async function (req, res) {
     const { connClass, body } = req
