@@ -107,20 +107,20 @@ const CellBase = props => {
           >
             {
               (statusCode => {
-                switch(statusCode) {
-                  case 1:        
+                switch (statusCode) {
+                  case 1:
                     return null
                   case 0:
                     return (
                       <Button>CONSEGNATA</Button>
                     )
                   default:
-                    return  (
+                    return (
                       <SvgIcon fontSize="small">
                         <SendIcon/>
                       </SvgIcon>
                     )
-                }  
+                }
               })(row.statusCode)
             }
           </IconButton>
