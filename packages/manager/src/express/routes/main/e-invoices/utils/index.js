@@ -268,7 +268,7 @@ export async function createEInvoiceXML (connClass, owner, paymentObj) {
     },
   }
   const feed = xmlbuilder.create(xml, { encoding: 'UTF-8' })
-  return { buf: new Buffer.from(feed.toString()), id: `IT${companyData.iva}_${sendingCounter}` }
+  return { buffer: new Buffer.from(feed.toString()), id: `IT${companyData.iva}_${sendingCounter}` }
 }
 
 /* eslint-enable  */

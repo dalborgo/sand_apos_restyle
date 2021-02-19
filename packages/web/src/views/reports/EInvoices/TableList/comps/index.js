@@ -7,13 +7,15 @@ import { useHistory } from 'react-router'
 import { useQueryClient } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
-import { baseURL, buttonQuery } from 'src/utils/reactQueryFunctions'
+import { axiosLocalInstance, buttonQuery } from 'src/utils/reactQueryFunctions'
 import { Download as DownloadIcon, Send as SendIcon } from 'react-feather'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
 import { messages } from 'src/translations/messages'
 import { useIntl } from 'react-intl'
 import clsx from 'clsx'
+import { saveAs } from 'file-saver'
+import { useSnackbar } from 'notistack'
 
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
@@ -31,7 +33,6 @@ const useStyles = makeStyles(() => ({
     },
   },
 }))
-
 const CellBase = props => {
   const { column, row, theme } = props
   const dateTimeFormatter = useDateTimeFormatter()
@@ -40,6 +41,7 @@ const CellBase = props => {
   const intl = useIntl()
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
   const history = useHistory()
   const queryClient = useQueryClient()
   const docId = row._id
@@ -52,10 +54,28 @@ const CellBase = props => {
         >
           <IconButton
             color="secondary"
-            onClick={() => window.open(`${baseURL}e-invoices/create_xml/${docId}?owner=${owner}`, '_self')}
+            onClick={
+              async () => {
+                try {
+                  const data = {
+                    owner,
+                  }
+                  setLoading(true)
+                  const response = await axiosLocalInstance(`e-invoices/create_xml/${docId}`, {
+                    data,
+                    method: 'post',
+                  })
+                  setLoading(false)
+                  const { base64, filename } = response.data
+                  saveAs(`data:application/xml;base64,${base64}`, filename)
+                } catch ({message}) {
+                  enqueueSnackbar(message)
+                }
+              }
+            }
           >
             <SvgIcon fontSize="small">
-              <DownloadIcon />
+              <DownloadIcon/>
             </SvgIcon>
           </IconButton>
         </Tooltip>

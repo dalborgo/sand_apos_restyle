@@ -2,13 +2,12 @@ import config from 'config'
 import eInvoiceAuth, { authStates } from './eInvoiceClass'
 import { createEInvoiceXML } from './utils'
 import log from '@adapter/common/src/winston'
-import stream from 'stream'
 import { couchQueries } from '@adapter/io'
 import moment from 'moment'
 import archiver from 'archiver'
 
 const knex = require('knex')({ client: 'mysql' })
-const { security, utils } = require(__helpers)
+const { utils } = require(__helpers)
 const qs = require('qs')
 const { authenticationBaseUrl, username, password } = config.get('e_invoice')
 
@@ -63,6 +62,16 @@ async function userInfo () {
   return partial.data
 }
 
+async function createXml (req) {
+  utils.checkSecurity(req)
+  const { connClass, body, params } = req
+  const params_ = { ...body, ...params }
+  utils.controlParameters(params_, ['owner', 'paymentId'])
+  const { owner, paymentId } = params_
+  return createEInvoiceXML(connClass, owner, paymentId)
+}
+
+
 function addRouters (router) {
   router.get('/e-invoices/signin', async function (req, res) {
     utils.checkSecurity(req)
@@ -78,23 +87,18 @@ function addRouters (router) {
     utils.checkSecurity(req)
     res.send(await userInfo())
   })
-  router.get('/e-invoices/create_xml/:paymentId', async function (req, res) {
-    utils.checkSecurity(req)
-    const { connClass, query, params } = req
-    const params_ = { ...query, ...params }
-    utils.controlParameters(params_, ['owner', 'paymentId'])
-    const { owner, paymentId } = params_
-    const { id: eInvoiceId, buf: eInvoiceContent } = await createEInvoiceXML(connClass, owner, paymentId)
-    const readStream = new stream.PassThrough()
-    readStream.end(eInvoiceContent)
-    res.set('Content-disposition', `attachment; filename=${eInvoiceId}.xml`)
-    res.set('Content-Type', 'application/xml')
-    readStream.pipe(res)
+  router.post('/e-invoices/create_xml/:paymentId', async function (req, res) {
+    const { id: eInvoiceId, buffer: eInvoiceContent } = await createXml(req)
+    res.send({ filename: `${eInvoiceId}.xml`, base64: eInvoiceContent.toString('base64') })
   })
-
-  router.get('/e-invoices/create_zip/:filename', async function (req, res) {
-    const { connClass, query } = req
-    utils.controlParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
+  router.post('/e-invoices/send_xml/:paymentId', async function (req, res) {
+    const { buffer: eInvoiceContent } = await createXml(req)
+    const dataFile = eInvoiceContent.toString('base64')
+    res.send({ ok: true, data: dataFile })
+  })
+  router.post('/e-invoices/create_zip', async function (req, res) {
+    const { connClass, body } = req
+    utils.controlParameters(body, ['startDateInMillis', 'endDateInMillis', 'owner'])
     const parsedOwner = utils.parseOwner(req, 'buc')
     const {
       owner,
@@ -102,7 +106,7 @@ function addRouters (router) {
       options,
       startDateInMillis: startDate,
       endDateInMillis: endDate,
-    } = query
+    } = body
     const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
     const statement = knex({ buc: bucketName })
       .select(knex.raw('buc.*, mode.payment_mode'))
@@ -114,11 +118,13 @@ function addRouters (router) {
       .where(knex.raw(parsedOwner.queryCondition))
       .toQuery()
     const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
-    if (!ok) {return res.send({ ok, message, err })}
+    if (!ok) {
+      res.status(412).send({ ok, message, err })
+    }
     const zip = archiver('zip', {})
     zip.pipe(res)
     for (let payment of results) {
-      const { id: eInvoiceId, buf: eInvoiceContent } = await createEInvoiceXML(connClass, owner, payment)
+      const { id: eInvoiceId, buffer: eInvoiceContent } = await createEInvoiceXML(connClass, owner, payment)
       zip.append(eInvoiceContent, { name: `${eInvoiceId}.xml` })
     }
     await zip.finalize()

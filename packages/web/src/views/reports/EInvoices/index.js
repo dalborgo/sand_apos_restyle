@@ -10,7 +10,7 @@ import DateRangeFormikWrapper from 'src/components/DateRangeFormikWrapper'
 import shallow from 'zustand/shallow'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import useAuth from 'src/hooks/useAuth'
-import { axiosLocalInstance, baseURL, useSnackQueryError } from 'src/utils/reactQueryFunctions'
+import { axiosLocalInstance, manageFile, useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import useEInvoiceStore from 'src/zustandStore/useEInvoiceStore'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import moment from 'moment'
@@ -20,6 +20,8 @@ import { useHistory, useParams } from 'react-router'
 import EntriesTableDialog from 'src/components/EntriesTableDialog'
 import { parentPath } from 'src/utils/urlFunctions'
 import ChangeCustomerDialog from './ChangeCustomerDialog'
+import { useSnackbar } from 'notistack'
+import { useGeneralStore } from 'src/zustandStore'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,10 +48,13 @@ const changeCustomerMutation_ = async values => {
   return data
 }
 
+const loadingSel = state => ({ setLoading: state.setLoading })
 const EInvoices = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const snackQueryError = useSnackQueryError()
+  const { enqueueSnackbar } = useSnackbar()
+  const { setLoading } = useGeneralStore(loadingSel, shallow)
   const history = useHistory()
   const queryClient = useQueryClient()
   const [isRefetch, setIsRefetch] = useState(false)
@@ -102,12 +107,25 @@ const EInvoices = () => {
     closeChangeCustomerDialog()
     return values
   }, [closeChangeCustomerDialog, changeCustomerMutation, owner, targetCustomerId])
-  const exportZip = useCallback(() => {
+  const exportZip = useCallback(async () => {
     const labelEnd = endDateInMillis && moment(endDateInMillis, 'YYYYMMDDHHmmssSSS').format('DD-MM-YYYY')
     const labelStart = startDateInMillis && moment(startDateInMillis, 'YYYYMMDDHHmmssSSS').format('DD-MM-YYYY')
-    const fileName = `xml_${labelStart !== labelEnd ? `${labelStart}_${labelEnd}` : labelStart}.zip`
-    window.open(`${baseURL}e-invoices/create_zip/${fileName}?owner=${owner}&startDateInMillis=${startDateInMillis}&endDateInMillis=${endDateInMillis}`, '_self')
-  }, [endDateInMillis, owner, startDateInMillis])
+    const filename = `xml_${labelStart !== labelEnd ? `${labelStart}_${labelEnd}` : labelStart}.zip`
+    const data = {
+      endDateInMillis,
+      owner,
+      startDateInMillis,
+    }
+    setLoading(true)
+    const { ok, message } = await manageFile(
+      'e-invoices/create_zip',
+      filename,
+      'application/zip',
+      data
+    )
+    setLoading(false)
+    !ok && enqueueSnackbar(message)
+  }, [endDateInMillis, enqueueSnackbar, owner, setLoading, startDateInMillis])
   const effectiveFetching = getEffectiveFetchingWithPrev(rest, isRefetch)
   return (
     <Page

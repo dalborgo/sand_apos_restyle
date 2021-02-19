@@ -12,9 +12,11 @@ import isObject from 'lodash/isObject'
 import mapValues from 'lodash/mapValues'
 import { useHistory } from 'react-router'
 import useAuth from 'src/hooks/useAuth'
+import readBlob from 'read-blob'
 import qs from 'qs'
+import { saveAs } from 'file-saver'
 
-export const baseURL =  `${envConfig.BACKEND_HOST}/api/`
+export const baseURL = `${envConfig.BACKEND_HOST}/api/`
 
 export const axiosLocalInstance = axios.create({
   baseURL,
@@ -48,6 +50,38 @@ export const defaultQueryFn = async ({ queryKey }) => {
     params,
   })
   return data
+}
+
+export async function manageFile (endpoint, filename, type, data, options = {}) {
+  try {
+    const {
+      method = 'POST',
+      same = true,
+      toDownload = true,
+    } = options
+    const response = await axiosLocalInstance(endpoint, {
+      data,
+      method,
+      responseType: 'blob',
+    })
+    if (response.status === 412) {
+      const json = await readBlob(response.data, 'application/json')
+      return JSON.parse(json)
+    } else {
+      const file = new File([response.data], filename, { type })
+      if (toDownload) {
+        saveAs(file)
+      } else {
+        const exportUrl = URL.createObjectURL(file)
+        window.open(exportUrl, same ? '_self' : '_blank')
+        URL.revokeObjectURL(exportUrl)
+      }
+      return { ok: true }
+    }
+  } catch (err) {
+    log.error(err.message)
+    return { ok: false, message: err.message, err }
+  }
 }
 
 export function useSnackQueryError () {
