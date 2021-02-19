@@ -4,11 +4,12 @@ import { Divider, makeStyles, Table, TableBody, TableCell, TableRow, useTheme } 
 import { useMoneyFormatter } from 'src/utils/formatters'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
-import { useGeneralStore } from '../../../../../zustandStore'
+import { useGeneralStore } from 'src/zustandStore'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 450,
+    marginBottom: theme.spacing(2),
   },
   bold: props => ({
     fontWeight: props.isBold ? 'bold' : undefined,
@@ -56,17 +57,24 @@ const TitleRow = ({ title }) => {
   )
 }
 
-function createRows (closing, values, pre, post, mf, intl) {
+function createRows (closing, values, pre, post, mf, intl, total) {
   const tot = { num: 0, val: 0 }
   const rows = values.reduce((prev, curr) => {
     const { key, value } = curr
     const defKey = key || value
-    const { num, display, val } = closing[`${pre}_${defKey}${post ? `_${post}` : ''}`] || {}
-    num && prev.push(<SimpleRow key={defKey} values={{ left: display, center: num, right: mf(val) }}/>)
+    const { num, display, name, val } = closing[`${pre}_${defKey}${post ? `_${post}` : ''}`] || {}
+    num && prev.push(<SimpleRow key={defKey} values={{ left: display || name, center: num, right: mf(val) }}/>)
     tot.num += num || 0
     tot.val += val || 0
     return prev
   }, [])
+  if(total && tot.num < total.num){
+    const diffNum = total.num - tot.num
+    const diffVal = total.val - tot.val
+    tot.num += diffNum
+    tot.val += diffVal
+    rows.push(<SimpleRow key="other" values={{ left: intl.formatMessage(messages['common_charge']).toUpperCase(), center: diffNum, right: mf(diffVal) }}/>)
+  }
   tot.num && rows.push(
     <SimpleRow
       isBold
@@ -77,21 +85,27 @@ function createRows (closing, values, pre, post, mf, intl) {
   return rows
 }
 
-const WrapperRows = ({ closing, values, title, pre, post }) => {
+const WrapperRows = ({ closing, values, title, pre, post, total }) => {
   const moneyFormatter = useMoneyFormatter()
   const intl = useIntl()
-  return (
-    <>
-      <TitleRow title={title}/>
+  const rows = createRows(closing, values, pre, post, moneyFormatter, intl, total).map(row => row)
+  if(rows.length){
+    return (
       <>
-        {
-          createRows(closing, values, pre, post, moneyFormatter, intl).map(row => row)
-        }
+        <TitleRow title={title}/>
+        <>
+          {
+            rows
+          }
+        </>
       </>
-    </>
-  )
+    )
+  }else{
+    return null
+  }
 }
 const selAllIn = state => state.allIn
+
 function ClosingTable ({ data }) {
   const classes = useStyles()
   const allIn = useGeneralStore(selAllIn)
@@ -103,60 +117,73 @@ function ClosingTable ({ data }) {
   const elab = calculateClosingTable(closing?.[side])
   const moneyFormatter = useMoneyFormatter()
   const intlTotal = intl.formatMessage(messages['common_total'])
+  console.log('incomes:', incomes)
   return (
     <>
       <Table aria-label="closing-table" className={classes.table} size="small">
         <TableBody>
           {
             operators.map(({ user }) => {
-              return (
-                <React.Fragment key={user}>
-                  <TableRow>
-                    <TableCell
-                      colSpan={3}
-                      style={{ padding: theme.spacing(1, 0) }}
-                    >
-                      <Divider/>
-                    </TableCell>
-                  </TableRow>
-                  <SimpleRow isBold values={{ left: user.toUpperCase(), right: moneyFormatter(elab[user].val) }}/>
-                  <WrapperRows
-                    closing={elab}
-                    pre={user}
-                    title={intl.formatMessage(messages['common_type_document'])}
-                    values={modes}
-                  />
-                  <WrapperRows
-                    closing={elab}
-                    pre={user}
-                    title={intl.formatMessage(messages['common_type_payment'])}
-                    values={incomes}
-                  />
-                  <WrapperRows
-                    closing={elab}
-                    post="sc"
-                    pre={user}
-                    title={intl.formatMessage(messages['common_discounts'])}
-                    values={modes}
-                  />
-                  {
-                    Boolean(elab[`${user}_st`].num) &&
-                    <>
-                      <TitleRow title={intl.formatMessage(messages['common_reversals'])}/>
-                      <SimpleRow
-                        isBold
-                        values={
-                          {
-                            left: intlTotal,
-                            center: elab[`${user}_st`].num,
-                            right: moneyFormatter(elab[`${user}_st`].val),
+              const total = {num: elab[user].num || 0, val: elab[user].val || 0}
+              console.log('total:', total)
+              if (total.num) {
+                return (
+                  <React.Fragment key={user}>
+                    <TableRow>
+                      <TableCell
+                        colSpan={3}
+                        style={{ padding: theme.spacing(1, 0) }}
+                      >
+                        <Divider/>
+                      </TableCell>
+                    </TableRow>
+                    <SimpleRow isBold values={{ left: user.toUpperCase(), right: moneyFormatter(elab[user].val) }}/>
+                    <WrapperRows
+                      closing={elab}
+                      pre={user}
+                      title={intl.formatMessage(messages['common_type_document'])}
+                      values={modes}
+                    />
+                    <WrapperRows
+                      closing={elab}
+                      pre={user}
+                      title={intl.formatMessage(messages['common_type_payment'])}
+                      total={total}
+                      values={incomes}
+                    />
+                    {
+                      Boolean(elab[`${user}_st`].num) &&
+                      <>
+                        <WrapperRows
+                          closing={elab}
+                          post="sc"
+                          pre={user}
+                          title={intl.formatMessage(messages['common_discounts'])}
+                          values={modes}
+                        />
+                      </>
+                    }
+                    {
+                      Boolean(elab[`${user}_st`].num) &&
+                      <>
+                        <TitleRow title={intl.formatMessage(messages['common_reversals'])}/>
+                        <SimpleRow
+                          isBold
+                          values={
+                            {
+                              left: intlTotal,
+                              center: elab[`${user}_st`].num,
+                              right: moneyFormatter(elab[`${user}_st`].val),
+                            }
                           }
-                        }
-                      />
-                    </>
-                  }
-                </React.Fragment>
-              )
+                        />
+                      </>
+                    }
+                  </React.Fragment>
+                )
+              } else {
+                return null
+              }
             })
           }
         </TableBody>

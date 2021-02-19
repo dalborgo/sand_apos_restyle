@@ -98,7 +98,7 @@ function reduceChildRoutes ({
   return acc
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   mobileDrawer: {
     width: 256,
   },
@@ -111,6 +111,11 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
     width: 64,
     height: 64,
+  },
+  subheader: {
+    paddingTop: theme.spacing(1),
+    paddingBottom: 0,
+    lineHeight: 2,
   },
 }))
 
@@ -135,91 +140,95 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
       height="100%"
     >
       <PerfectScrollbar options={{ suppressScrollX: true }} ref={PerfectScrollbarRef}>
-        <Box p={2} pt={3}>
-          <Box
-            display="flex"
-            justifyContent="center"
-          >
-            <RouterLink to="/app/account">
-              <Avatar
-                alt="User"
-                className={classes.avatar}
-                src={`/static/images/avatars/${user.priority}.png`}
-                variant="rounded"
-              />
-            </RouterLink>
-          </Box>
-          <Box
-            mt={1}
-            textAlign="center"
-          >
-            <Link
-              color="textPrimary"
-              component={RouterLink}
-              to="/app/account"
-              underline="none"
-              variant="h5"
+        <Box display="flex" flexDirection="column" height="100%">
+          <Box p={2} pt={3}>
+            <Box
+              display="flex"
+              justifyContent="center"
             >
-              {user.display}
-            </Link>
-            <Typography
-              color="textSecondary"
-              variant="body2"
+              <RouterLink to="/app/account">
+                <Avatar
+                  alt="User"
+                  className={classes.avatar}
+                  src={`/static/images/avatars/${user?.priority}.png`}
+                  variant="rounded"
+                />
+              </RouterLink>
+            </Box>
+            <Box
+              mt={1}
+              textAlign="center"
             >
-              {roleFormatter(user.priority)}
-            </Typography>
-          </Box>
-        </Box>
-        <Divider/>
-        <Box p={2} pt={1}>
-          {
-            sections.map(section => (
-              <List
-                key={section.subheader}
-                subheader={
-                  (
-                    <ListSubheader
-                      disableGutters
-                      disableSticky
-                    >
-                      {messages[`sub_${section.subheader}`] ? intl.formatMessage(messages[`sub_${section.subheader}`]) : section.subheader}
-                    </ListSubheader>
-                  )
-                }
+              <Link
+                color="textPrimary"
+                component={RouterLink}
+                to="/app/account"
+                underline="none"
+                variant="h5"
               >
-                {
-                  renderNavItems({
-                    intl,
-                    items: section.items,
-                    pathname: location.pathname,
-                    priority: user.priority,
-                  })
-                }
-              </List>
-            ))
-          }
-        </Box>
-        <Divider/>
-        <Box p={2}>
-          <Box
-            bgcolor="background.dark"
-            borderRadius="borderRadius"
-            p={2}
-          >
-            <Typography
-              color="textPrimary"
-              variant="h6"
+                {user?.display}
+              </Link>
+              <Typography
+                color="textSecondary"
+                variant="body2"
+              >
+                {roleFormatter(user?.priority)}
+              </Typography>
+            </Box>
+          </Box>
+          <Divider/>
+          <Box p={2} pt={1}>
+            {
+              sections.map(section => (
+                <List
+                  key={section.subheader}
+                  subheader={
+                    (
+                      <ListSubheader
+                        className={classes.subheader}
+                        disableGutters
+                        disableSticky
+                      >
+                        {messages[`sub_${section.subheader}`] ? intl.formatMessage(messages[`sub_${section.subheader}`]) : section.subheader}
+                      </ListSubheader>
+                    )
+                  }
+                >
+                  {
+                    renderNavItems({
+                      intl,
+                      items: section.items,
+                      pathname: location.pathname,
+                      priority: user?.priority,
+                    })
+                  }
+                </List>
+              ))
+            }
+          </Box>
+          <Box flexGrow={1}/>
+          <Divider/>
+          <Box p={2}>
+            <Box
+              bgcolor="background.dark"
+              borderRadius="borderRadius"
+              p={2}
             >
-              Need Help?
-            </Typography>
-            <Link
-              color="secondary"
-              component={RouterLink}
-              to="/docs"
-              variant="subtitle1"
-            >
-              Check our docs
-            </Link>
+              <Typography
+                color="textPrimary"
+                variant="h6"
+              >
+                Need Help?
+              </Typography>
+              <Link
+                color="secondary"
+                component={RouterLink}
+                to="/docs"
+                variant="subtitle1"
+              >
+                Check our docs
+              </Link>
+            </Box>
           </Box>
         </Box>
       </PerfectScrollbar>

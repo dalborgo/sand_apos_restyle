@@ -20,10 +20,10 @@ import shallow from 'zustand/shallow'
 import { parentPath } from 'src/utils/urlFunctions'
 import { FormattedMessage } from 'react-intl'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   dialogContent: {
     paddingTop: 0,
-    paddingBottom: theme.spacing(2),
+    paddingBottom: 0,
   },
   dialogTitle: {
     paddingBottom: 0,

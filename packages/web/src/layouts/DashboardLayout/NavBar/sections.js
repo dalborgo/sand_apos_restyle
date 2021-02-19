@@ -1,20 +1,12 @@
 import {
   BarChart as BarChartIcon,
   Clock as ClockIcon,
+  DollarSign as DollarSignIcon,
   FileText as FileTextIcon,
   Inbox as InboxIcon,
-  DollarSign as DollarSignIcon,
-  Edit as EditIcon,
-  Folder as FolderIcon,
   List as ListIcon,
-  Lock as LockIcon,
   PieChart as PieChartIcon,
-  Share2 as ShareIcon,
-  User as UserIcon,
-  UserPlus as UserPlusIcon,
-  Users as UsersIcon,
 } from 'react-feather'
-import ReceiptIcon from '@material-ui/icons/ReceiptOutlined'
 
 const sections = [
   {
@@ -63,7 +55,7 @@ const sections = [
       },
     ],
   },
-  {
+  /*{
     subheader: 'Management',
     items: [
       {
@@ -197,7 +189,7 @@ const sections = [
         ],
       },
     ],
-  },
+  },*/
 ]
 
 export default sections

@@ -68,6 +68,10 @@
     "defaultMessage": "Struttura"
   },
   {
+    "id": "common.charge",
+    "defaultMessage": "Addebito"
+  },
+  {
     "id": "common.clear",
     "defaultMessage": "Pulisci"
   },
@@ -130,6 +134,10 @@
   {
     "id": "common.number",
     "defaultMessage": "Numero"
+  },
+  {
+    "id": "common.other",
+    "defaultMessage": "Altro"
   },
   {
     "id": "common.price",
@@ -310,6 +318,10 @@
   {
     "id": "mode.INVOICE",
     "defaultMessage": "Fattura"
+  },
+  {
+    "id": "mode.OTHER",
+    "defaultMessage": "Altro"
   },
   {
     "id": "mode.PRECHECK",

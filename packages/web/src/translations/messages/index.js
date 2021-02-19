@@ -33,6 +33,10 @@ export const messages = defineMessages({
     id: 'mode.5STELLE',
     defaultMessage: 'Addebito',
   },
+  mode_OTHER: {
+    id: 'mode.OTHER',
+    defaultMessage: 'Altro',
+  },
   mode_PRECHECK: {
     id: 'mode.PRECHECK',
     defaultMessage: 'Preconto',
@@ -45,6 +49,10 @@ export const messages = defineMessages({
     id: 'common.username',
     defaultMessage: 'Nome Utente',
   },
+  common_charge: {
+    id: 'common.charge',
+    defaultMessage: 'Addebito',
+  },
   common_customer: {
     id: 'common.customer',
     defaultMessage: 'Cliente',
@@ -52,6 +60,10 @@ export const messages = defineMessages({
   common_table: {
     id: 'common.table',
     defaultMessage: 'Tavolo',
+  },
+  common_other: {
+    id: 'common.other',
+    defaultMessage: 'Altro',
   },
   common_search: {
     id: 'common.search',

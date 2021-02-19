@@ -107,5 +107,8 @@
   "reports.e_invoices.change_customer_data": "Modifica anagrafica cliente",
   "reports.e_invoices_download_xml": "Scarica xml",
   "reports.e_invoices_download_xml_zip": "Scarica zip",
-  "reports.e_invoices_send": "Invia"
+  "reports.e_invoices_send": "Invia",
+  "common.charge": "Addebito",
+  "mode.OTHER": "Altro",
+  "common.other": "Altro"
 }
