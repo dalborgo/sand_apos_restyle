@@ -19,7 +19,7 @@ export async function createEInvoiceXML (connClass, owner, paymentObj) {
     const statement = knex
       .from(knex.raw(`\`${bucketName}\` buc USE KEYS '${paymentObj}'`))
       .select(knex.raw('buc.*, mode.payment_mode'))
-      .joinRaw(`LEFT JOIN \`${bucketName}\` mode ON KEYS buc.income`)
+      .joinRaw(`LEFT JOIN \`${bucketName}\` mode ON KEYS buc.income_id`)
     const {
       ok,
       results,

@@ -8,7 +8,7 @@ const { Unauthorized } = require(__errors)
 const { AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
 
-function hasAuthorization (headers, checkCodes) {
+function hasAuthorization (headers, checkCodes = []) {
   if (connections.isInternal(headers) || !cFunctions.isProd()) {return}
   const { authorization } = headers
   if (!authorization) {throw new Unauthorized()}

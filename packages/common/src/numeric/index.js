@@ -2,17 +2,6 @@ import numeral from 'numeral'
 import cFunctions from '../functions'
 import compose from 'lodash/fp/compose'
 
-/*numeral.register('locale', 'en', {
-  delimiters: {
-    thousands: '.',
-    decimal: ',',
-  },
-  currency: {
-    symbol: '€',
-  },
-})*/
-//numeral.locale('it')
-
 const printMoney = (value, fd = 2) => printDecimal(value, fd, true)
 const printByte = value => numeral(parseInt(value, 10)).format('0b')
 const round = (num, decimal = 2) => Number(num.toFixed(decimal))

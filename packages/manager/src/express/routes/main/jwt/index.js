@@ -4,7 +4,7 @@ import config from 'config'
 import get from 'lodash/get'
 import log from '@adapter/common/src/winston'
 
-const { security } = require(__helpers)
+const { utils } = require(__helpers)
 
 const { MAXAGE_MINUTES = 30, AUTH = 'boobs' } = config.get('express')
 const JWT_SECRET = AUTH
@@ -118,7 +118,7 @@ function addRouters (router) {
     res.send(results)
   })
   router.get('/jwt/check_session', async function (req, res) {
-    security.hasAuthorization(req.headers)
+    utils.checkSecurity(req)
     res.send({ ok: true })
   })
   router.get('/jwt/refresh_token', async function (req, res) {

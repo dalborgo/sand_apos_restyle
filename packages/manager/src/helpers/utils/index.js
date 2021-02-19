@@ -9,9 +9,9 @@ import { security } from '../'
  */
 function parseOwner ({ query, body, headers }, bucketLabel) {
   const { owner } = Object.assign({}, body, query)
-  if (!owner) {return {}}
   const ownerArray = Array.isArray(owner) ? owner : [owner]
   security.hasAuthorization(headers, ownerArray)
+  if (!owner) {return {}}
   const [startOwner] = ownerArray
   const endOwner = ownerArray.length > 1 ? ownerArray[ownerArray.length - 1] : startOwner
   return {
@@ -20,6 +20,11 @@ function parseOwner ({ query, body, headers }, bucketLabel) {
     queryCondition: `${bucketLabel ? `${bucketLabel}.` : ''}owner IN ${JSON.stringify(ownerArray)}`,
     startOwner,
   }
+}
+function checkSecurity({ query, body, headers }) {
+  const { owner } = Object.assign({}, body, query)
+  const ownerArray = Array.isArray(owner) ? owner : [owner]
+  security.hasAuthorization(headers, ownerArray)
 }
 
 const checkSide = allIn => Boolean(allIn === 'true' || allIn === true)
@@ -54,6 +59,7 @@ async function allSettled (promises) {
 
 export default {
   allSettled,
+  checkSecurity,
   checkSide,
   controlParameters,
   parseOwner,

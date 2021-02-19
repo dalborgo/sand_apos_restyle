@@ -1,7 +1,7 @@
 import { couchQueries, couchViews } from '@adapter/io'
 import { queryById } from '../queries'
 
-const { utils, axios, security } = require(__helpers)
+const { utils, axios } = require(__helpers)
 
 const getEndkey = str => str.substring(0, str.length - 1) + String.fromCharCode(str.charCodeAt(str.length - 1) + 1)
 
@@ -138,7 +138,7 @@ function addRouters (router) {
     res.send(data)
   })
   router.put('/docs/upsert', async function (req, res) {
-    security.hasAuthorization(req.headers)
+    utils.checkSecurity(req)
     const { connClass, body } = req
     const { docId, doc, options } = body
     const { astenposBucketCollection: collection } = connClass
@@ -146,7 +146,7 @@ function addRouters (router) {
     res.send({ ok: true, results: { docId, data } })
   })
   router.delete('/docs/remove', async function (req, res) {
-    security.hasAuthorization(req.headers)
+    utils.checkSecurity(req)
     const { connClass, body } = req
     const { docId, options } = body
     const { astenposBucketCollection: collection } = connClass

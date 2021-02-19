@@ -79,7 +79,7 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
       const newIncomeId = `PAYMENT_INCOME_${doc.income}_${token}`
       doc.date_closing = doc.date_closing || paymentClosingDates[doc.meta_id]
       doc.archived = true
-      docs.push({ ...doc, order: newOrderId, order_id: newOrderId, income: newIncomeId })
+      docs.push({ ...doc, order: newOrderId, order_id: newOrderId, income_id: newIncomeId })
     } else {
       const isValid = doc.type && doc.type !== 'ARCHIVE'
       isValid && docs.push(doc) //skip if type missing or is 'ARCHIVE'

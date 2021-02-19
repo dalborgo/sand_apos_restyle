@@ -65,7 +65,7 @@ async function userInfo () {
 
 function addRouters (router) {
   router.get('/e-invoices/signin', async function (req, res) {
-    security.hasAuthorization(req.headers)
+    utils.checkSecurity(req)
     res.send(await refresh(getAuth()))
   })
   router.get('/e-invoices/refresh', async function (req, res) {
@@ -75,11 +75,11 @@ function addRouters (router) {
     res.send(await refresh(refreshToken))
   })
   router.get('/e-invoices/userInfo', async function (req, res) {
-    security.hasAuthorization(req.headers)
+    utils.checkSecurity(req)
     res.send(await userInfo())
   })
   router.get('/e-invoices/create_xml/:paymentId', async function (req, res) {
-    security.hasAuthorization(req.headers)
+    utils.checkSecurity(req)
     const { connClass, query, params } = req
     const params_ = { ...query, ...params }
     utils.controlParameters(params_, ['owner', 'paymentId'])
@@ -106,7 +106,7 @@ function addRouters (router) {
     const endDate_ = moment(endDate, 'YYYYMMDDHHmmssSSS').endOf('day').format('YYYYMMDDHHmmssSSS') // end day
     const statement = knex({ buc: bucketName })
       .select(knex.raw('buc.*, mode.payment_mode'))
-      .joinRaw(`LEFT JOIN \`${bucketName}\` mode ON KEYS buc.income`)
+      .joinRaw(`LEFT JOIN \`${bucketName}\` mode ON KEYS buc.income_id`)
       .where({ 'buc.type': 'PAYMENT' })
       .where({ 'buc.mode': 'INVOICE' })
       .where({ 'buc.archived': true })
