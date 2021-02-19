@@ -112,7 +112,7 @@ const CellBase = props => {
                     return null
                   case 0:
                     return (
-                      <Button>PROVA</Button>
+                      <Button>CONSEGNATA</Button>
                     )
                   default:
                     return  (
