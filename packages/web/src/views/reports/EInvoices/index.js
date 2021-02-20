@@ -42,7 +42,7 @@ const eInvoiceSelector = state => ({
 })
 
 const changeCustomerMutation_ = async values => {
-  const { data } = await axiosLocalInstance.put('queries/update_by_id', {
+  const { data } = await axiosLocalInstance.put('e-invoices/update_customer', {
     ...values,
   })
   return data

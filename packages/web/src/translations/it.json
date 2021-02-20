@@ -110,5 +110,6 @@
   "reports.e_invoices_send": "Invia",
   "common.charge": "Addebito",
   "mode.OTHER": "Altro",
-  "common.other": "Altro"
+  "common.other": "Altro",
+  "reports.e_invoices_send_error": "Errore di invio"
 }

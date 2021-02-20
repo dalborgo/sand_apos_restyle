@@ -19,7 +19,7 @@ import { useSnackbar } from 'notistack'
 
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   buttonRoot: {
     textTransform: 'none',
     lineHeight: '18px',
@@ -31,6 +31,9 @@ const useStyles = makeStyles(() => ({
     '&:hover': {
       backgroundColor: colors.green[200],
     },
+  },
+  buttonErrorColor: {
+    color: theme.palette.error.main,
   },
 }))
 const CellBase = props => {
@@ -81,50 +84,70 @@ const CellBase = props => {
     )
   }
   if (column.name === 'action') {
+    const hasSendError = row.statusCode === 999
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
-        <Tooltip
-          title={intl.formatMessage(messages['reports_e_invoices_send'])}
-        >
-          <IconButton
-            color="secondary"
-            onClick={
-              async () => {
-                try {
-                  const data = { owner }
-                  setLoading(true)
-                  const response = await axiosLocalInstance(`e-invoices/send_xml/${docId}`, {
-                    data,
-                    method: 'post',
-                  })
-                  console.log('response.data:', response.data)
-                  setLoading(false)
-                } catch ({ message }) {
-                  enqueueSnackbar(message)
-                }
-              }
-            }
-          >
-            {
-              (statusCode => {
-                switch (statusCode) {
-                  case 1:
-                    return null
-                  case 0:
-                    return (
-                      <Button>CONSEGNATA</Button>
-                    )
-                  default:
-                    return (
+        {
+          (statusCode => {
+            switch (statusCode) {
+              case 3:
+                return <Button>ACCETTATA</Button>
+              case 2:
+                return <Button>INVIATA</Button>
+              case 1:
+                return <Button>NON CONSEGNATA</Button>
+              case 0:
+                return (
+                  <Button>CONSEGNATA</Button>
+                )
+              default:
+                return (
+                  <Tooltip
+                    title={hasSendError ? intl.formatMessage(messages['reports_e_invoices_send_error']) : intl.formatMessage(messages['reports_e_invoices_send'])}
+                  >
+                    <Button
+                      classes={
+                        {
+                          textSecondary: hasSendError ? classes.buttonErrorColor : undefined,
+                        }
+                      }
+                      color="secondary"
+                      onClick={
+                        async () => {
+                          try {
+                            const data = { owner }
+                            setLoading(true)
+                            const {
+                              data: {
+                                ok,
+                                results,
+                                message,
+                              },
+                            } = await axiosLocalInstance(`e-invoices/send_xml/${docId}`, {
+                              data,
+                              method: 'post',
+                            })
+                            console.log(results)
+                            setLoading(false)
+                            await queryClient.invalidateQueries('reports/e_invoices')
+                            enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
+                          } catch ({ message }) {
+                            setLoading(false)
+                            enqueueSnackbar(message)
+                          }
+                        }
+                      }
+                    >
+                      INVIA&nbsp;&nbsp;
                       <SvgIcon fontSize="small">
                         <SendIcon/>
                       </SvgIcon>
-                    )
-                }
-              })(row.statusCode)
+                    </Button>
+                  </Tooltip>
+                )
             }
-          </IconButton>
-        </Tooltip>
+          })(row.statusCode)
+        }
       </VirtualTable.Cell>
     )
   }

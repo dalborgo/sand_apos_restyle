@@ -49,15 +49,22 @@ export async function queryById (req, extra) {
   const statement = `${knex_.toQuery()} USE KEYS "${id}"${conditions}`
   const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
   if (!ok) {return { ok, message, err }}
-  return data.length ? { ok, results: data.length ? data[0] : null } : { ok: false, message: 'not found', errCode: 404, id }
+  return data.length
+    ? { ok, results: data.length ? data[0] : null }
+    : {
+      ok: false,
+      message: 'not found',
+      errCode: 404,
+      id,
+    }
 }
 
-function createSetStatement (val) {
+export function createSetStatement (val, prefix = '') {
   const toSet = []
   for (let key in dot.dot(val)) {
     let value = get(val, key)
     value = isString(value) ? `"${value}"` : value
-    toSet.push(`${cFunctions.escapeN1qlObj(key)} = ${value}`)
+    toSet.push(`${prefix}${cFunctions.escapeN1qlObj(key)} = ${value}`)
   }
   return `SET ${toSet.join(', ')}`
 }
@@ -75,6 +82,21 @@ function createUnsetStatement (val) {
     return cFunctions.escapeN1qlObj(val_)
   })
   return `UNSET ${toUnset_.join(', ')}`
+}
+
+export async function updateById (req, completeResponse = false) {
+  const { connClass, body } = req
+  utils.controlParameters(body, ['owner', 'id'])
+  if (!isObject(body.set) && !body.unset) {
+    throw new BadRequest('INVALID_DOC_UPDATE')
+  }
+  utils.parseOwner(req) //security check
+  const { id, set, unset, bucketName = connClass.astenposBucketName, options } = body
+  let conditions = ''
+  if (set) {conditions += createSetStatement(set)}
+  if (unset) {conditions += ` ${createUnsetStatement(unset)}`}
+  const statement = `UPDATE \`${bucketName}\` buc USE KEYS "${id}" ${conditions.trim()} RETURNING ${completeResponse ? 'meta().id, buc' : 'meta().id'}`
+  return couchQueries.exec(statement, connClass.cluster, options)
 }
 
 function addRouters (router) {
@@ -129,18 +151,7 @@ function addRouters (router) {
    * }
    */
   router.put('/queries/update_by_id', async function (req, res) {
-    const { connClass, body } = req
-    utils.controlParameters(body, ['owner', 'id'])
-    if (!isObject(body.set) && !body.unset) {
-      throw new BadRequest('INVALID_DOC_UPDATE')
-    }
-    utils.parseOwner(req) //security check
-    const { id, set, unset, bucketName = connClass.astenposBucketName, options } = body
-    let conditions = ''
-    if (set) {conditions += createSetStatement(set)}
-    if (unset) {conditions += ` ${createUnsetStatement(unset)}`}
-    const statement = `UPDATE \`${bucketName}\` USE KEYS "${id}" ${conditions.trim()} RETURNING meta().id`
-    const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
+    const { ok, results: data, message, err } = await updateById(req)
     if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results: data.length ? data[0] : null })
   })

@@ -17,7 +17,7 @@ const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
 const tableColumnExtensions = [
   { columnName: 'download', width: 80 },
   { columnName: 'final_price', align: 'right' },
-  { columnName: 'action', align: 'right', width: 120 },
+  { columnName: 'action', align: 'right', width: 160 },
 ]
 const totalSummaryItems = [
   { columnName: 'table_display', type: 'count' },

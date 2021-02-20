@@ -5,6 +5,7 @@ import log from '@adapter/common/src/winston'
 import { couchQueries } from '@adapter/io'
 import moment from 'moment'
 import archiver from 'archiver'
+import { createSetStatement, updateById } from '../queries'
 
 const knex = require('knex')({ client: 'mysql' })
 const { utils } = require(__helpers)
@@ -63,7 +64,6 @@ async function sendXml (dataFile) {
 }
 
 async function createXml (req) {
-  utils.checkSecurity(req)
   const { connClass, body, params } = req
   const params_ = { ...body, ...params }
   utils.controlParameters(params_, ['owner', 'paymentId'])
@@ -72,24 +72,70 @@ async function createXml (req) {
 }
 
 function addRouters (router) {
+  router.post('/e-invoices/send_xml/:paymentId', async function (req, res) {
+    utils.checkSecurity(req)
+    const { connClass, params } = req
+    const { buffer: eInvoiceContent, payment } = await createXml(req)
+    const dataFile = eInvoiceContent.toString('base64')
+    const { results: data } = await sendXml(dataFile)
+    const { astenposBucketCollection: collection } = connClass
+    const { paymentId } = params
+    const { errorCode, errorDescription } = data
+    const message = errorDescription.split(' - ')[0]
+    const hasError = errorCode !== '0000'
+    const results = {
+      res_invoice_upload: data,
+      status: {
+        status_code: hasError ? 999 : 3,
+      },
+    }
+    const newDoc = {
+      ...payment,
+      payment_mode: undefined,
+      fatt_elett: results,
+    }
+    await collection.upsert(paymentId, newDoc)
+    if (hasError) { return res.send({ ok: false, message })}
+    res.send({ ok: true, results, message })
+  })
   router.get('/e-invoices/signin', async function (req, res) {
     utils.checkSecurity(req)
     res.send(await refresh(getAuth()))
   })
   router.get('/e-invoices/refresh', async function (req, res) {
+    utils.checkSecurity(req)
     const { query } = req
     utils.controlParameters(query, ['refreshToken'])
     const { refreshToken } = query
     res.send(await refresh(refreshToken))
   })
   router.post('/e-invoices/create_xml/:paymentId', async function (req, res) {
+    utils.checkSecurity(req)
     const { id: eInvoiceId, buffer: eInvoiceContent } = await createXml(req)
     res.send({ filename: `${eInvoiceId}.xml`, base64: eInvoiceContent.toString('base64') })
   })
-  router.post('/e-invoices/send_xml/:paymentId', async function (req, res) {
-    const { buffer: eInvoiceContent } = await createXml(req)
-    const dataFile = eInvoiceContent.toString('base64')
-    res.send(await sendXml(dataFile))
+  router.put('/e-invoices/update_customer', async function (req, res) {
+    const { ok, results: data, message, err } = await updateById(req, true)
+    const { connClass, body } = req
+    if (!ok) {return res.send({ ok, message, err })}
+    const [dataFirst] = data
+    if (!dataFirst) {return res.send({ ok, results: null })}
+    const { astenposBucketName: bucketName } = connClass
+    const statement = knex(bucketName)
+      .select(knex.raw('RAW meta().id'))
+      .where({ type: 'PAYMENT' })
+      .where({ mode: 'INVOICE' })
+      .where({ archived: true })
+      .where({ 'customer._id': dataFirst.id })
+      .where(knex.raw('(fatt_elett.status.status_code IN [777, 999] OR fatt_elett.status.status_code is missing)'))
+      .toQuery()
+    {
+      const { ok, results: payments, message, err } = await couchQueries.exec(statement, connClass.cluster)
+      if (!ok) {return res.send({ ok, message, err })}
+      const statement_ = `UPDATE \`${bucketName}\` buc USE KEYS ${JSON.stringify(payments)} ${createSetStatement(body.set, 'customer.')}`
+      await couchQueries.exec(statement_, connClass.cluster)
+    }
+    res.send({ ok, results: dataFirst })
   })
   router.post('/e-invoices/create_zip', async function (req, res) {
     const { connClass, body } = req

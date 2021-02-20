@@ -110,5 +110,6 @@
   "reports.e_invoices_send": "",
   "common.charge": "",
   "mode.OTHER": "",
-  "common.other": ""
+  "common.other": "",
+  "reports.e_invoices_send_error": ""
 }
