@@ -43,20 +43,27 @@ export async function queryById (req, extra) {
     options,
   } = Object.assign({}, body, query, extra)
   utils.controlParameters({ id }, ['id'])
-  const conditions = parsedOwner.queryCondition ? ` WHERE ${parsedOwner.queryCondition}` : '' //impedisce di accedere ad altri docs da portale
+  const conditions = parsedOwner.queryCondition ? ` WHERE ${parsedOwner.queryCondition}` : ''// impedisce di accedere ad altri docs da portale
   const knex_ = knex({ buc: bucketName }).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
   const statement = `${knex_.toQuery()} USE KEYS "${id}"${conditions}`
   const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
   if (!ok) {return { ok, message, err }}
-  return data.length
-    ? { ok, results: data.length ? data[0] : null }
-    : {
+  if(!data.length){
+    return {
       ok: false,
       message: 'not found',
       errCode: 404,
       id,
     }
+  }else{
+    const [first] = data
+    let results = first
+    if(columns && columns.length === 1 && !withMeta){
+      results = first[columns[0]]
+    }
+    return { ok, results }
+  }
 }
 
 export function createSetStatement (val, prefix = '') {

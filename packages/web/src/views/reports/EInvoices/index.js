@@ -58,7 +58,7 @@ const EInvoices = () => {
   const history = useHistory()
   const queryClient = useQueryClient()
   const [isRefetch, setIsRefetch] = useState(false)
-  const { docId, targetCustomerId } = useParams()
+  const { docId, targetPaymentId } = useParams()
   const intl = useIntl()
   const { startDate, endDate, setDateRange } = useEInvoiceStore(eInvoiceSelector, shallow)
   const endDateInMillis = useMemo(() => endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined, [endDate])
@@ -68,7 +68,10 @@ const EInvoices = () => {
     owner,
     startDateInMillis,
   }], [endDateInMillis, owner, startDateInMillis])
-  const targetCustomerKey = useMemo(() => ['docs/get_by_id', { docId: targetCustomerId }], [targetCustomerId])
+  const targetPaymentKey = useMemo(() => ['queries/query_by_id', {
+    id: targetPaymentId,
+    columns: ['customer'],
+  }], [targetPaymentId])
   const { data, refetch, ...rest } = useQuery(fetchKey, {
     keepPreviousData: true,
     notifyOnChangeProps: ['data', 'error'],
@@ -86,27 +89,36 @@ const EInvoices = () => {
   
   const changeCustomerMutation = useMutation(changeCustomerMutation_, {
     onMutate: async ({ set }) => {
-      await queryClient.cancelQueries(targetCustomerKey)
-      const { results: customer } = queryClient.getQueryData(targetCustomerKey)
-      const newCustomer = { ...customer, ...set }
-      queryClient.setQueryData(targetCustomerKey, { ok: true, results: newCustomer })
-      return { previousData: customer }
+      await queryClient.cancelQueries(targetPaymentKey)
+      const previousData = queryClient.getQueryData(targetPaymentKey)
+      const newCustomer = { ...previousData.results, ...set }
+      queryClient.setQueryData(targetPaymentKey, { ok: true, results: newCustomer })
+      return { previousData, newCustomer }
     },
     onSettled: (data, error, variables, context) => {
-      const { ok, message, err } = data || {}
+      const { ok, message, err, results: paymentsIds } = data || {}
       if (!ok || error) {
-        queryClient.setQueryData(targetCustomerKey, context.previousData)
+        queryClient.setQueryData(targetPaymentKey, context.previousData)
         snackQueryError(err || message || error)
+      } else {
+        for (let id of paymentsIds) {
+          if (id === targetPaymentId) { continue}
+          queryClient.setQueryData(['queries/query_by_id', { id, columns: ['customer'] }], {
+            ok: true,
+            results: context.newCustomer,
+          })
+        }
       }
-      queryClient.invalidateQueries(targetCustomerKey).then()
+      queryClient.invalidateQueries(targetPaymentKey).then()
     },
   })
   
   const changeCustomerSubmit = useCallback(values => {
-    changeCustomerMutation.mutate({ id: targetCustomerId, set: { ...values }, owner })
+    const { _id: id, ...rest } = values
+    changeCustomerMutation.mutate({ id, set: { ...rest }, owner })
     closeChangeCustomerDialog()
     return values
-  }, [closeChangeCustomerDialog, changeCustomerMutation, owner, targetCustomerId])
+  }, [closeChangeCustomerDialog, changeCustomerMutation, owner])
   const exportZip = useCallback(async () => {
     const labelEnd = endDateInMillis && moment(endDateInMillis, 'YYYYMMDDHHmmssSSS').format('DD-MM-YYYY')
     const labelStart = startDateInMillis && moment(startDateInMillis, 'YYYYMMDDHHmmssSSS').format('DD-MM-YYYY')
@@ -172,10 +184,10 @@ const EInvoices = () => {
       </DivContentWrapper>
       {docId && <EntriesTableDialog docId={docId} urlKey="reports/e_invoice"/>}
       {
-        targetCustomerId &&
+        targetPaymentId &&
         <ChangeCustomerDialog
           close={closeChangeCustomerDialog}
-          docId={targetCustomerId}
+          docId={targetPaymentId}
           onSubmit={changeCustomerSubmit}
         />
       }

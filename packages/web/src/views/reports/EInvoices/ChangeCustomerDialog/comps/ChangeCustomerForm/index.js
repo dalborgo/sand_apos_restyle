@@ -17,14 +17,14 @@ const ChangeCustomerForm = memo(function ChangeCustomerForm ({ onSubmit, data, i
   const { company, number, room, table, date, amount } = state
   const moneyFormatter = useMoneyFormatter()
   const dateFormatter = useDateFormatter()
-  const { results: { iva } } = data || {}
+  const { results: { iva, _id } } = data || {}
   if (isLoading) {
     return <LoadingLinearBoxed boxHeight={40}/>
   } else {
     if (data?.ok) {
       return (
         <Formik
-          initialValues={{ iva }}
+          initialValues={{ iva, _id }}
           onSubmit={onSubmit}
         >
           {

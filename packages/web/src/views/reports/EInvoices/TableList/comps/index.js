@@ -195,7 +195,6 @@ const CellBase = props => {
   }
   if (column.name === 'type') {
     const company = row.company || ''
-    const companyId = row.company_id
     const number = intl.formatMessage(messages['mode_INVOICE']) + (row.number ? ` ${row.number}` : '')
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
@@ -209,10 +208,10 @@ const CellBase = props => {
           disabled={intLoading}
           onClick={
             async () => {
-              const queryKey = ['docs/get_by_id', { docId: companyId }]
+              const queryKey = ['queries/query_by_id', { id: docId, columns: ['customer'] }]
               await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
               history.push({
-                pathname: `${window.location.pathname}/change-customer-data/${companyId}`,
+                pathname: `${window.location.pathname}/change-customer-data/${docId}`,
                 state: {
                   company: row.company,
                   number: row.number,
