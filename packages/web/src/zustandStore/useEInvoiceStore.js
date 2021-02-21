@@ -1,9 +1,12 @@
 import create from 'zustand'
 import immerMiddleware from './immerMiddleware'
+import moment from 'moment'
 
 const initialState = {
   startDate: null,
   endDate: null,
+  startDateInMillis: null,
+  endDateInMillis: null,
 }
 
 const useClosingDayStore = create(immerMiddleware(set => ({
@@ -14,6 +17,8 @@ const useClosingDayStore = create(immerMiddleware(set => ({
     if (startDate && endDate) {
       state.startDate = startDate
       state.endDate = endDate
+      state.startDateInMillis = startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined
+      state.endDateInMillis = endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined
     }
   }),
 })))

@@ -16,7 +16,7 @@ import { useIntl } from 'react-intl'
 import clsx from 'clsx'
 import { saveAs } from 'file-saver'
 import { useSnackbar } from 'notistack'
-
+import useEInvoiceStore from 'src/zustandStore/useEInvoiceStore'
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
 const useStyles = makeStyles(theme => ({
@@ -36,8 +36,14 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.error.main,
   },
 }))
+
+const eInvoiceSelector = state => ({
+  endDateInMillis: state.endDateInMillis,
+  startDateInMillis: state.startDateInMillis,
+})
 const CellBase = props => {
   const { column, row, theme } = props
+  const { startDateInMillis, endDateInMillis } = useEInvoiceStore(eInvoiceSelector, shallow)
   const dateTimeFormatter = useDateTimeFormatter()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const [intLoading, setIntLoading] = useState(false)
@@ -127,9 +133,23 @@ const CellBase = props => {
                               data,
                               method: 'post',
                             })
-                            console.log(results)
                             setLoading(false)
-                            await queryClient.invalidateQueries('reports/e_invoices')
+                            const queryKey = ['reports/e_invoices', {
+                              endDateInMillis,
+                              owner,
+                              startDateInMillis,
+                            }]
+                            const {results: arrPayment} = queryClient.getQueryData(queryKey)
+                            
+                            const newArrPayment = []
+                            for (let payment of arrPayment) {
+                              if (docId === payment._id) {
+                                newArrPayment.push({ ...payment, statusCode: results })
+                              } else {
+                                newArrPayment.push(payment)
+                              }
+                            }
+                            queryClient.setQueryData(queryKey, {ok: true, results: newArrPayment })
                             enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
                           } catch ({ message }) {
                             setLoading(false)

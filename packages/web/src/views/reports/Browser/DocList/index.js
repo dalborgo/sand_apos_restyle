@@ -57,7 +57,7 @@ const ListElem = withWidth()(({ text, value, remove, noChannel, locked, isSingle
     }
   }, [history])
   useLayoutEffect(() => {
-    if (isSingleRow && width !== 'xs') { //autoselect single row, no mobile
+    if (isSingleRow && width !== 'xs') {// autoselect single row, no mobile
       const elem = document.getElementById(text)
       if (elem) {
         elem.classList.add('MuiBrowserElem-containerSelected')
@@ -75,10 +75,10 @@ const ListElem = withWidth()(({ text, value, remove, noChannel, locked, isSingle
   const params = testParams(`${baseUrl}/:docId`)
   let linkClasses = clsx(classes.link)
   let containerClasses = clsx(classes.container, { [classes.containerSelected]: params && params['docId'] === text })
-  if (value) {
+  if (value) {// con vista
     const [first] = value || []
     linkClasses += ` ${clsx(first.includes(owner) ? classes.linkPhone : classes.linkServer)}`
-  } else {
+  } else {// con query
     linkClasses += ` ${clsx(noChannel ? classes.linkServer : classes.linkPhone)}`
   }
   return (

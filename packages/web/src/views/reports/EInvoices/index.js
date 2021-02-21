@@ -37,8 +37,10 @@ const useStyles = makeStyles((theme) => ({
 
 const eInvoiceSelector = state => ({
   endDate: state.endDate,
+  endDateInMillis: state.endDateInMillis,
   setDateRange: state.setDateRange,
   startDate: state.startDate,
+  startDateInMillis: state.startDateInMillis,
 })
 
 const changeCustomerMutation_ = async values => {
@@ -60,9 +62,7 @@ const EInvoices = () => {
   const [isRefetch, setIsRefetch] = useState(false)
   const { docId, targetPaymentId } = useParams()
   const intl = useIntl()
-  const { startDate, endDate, setDateRange } = useEInvoiceStore(eInvoiceSelector, shallow)
-  const endDateInMillis = useMemo(() => endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined, [endDate])
-  const startDateInMillis = useMemo(() => startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined, [startDate])
+  const { startDate, endDate, setDateRange, endDateInMillis, startDateInMillis } = useEInvoiceStore(eInvoiceSelector, shallow)
   const fetchKey = useMemo(() => ['reports/e_invoices', {
     endDateInMillis,
     owner,
@@ -73,10 +73,11 @@ const EInvoices = () => {
     columns: ['customer'],
   }], [targetPaymentId])
   const { data, refetch, ...rest } = useQuery(fetchKey, {
+    cacheTime: 0,// no cache possono esserci continue modifiche esterne (macinino)
+    enabled: Boolean(startDate && endDate),
     keepPreviousData: true,
     notifyOnChangeProps: ['data', 'error'],
     onError: snackQueryError,
-    enabled: Boolean(startDate && endDate),
   })
   const refetchOnClick = useCallback(async () => {
     setIsRefetch(true)

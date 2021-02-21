@@ -83,20 +83,21 @@ function addRouters (router) {
     const { errorCode, errorDescription } = data
     const message = errorDescription.split(' - ')[0]
     const hasError = errorCode !== '0000'
-    const results = {
+    const statusCode = hasError ? 999 : 3
+    const invoiceData = {
       res_invoice_upload: data,
       status: {
-        status_code: hasError ? 999 : 3,
+        status_code: statusCode,
       },
     }
     const newDoc = {
       ...payment,
       payment_mode: undefined,
-      fatt_elett: results,
+      fatt_elett: invoiceData,
     }
     await collection.upsert(paymentId, newDoc)
-    if (hasError) { return res.send({ ok: false, message })}
-    res.send({ ok: true, results, message })
+    if (hasError) { return res.send({ ok: false, message, results: statusCode })}
+    res.send({ ok: true, results: statusCode, message })
   })
   router.get('/e-invoices/signin', async function (req, res) {
     utils.checkSecurity(req)
