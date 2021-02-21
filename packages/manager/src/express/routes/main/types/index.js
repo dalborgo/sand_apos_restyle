@@ -4,13 +4,15 @@ const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
 
 /**
+ * @param req
+ * @param type
  * @param params_: {_id, order} -> `id` consents di scegliere un altro campo come id
  */
 
 function execTypesQuery (req, type, params_ = {}) {
   const { connClass, query } = req
   const { params } = query || {}
-  const { _id, order } = { ...params_, ...params }
+  const { _id, order, columns = [] } = { ...params_, ...params }
   utils.controlParameters(query, ['owner'])
   const parsedOwner = utils.parseOwner(req)
   const {
@@ -21,7 +23,8 @@ function execTypesQuery (req, type, params_ = {}) {
     .where({ type })
     .where(knex.raw(parsedOwner.queryCondition))
     .select(knex.raw(`${_id ? '`' + _id + '`' : 'meta().id'} _id`))
-    .select(['display'])
+    .select('display')
+    .select(columns)
   if (order) {
     statement.orderBy(order)
   }
@@ -35,7 +38,7 @@ function addRouters (router) {
     res.send({ ok, results: data })
   })
   router.get('/types/incomes', async function (req, res) {
-    const { ok, results: data, message, info } = await execTypesQuery(req, 'PAYMENT_INCOME', { order: 'index' })
+    const { ok, results: data, message, info } = await execTypesQuery(req, 'PAYMENT_INCOME', { order: 'index', columns: ['key'] })
     if (!ok) {return res.send({ ok, message, info })}
     res.send({ ok, results: data })
   })

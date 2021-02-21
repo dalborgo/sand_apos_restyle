@@ -230,6 +230,7 @@ function createExcel (intl, dateTimeFormatter, closedRows, owner) {
     saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx')
   })
 }
+
 const selAllIn = state => state.allIn
 const ClosedTables = () => {
   const { selectedCode: { code: owner } } = useAuth()
@@ -264,8 +265,9 @@ const ClosedTables = () => {
   }], [allIn, endDate, owner, roomFilter, startDate, tableFilter])
   const { refetch, isIdle, ...rest } = useQuery(fetchKey, {
     onError: snackQueryError,
+    notifyOnChangeProps: ['data', 'error'],
     enabled: Boolean(startDate && endDate),
-    onSettled: data => { //fa risparmiare un expensive rendere al primo caricamento rispetto a useEffect
+    onSettled: data => {// fa risparmiare un expensive rendere al primo caricamento rispetto a useEffect
       if (data?.ok) {
         setClosedRows(data.results)
       }
@@ -286,7 +288,13 @@ const ClosedTables = () => {
         queryClient.setQueryData(fetchKey, context.previousRows)
         snackQueryError(err || message || error)
       }
-      queryClient.invalidateQueries(fetchKey).then()
+      queryClient.invalidateQueries('reports/closed_tables', {// cerca di refechare in background anche quella disabled
+        predicate: ({queryKey}) => {
+          const [, second] = queryKey
+          return Boolean(second.endDateInMillis && second.startDateInMillis && (queryKey !== fetchKey))
+        },
+        refetchInactive: true,
+      }).then()
     },
   })
   
@@ -295,8 +303,9 @@ const ClosedTables = () => {
   }, [history])
   const changePaymentSubmit = useCallback(values => {
     const { results: incomes } = queryClient.getQueryData(['types/incomes', { owner }])
-    const { _id: income } = find(incomes, { display: values.income })
-    mutation.mutate({ id: targetDocId, set: { income }, owner, display: values.income }) // display serve in onMutate
+    // eslint-disable-next-line camelcase
+    const { _id: income_id, key: income } = find(incomes, { display: values.income })
+    mutation.mutate({ id: targetDocId, set: { income_id, income }, owner, display: values.income })// display serve in onMutate
     closeChangePaymentDialog()
     return values
   }, [closeChangePaymentDialog, mutation, owner, queryClient, targetDocId])
@@ -311,7 +320,7 @@ const ClosedTables = () => {
   }, [owner, queryClient])
   
   useEffect(() => {
-    if (rest?.data?.ok && !rest.isFetchedAfterMount) { //necessario per triggerare quando legge dalla cache
+    if (rest?.data?.ok && !rest.isFetchedAfterMount) {// necessario per triggerare quando legge dalla cache
       console.log('%c***USE_EFFECT', 'color: cyan')
       setClosedRows(rest.data.results)
     }
