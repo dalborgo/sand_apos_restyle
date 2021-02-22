@@ -8,7 +8,13 @@ import { useQueryClient } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import { axiosLocalInstance, buttonQuery } from 'src/utils/reactQueryFunctions'
-import { Download as DownloadIcon, Send as SendIcon } from 'react-feather'
+import {
+  Download as DownloadIcon,
+  Frown as FrownIcon,
+  Mail as MailIcon,
+  Send as SendIcon,
+  UploadCloud as UploadCloudIcon,
+} from 'react-feather'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
 import { messages } from 'src/translations/messages'
@@ -17,6 +23,8 @@ import clsx from 'clsx'
 import { saveAs } from 'file-saver'
 import { useSnackbar } from 'notistack'
 import useEInvoiceStore from 'src/zustandStore/useEInvoiceStore'
+import { sendXml } from '../../helpers'
+
 const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
 
 const useStyles = makeStyles(theme => ({
@@ -41,6 +49,7 @@ const eInvoiceSelector = state => ({
   endDateInMillis: state.endDateInMillis,
   startDateInMillis: state.startDateInMillis,
 })
+
 const CellBase = props => {
   const { column, row, theme } = props
   const { startDateInMillis, endDateInMillis } = useEInvoiceStore(eInvoiceSelector, shallow)
@@ -55,6 +64,14 @@ const CellBase = props => {
   const queryClient = useQueryClient()
   const docId = row._id
   const cellStyle = { paddingLeft: theme.spacing(2) }
+  const state = {
+    company: row.company,
+    number: row.number,
+    table: row.table_display,
+    room: row.room_display,
+    date: row.date,
+    amount: row.final_price,
+  }
   if (column.name === 'download') {
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
@@ -90,16 +107,55 @@ const CellBase = props => {
     )
   }
   if (column.name === 'action') {
-    const hasSendError = row.statusCode === 999
     return (
       <VirtualTable.Cell {...props} style={cellStyle}>
         {
           (statusCode => {
             switch (statusCode) {
+              case 999:
+                return (
+                  <Button
+                    classes={
+                      {
+                        textSecondary: classes.buttonErrorColor,
+                      }
+                    }
+                    color="secondary"
+                    onClick={
+                      async () => {
+                        const queryKey = ['queries/query_by_id', { id: docId, columns: ['fatt_elett'] }]
+                        await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
+                        history.push({
+                          pathname: `${window.location.pathname}/notification/${docId}`,
+                          state,
+                        })
+                      }
+                    }
+                  >
+                    {intl.formatMessage(messages['common_error'])}&nbsp;&nbsp;
+                    <SvgIcon fontSize="small">
+                      <FrownIcon/>
+                    </SvgIcon>
+                  </Button>
+                )
               case 3:
-                return <Button>ACCETTATA</Button>
+                return (
+                  <Button color="secondary">
+                    {intl.formatMessage(messages['reports_e_invoices_accepted'])}&nbsp;&nbsp;
+                    <SvgIcon fontSize="small">
+                      <UploadCloudIcon/>
+                    </SvgIcon>
+                  </Button>
+                )
               case 2:
-                return <Button>INVIATA</Button>
+                return (
+                  <Button color="secondary">
+                    {intl.formatMessage(messages['reports_e_invoices_sent'])}&nbsp;&nbsp;
+                    <SvgIcon fontSize="small">
+                      <MailIcon/>
+                    </SvgIcon>
+                  </Button>
+                )
               case 1:
                 return <Button>NON CONSEGNATA</Button>
               case 0:
@@ -108,62 +164,28 @@ const CellBase = props => {
                 )
               default:
                 return (
-                  <Tooltip
-                    title={hasSendError ? intl.formatMessage(messages['reports_e_invoices_send_error']) : intl.formatMessage(messages['reports_e_invoices_send'])}
+                  <Button
+                    color="secondary"
+                    onClick={
+                      async () => {
+                        try {
+                          const {
+                            ok,
+                            message,
+                          } = await sendXml(owner, setLoading, docId, endDateInMillis, startDateInMillis, queryClient)
+                          enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
+                        } catch ({ message }) {
+                          setLoading(false)
+                          enqueueSnackbar(message)
+                        }
+                      }
+                    }
                   >
-                    <Button
-                      classes={
-                        {
-                          textSecondary: hasSendError ? classes.buttonErrorColor : undefined,
-                        }
-                      }
-                      color="secondary"
-                      onClick={
-                        async () => {
-                          try {
-                            const data = { owner }
-                            setLoading(true)
-                            const {
-                              data: {
-                                ok,
-                                results,
-                                message,
-                              },
-                            } = await axiosLocalInstance(`e-invoices/send_xml/${docId}`, {
-                              data,
-                              method: 'post',
-                            })
-                            setLoading(false)
-                            const queryKey = ['reports/e_invoices', {
-                              endDateInMillis,
-                              owner,
-                              startDateInMillis,
-                            }]
-                            const {results: arrPayment} = queryClient.getQueryData(queryKey)
-                            
-                            const newArrPayment = []
-                            for (let payment of arrPayment) {
-                              if (docId === payment._id) {
-                                newArrPayment.push({ ...payment, statusCode: results })
-                              } else {
-                                newArrPayment.push(payment)
-                              }
-                            }
-                            queryClient.setQueryData(queryKey, {ok: true, results: newArrPayment })
-                            enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
-                          } catch ({ message }) {
-                            setLoading(false)
-                            enqueueSnackbar(message)
-                          }
-                        }
-                      }
-                    >
-                      INVIA&nbsp;&nbsp;
-                      <SvgIcon fontSize="small">
-                        <SendIcon/>
-                      </SvgIcon>
-                    </Button>
-                  </Tooltip>
+                    INVIA&nbsp;&nbsp;
+                    <SvgIcon fontSize="small">
+                      <SendIcon/>
+                    </SvgIcon>
+                  </Button>
                 )
             }
           })(row.statusCode)
@@ -232,14 +254,7 @@ const CellBase = props => {
               await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
               history.push({
                 pathname: `${window.location.pathname}/change-customer-data/${docId}`,
-                state: {
-                  company: row.company,
-                  number: row.number,
-                  table: row.table_display,
-                  room: row.room_display,
-                  date: row.date,
-                  amount: row.final_price,
-                },
+                state,
               })
             }
           }

@@ -78,7 +78,7 @@ const ChangeCustomerDialog = ({ width, onSubmit, close, docId }) => {
     return (
       data.results ?
         <Dialog
-          aria-labelledby="runningTable-dialog-title"
+          aria-labelledby="customerTable-dialog-title"
           fullScreen={fullScreen}
           maxWidth="md"
           onClose={close}

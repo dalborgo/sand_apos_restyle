@@ -111,5 +111,10 @@
   "common.charge": "Addebito",
   "mode.OTHER": "Altro",
   "common.other": "Altro",
-  "reports.e_invoices_send_error": "Errore di invio"
+  "reports.e_invoices_send_error": "Errore di invio",
+  "common.error": "Errore",
+  "reports.e_invoices.notification": "Info fattura",
+  "reports.e_invoices_accepted": "In carico",
+  "reports.e_invoices_sent": "Inviata",
+  "reports.e_invoices_resend": "RE-INVIA"
 }

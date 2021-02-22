@@ -22,6 +22,7 @@ import { parentPath } from 'src/utils/urlFunctions'
 import ChangeCustomerDialog from './ChangeCustomerDialog'
 import { useSnackbar } from 'notistack'
 import { useGeneralStore } from 'src/zustandStore'
+import NotificationDialog from './NotificationDialog'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -60,7 +61,7 @@ const EInvoices = () => {
   const history = useHistory()
   const queryClient = useQueryClient()
   const [isRefetch, setIsRefetch] = useState(false)
-  const { docId, targetPaymentId } = useParams()
+  const { docId, targetPaymentId, notificationPaymentId } = useParams()
   const intl = useIntl()
   const { startDate, endDate, setDateRange, endDateInMillis, startDateInMillis } = useEInvoiceStore(eInvoiceSelector, shallow)
   const fetchKey = useMemo(() => ['reports/e_invoices', {
@@ -73,7 +74,6 @@ const EInvoices = () => {
     columns: ['customer'],
   }], [targetPaymentId])
   const { data, refetch, ...rest } = useQuery(fetchKey, {
-    cacheTime: 0,// no cache possono esserci continue modifiche esterne (macinino)
     enabled: Boolean(startDate && endDate),
     keepPreviousData: true,
     notifyOnChangeProps: ['data', 'error'],
@@ -84,7 +84,7 @@ const EInvoices = () => {
     await refetch()
     setIsRefetch(false)
   }, [refetch])
-  const closeChangeCustomerDialog = useMemo(() => {
+  const closeDialog = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname, -2))
   }, [history])
   
@@ -117,9 +117,9 @@ const EInvoices = () => {
   const changeCustomerSubmit = useCallback(values => {
     const { _id: id, ...rest } = values
     changeCustomerMutation.mutate({ id, set: { ...rest }, owner })
-    closeChangeCustomerDialog()
+    closeDialog()
     return values
-  }, [closeChangeCustomerDialog, changeCustomerMutation, owner])
+  }, [closeDialog, changeCustomerMutation, owner])
   const exportZip = useCallback(async () => {
     const labelEnd = endDateInMillis && moment(endDateInMillis, 'YYYYMMDDHHmmssSSS').format('DD-MM-YYYY')
     const labelStart = startDateInMillis && moment(startDateInMillis, 'YYYYMMDDHHmmssSSS').format('DD-MM-YYYY')
@@ -187,9 +187,16 @@ const EInvoices = () => {
       {
         targetPaymentId &&
         <ChangeCustomerDialog
-          close={closeChangeCustomerDialog}
+          close={closeDialog}
           docId={targetPaymentId}
           onSubmit={changeCustomerSubmit}
+        />
+      }
+      {
+        notificationPaymentId &&
+        <NotificationDialog
+          close={closeDialog}
+          docId={notificationPaymentId}
         />
       }
     </Page>

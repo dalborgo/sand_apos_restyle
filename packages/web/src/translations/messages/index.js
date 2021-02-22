@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  reports_e_invoices_accepted: {
+    id: 'reports.e_invoices_accepted',
+    defaultMessage: 'In carico',
+  },
   reports_e_invoices_customer_vat: {
     id: 'reports.e_invoices_customer_vat',
     defaultMessage: 'Partita iva',
@@ -12,6 +16,10 @@ export const messages = defineMessages({
   reports_e_invoices_send: {
     id: 'reports.e_invoices_send',
     defaultMessage: 'Invia',
+  },
+  reports_e_invoices_sent: {
+    id: 'reports.e_invoices_sent',
+    defaultMessage: 'Inviata',
   },
   reports_e_invoices_send_error: {
     id: 'reports.e_invoices_send_error',
@@ -76,6 +84,10 @@ export const messages = defineMessages({
   common_exportMenu: {
     id: 'common.exportMenu',
     defaultMessage: 'Menu esportazione dati',
+  },
+  common_error: {
+    id: 'common.error',
+    defaultMessage: 'Errore',
   },
   common_exportTable: {
     id: 'common.exportTable',

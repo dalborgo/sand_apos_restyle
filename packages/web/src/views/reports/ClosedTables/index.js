@@ -288,10 +288,10 @@ const ClosedTables = () => {
         queryClient.setQueryData(fetchKey, context.previousRows)
         snackQueryError(err || message || error)
       }
-      queryClient.invalidateQueries('reports/closed_tables', {// cerca di refechare in background anche quella disabled
+      queryClient.invalidateQueries('reports/closed_tables', {// cerca di refetchare in background anche quella disabled
         predicate: ({queryKey}) => {
           const [, second] = queryKey
-          return Boolean(second.endDateInMillis && second.startDateInMillis && (queryKey !== fetchKey))
+          return Boolean(second.endDateInMillis && second.startDateInMillis && queryKey !== fetchKey)
         },
         refetchInactive: true,
       }).then()

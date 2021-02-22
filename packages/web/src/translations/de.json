@@ -111,5 +111,10 @@
   "common.charge": "",
   "mode.OTHER": "",
   "common.other": "",
-  "reports.e_invoices_send_error": ""
+  "reports.e_invoices_send_error": "",
+  "common.error": "",
+  "reports.e_invoices.notification": "",
+  "reports.e_invoices_accepted": "",
+  "reports.e_invoices_sent": "",
+  "reports.e_invoices_resend": ""
 }

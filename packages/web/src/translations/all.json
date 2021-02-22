@@ -100,6 +100,10 @@
     "defaultMessage": "Separato"
   },
   {
+    "id": "common.error",
+    "defaultMessage": "Errore"
+  },
+  {
     "id": "common.export",
     "defaultMessage": "Menu esportazione dati"
   },
@@ -385,6 +389,14 @@
     "defaultMessage": "Fatture elettroniche"
   },
   {
+    "id": "reports.e_invoices.notification",
+    "defaultMessage": "Info fattura"
+  },
+  {
+    "id": "reports.e_invoices_accepted",
+    "defaultMessage": "In carico"
+  },
+  {
     "id": "reports.e_invoices_customer_vat",
     "defaultMessage": "Partita iva"
   },
@@ -397,12 +409,20 @@
     "defaultMessage": "Scarica zip"
   },
   {
+    "id": "reports.e_invoices_resend",
+    "defaultMessage": "RE-INVIA"
+  },
+  {
     "id": "reports.e_invoices_send",
     "defaultMessage": "Invia"
   },
   {
     "id": "reports.e_invoices_send_error",
     "defaultMessage": "Errore di invio"
+  },
+  {
+    "id": "reports.e_invoices_sent",
+    "defaultMessage": "Inviata"
   },
   {
     "id": "reports.header.list_documents",
