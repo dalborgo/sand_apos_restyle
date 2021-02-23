@@ -148,6 +148,7 @@ function addRouters (router) {
     const message = errorDescription.split(' - ')[0]
     const hasError = errorCode !== '0000'
     const statusCode = hasError ? 999 : 3
+    const paymentErrorCode = get(payment, 'fatt_elett.res_invoice_upload.errorCode')
     const invoiceData = {
       res_invoice_upload: data,
       status: {
@@ -159,7 +160,7 @@ function addRouters (router) {
       payment_mode: undefined,
       fatt_elett: invoiceData,
     }
-    await collection.upsert(paymentId, newDoc)
+    if (paymentErrorCode !== errorCode) {await collection.upsert(paymentId, newDoc)}
     if (hasError) { return res.send({ ok: false, message, results: statusCode })}
     res.send({ ok: true, results: statusCode, message })
   })
@@ -217,7 +218,7 @@ function addRouters (router) {
     }
     res.send({
       ok: true,
-      results: isDifferent ? { code: 'UPDATED', newStatus: responseStatusCode } : { code: 'SAME_CONTENT' }
+      results: isDifferent ? { code: 'UPDATED', newStatus: responseStatusCode } : { code: 'SAME_CONTENT' },
     })
   })
   router.put('/e-invoices/update_customer', async function (req, res) {
