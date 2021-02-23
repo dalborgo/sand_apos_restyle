@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
 const { companySelect, hasSingleCompany } = useGeneralStore.getState()
 const selAllIn = state => state.allIn
 const BestEarning = () => {
-  console.log('%cRENDER_BEST', 'color: pink')
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const intl = useIntl()

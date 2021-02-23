@@ -11,9 +11,12 @@ import { axiosLocalInstance, buttonQuery } from 'src/utils/reactQueryFunctions'
 import {
   Download as DownloadIcon,
   Frown as FrownIcon,
+  HelpCircle as HelpCircleIcon,
   Mail as MailIcon,
   Send as SendIcon,
   UploadCloud as UploadCloudIcon,
+  Check as CheckIcon,
+  AlertTriangle as AlertTriangleIcon,
 } from 'react-feather'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
@@ -48,6 +51,9 @@ const useStyles = makeStyles(theme => ({
   },
   buttonNormalColor: {
     color: colors.cyan[400],
+  },
+  buttonGreenColor: {
+    color: colors.green[500],
   },
 }))
 
@@ -86,6 +92,7 @@ const CellBase = props => {
     room: row.room_display,
     date: row.date,
     amount: row.final_price,
+    status: row.statusCode,
   }
   if (column.name === 'download') {
     return (
@@ -98,10 +105,8 @@ const CellBase = props => {
             onClick={
               async () => {
                 try {
-                  const data = { owner }
                   setLoading(true)
                   const response = await axiosLocalInstance(`e-invoices/create_xml/${docId}`, {
-                    data,
                     method: 'post',
                   })
                   setLoading(false)
@@ -130,6 +135,7 @@ const CellBase = props => {
           (statusCode => {
             switch (statusCode) {
               case 999:
+              case 777:
                 return (
                   <Button
                     classes={
@@ -145,7 +151,7 @@ const CellBase = props => {
                       }
                     }
                   >
-                    {intl.formatMessage(messages['common_error'])}&nbsp;&nbsp;
+                    {intl.formatMessage(messages[statusCode === 999 ? 'common_error' : 'reports_e_invoices_refused'])}&nbsp;&nbsp;
                     <SvgIcon fontSize="small">
                       <FrownIcon/>
                     </SvgIcon>
@@ -175,12 +181,29 @@ const CellBase = props => {
                   </Button>
                 )
               case 1:
-                return <Button>NON CONSEGNATA</Button>
               case 0:
                 return (
-                  <Button>CONSEGNATA</Button>
+                  <Button
+                    classes={
+                      {
+                        textSecondary: classes.buttonGreenColor,
+                      }
+                    }
+                    color="secondary"
+                    disabled={loading === docId}
+                    onClick={
+                      async () => {
+                        await openDialog(docId, queryClient, setLoading, setIntLoading, history, state)
+                      }
+                    }
+                  >
+                    {intl.formatMessage(messages[statusCode === 1 ? 'reports_e_invoices_not_delivered' : 'reports_e_invoices_delivered'])}&nbsp;&nbsp;
+                    <SvgIcon fontSize="small">
+                      {statusCode === 1 ? <AlertTriangleIcon/> : <CheckIcon/>}
+                    </SvgIcon>
+                  </Button>
                 )
-              default:
+              case undefined:// invia
                 return (
                   <Button
                     color="secondary"
@@ -204,6 +227,28 @@ const CellBase = props => {
                     {intl.formatMessage(messages['reports_e_invoices_send'])}&nbsp;&nbsp;
                     <SvgIcon fontSize="small">
                       <SendIcon/>
+                    </SvgIcon>
+                  </Button>
+                )
+              default:
+                return (
+                  <Button
+                    classes={
+                      {
+                        textSecondary: classes.buttonErrorColor,
+                      }
+                    }
+                    color="secondary"
+                    disabled={loading === docId}
+                    onClick={
+                      async () => {
+                        await openDialog(docId, queryClient, setLoading, setIntLoading, history, state)
+                      }
+                    }
+                  >
+                    {intl.formatMessage(messages['common_undefined'])}&nbsp;&nbsp;
+                    <SvgIcon fontSize="small">
+                      {<HelpCircleIcon/>}
                     </SvgIcon>
                   </Button>
                 )

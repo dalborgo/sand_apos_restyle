@@ -11,7 +11,6 @@ import { useDateFormatter, useMoneyFormatter } from 'src/utils/formatters'
 import { Redirect } from 'react-router'
 
 const ChangePaymentForm = memo(function ChangePaymentForm ({ onSubmit, data, isLoading }) {
-  console.log('%cRENDER_FORM', 'color: pink')
   const theme = useTheme()
   const { state = {} } = useLocation()
   const { income, room, table, date, amount } = state

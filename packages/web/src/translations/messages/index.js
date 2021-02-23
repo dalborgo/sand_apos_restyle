@@ -17,6 +17,22 @@ export const messages = defineMessages({
     id: 'reports.e_invoices_send',
     defaultMessage: 'Invia',
   },
+  reports_e_invoices_not_delivered: {
+    id: 'reports.e_invoices_not_delivered',
+    defaultMessage: 'Nel cassetto',
+  },
+  reports_e_invoices_not_delivered_long: {
+    id: 'reports.e_invoices_not_delivered_long',
+    defaultMessage: 'Nel cassetto fiscale del cliente',
+  },
+  reports_e_invoices_delivered: {
+    id: 'reports.e_invoices_delivered',
+    defaultMessage: 'Consegnata',
+  },
+  reports_e_invoices_refused: {
+    id: 'reports.e_invoices_refused',
+    defaultMessage: 'Scartata',
+  },
   reports_e_invoices_new_state: {
     id: 'reports.e_invoices_new_state',
     defaultMessage: 'Aggiornato nuovo stato!',
@@ -68,6 +84,10 @@ export const messages = defineMessages({
   common_username: {
     id: 'common.username',
     defaultMessage: 'Nome Utente',
+  },
+  common_undefined: {
+    id: 'common.common_undefined',
+    defaultMessage: 'Indefinito',
   },
   common_charge: {
     id: 'common.charge',

@@ -58,7 +58,6 @@ const ChangePaymentHeader = memo(function DialogHeader ({ onClose }) {
 })
 const loadingSel = state => ({ setLoading: state.setLoading })
 const ChangePaymentDialog = ({ width, onSubmit, close }) => {
-  console.log('%cRENDER_DIALOG_CHANGE_PAYMENT', 'color: orange')
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
@@ -70,7 +69,6 @@ const ChangePaymentDialog = ({ width, onSubmit, close }) => {
       isLoading && setLoading(false)
     },
   })
-  console.log('data:', data)
   useEffect(() => {
     if (isLoading) {
       setLoading(true)

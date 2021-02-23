@@ -80,6 +80,10 @@
     "defaultMessage": "Chiuso da"
   },
   {
+    "id": "common.common_undefined",
+    "defaultMessage": "Indefinito"
+  },
+  {
     "id": "common.covers",
     "defaultMessage": "Coperti"
   },
@@ -214,6 +218,10 @@
   {
     "id": "common.type_of_payment",
     "defaultMessage": "Tipo di Pagamento"
+  },
+  {
+    "id": "common.undefined",
+    "defaultMessage": "Indefinito"
   },
   {
     "id": "common.username",
@@ -394,7 +402,7 @@
   },
   {
     "id": "reports.e_invoices.notification",
-    "defaultMessage": "Info fattura"
+    "defaultMessage": "Info fattura:"
   },
   {
     "id": "reports.e_invoices_accepted",
@@ -403,6 +411,10 @@
   {
     "id": "reports.e_invoices_customer_vat",
     "defaultMessage": "Partita iva"
+  },
+  {
+    "id": "reports.e_invoices_delivered",
+    "defaultMessage": "Consegnata"
   },
   {
     "id": "reports.e_invoices_download_xml",
@@ -415,6 +427,18 @@
   {
     "id": "reports.e_invoices_new_state",
     "defaultMessage": "Aggiornato nuovo stato!"
+  },
+  {
+    "id": "reports.e_invoices_not_delivered",
+    "defaultMessage": "Nel cassetto"
+  },
+  {
+    "id": "reports.e_invoices_not_delivered_long",
+    "defaultMessage": "Nel cassetto fiscale del cliente"
+  },
+  {
+    "id": "reports.e_invoices_refused",
+    "defaultMessage": "Scartata"
   },
   {
     "id": "reports.e_invoices_resend",
@@ -441,12 +465,8 @@
     "defaultMessage": "AGGIORNA"
   },
   {
-    "id": "reports.e_invoices_xml_error_notification",
-    "defaultMessage": "Xml notifica di errore"
-  },
-  {
     "id": "reports.e_invoices_xml_notification",
-    "defaultMessage": "Xml notifica"
+    "defaultMessage": "Notifica Xml"
   },
   {
     "id": "reports.header.list_documents",

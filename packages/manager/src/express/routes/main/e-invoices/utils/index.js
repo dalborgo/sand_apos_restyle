@@ -11,7 +11,7 @@ const knex = require('knex')({ client: 'mysql' })
 export const getInvoiceStatus = ({ errorCode, notifications = [] }) => {
   let status
   if (notifications && notifications.length) {
-    const notification = notifications.pop()
+    const notification = notifications[notifications.length - 1]
     const { docType = 'NO_DOC_TYPE' } = notification
     switch (docType) {
       case 'NE':
@@ -25,7 +25,7 @@ export const getInvoiceStatus = ({ errorCode, notifications = [] }) => {
         status = 0// consegnata
         break
       default:
-        status = 555// inaspettatamente senza docType
+        status = docType// inaspettatamente senza docType
     }
   } else {
     status = errorCode === '0000' ? 2 : 3// 0002 non ancora preso in consegna dal sistema di notifico
@@ -34,11 +34,9 @@ export const getInvoiceStatus = ({ errorCode, notifications = [] }) => {
 }
 
 /* eslint-disable sort-keys */
-export async function createEInvoiceXML (connClass, owner, paymentObj) {
+export async function createEInvoiceXML (connClass, paymentObj) {
   const collection = connClass.astenposBucketCollection
   const bucketName = connClass.astenposBucketName
-  const { content } = await collection.get(`general_configuration_${owner}`)
-  const companyData = get(content, 'company_data')
   let payment
   if (isString(paymentObj)) {
     const statement = knex
@@ -58,6 +56,9 @@ export async function createEInvoiceXML (connClass, owner, paymentObj) {
   } else {
     payment = paymentObj
   }
+  const { owner } = payment
+  const { content } = await collection.get(`general_configuration_${owner}`)
+  const companyData = get(content, 'company_data')
   const longDecimal = 7
   if (!companyData) {return { ok: false, message: 'company data missing', errCode: 404 }}
   const { fte } = companyData
@@ -295,7 +296,7 @@ export async function createEInvoiceXML (connClass, owner, paymentObj) {
   const feed = xmlbuilder.create(xml, { encoding: 'UTF-8' })
   return {
     ok: true,
-    results: { buffer: new Buffer.from(feed.toString()), id: `IT${companyData.iva}_${sendingCounter}`, payment }
+    results: { buffer: new Buffer.from(feed.toString()), id: `IT${companyData.iva}_${sendingCounter}`, payment },
   }
 }
 

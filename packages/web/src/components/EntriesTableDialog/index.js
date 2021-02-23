@@ -61,7 +61,6 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
 })
 const loadingSel = state => ({ setLoading: state.setLoading })
 const EntriesTableDialog = ({ docId, urlKey, width }) => {
-  console.log('%cRENDER_DIALOG_ENTRIES', 'color: orange')
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)

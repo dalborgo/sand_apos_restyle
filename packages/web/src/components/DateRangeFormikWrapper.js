@@ -8,7 +8,6 @@ const DateRangeFormikWrapper = memo((function DateRangeFormikWrapper ({
   endDate,
   setDateRange,
 }) {
-  console.log('%cRENDER_FORMIK_WRAPPER', 'color: orange')
   const endDateRef = useRef(null)
   const startDateRef = useRef(null)
   const [open, setOpen] = useState(false)

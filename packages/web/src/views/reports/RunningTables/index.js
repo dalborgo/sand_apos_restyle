@@ -47,7 +47,6 @@ const runningSelector = state => ({
 })
 
 const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit }) {
-  console.log('%cRENDER_FORM', 'color: pink')
   const { selectedCode: { code: owner } } = useAuth()
   const intl = useIntl()
   const { isLoading, data } = useQuery(['types/rooms', { owner }], {

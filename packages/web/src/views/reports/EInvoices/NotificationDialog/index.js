@@ -1,15 +1,25 @@
 import React, { memo, useEffect, useMemo } from 'react'
-import { Dialog, DialogTitle, Grid, IconButton, makeStyles, Typography, withWidth, } from '@material-ui/core'
+import { colors, Dialog, DialogTitle, Grid, IconButton, makeStyles, Typography, withWidth } from '@material-ui/core'
 import { Redirect } from 'react-router'
 import { useQuery } from 'react-query'
 import CloseIcon from '@material-ui/icons/Close'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { StatusReport } from './comps'
+import { getStatusLabel } from '../helpers'
 
 const useStyles = makeStyles(theme => ({
+  typoError: {
+    color: theme.palette.error.main,
+  },
+  typoCyan: {
+    color: colors.cyan[400],
+  },
+  typoGreen: {
+    color: colors.green[500],
+  },
   dialogContent: {
     padding: 0,
   },
@@ -27,8 +37,25 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const NotificationHeader = memo(function DialogHeader ({ onClose }) {
+const getTextColor = (status, classes) => {
+  switch (status) {
+    case 999:
+    case 777:
+      return classes.typoError
+    case 3:
+    case 2:
+      return classes.typoCyan
+    case 1:
+    case 0:
+      return classes.typoGreen
+    default:
+      return classes.typoError
+  }
+}
+
+const NotificationHeader = memo(function DialogHeader ({ onClose, statusCode }) {
   const classes = useStyles()
+  const intl = useIntl()
   return (
     <Grid
       alignItems="center"
@@ -37,14 +64,17 @@ const NotificationHeader = memo(function DialogHeader ({ onClose }) {
       justify="space-between"
     >
       <Grid item>
-        <Typography style={{ fontVariant: 'small-caps' }} variant="h4">
+        <Typography display="inline" variant="h4">
           <FormattedMessage
-            defaultMessage="Info fattura"
+            defaultMessage="Info fattura: "
             id="reports.e_invoices.notification"
           />&nbsp;
         </Typography>
+        <Typography className={getTextColor(statusCode, classes)} display="inline" variant="h4">
+          {getStatusLabel(statusCode, intl).toLowerCase()}
+        </Typography>
       </Grid>
-      <Grid item>
+      <Grid item style={{ marginLeft: 15 }}>
         <IconButton onClick={onClose}><CloseIcon/></IconButton>
       </Grid>
     </Grid>
@@ -69,8 +99,9 @@ const NotificationDialog = ({ width, close, docId }) => {
     }
   }, [isLoading, setLoading])
   if (!isLoading && data?.ok) {
+    const { results } = data
     return (
-      data.results ?
+      results ?
         <Dialog
           aria-labelledby="notification-dialog-title"
           fullScreen={fullScreen}
@@ -79,9 +110,9 @@ const NotificationDialog = ({ width, close, docId }) => {
           open={Boolean(true)}
         >
           <DialogTitle className={classes.dialogTitle} disableTypography id="notificationForm-dialog-title">
-            <NotificationHeader onClose={close}/>
+            <NotificationHeader onClose={close} statusCode={results.status.status_code}/>
           </DialogTitle>
-          <StatusReport data={data} docId={docId} onClose={close}/>
+          <StatusReport data={results} docId={docId} onClose={close}/>
         </Dialog>
         :
         <Redirect to="/404"/>

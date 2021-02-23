@@ -9,7 +9,6 @@ import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
 import { EInvoiceHeaderDialog } from '../../../helpers'
 
 const ChangeCustomerForm = memo(function ChangeCustomerForm ({ onSubmit, data, isLoading }) {
-  console.log('%cRENDER_FORM', 'color: pink')
   const theme = useTheme()
   const intl = useIntl()
   const { state = {} } = useLocation()

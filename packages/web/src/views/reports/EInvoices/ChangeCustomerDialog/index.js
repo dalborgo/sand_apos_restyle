@@ -49,7 +49,7 @@ const ChangeCustomerHeader = memo(function DialogHeader ({ onClose }) {
           />&nbsp;
         </Typography>
       </Grid>
-      <Grid item>
+      <Grid item style={{marginLeft: 15}}>
         <IconButton onClick={onClose}><CloseIcon/></IconButton>
       </Grid>
     </Grid>
@@ -57,7 +57,6 @@ const ChangeCustomerHeader = memo(function DialogHeader ({ onClose }) {
 })
 const loadingSel = state => ({ setLoading: state.setLoading })
 const ChangeCustomerDialog = ({ width, onSubmit, close, docId }) => {
-  console.log('%cRENDER_DIALOG_CHANGE_CUSTOMER', 'color: orange')
   const classes = useStyles()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
   const fullScreen = useMemo(() => ['sm', 'xs'].includes(width), [width])

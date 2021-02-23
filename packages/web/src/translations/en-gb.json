@@ -122,5 +122,10 @@
   "common.filename": "",
   "reports.e_invoices_update": "",
   "reports.e_invoices_xml_notification": "",
-  "reports.e_invoices_xml_error_notification": ""
+  "reports.e_invoices_delivered": "",
+  "reports.e_invoices_not_delivered": "",
+  "reports.e_invoices_refused": "",
+  "common.undefined": "",
+  "common.common_undefined": "",
+  "reports.e_invoices_not_delivered_long": ""
 }

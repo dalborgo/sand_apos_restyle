@@ -113,7 +113,7 @@
   "common.other": "Altro",
   "reports.e_invoices_send_error": "Errore di invio",
   "common.error": "Errore",
-  "reports.e_invoices.notification": "Info fattura",
+  "reports.e_invoices.notification": "Info fattura:",
   "reports.e_invoices_accepted": "In carico",
   "reports.e_invoices_sent": "Inviata",
   "reports.e_invoices_resend": "RE-INVIA",
@@ -121,6 +121,11 @@
   "reports.e_invoices_same_state": "Nessun aggiornamento",
   "common.filename": "Filename",
   "reports.e_invoices_update": "AGGIORNA",
-  "reports.e_invoices_xml_notification": "Xml notifica",
-  "reports.e_invoices_xml_error_notification": "Xml notifica di errore"
+  "reports.e_invoices_xml_notification": "Notifica Xml",
+  "reports.e_invoices_delivered": "Consegnata",
+  "reports.e_invoices_not_delivered": "Nel cassetto",
+  "reports.e_invoices_refused": "Scartata",
+  "common.undefined": "Indefinito",
+  "common.common_undefined": "Indefinito",
+  "reports.e_invoices_not_delivered_long": "Nel cassetto fiscale del cliente"
 }

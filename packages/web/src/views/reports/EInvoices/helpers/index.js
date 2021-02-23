@@ -2,7 +2,9 @@ import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import React from 'react'
 import { Grid, useTheme } from '@material-ui/core'
 import LabeledTypo from 'src/components/LabeledTypo'
+import isNil from 'lodash/isNil'
 import { useDateFormatter, useMoneyFormatter } from 'src/utils/formatters'
+import { messages } from 'src/translations/messages'
 
 function invalidateRows (endDateInMillis, owner, startDateInMillis, queryClient, docId, statusCode) {
   const fetchKey = ['reports/e_invoices', {
@@ -32,7 +34,6 @@ function invalidateRows (endDateInMillis, owner, startDateInMillis, queryClient,
 }
 
 export async function sendXml (owner, docId, endDateInMillis, startDateInMillis, queryClient) {
-  const data = { owner }
   const {
     data: {
       ok,
@@ -40,7 +41,6 @@ export async function sendXml (owner, docId, endDateInMillis, startDateInMillis,
       message,
     },
   } = await axiosLocalInstance(`e-invoices/send_xml/${docId}`, {
-    data,
     method: 'post',
   })
   invalidateRows(endDateInMillis, owner, startDateInMillis, queryClient, docId, results)
@@ -48,7 +48,6 @@ export async function sendXml (owner, docId, endDateInMillis, startDateInMillis,
 }
 
 export async function loadStatus (owner, docId, endDateInMillis, startDateInMillis, queryClient) {
-  const data = { owner }
   const {
     data: {
       ok,
@@ -56,11 +55,10 @@ export async function loadStatus (owner, docId, endDateInMillis, startDateInMill
       message,
     },
   } = await axiosLocalInstance(`e-invoices/update_state/${docId}`, {
-    data,
     method: 'put',
   })
   const { newStatus } = results || {}
-  newStatus && invalidateRows(endDateInMillis, owner, startDateInMillis, queryClient, docId, newStatus)// solo se lo status è cambiato
+  !isNil(newStatus) && invalidateRows(endDateInMillis, owner, startDateInMillis, queryClient, docId, newStatus)// solo se lo status è cambiato
   return { ok, results, message }
 }
 
@@ -102,4 +100,23 @@ export function EInvoiceHeaderDialog ({ company, number, room, table, date, amou
       </Grid>
     </>
   )
+}
+
+export const getStatusLabel = (statusCode, intl) => {
+  switch (statusCode) {
+    case 999:
+      return intl.formatMessage(messages['common_error'])
+    case 777:
+      return intl.formatMessage(messages['reports_e_invoices_refused'])
+    case 3:
+      return intl.formatMessage(messages['reports_e_invoices_accepted'])
+    case 2:
+      return intl.formatMessage(messages['reports_e_invoices_sent'])
+    case 1:
+      return intl.formatMessage(messages['reports_e_invoices_not_delivered_long'])
+    case 0:
+      return intl.formatMessage(messages['reports_e_invoices_delivered'])
+    default:
+      return intl.formatMessage(messages['common_undefined'])
+  }
 }
