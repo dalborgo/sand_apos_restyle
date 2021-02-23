@@ -1,23 +1,10 @@
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import React from 'react'
 import { Grid, useTheme } from '@material-ui/core'
-import LabeledTypo from '../../../../components/LabeledTypo'
-import { useDateFormatter, useMoneyFormatter } from '../../../../utils/formatters'
+import LabeledTypo from 'src/components/LabeledTypo'
+import { useDateFormatter, useMoneyFormatter } from 'src/utils/formatters'
 
-export async function sendXml (owner, setLoading, docId, endDateInMillis, startDateInMillis, queryClient) {
-  const data = { owner }
-  setLoading(true)
-  const {
-    data: {
-      ok,
-      results,
-      message,
-    },
-  } = await axiosLocalInstance(`e-invoices/send_xml/${docId}`, {
-    data,
-    method: 'post',
-  })
-  setLoading(false)
+function invalidateRows (endDateInMillis, owner, startDateInMillis, queryClient, docId, statusCode) {
   const fetchKey = ['reports/e_invoices', {
     endDateInMillis,
     owner,
@@ -28,7 +15,7 @@ export async function sendXml (owner, setLoading, docId, endDateInMillis, startD
   const newArrPayment = []
   for (let payment of arrPayment) {
     if (docId === payment._id) {
-      newArrPayment.push({ ...payment, statusCode: results })
+      newArrPayment.push({ ...payment, statusCode })
     } else {
       newArrPayment.push(payment)
     }
@@ -41,11 +28,43 @@ export async function sendXml (owner, setLoading, docId, endDateInMillis, startD
     },
     refetchInactive: true,
   }).then()
+  queryClient.invalidateQueries(['queries/query_by_id', { id: docId, columns: ['fatt_elett'] }]).then()
+}
+
+export async function sendXml (owner, docId, endDateInMillis, startDateInMillis, queryClient) {
+  const data = { owner }
+  const {
+    data: {
+      ok,
+      results,
+      message,
+    },
+  } = await axiosLocalInstance(`e-invoices/send_xml/${docId}`, {
+    data,
+    method: 'post',
+  })
+  invalidateRows(endDateInMillis, owner, startDateInMillis, queryClient, docId, results)
   return { ok, message }
 }
 
+export async function loadStatus (owner, docId, endDateInMillis, startDateInMillis, queryClient) {
+  const data = { owner }
+  const {
+    data: {
+      ok,
+      results,
+      message,
+    },
+  } = await axiosLocalInstance(`e-invoices/update_state/${docId}`, {
+    data,
+    method: 'put',
+  })
+  const { newStatus } = results || {}
+  newStatus && invalidateRows(endDateInMillis, owner, startDateInMillis, queryClient, docId, newStatus)// solo se lo status è cambiato
+  return { ok, results, message }
+}
 
-export function EInvoiceHeaderDialog ({ company, number, room, table, date, amount}) {
+export function EInvoiceHeaderDialog ({ company, number, room, table, date, amount }) {
   const theme = useTheme()
   const moneyFormatter = useMoneyFormatter()
   const dateFormatter = useDateFormatter()

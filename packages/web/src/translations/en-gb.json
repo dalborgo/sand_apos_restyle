@@ -116,5 +116,11 @@
   "reports.e_invoices.notification": "",
   "reports.e_invoices_accepted": "",
   "reports.e_invoices_sent": "",
-  "reports.e_invoices_resend": ""
+  "reports.e_invoices_resend": "",
+  "reports.e_invoices_new_state": "",
+  "reports.e_invoices_same_state": "",
+  "common.filename": "",
+  "reports.e_invoices_update": "",
+  "reports.e_invoices_xml_notification": "",
+  "reports.e_invoices_xml_error_notification": ""
 }

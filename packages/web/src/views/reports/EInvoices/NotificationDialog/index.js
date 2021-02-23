@@ -1,26 +1,13 @@
 import React, { memo, useEffect, useMemo } from 'react'
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  IconButton,
-  makeStyles,
-  Typography,
-  withWidth,
-} from '@material-ui/core'
+import { Dialog, DialogTitle, Grid, IconButton, makeStyles, Typography, withWidth, } from '@material-ui/core'
 import { Redirect } from 'react-router'
-import { useQuery, useQueryClient } from 'react-query'
+import { useQuery } from 'react-query'
 import CloseIcon from '@material-ui/icons/Close'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import { FormattedMessage } from 'react-intl'
-import { useSnackbar } from 'notistack'
-import useAuth from 'src/hooks/useAuth'
-import useEInvoiceStore from 'src/zustandStore/useEInvoiceStore'
-import { sendXml } from '../helpers'
+
+import { StatusReport } from './comps'
 
 const useStyles = makeStyles(theme => ({
   dialogContent: {
@@ -63,22 +50,15 @@ const NotificationHeader = memo(function DialogHeader ({ onClose }) {
     </Grid>
   )
 })
-const eInvoiceSelector = state => ({
-  endDateInMillis: state.endDateInMillis,
-  startDateInMillis: state.startDateInMillis,
-})
+
 const loadingSel = state => ({ setLoading: state.setLoading })
 const NotificationDialog = ({ width, close, docId }) => {
   const classes = useStyles()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
-  const { enqueueSnackbar } = useSnackbar()
-  const queryClient = useQueryClient()
-  const { selectedCode: { code: owner } } = useAuth()
-  const { startDateInMillis, endDateInMillis } = useEInvoiceStore(eInvoiceSelector, shallow)
   const fullScreen = useMemo(() => ['sm', 'xs'].includes(width), [width])
   const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, columns: ['fatt_elett'] }], {
     notifyOnChangeProps: ['data', 'error'],
-    staleTime: Infinity, //non chiama due volte il server per richieste ravvicinate
+    staleTime: Infinity,// non chiama due volte il server per richieste ravvicinate
     onSettled: () => {
       isLoading && setLoading(false)
     },
@@ -101,34 +81,7 @@ const NotificationDialog = ({ width, close, docId }) => {
           <DialogTitle className={classes.dialogTitle} disableTypography id="notificationForm-dialog-title">
             <NotificationHeader onClose={close}/>
           </DialogTitle>
-          <DialogContent className={classes.dialogContent}>
-            <pre>
-              {JSON.stringify(data, null, 2)}
-            </pre>
-          </DialogContent>
-          <DialogActions className={classes.dialogAction}>
-            <Button
-              autoFocus
-              color="primary"
-              onClick={
-                async () => {
-                  try {
-                    close()
-                    const {
-                      ok,
-                      message,
-                    } = await sendXml(owner, setLoading, docId, endDateInMillis, startDateInMillis, queryClient)
-                    enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
-                  } catch ({ message }) {
-                    setLoading(false)
-                    enqueueSnackbar(message)
-                  }
-                }
-              }
-            >
-              <FormattedMessage defaultMessage="RE-INVIA" id="reports.e_invoices_resend"/>
-            </Button>
-          </DialogActions>
+          <StatusReport data={data} docId={docId} onClose={close}/>
         </Dialog>
         :
         <Redirect to="/404"/>

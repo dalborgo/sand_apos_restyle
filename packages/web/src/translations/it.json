@@ -116,5 +116,11 @@
   "reports.e_invoices.notification": "Info fattura",
   "reports.e_invoices_accepted": "In carico",
   "reports.e_invoices_sent": "Inviata",
-  "reports.e_invoices_resend": "RE-INVIA"
+  "reports.e_invoices_resend": "RE-INVIA",
+  "reports.e_invoices_new_state": "Aggiornato nuovo stato!",
+  "reports.e_invoices_same_state": "Nessun aggiornamento",
+  "common.filename": "Filename",
+  "reports.e_invoices_update": "AGGIORNA",
+  "reports.e_invoices_xml_notification": "Xml notifica",
+  "reports.e_invoices_xml_error_notification": "Xml notifica di errore"
 }

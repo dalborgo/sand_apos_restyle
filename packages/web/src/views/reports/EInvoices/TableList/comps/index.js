@@ -25,7 +25,10 @@ import { useSnackbar } from 'notistack'
 import useEInvoiceStore from 'src/zustandStore/useEInvoiceStore'
 import { sendXml } from '../../helpers'
 
-const loadingSel = state => ({ setLoading: state.setLoading, loading: state.loading })
+const loadingSel = state => ({
+  setLoading: state.setLoading,
+  loading: state.loading,
+})
 
 const useStyles = makeStyles(theme => ({
   buttonRoot: {
@@ -43,6 +46,9 @@ const useStyles = makeStyles(theme => ({
   buttonErrorColor: {
     color: theme.palette.error.main,
   },
+  buttonNormalColor: {
+    color: colors.cyan[400],
+  },
 }))
 
 const eInvoiceSelector = state => ({
@@ -50,11 +56,20 @@ const eInvoiceSelector = state => ({
   startDateInMillis: state.startDateInMillis,
 })
 
+async function openDialog (docId, queryClient, setLoading, setIntLoading, history, state) {
+  const queryKey = ['queries/query_by_id', { id: docId, columns: ['fatt_elett'] }]
+  await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
+  history.push({
+    pathname: `${window.location.pathname}/notification/${docId}`,
+    state,
+  })
+}
+
 const CellBase = props => {
   const { column, row, theme } = props
   const { startDateInMillis, endDateInMillis } = useEInvoiceStore(eInvoiceSelector, shallow)
   const dateTimeFormatter = useDateTimeFormatter()
-  const { setLoading } = useGeneralStore(loadingSel, shallow)
+  const { setLoading, loading } = useGeneralStore(loadingSel, shallow)
   const [intLoading, setIntLoading] = useState(false)
   const intl = useIntl()
   const { selectedCode: { code: owner } } = useAuth()
@@ -90,7 +105,9 @@ const CellBase = props => {
                     method: 'post',
                   })
                   setLoading(false)
-                  const { base64, filename } = response.data
+                  const { ok, results, message } = response.data
+                  if (!ok) {return enqueueSnackbar(message)}
+                  const { base64, filename } = results
                   saveAs(`data:application/xml;base64,${base64}`, filename)
                 } catch ({ message }) {
                   enqueueSnackbar(message)
@@ -121,14 +138,10 @@ const CellBase = props => {
                       }
                     }
                     color="secondary"
+                    disabled={loading === docId}
                     onClick={
                       async () => {
-                        const queryKey = ['queries/query_by_id', { id: docId, columns: ['fatt_elett'] }]
-                        await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
-                        history.push({
-                          pathname: `${window.location.pathname}/notification/${docId}`,
-                          state,
-                        })
+                        await openDialog(docId, queryClient, setLoading, setIntLoading, history, state)
                       }
                     }
                   >
@@ -138,21 +151,26 @@ const CellBase = props => {
                     </SvgIcon>
                   </Button>
                 )
+              case 2:
               case 3:
                 return (
-                  <Button color="secondary">
-                    {intl.formatMessage(messages['reports_e_invoices_accepted'])}&nbsp;&nbsp;
+                  <Button
+                    classes={
+                      {
+                        textSecondary: classes.buttonNormalColor,
+                      }
+                    }
+                    color="secondary"
+                    disabled={loading === docId}
+                    onClick={
+                      async () => {
+                        await openDialog(docId, queryClient, setLoading, setIntLoading, history, state)
+                      }
+                    }
+                  >
+                    {intl.formatMessage(messages[statusCode === 3 ? 'reports_e_invoices_accepted' : 'reports_e_invoices_sent'])}&nbsp;&nbsp;
                     <SvgIcon fontSize="small">
-                      <UploadCloudIcon/>
-                    </SvgIcon>
-                  </Button>
-                )
-              case 2:
-                return (
-                  <Button color="secondary">
-                    {intl.formatMessage(messages['reports_e_invoices_sent'])}&nbsp;&nbsp;
-                    <SvgIcon fontSize="small">
-                      <MailIcon/>
+                      {statusCode === 3 ? <UploadCloudIcon/> : <MailIcon/>}
                     </SvgIcon>
                   </Button>
                 )
@@ -169,11 +187,13 @@ const CellBase = props => {
                     onClick={
                       async () => {
                         try {
+                          setLoading(true)
                           const {
                             ok,
                             message,
-                          } = await sendXml(owner, setLoading, docId, endDateInMillis, startDateInMillis, queryClient)
+                          } = await sendXml(owner, docId, endDateInMillis, startDateInMillis, queryClient)
                           enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
+                          setLoading(false)
                         } catch ({ message }) {
                           setLoading(false)
                           enqueueSnackbar(message)
@@ -181,7 +201,7 @@ const CellBase = props => {
                       }
                     }
                   >
-                    INVIA&nbsp;&nbsp;
+                    {intl.formatMessage(messages['reports_e_invoices_send'])}&nbsp;&nbsp;
                     <SvgIcon fontSize="small">
                       <SendIcon/>
                     </SvgIcon>

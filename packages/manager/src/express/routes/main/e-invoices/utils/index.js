@@ -8,6 +8,31 @@ import { numeric } from '@adapter/common'
 
 const knex = require('knex')({ client: 'mysql' })
 
+export const getInvoiceStatus = ({ errorCode, notifications = [] }) => {
+  let status
+  if (notifications && notifications.length) {
+    const notification = notifications.pop()
+    const { docType = 'NO_DOC_TYPE' } = notification
+    switch (docType) {
+      case 'NE':
+      case 'NS':
+        status = 777// scartata
+        break
+      case 'MC':
+        status = 1// non consegnata
+        break
+      case 'RC':
+        status = 0// consegnata
+        break
+      default:
+        status = 555// inaspettatamente senza docType
+    }
+  } else {
+    status = errorCode === '0000' ? 2 : 3// 0002 non ancora preso in consegna dal sistema di notifico
+  }
+  return status
+}
+
 /* eslint-disable sort-keys */
 export async function createEInvoiceXML (connClass, owner, paymentObj) {
   const collection = connClass.astenposBucketCollection
@@ -268,7 +293,10 @@ export async function createEInvoiceXML (connClass, owner, paymentObj) {
     },
   }
   const feed = xmlbuilder.create(xml, { encoding: 'UTF-8' })
-  return { buffer: new Buffer.from(feed.toString()), id: `IT${companyData.iva}_${sendingCounter}`, payment }
+  return {
+    ok: true,
+    results: { buffer: new Buffer.from(feed.toString()), id: `IT${companyData.iva}_${sendingCounter}`, payment }
+  }
 }
 
 /* eslint-enable  */

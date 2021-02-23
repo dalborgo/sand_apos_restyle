@@ -17,6 +17,14 @@ export const messages = defineMessages({
     id: 'reports.e_invoices_send',
     defaultMessage: 'Invia',
   },
+  reports_e_invoices_new_state: {
+    id: 'reports.e_invoices_new_state',
+    defaultMessage: 'Aggiornato nuovo stato!',
+  },
+  reports_e_invoices_same_state: {
+    id: 'reports.e_invoices_same_state',
+    defaultMessage: 'Nessun aggiornamento',
+  },
   reports_e_invoices_sent: {
     id: 'reports.e_invoices_sent',
     defaultMessage: 'Inviata',
@@ -64,6 +72,10 @@ export const messages = defineMessages({
   common_charge: {
     id: 'common.charge',
     defaultMessage: 'Addebito',
+  },
+  common_filename: {
+    id: 'common.filename',
+    defaultMessage: 'Filename',
   },
   common_customer: {
     id: 'common.customer',

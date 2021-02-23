@@ -120,6 +120,10 @@
     "defaultMessage": "Esporta tabella"
   },
   {
+    "id": "common.filename",
+    "defaultMessage": "Filename"
+  },
+  {
     "id": "common.filters",
     "defaultMessage": "Filtri"
   },
@@ -409,8 +413,16 @@
     "defaultMessage": "Scarica zip"
   },
   {
+    "id": "reports.e_invoices_new_state",
+    "defaultMessage": "Aggiornato nuovo stato!"
+  },
+  {
     "id": "reports.e_invoices_resend",
     "defaultMessage": "RE-INVIA"
+  },
+  {
+    "id": "reports.e_invoices_same_state",
+    "defaultMessage": "Nessun aggiornamento"
   },
   {
     "id": "reports.e_invoices_send",
@@ -423,6 +435,18 @@
   {
     "id": "reports.e_invoices_sent",
     "defaultMessage": "Inviata"
+  },
+  {
+    "id": "reports.e_invoices_update",
+    "defaultMessage": "AGGIORNA"
+  },
+  {
+    "id": "reports.e_invoices_xml_error_notification",
+    "defaultMessage": "Xml notifica di errore"
+  },
+  {
+    "id": "reports.e_invoices_xml_notification",
+    "defaultMessage": "Xml notifica"
   },
   {
     "id": "reports.header.list_documents",
