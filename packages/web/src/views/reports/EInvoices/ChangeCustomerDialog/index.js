@@ -16,7 +16,8 @@ import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import { FormattedMessage } from 'react-intl'
 import { ChangeCustomerForm } from './comps'
-
+import { useLocation } from 'react-router-dom'
+import isNil from 'lodash/isNil'
 const useStyles = makeStyles(theme => ({
   dialogContent: {
     padding: 0,
@@ -34,6 +35,8 @@ const useStyles = makeStyles(theme => ({
 
 const ChangeCustomerHeader = memo(function DialogHeader ({ onClose }) {
   const classes = useStyles()
+  const { state = {} } = useLocation()
+  const isEditable = isNil(state.status) || state.status > 3
   return (
     <Grid
       alignItems="center"
@@ -43,10 +46,19 @@ const ChangeCustomerHeader = memo(function DialogHeader ({ onClose }) {
     >
       <Grid item>
         <Typography style={{ fontVariant: 'small-caps' }} variant="h4">
-          <FormattedMessage
-            defaultMessage="Modifica anagrafica cliente"
-            id="reports.e_invoices.change_customer_data"
-          />&nbsp;
+          {
+            isEditable ?
+              <FormattedMessage
+                defaultMessage="Modifica anagrafica cliente"
+                id="reports.e_invoices.change_customer_data"
+              />
+              :
+              <FormattedMessage
+                defaultMessage="Anagrafica cliente"
+                id="reports.e_invoices.customer_data"
+              />
+          }
+          &nbsp;
         </Typography>
       </Grid>
       <Grid item style={{marginLeft: 15}}>

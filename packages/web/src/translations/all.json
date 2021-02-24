@@ -397,6 +397,10 @@
     "defaultMessage": "Modifica anagrafica cliente"
   },
   {
+    "id": "reports.e_invoices.customer_data",
+    "defaultMessage": "Anagrafica cliente"
+  },
+  {
     "id": "reports.e_invoices.header_title",
     "defaultMessage": "Fatture elettroniche"
   },
@@ -409,6 +413,22 @@
     "defaultMessage": "In carico"
   },
   {
+    "id": "reports.e_invoices_address",
+    "defaultMessage": "Indirizzo"
+  },
+  {
+    "id": "reports.e_invoices_city",
+    "defaultMessage": "Città"
+  },
+  {
+    "id": "reports.e_invoices_company",
+    "defaultMessage": "Azienda"
+  },
+  {
+    "id": "reports.e_invoices_contact",
+    "defaultMessage": "Contatto"
+  },
+  {
     "id": "reports.e_invoices_customer_vat",
     "defaultMessage": "Partita iva"
   },
@@ -417,12 +437,20 @@
     "defaultMessage": "Consegnata"
   },
   {
+    "id": "reports.e_invoices_district",
+    "defaultMessage": "Provincia"
+  },
+  {
     "id": "reports.e_invoices_download_xml",
     "defaultMessage": "Scarica xml"
   },
   {
     "id": "reports.e_invoices_download_xml_zip",
     "defaultMessage": "Scarica zip"
+  },
+  {
+    "id": "reports.e_invoices_fiscal_code",
+    "defaultMessage": "Codice fiscale"
   },
   {
     "id": "reports.e_invoices_new_state",
@@ -437,6 +465,10 @@
     "defaultMessage": "Nel cassetto fiscale del cliente"
   },
   {
+    "id": "reports.e_invoices_pec",
+    "defaultMessage": "Pec"
+  },
+  {
     "id": "reports.e_invoices_refused",
     "defaultMessage": "Scartata"
   },
@@ -447,6 +479,10 @@
   {
     "id": "reports.e_invoices_same_state",
     "defaultMessage": "Nessun aggiornamento"
+  },
+  {
+    "id": "reports.e_invoices_sdi",
+    "defaultMessage": "Sdi"
   },
   {
     "id": "reports.e_invoices_send",
@@ -461,12 +497,24 @@
     "defaultMessage": "Inviata"
   },
   {
+    "id": "reports.e_invoices_split_payment",
+    "defaultMessage": "Scissione pagamenti"
+  },
+  {
+    "id": "reports.e_invoices_state",
+    "defaultMessage": "Stato"
+  },
+  {
     "id": "reports.e_invoices_update",
     "defaultMessage": "AGGIORNA"
   },
   {
     "id": "reports.e_invoices_xml_notification",
     "defaultMessage": "Notifica Xml"
+  },
+  {
+    "id": "reports.e_invoices_zip",
+    "defaultMessage": "Cap"
   },
   {
     "id": "reports.header.list_documents",

@@ -9,6 +9,50 @@ export const messages = defineMessages({
     id: 'reports.e_invoices_customer_vat',
     defaultMessage: 'Partita iva',
   },
+  reports_e_invoices_fiscal_code: {
+    id: 'reports.e_invoices_fiscal_code',
+    defaultMessage: 'Codice fiscale',
+  },
+  reports_e_invoices_company: {
+    id: 'reports.e_invoices_company',
+    defaultMessage: 'Azienda',
+  },
+  reports_e_invoices_address: {
+    id: 'reports.e_invoices_address',
+    defaultMessage: 'Indirizzo',
+  },
+  reports_e_invoices_zip: {
+    id: 'reports.e_invoices_zip',
+    defaultMessage: 'Cap',
+  },
+  reports_e_invoices_city: {
+    id: 'reports.e_invoices_city',
+    defaultMessage: 'Città',
+  },
+  reports_e_invoices_district: {
+    id: 'reports.e_invoices_district',
+    defaultMessage: 'Provincia',
+  },
+  reports_e_invoices_state: {
+    id: 'reports.e_invoices_state',
+    defaultMessage: 'Stato',
+  },
+  reports_e_invoices_sdi: {
+    id: 'reports.e_invoices_sdi',
+    defaultMessage: 'Sdi',
+  },
+  reports_e_invoices_split_payment: {
+    id: 'reports.e_invoices_split_payment',
+    defaultMessage: 'Scissione pagamenti',
+  },
+  reports_e_invoices_pec: {
+    id: 'reports.e_invoices_pec',
+    defaultMessage: 'Pec',
+  },
+  reports_e_invoices_contact: {
+    id: 'reports.e_invoices_contact',
+    defaultMessage: 'Contatto',
+  },
   reports_e_invoices_download_xml: {
     id: 'reports.e_invoices_download_xml',
     defaultMessage: 'Scarica xml',

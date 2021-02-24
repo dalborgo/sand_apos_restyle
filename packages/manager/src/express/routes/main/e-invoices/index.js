@@ -238,8 +238,10 @@ function addRouters (router) {
     {
       const { ok, results: payments, message, err } = await couchQueries.exec(statement, connClass.cluster)
       if (!ok) {return res.send({ ok, message, err })}
-      const statement_ = `UPDATE \`${bucketName}\` buc USE KEYS ${JSON.stringify(payments)} ${createSetStatement(body.set, 'customer.')}`
-      await couchQueries.exec(statement_, connClass.cluster)
+      if (payments.length) {
+        const statement_ = `UPDATE \`${bucketName}\` buc USE KEYS ${JSON.stringify(payments)} ${createSetStatement(body.set, 'customer.')}`
+        await couchQueries.exec(statement_, connClass.cluster)
+      }
       res.send({ ok, results: payments })
     }
   })

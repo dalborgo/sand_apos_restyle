@@ -127,5 +127,17 @@
   "reports.e_invoices_refused": "Scartata",
   "common.undefined": "Indefinito",
   "common.common_undefined": "Indefinito",
-  "reports.e_invoices_not_delivered_long": "Nel cassetto fiscale del cliente"
+  "reports.e_invoices_not_delivered_long": "Nel cassetto fiscale del cliente",
+  "reports.e_invoices_company": "Azienda",
+  "reports.e_invoices_fiscal_code": "Codice fiscale",
+  "reports.e_invoices_address": "Indirizzo",
+  "reports.e_invoices_city": "Città",
+  "reports.e_invoices_contact": "Contatto",
+  "reports.e_invoices_district": "Provincia",
+  "reports.e_invoices_pec": "Pec",
+  "reports.e_invoices_sdi": "Sdi",
+  "reports.e_invoices_state": "Stato",
+  "reports.e_invoices_zip": "Cap",
+  "reports.e_invoices.customer_data": "Anagrafica cliente",
+  "reports.e_invoices_split_payment": "Scissione pagamenti"
 }

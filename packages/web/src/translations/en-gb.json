@@ -127,5 +127,17 @@
   "reports.e_invoices_refused": "",
   "common.undefined": "",
   "common.common_undefined": "",
-  "reports.e_invoices_not_delivered_long": ""
+  "reports.e_invoices_not_delivered_long": "",
+  "reports.e_invoices_company": "",
+  "reports.e_invoices_fiscal_code": "",
+  "reports.e_invoices_address": "",
+  "reports.e_invoices_city": "",
+  "reports.e_invoices_contact": "",
+  "reports.e_invoices_district": "",
+  "reports.e_invoices_pec": "",
+  "reports.e_invoices_sdi": "",
+  "reports.e_invoices_state": "",
+  "reports.e_invoices_zip": "",
+  "reports.e_invoices.customer_data": "",
+  "reports.e_invoices_split_payment": ""
 }
