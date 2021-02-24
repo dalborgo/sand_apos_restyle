@@ -30,7 +30,10 @@ function invalidateRows (endDateInMillis, owner, startDateInMillis, queryClient,
     },
     refetchInactive: true,
   }).then()
-  queryClient.invalidateQueries(['queries/query_by_id', { id: docId, columns: ['fatt_elett'] }]).then()
+  queryClient.invalidateQueries(['queries/query_by_id', {
+    id: docId,
+    columns: ['fatt_elett'],
+  }], { refetchInactive: true }).then()
 }
 
 export async function sendXml (owner, docId, endDateInMillis, startDateInMillis, queryClient) {
@@ -120,3 +123,5 @@ export const getStatusLabel = (statusCode, intl) => {
       return intl.formatMessage(messages['common_undefined'])
   }
 }
+
+export const isCompanyDataEditable = status => isNil(status) || status > 3

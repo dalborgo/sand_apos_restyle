@@ -3,16 +3,15 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { FastField, Form, Formik } from 'formik'
 import { Button, Grid, InputLabel, useTheme } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
-import { TextField, Switch } from 'formik-material-ui'
+import { Switch, TextField } from 'formik-material-ui'
 import { messages } from 'src/translations/messages'
 import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
-import { EInvoiceHeaderDialog } from '../../../helpers'
-import isNil from 'lodash/isNil'
+import { EInvoiceHeaderDialog, isCompanyDataEditable } from '../../../helpers'
 
-const TextRow = ({message, name}) => {
+const TextRow = ({ message, name }) => {
   const { state = {} } = useLocation()
   const intl = useIntl()
-  const isEditable = isNil(state.status) || state.status > 3
+  const isEditable = isCompanyDataEditable(state.status)
   return (
     <FastField
       component={TextField}
@@ -31,9 +30,9 @@ const ChangeCustomerForm = memo(function ChangeCustomerForm ({ onSubmit, data, i
   const intl = useIntl()
   const { state = {} } = useLocation()
   const { results } = data || {}
-  const isEditable = isNil(state.status) || state.status > 3
+  const isEditable = isCompanyDataEditable(state.status)
   // eslint-disable-next-line no-unused-vars
-  const {type, ...initialValues} = results
+  const { type, ...initialValues } = results
   if (isLoading) {
     return <LoadingLinearBoxed boxHeight={40}/>
   } else {
@@ -92,11 +91,13 @@ const ChangeCustomerForm = memo(function ChangeCustomerForm ({ onSubmit, data, i
                   </Grid>
                   <Grid item style={{ margin: theme.spacing(1.5, 4, isEditable ? 1 : 2) }}>
                     <InputLabel
-                      htmlFor="importantCustomer"
+                      disabled={!isEditable}
+                      htmlFor="split_payment"
                     >
                       {intl.formatMessage(messages['reports_e_invoices_split_payment'])}
                       <FastField
                         component={Switch}
+                        disabled={!isEditable}
                         name="split_payment"
                         onChange={
                           event => {

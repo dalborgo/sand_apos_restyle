@@ -401,6 +401,10 @@
     "defaultMessage": "Anagrafica cliente"
   },
   {
+    "id": "reports.e_invoices.customer_data_in_invoice",
+    "defaultMessage": "Anagrafica cliente in fattura"
+  },
+  {
     "id": "reports.e_invoices.header_title",
     "defaultMessage": "Fatture elettroniche"
   },

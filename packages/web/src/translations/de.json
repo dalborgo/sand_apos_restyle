@@ -139,5 +139,6 @@
   "reports.e_invoices_state": "",
   "reports.e_invoices_zip": "",
   "reports.e_invoices.customer_data": "",
-  "reports.e_invoices_split_payment": ""
+  "reports.e_invoices_split_payment": "",
+  "reports.e_invoices.customer_data_in_invoice": ""
 }

@@ -18,6 +18,7 @@ import { FormattedMessage } from 'react-intl'
 import { ChangeCustomerForm } from './comps'
 import { useLocation } from 'react-router-dom'
 import isNil from 'lodash/isNil'
+import { isCompanyDataEditable } from '../helpers'
 const useStyles = makeStyles(theme => ({
   dialogContent: {
     padding: 0,
@@ -36,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 const ChangeCustomerHeader = memo(function DialogHeader ({ onClose }) {
   const classes = useStyles()
   const { state = {} } = useLocation()
-  const isEditable = isNil(state.status) || state.status > 3
+  const isEditable = isCompanyDataEditable(state.status)
   return (
     <Grid
       alignItems="center"
@@ -54,8 +55,8 @@ const ChangeCustomerHeader = memo(function DialogHeader ({ onClose }) {
               />
               :
               <FormattedMessage
-                defaultMessage="Anagrafica cliente"
-                id="reports.e_invoices.customer_data"
+                defaultMessage="Anagrafica cliente in fattura"
+                id="reports.e_invoices.customer_data_in_invoice"
               />
           }
           &nbsp;

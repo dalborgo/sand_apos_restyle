@@ -139,5 +139,6 @@
   "reports.e_invoices_state": "Stato",
   "reports.e_invoices_zip": "Cap",
   "reports.e_invoices.customer_data": "Anagrafica cliente",
-  "reports.e_invoices_split_payment": "Scissione pagamenti"
+  "reports.e_invoices_split_payment": "Scissione pagamenti",
+  "reports.e_invoices.customer_data_in_invoice": "Anagrafica cliente in fattura"
 }
