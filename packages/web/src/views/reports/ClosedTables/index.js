@@ -84,7 +84,6 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
                 fullWidth
                 label={intl.formatMessage(messages['common_table'])}
                 name="table"
-                onFocus={event => event.target.select()}
                 size="small"
                 variant="outlined"
               />

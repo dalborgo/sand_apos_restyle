@@ -22,5 +22,9 @@
     box-shadow: 0 0 1px 0 rgba(0,0,0,0.31), 0 2px 2px -2px rgba(255, 126, 126, 0.25) !important;
 }
 
+#changeCustomerForm .MuiInputLabel-outlined.MuiInputLabel-shrink {
+    transform: translate(14px, -8px) scale(0.85) !important;
+}
+
 
 

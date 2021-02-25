@@ -5,6 +5,7 @@ import { THEMES } from 'src/constants'
 import { softShadows, strongShadows } from './shadows'
 import typography from './typography'
 import log from '@adapter/common/src/log'
+import { focus } from 'src/utils/formik'
 
 const Transition = React.forwardRef(function Transition (props, ref) {
   return <Slide ref={ref} {...props} />
@@ -14,6 +15,11 @@ const baseOptions = {
   direction: 'ltr',
   typography,
   props: {
+    MuiTextField: {
+      variant: 'outlined',
+      size: 'small',
+      onFocus: focus,
+    },
     MuiDialog: {
       TransitionComponent: Transition,
     },

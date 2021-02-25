@@ -1,12 +1,26 @@
 import React, { memo } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { FastField, Form, Formik } from 'formik'
-import { Button, Grid, InputLabel, useTheme } from '@material-ui/core'
+import { Button, Grid, InputLabel, makeStyles, useTheme } from '@material-ui/core'
 import { useLocation } from 'react-router-dom'
 import { Switch, TextField } from 'formik-material-ui'
 import { messages } from 'src/translations/messages'
 import LoadingLinearBoxed from 'src/components/LoadingLinearBoxed'
 import { EInvoiceHeaderDialog, isCompanyDataEditable } from '../../../helpers'
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    '& .MuiInputLabel-root': {
+      marginTop: 2,
+      fontSize:theme.typography.pxToRem(14),
+    },
+    '& .MuiInputBase-input ': {
+      backgroundColor: theme.palette.background.dark,
+      fontSize: theme.typography.pxToRem(14),
+    },
+  },
+}))
+
 
 const TextRow = ({ message, name }) => {
   const { state = {} } = useLocation()
@@ -19,14 +33,13 @@ const TextRow = ({ message, name }) => {
       fullWidth
       label={intl.formatMessage(messages[message])}
       name={name}
-      size="small"
-      variant="outlined"
     />
   )
 }
 
 const ChangeCustomerForm = memo(function ChangeCustomerForm ({ onSubmit, data, isLoading }) {
   const theme = useTheme()
+  const classes = useStyles()
   const intl = useIntl()
   const { state = {} } = useLocation()
   const { results } = data || {}
@@ -47,8 +60,10 @@ const ChangeCustomerForm = memo(function ChangeCustomerForm ({ onSubmit, data, i
               <Form style={{ height: '100%' }}>
                 <Grid
                   alignItems="stretch"
+                  className={classes.container}
                   container
                   direction="column"
+                  id="changeCustomerForm"
                   justify="space-between"
                   style={{ height: '100%', minWidth: 350 }}
                 >

@@ -11,7 +11,7 @@ import {
   makeStyles,
   SvgIcon,
 } from '@material-ui/core'
-import { AlertCircle as AlertCircleIcon, FileText as FileTextIcon, Save as SaveIcon } from 'react-feather'
+import { AlertCircle as AlertCircleIcon, Save as SaveIcon } from 'react-feather'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import shallow from 'zustand/shallow'
@@ -24,6 +24,8 @@ import { saveAs } from 'file-saver'
 import { useLocation } from 'react-router-dom'
 import { EInvoiceHeaderDialog, loadStatus, sendXml } from '../../../helpers'
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
+import Icon from '@mdi/react'
+import { mdiFilePdfBoxOutline, mdiXml } from '@mdi/js'
 
 const useStyles = makeStyles(theme => ({
   buttonErrorColor: {
@@ -34,13 +36,14 @@ const useStyles = makeStyles(theme => ({
   },
   defaultIcon: {
     backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.contrastText,
   },
   dialogContent: {
-    padding: 0,
+    padding: theme.spacing(2, 0, 0),
     minWidth: 400,
   },
   dialogAction: {
-    padding: theme.spacing(1, 2),
+    padding: theme.spacing(2, 3),
   },
 }))
 const eInvoiceSelector = state => ({
@@ -64,7 +67,7 @@ const StatusReport = ({ data, onClose, docId }) => {
   const error = errorDescription ? errorDescription.split(' - ')[0] : ''
   return (
     <>
-      <DialogContent className={classes.dialogContent}>
+      <DialogContent className={classes.dialogContent} dividers>
         {
           state?.company &&
           <EInvoiceHeaderDialog {...state}/>
@@ -210,11 +213,11 @@ const StatusReport = ({ data, onClose, docId }) => {
                         }
                       }
                     }
+                    size="small"
+                    variant="contained"
                   >
-                    <FormattedMessage defaultMessage="Notifica Xml" id="reports.e_invoices_xml_notification"/>&nbsp;
-                    <SvgIcon fontSize="small">
-                      <FileTextIcon/>
-                    </SvgIcon>
+                    <FormattedMessage defaultMessage="Notifica Xml" id="reports.e_invoices_xml_notification"/>&nbsp;&nbsp;
+                    <Icon path={mdiXml} size="1.2rem"/>
                   </Button>
                 )
             }
@@ -248,11 +251,11 @@ const StatusReport = ({ data, onClose, docId }) => {
                 }
               }
             }
+            size="small"
+            variant="contained"
           >
-            <FormattedMessage defaultMessage="File pdf" id="reports.e_invoices_pdf_file"/>&nbsp;
-            <SvgIcon fontSize="small">
-              <SaveIcon/>
-            </SvgIcon>
+            <FormattedMessage defaultMessage="File pdf" id="reports.e_invoices_pdf_file"/>&nbsp;&nbsp;
+            <Icon path={mdiFilePdfBoxOutline} size="1.2rem"/>
           </Button>
         }
       </DialogActions>

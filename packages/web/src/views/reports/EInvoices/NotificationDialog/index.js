@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1, 2),
   },
   dialogTitle: {
-    padding: theme.spacing(1, 1, 1, 2),
+    padding: theme.spacing(0.5, 1, 0.5, 2),
   },
   boldText: {
     fontWeight: 'bold',

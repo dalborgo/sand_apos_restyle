@@ -104,6 +104,7 @@ const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched }) => {
           label: intl.formatMessage(messages.installation),
           variant: 'outlined',
           required: true,
+          size: 'medium',
           className: classes.field,
           FormHelperTextProps: {
             classes: { root: classes.helperText },

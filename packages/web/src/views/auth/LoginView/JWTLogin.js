@@ -127,8 +127,8 @@ const JWTLogin = memo(({ className, ...rest }) => {
               margin="normal"
               name="username"
               onChange={handleChange}
-              onFocus={focus}
               required
+              size="medium"
               type="text"
               value={values.username}
               variant="outlined"

@@ -91,7 +91,7 @@ export function EInvoiceHeaderDialog ({ company, number, room, table, date, amou
           </Grid>
         </Grid>
       </Grid>
-      <Grid item style={{ margin: theme.spacing(0, 3, 2) }}>
+      <Grid item style={{ margin: theme.spacing(0, 3, 1) }}>
         <Grid container justify="space-between" style={{ width: '100%' }}>
           <Grid item>
             <LabeledTypo label="common_date" text={dateFormatter(date)}/>
