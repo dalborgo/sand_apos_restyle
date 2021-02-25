@@ -93,6 +93,10 @@ export const messages = defineMessages({
     id: 'reports.e_invoices_send_error',
     defaultMessage: 'Errore di invio',
   },
+  reports_e_invoices_not_found: {
+    id: 'reports.e_invoices_not_found',
+    defaultMessage: 'File non trovato!',
+  },
   reports_e_invoices_download_xml_zip: {
     id: 'reports.e_invoices_download_xml_zip',
     defaultMessage: 'Scarica zip',

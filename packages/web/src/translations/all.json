@@ -469,6 +469,14 @@
     "defaultMessage": "Nel cassetto fiscale del cliente"
   },
   {
+    "id": "reports.e_invoices_not_found",
+    "defaultMessage": "File non trovato!"
+  },
+  {
+    "id": "reports.e_invoices_pdf_file",
+    "defaultMessage": "File pdf"
+  },
+  {
     "id": "reports.e_invoices_pec",
     "defaultMessage": "Pec"
   },

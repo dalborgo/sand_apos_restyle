@@ -11,7 +11,7 @@ import {
   makeStyles,
   SvgIcon,
 } from '@material-ui/core'
-import { AlertCircle as AlertCircleIcon, Save as SaveIcon } from 'react-feather'
+import { AlertCircle as AlertCircleIcon, FileText as FileTextIcon, Save as SaveIcon } from 'react-feather'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import shallow from 'zustand/shallow'
@@ -199,7 +199,11 @@ const StatusReport = ({ data, onClose, docId }) => {
                           setLoading(false)
                           if (!ok) {return enqueueSnackbar(message)}
                           const { base64, filename } = results
-                          saveAs(`data:application/xml;base64,${base64}`, filename)
+                          if (filename) {
+                            saveAs(`data:application/xml;base64,${base64}`, filename)
+                          } else {
+                            enqueueSnackbar(intl.formatMessage(messages['reports_e_invoices_not_found']))
+                          }
                         } catch ({ message }) {
                           setLoading(false)
                           enqueueSnackbar(message)
@@ -207,11 +211,49 @@ const StatusReport = ({ data, onClose, docId }) => {
                       }
                     }
                   >
-                    <FormattedMessage defaultMessage="Notifica Xml" id="reports.e_invoices_xml_notification"/>
+                    <FormattedMessage defaultMessage="Notifica Xml" id="reports.e_invoices_xml_notification"/>&nbsp;
+                    <SvgIcon fontSize="small">
+                      <FileTextIcon/>
+                    </SvgIcon>
                   </Button>
                 )
             }
           })(statusCode)
+        }
+        {
+          statusCode < 4 &&
+          <Button
+            color="secondary"
+            onClick={
+              async () => {
+                try {
+                  onClose()
+                  setLoading(docId)
+                  const {
+                    data: {
+                      ok,
+                      results,
+                      message,
+                    },
+                  } = await axiosLocalInstance(`e-invoices/search/${uploadFileName}`, {
+                    method: 'post',
+                  })
+                  setLoading(false)
+                  if (!ok) {return enqueueSnackbar(message)}
+                  const { base64, filename } = results
+                  saveAs(`data:application/pdf;base64,${base64}`, filename)
+                } catch ({ message }) {
+                  setLoading(false)
+                  enqueueSnackbar(message)
+                }
+              }
+            }
+          >
+            <FormattedMessage defaultMessage="File pdf" id="reports.e_invoices_pdf_file"/>&nbsp;
+            <SvgIcon fontSize="small">
+              <SaveIcon/>
+            </SvgIcon>
+          </Button>
         }
       </DialogActions>
     </>

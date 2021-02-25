@@ -17,7 +17,6 @@ import shallow from 'zustand/shallow'
 import { FormattedMessage } from 'react-intl'
 import { ChangeCustomerForm } from './comps'
 import { useLocation } from 'react-router-dom'
-import isNil from 'lodash/isNil'
 import { isCompanyDataEditable } from '../helpers'
 const useStyles = makeStyles(theme => ({
   dialogContent: {

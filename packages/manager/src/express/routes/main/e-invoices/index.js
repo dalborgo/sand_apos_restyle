@@ -8,6 +8,41 @@ import archiver from 'archiver'
 import { createSetStatement, updateById } from '../queries'
 import get from 'lodash/get'
 
+const MOCK_SEARCH = {
+  id: '5c53132ea0d613015cae59cf',
+  sender: {
+    description: 'M.E.M. System Office',
+    countryCode: 'IT',
+    vatCode: '02829270236',
+    fiscalCode: null,
+  },
+  receiver: {
+    description: 'ASTEN',
+    countryCode: 'IT',
+    vatCode: '00000000000',
+    fiscalCode: '00000000000',
+  },
+  file: 'MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwGggCSABIID6DxwOkZhdHR1cmFFbGV0dHJvbmljYSB4bWxuczpkcz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC8wOS94bWxkc2lnIyIgeG1sbnM6cD0iaHR0cDovL2l2YXNlcnZpemkuYWdlbnppYWVudHJhdGUuZ292Lml0L2RvY3MveHNkL2ZhdHR1cmUvdjEuMiIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgdmVyc2lvbmU9IkZQUjEyIiB4c2k6c2NoZW1hTG9jYXRpb249Imh0dHA6Ly9pdmFzZXJ2aXppLmFnZW56aWFlbnRyYXRlLmdvdi5pdC9kb2NzL3hzZC9mYXR0dXJlL3YxLjIgaHR0cDovL3d3dy5mYXR0dXJhcGEuZ292Lml0L2V4cG9ydC9mYXR0dXJhemlvbmUvc2RpL2ZhdHR1cmFwYS92MS4yL1NjaGVtYV9kZWxfZmlsZV94bWxfRmF0dHVyYVBBX3ZlcnNpb25lXzEuMi54c2QiPjxGYXR0dXJhRWxldHRyb25pY2FIZWFkZXI+PERhdGlUcmFzbWlzc2lvbmU+PElkVHJhc21pdHRlbnRlPjxJZFBhZXNlPklUPC9JZFBhZXNlPjxJZENvZGljZT4wMTg3OTAyMDUxNzwvSWRDb2RpY2U+PC9JZFRyYXNtaXR0ZW50ZT48UHJvZ3Jlc3Npdm9JbnZpbz43PC9Qcm9ncmVzc2l2b0ludmlvPjxGb3JtYXRvVHJhc21pc3Npb25lPkZQUjEyPC9Gb3JtYXRvVHJhc21pc3Npb25lPjxDb2RpY2VEZXN0aW5hdGFyaW8+MDAwMDAwMDwvQ29kaWNlRGVzdGluYXRhcmlvPjwvRGF0aVRyYXNtaXNzaW9uZT48Q2VkZW50ZVByZXN0YXRvcmU+PERhdGlBbmFncmFmaWNpPjxJZEZpc2NhbGVJVkE+PElkUGFlc2U+SVQ8L0lkUGFlc2U+PElkQ29kaWNlPjAyODI5MjcwMjM2PC9JZENvZGljZT48L0lkRmlzY2FsZUlWQT48QW5hZ3JhZmljYT48RGVub21pbmF6aW9uZT5NLkUuTS4gU3lzdGVtIE9mZmljZTwvRGVub21pbmF6aW9uZT48L0FuYWdyYWZpY2E+PFJlZ2ltZUZpc2NhbGU+UkYwMTwvUmVnaW1lRmlzY2FsZT48L0RhdGlBbmFncmFmaWNpPjxTZWRlPjxJbmRpcml6em8+UGlhenphIFVuaXTDoCBkJ0l0YWxpYSwgNzwvSW5kaXJpenpvPjxDQVA+MzcwNDEEggPoPC9DQVA+PENvbXVuZT5BbGJhcmVkbyBkJ0FkaWdlPC9Db211bmU+PFByb3ZpbmNpYT5WUjwvUHJvdmluY2lhPjxOYXppb25lPklUPC9OYXppb25lPjwvU2VkZT48L0NlZGVudGVQcmVzdGF0b3JlPjxDZXNzaW9uYXJpb0NvbW1pdHRlbnRlPjxEYXRpQW5hZ3JhZmljaT48SWRGaXNjYWxlSVZBPjxJZFBhZXNlPklUPC9JZFBhZXNlPjxJZENvZGljZT4wMDAwMDAwMDAwMDwvSWRDb2RpY2U+PC9JZEZpc2NhbGVJVkE+PENvZGljZUZpc2NhbGU+MDAwMDAwMDAwMDA8L0NvZGljZUZpc2NhbGU+PEFuYWdyYWZpY2E+PERlbm9taW5hemlvbmU+QVNURU48L0Rlbm9taW5hemlvbmU+PC9BbmFncmFmaWNhPjwvRGF0aUFuYWdyYWZpY2k+PFNlZGU+PEluZGlyaXp6bz5QSUFaWkE8L0luZGlyaXp6bz48Q0FQPjM3MDE0PC9DQVA+PENvbXVuZT5BTEJBUkVETzwvQ29tdW5lPjxQcm92aW5jaWE+VlI8L1Byb3ZpbmNpYT48TmF6aW9uZT5JVDwvTmF6aW9uZT48L1NlZGU+PC9DZXNzaW9uYXJpb0NvbW1pdHRlbnRlPjwvRmF0dHVyYUVsZXR0cm9uaWNhSGVhZGVyPjxGYXR0dXJhRWxldHRyb25pY2FCb2R5PjxEYXRpR2VuZXJhbGk+PERhdGlHZW5lcmFsaURvY3VtZW50bz48VGlwb0RvY3VtZW50bz5URDAxPC9UaXBvRG9jdW1lbnRvPjxEaXZpc2E+RVVSPC9EaXZpc2E+PERhdGE+MjAxOS0wMS0zMTwvRGF0YT48TnVtZXJvPjEwPC9OdW1lcm8+PEltcG9ydG9Ub3RhbGVEb2N1bWVudG8+MC4xMDwvSW1wb3J0b1RvdGFsZURvY3VtZW50bz48L0RhdGlHZW5lcmFsaURvY3VtZW50bz48L0RhdGlHZW5lcmFsaT48RGF0aUJlbmlTZXJ2aXppPjxEZXR0YWdsaW9MaW5lZT48TnVtZXJvTGluZWE+MTwvTnVtZXJvTGluZWE+PERlc2NyaXppb25lPkdlbGF0bzwvRGVzY3JpemlvbmU+PFF1YW50aXRhPjEuMDA8L1F1YW50aXRhPjxQcmV6em9Vbml0YXJpbz4wLjA5MDkxPC9QcmV6em9Vbml0YXJpbz48UHJlenpvVG90YWxlPjAuMDkwOTE8L1ByZXp6b1RvdGFsZT48QWxpcXVvdGFJVkE+MTAuMDA8LwSCAatBbGlxdW90YUlWQT48L0RldHRhZ2xpb0xpbmVlPjxEYXRpUmllcGlsb2dvPjxBbGlxdW90YUlWQT4xMC4wMDwvQWxpcXVvdGFJVkE+PEltcG9uaWJpbGVJbXBvcnRvPjAuMDk8L0ltcG9uaWJpbGVJbXBvcnRvPjxJbXBvc3RhPjAuMDE8L0ltcG9zdGE+PC9EYXRpUmllcGlsb2dvPjwvRGF0aUJlbmlTZXJ2aXppPjxEYXRpUGFnYW1lbnRvPjxDb25kaXppb25pUGFnYW1lbnRvPlRQMDI8L0NvbmRpemlvbmlQYWdhbWVudG8+PERldHRhZ2xpb1BhZ2FtZW50bz48TW9kYWxpdGFQYWdhbWVudG8+TVAwMTwvTW9kYWxpdGFQYWdhbWVudG8+PEltcG9ydG9QYWdhbWVudG8+MC4xMDwvSW1wb3J0b1BhZ2FtZW50bz48L0RldHRhZ2xpb1BhZ2FtZW50bz48L0RhdGlQYWdhbWVudG8+PC9GYXR0dXJhRWxldHRyb25pY2FCb2R5PjwvcDpGYXR0dXJhRWxldHRyb25pY2E+AAAAAAAAoIAwggfbMIIFw6ADAgECAgha3UYHIs/TBTANBgkqhkiG9w0BAQsFADCBsjELMAkGA1UEBhMCSVQxDzANBgNVBAcMBkFyZXp6bzEYMBYGA1UECgwPQXJ1YmFQRUMgUy5wLkEuMRowGAYDVQRhDBFWQVRJVC0wMTg3OTAyMDUxNzEpMCcGA1UECwwgUXVhbGlmaWVkIFRydXN0IFNlcnZpY2UgUHJvdmlkZXIxMTAvBgNVBAMMKEFydWJhUEVDIEVVIFF1YWxpZmll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',
+  filename: 'IT01879020517_f69en.xml.p7m',
+  invoices: [
+    {
+      invoiceDate: '2019-01-31T00:00:00.000+01:00',
+      number: '10',
+      status: 'Scartata',
+      statusDescription: '',
+    },
+  ],
+  username: 'PIVAIT02829270236',
+  lastUpdate: '2019-01-31T16:21:17.000+0000',
+  idSdi: '247087292',
+  creationDate: '2019-01-31T15:24:30.000+0000',
+  errorCode: '0000',
+  errorDescription: null,
+  pddAvailable: false,
+  invoiceType: 'FPR12',
+  docType: 'out',
+}
+
 const MOCK_REFUSE = {
   count: 1,
   notifications: [
@@ -66,23 +101,6 @@ const { authenticationBaseUrl, baseUrl, username, password } = config.get('e_inv
 
 const { axios } = require(__helpers)
 
-async function getAuth () {
-  const { data } = await axios.eInvoiceInstance(authenticationBaseUrl).post('/auth/signin', qs.stringify({
-    grant_type: 'password',
-    username,
-    password,
-  }))
-  return data
-}
-
-async function refresh (refreshToken) {
-  const { data } = await axios.eInvoiceInstance(authenticationBaseUrl).post('/auth/signin', qs.stringify({
-    grant_type: 'refresh_token',
-    refresh_token: refreshToken,
-  }))
-  return data
-}
-
 async function manageRequest (params, method = 'post') {
   const { state } = eInvoiceAuth
   log.debug('eInvoiceAuth state:', state)
@@ -115,13 +133,24 @@ async function sendXml (dataFile) {
   return partial.data
 }
 
-async function notification (invoiceFile) {
+async function notification (invoiceFile, onlyStatus = true) {
   const {
     data,
   } = await manageRequest([`/services/notification/out/getByInvoiceFilename?invoiceFilename=${invoiceFile}`], 'get')
   const { ok, results, message } = data
   if (!ok) {return { ok, message }}
-  return { ok: true, results: getInvoiceStatus(MOCK_RECEIVED) }
+  return onlyStatus ? { ok, results: getInvoiceStatus(results) } : { ok: true, results }
+}
+
+async function search (invoiceFile, pdf = false, xml = false) {
+  let filter = !xml ? '&includeFile=false' : ''
+  if(pdf){filter+='&includePdf=true'}
+  const {
+    data,
+  } = await manageRequest([`/services/invoice/out/getByFilename?filename=${invoiceFile}${filter}`], 'get')
+  const { ok, results, message } = data
+  if (!ok) {return { ok, message }}
+  return { ok, results }
 }
 
 async function createXml (req) {
@@ -163,31 +192,31 @@ function addRouters (router) {
     if (hasError) { return res.send({ ok: false, message, results: statusCode })}
     res.send({ ok: true, results: statusCode, message })
   })
-  router.get('/e-invoices/signin', async function (req, res) {
-    utils.checkSecurity(req)
-    res.send(await refresh(getAuth()))
-  })
-  router.get('/e-invoices/refresh', async function (req, res) {
-    utils.checkSecurity(req)
-    const { query } = req
-    utils.controlParameters(query, ['refreshToken'])
-    const { refreshToken } = query
-    res.send(await refresh(refreshToken))
-  })
   router.post('/e-invoices/create_xml/:paymentId', async function (req, res) {
     utils.checkSecurity(req)
     const { ok, results: { id: eInvoiceId, buffer: eInvoiceContent }, message } = await createXml(req)
     if (!ok) {return res.send({ ok, message })}
     res.send({ ok, results: { filename: `${eInvoiceId}.xml`, base64: eInvoiceContent.toString('base64') } })
   })
-  router.get('/e-invoices/notification/:invoiceFile', async function (req, res) {
+  router.post('/e-invoices/xml_notification/:invoiceFile', async function (req, res) {
     utils.checkSecurity(req)
     const { params } = req
     utils.controlParameters(params, ['invoiceFile'])
     const { invoiceFile } = params
-    const { ok, message, results } = await notification(invoiceFile)
+    const { ok, message, results } = await notification(invoiceFile, false)
     if (!ok) {return res.send({ ok, message })}
-    res.send({ ok: true, results })
+    const last = results.notifications[results.notifications.length - 1] || {}
+    res.send({ ok, results: { filename: last.filename, base64: last.file } })
+  })
+  router.post('/e-invoices/search/:invoiceFile', async function (req, res) {
+    utils.checkSecurity(req)
+    const { params, query } = req
+    utils.controlParameters(params, ['invoiceFile'])
+    const { invoiceFile } = params
+    const { allData = false, pdf = true, xml = false } = query
+    const { ok, message, results } = await search(invoiceFile, pdf, xml)
+    if (!ok) {return res.send({ ok, message })}
+    res.send(allData ? { ok, results } : { ok, results: { filename: results.filename, base64: results.pdfFile } })
   })
   router.put('/e-invoices/update_state/:paymentId', async function (req, res) {
     utils.checkSecurity(req)
