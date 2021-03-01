@@ -237,9 +237,17 @@ export const messages = defineMessages({
     id: 'sub.reports',
     defaultMessage: 'Report',
   },
+  sub_management: {
+    id: 'sub.management',
+    defaultMessage: 'Gestione',
+  },
   menu_closing_day: {
     id: 'menu.closing_day',
     defaultMessage: 'Chiusure di giornata',
+  },
+  menu_import: {
+    id: 'menu.import',
+    defaultMessage: 'Import',
   },
   menu_e_invoices: {
     id: 'menu.e_invoices',

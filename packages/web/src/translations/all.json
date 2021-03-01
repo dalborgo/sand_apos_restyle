@@ -308,6 +308,10 @@
     "defaultMessage": "Italiano"
   },
   {
+    "id": "management.import.header_title",
+    "defaultMessage": "Import"
+  },
+  {
     "id": "menu.closed_tables",
     "defaultMessage": "Tavoli chiusi"
   },
@@ -318,6 +322,10 @@
   {
     "id": "menu.e_invoices",
     "defaultMessage": "Fatture elettroniche"
+  },
+  {
+    "id": "menu.import",
+    "defaultMessage": "Import"
   },
   {
     "id": "menu.running_tables",
@@ -551,6 +559,10 @@
   {
     "id": "role.role_customer",
     "defaultMessage": "Cliente"
+  },
+  {
+    "id": "sub.management",
+    "defaultMessage": "Gestione"
   },
   {
     "id": "sub.reports",

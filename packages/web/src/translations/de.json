@@ -142,5 +142,8 @@
   "reports.e_invoices_split_payment": "",
   "reports.e_invoices.customer_data_in_invoice": "",
   "reports.e_invoices_pdf_file": "",
-  "reports.e_invoices_not_found": ""
+  "reports.e_invoices_not_found": "",
+  "management.import.header_title": "",
+  "menu.import": "",
+  "sub.management": ""
 }

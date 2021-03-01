@@ -97,7 +97,7 @@ function addRouters (router) {
     }
     // eslint-disable-next-line no-unused-vars
     const { forceNew, name, ...profile } = body
-    const toSave = {
+    const toSaveInstallation = {
       code,
       name,
       p2pPassword: getUUID(),
@@ -107,10 +107,22 @@ function addRouters (router) {
       sgUser: code,
       type: 'INSTALLATION',
     }
+    const toSaveUserManager = {
+      codes: [code],
+      locales: [],
+      password: profile.password,
+      type: 'USER_MANAGER',
+      user: code,
+    }
     {
       const { astenposBucketCollection: collection } = connClass
-      const data = await collection.insert(`INSTALLATION|${code}`, toSave)
-      log.debug('Response insert', data)
+      const data = await collection.insert(`INSTALLATION|${code}`, toSaveInstallation)
+      log.debug('Response insert installation', data)
+    }
+    {
+      const { astenposBucketCollection: collection } = connClass
+      const data = await collection.insert(`USER_MANAGER|${code}`, toSaveUserManager)
+      log.debug('Response insert user manager', data)
     }
     const destination = cFunctions.isProd() ? body.email : 'test@astenpos.it'
     const ed = emailDefinitions[body.state || 'IT']

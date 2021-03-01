@@ -142,5 +142,8 @@
   "reports.e_invoices_split_payment": "Scissione pagamenti",
   "reports.e_invoices.customer_data_in_invoice": "Anagrafica cliente in fattura",
   "reports.e_invoices_pdf_file": "File pdf",
-  "reports.e_invoices_not_found": "File non trovato!"
+  "reports.e_invoices_not_found": "File non trovato!",
+  "management.import.header_title": "Import",
+  "menu.import": "Import",
+  "sub.management": "Gestione"
 }

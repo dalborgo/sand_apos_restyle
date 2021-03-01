@@ -137,6 +137,11 @@ const routes = [
       },
       {
         exact: true,
+        path: '/app/management/import',
+        component: lazy(() => import('src/views/management/Import')),
+      },
+      {
+        exact: true,
         path: '/app/management',
         component: () => <Redirect to="/app/management/customers"/>,
       },

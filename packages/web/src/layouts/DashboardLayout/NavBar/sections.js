@@ -55,60 +55,18 @@ const sections = [
       },
     ],
   },
-  /*{
-    subheader: 'Management',
+  {
+    subheader: 'management',
     items: [
       {
-        title: 'Customers',
-        icon: UsersIcon,
-        href: '/app/management/customers',
-        items: [
-          {
-            title: 'List Customers',
-            href: '/app/management/customers',
-          },
-          {
-            title: 'View Customer',
-            href: '/app/management/customers/1',
-          },
-          {
-            title: 'Edit Customer',
-            href: '/app/management/customers/1/edit',
-          },
-        ],
-      },
-      {
-        title: 'Orders',
-        icon: FolderIcon,
-        href: '/app/management/orders',
-        items: [
-          {
-            title: 'List Orders',
-            href: '/app/management/orders',
-          },
-          {
-            title: 'View Order',
-            href: '/app/management/orders/1',
-          },
-        ],
-      },
-      {
-        title: 'Invoices',
-        icon: ReceiptIcon,
-        href: '/app/management/invoices',
-        items: [
-          {
-            title: 'List Invoices',
-            href: '/app/management/invoices',
-          },
-          {
-            title: 'View Invoice',
-            href: '/app/management/invoices/1',
-          },
-        ],
+        title: 'Import',
+        exact: false,
+        icon: InboxIcon,
+        href: '/app/management/import',
       },
     ],
   },
+  /*
   {
     subheader: 'Applications',
     items: [
