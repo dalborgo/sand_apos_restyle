@@ -68,7 +68,6 @@ const ListElem = withWidth()(({ text, value, remove, noChannel, locked, isSingle
   
   const handleRemove = useCallback(async event => {
     event.stopPropagation()
-    event.persist()
     await remove(event.currentTarget.name)
   }, [remove])
   

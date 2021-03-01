@@ -190,7 +190,6 @@ const TopBar = ({
               name="code"
               onChange={
                 event => {
-                  event.persist()
                   const value = event.target.value
                   changeCode(value)
                 }
