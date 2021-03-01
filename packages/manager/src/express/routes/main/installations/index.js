@@ -3,11 +3,12 @@ import log from '@adapter/common/src/winston'
 import { cFunctions } from '@adapter/common'
 import emailDefinitions from './emailDefinitions'
 import get from 'lodash/get'
+import { reqAuthPost } from '../../basicAuth'
 
 const { axios, utils } = require(__helpers)
 
 function addRouters (router) {
-  router.post('/installations/login', async function (req, res) {
+  router.post('/installations/login', reqAuthPost, async function (req, res) {
     const { body } = req
     utils.controlParameters(body, ['code', 'password'])
     const partial = {}
@@ -17,15 +18,15 @@ function addRouters (router) {
         owner: body.code,
         columns: ['type'],
       })
-      const { ok, message, results, err } = data
-      if (!ok) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
+      const { ok, message, results, err = {} } = data
+      if (!ok && err.code !== 404) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
       partial.hasGeneralConfig = Boolean(results)
     }
     {
       const { data } = await axios.localInstance.post('/queries/query_by_id', {
         id: `INSTALLATION|${body.code}`,
       })
-      const { ok, message, results, err } = data
+      const { ok, message, results, err = {} } = data
       if (!ok) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
       partial.installation = results
     }
@@ -38,7 +39,7 @@ function addRouters (router) {
     }
     res.send({ ok: true, results: partial.results })
   })
-  router.post('/installations/sendInstallationCode', async function (req, res) {
+  router.post('/installations/sendInstallationCode', reqAuthPost, async function (req, res) {
     const { body } = req
     utils.controlParameters(body, ['code'])
     const partial = {}
@@ -47,7 +48,7 @@ function addRouters (router) {
         id: `INSTALLATION|${body.code}`,
         columns: ['name', 'profile.email', 'profile.state'],
       })
-      const { ok, message, results, err } = data
+      const { ok, message, results, err = {} } = data
       if (!ok) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
       partial.installation = results
     }
@@ -58,7 +59,7 @@ function addRouters (router) {
     log.debug('Response nodemailer', response)
     res.send({ ok: true })
   })
-  router.post('/installations/signup', async function (req, res) {
+  router.post('/installations/signup', reqAuthPost, async function (req, res) {
     const { body } = req
     utils.controlParameters(body, ['iva', 'password', 'ragSoc', 'email'])
     const { data } = await axios.localInstance.post('/queries/query_by_type', {
@@ -68,7 +69,7 @@ function addRouters (router) {
     })
     const partial = {}
     {
-      const { ok, message, results, err } = data
+      const { ok, message, results, err = {} } = data
       if (!ok) {return res.send({ ok, message, err, errorCode: err.code || 500 })}
       partial.installations = results || []
     }
@@ -86,7 +87,7 @@ function addRouters (router) {
     const code = cFunctions.generateString()
     const password = getUUID()
     {
-      //serve lo slash in fondo
+      // serve lo slash in fondo
       const { data } = await axios.restApiInstance(connClass.sgAdmin, connClass.sgAdminToken).post(`/${connClass.astenposBucketName}/_user/`, {
         name: code,
         password,

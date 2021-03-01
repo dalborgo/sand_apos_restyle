@@ -77,11 +77,15 @@ if (SESSION_ENABLED) {
 app.use('/', indexRouter)
 app.use(`/${NAMESPACE}`, appRouter)
 
-function getInterceptedResponse (message) {
+function getInterceptedResponse (message, cause) {
+  const restartResponse = { interceptedResponseStatus: 503, hasToRestartServer: true }
+  if (cause === 201) {
+    return restartResponse
+  }
   switch (message) {
     case 'cluster object was closed':
     case 'parent cluster object has been closed':
-      return { interceptedResponseStatus: 503, hasToRestartServer: true }
+      return restartResponse
     default:
       return {}
   }
@@ -101,7 +105,7 @@ app.use((err, req, res, next) => {
       }
     }
   }
-  const { interceptedResponseStatus, hasToRestartServer } = getInterceptedResponse(err.message)
+  const { interceptedResponseStatus, hasToRestartServer } = getInterceptedResponse(err.message, err.cause)
   if (hasToRestartServer && cFunctions.isProd()) {
     setTimeout(() => {
       log.warn('RESTART SERVER DUE CONNECTION PROBLEM!')

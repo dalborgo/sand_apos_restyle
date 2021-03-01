@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import {
   Avatar,
-  Button,
+  Button, colors,
   DialogActions,
   DialogContent,
   List,
@@ -25,14 +25,26 @@ import { useLocation } from 'react-router-dom'
 import { EInvoiceHeaderDialog, loadStatus, sendXml } from '../../../helpers'
 import { axiosLocalInstance } from 'src/utils/reactQueryFunctions'
 import Icon from '@mdi/react'
-import { mdiFilePdfBoxOutline, mdiXml } from '@mdi/js'
+import { mdiFilePdfBoxOutline, mdiXml, mdiReload, mdiSendOutline } from '@mdi/js'
 
 const useStyles = makeStyles(theme => ({
   buttonErrorColor: {
     color: theme.palette.error.main,
   },
+  errorAvatar: {
+    backgroundColor: theme.palette.error.main,
+  },
   errorIcon: {
     backgroundColor: theme.palette.error.main,
+    '&:hover': {
+      backgroundColor: theme.palette.error.dark,
+    },
+  },
+  refreshIcon: {
+    backgroundColor: colors.cyan[300],
+    '&:hover': {
+      backgroundColor: colors.cyan[500],
+    },
   },
   defaultIcon: {
     backgroundColor: theme.palette.secondary.main,
@@ -97,7 +109,7 @@ const StatusReport = ({ data, onClose, docId }) => {
                   return (
                     <ListItem>
                       <ListItemAvatar>
-                        <Avatar className={classes.errorIcon}>
+                        <Avatar className={classes.errorAvatar}>
                           <SvgIcon fontSize="small">
                             <AlertCircleIcon/>
                           </SvgIcon>
@@ -119,12 +131,52 @@ const StatusReport = ({ data, onClose, docId }) => {
       </DialogContent>
       <DialogActions className={classes.dialogAction}>
         {
+          statusCode < 4 &&
+          <Button
+            color="secondary"
+            onClick={
+              async () => {
+                try {
+                  onClose()
+                  setLoading(docId)
+                  const {
+                    data: {
+                      ok,
+                      results,
+                      message,
+                    },
+                  } = await axiosLocalInstance(`e-invoices/search/${uploadFileName}`, {
+                    method: 'post',
+                  })
+                  setLoading(false)
+                  if (!ok) {return enqueueSnackbar(message)}
+                  const { base64, filename } = results
+                  saveAs(`data:application/pdf;base64,${base64}`, filename)
+                } catch ({ message }) {
+                  setLoading(false)
+                  enqueueSnackbar(message)
+                }
+              }
+            }
+            size="small"
+            variant="contained"
+          >
+            <FormattedMessage defaultMessage="File pdf" id="reports.e_invoices_pdf_file"/>&nbsp;&nbsp;
+            <Icon path={mdiFilePdfBoxOutline} size="1.2rem"/>
+          </Button>
+        }
+        {
           (statusCode => {
             switch (statusCode) {
               case 999:
                 return (
                   <Button
                     autoFocus
+                    classes={
+                      {
+                        root: classes.errorIcon,
+                      }
+                    }
                     color="secondary"
                     onClick={
                       async () => {
@@ -143,14 +195,22 @@ const StatusReport = ({ data, onClose, docId }) => {
                         }
                       }
                     }
+                    size="small"
+                    variant="contained"
                   >
-                    <FormattedMessage defaultMessage="RE-INVIA" id="reports.e_invoices_resend"/>
+                    <FormattedMessage defaultMessage="RE-INVIA" id="reports.e_invoices_resend"/>&nbsp;&nbsp;
+                    <Icon path={mdiSendOutline} size="1.2rem"/>
                   </Button>
                 )
               case 2:
               case 3:
                 return (
                   <Button
+                    classes={
+                      {
+                        root: classes.refreshIcon,
+                      }
+                    }
                     color="secondary"
                     onClick={
                       async () => {
@@ -172,8 +232,11 @@ const StatusReport = ({ data, onClose, docId }) => {
                         }
                       }
                     }
+                    size="small"
+                    variant="contained"
                   >
-                    <FormattedMessage defaultMessage="AGGIORNA" id="reports.e_invoices_update"/>
+                    <FormattedMessage defaultMessage="AGGIORNA" id="reports.e_invoices_update"/>&nbsp;&nbsp;
+                    <Icon path={mdiReload} size="1.2rem"/>
                   </Button>
                 )
               default:
@@ -216,47 +279,15 @@ const StatusReport = ({ data, onClose, docId }) => {
                     size="small"
                     variant="contained"
                   >
-                    <FormattedMessage defaultMessage="Notifica Xml" id="reports.e_invoices_xml_notification"/>&nbsp;&nbsp;
+                    <FormattedMessage
+                      defaultMessage="Notifica Xml"
+                      id="reports.e_invoices_xml_notification"
+                    />&nbsp;&nbsp;
                     <Icon path={mdiXml} size="1.2rem"/>
                   </Button>
                 )
             }
           })(statusCode)
-        }
-        {
-          statusCode < 4 &&
-          <Button
-            color="secondary"
-            onClick={
-              async () => {
-                try {
-                  onClose()
-                  setLoading(docId)
-                  const {
-                    data: {
-                      ok,
-                      results,
-                      message,
-                    },
-                  } = await axiosLocalInstance(`e-invoices/search/${uploadFileName}`, {
-                    method: 'post',
-                  })
-                  setLoading(false)
-                  if (!ok) {return enqueueSnackbar(message)}
-                  const { base64, filename } = results
-                  saveAs(`data:application/pdf;base64,${base64}`, filename)
-                } catch ({ message }) {
-                  setLoading(false)
-                  enqueueSnackbar(message)
-                }
-              }
-            }
-            size="small"
-            variant="contained"
-          >
-            <FormattedMessage defaultMessage="File pdf" id="reports.e_invoices_pdf_file"/>&nbsp;&nbsp;
-            <Icon path={mdiFilePdfBoxOutline} size="1.2rem"/>
-          </Button>
         }
       </DialogActions>
     </>

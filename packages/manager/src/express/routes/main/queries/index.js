@@ -49,17 +49,17 @@ export async function queryById (req, extra) {
   const statement = `${knex_.toQuery()} USE KEYS "${id}"${conditions}`
   const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
   if (!ok) {return { ok, message, err }}
-  if(!data.length){
+  if (!data.length) {
     return {
       ok: false,
-      message: 'not found',
-      errCode: 404,
+      message: `${id} not found!`,
+      err: { code: 404 },
       id,
     }
-  }else{
+  } else {
     const [first] = data
     let results = first
-    if(columns && columns.length === 1 && !withMeta){
+    if (columns && columns.length === 1 && !withMeta) {
       results = first[columns[0]]
     }
     return { ok, results }
