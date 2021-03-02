@@ -9,10 +9,10 @@ const knex = require('knex')({ client: 'mysql' })
  * @param params_: {_id, order} -> `id` consents di scegliere un altro campo come id
  */
 
-function execTypesQuery (req, type, params_ = {}) {
+export function execTypesQuery (req, type, params_ = {}) {
   const { connClass, query } = req
   const { params } = query || {}
-  const { _id, order, columns = [] } = { ...params_, ...params }
+  const { _id, order, columns = [], includeId = true } = { ...params_, ...params }
   utils.controlParameters(query, ['owner'])
   const parsedOwner = utils.parseOwner(req)
   const {
@@ -22,9 +22,11 @@ function execTypesQuery (req, type, params_ = {}) {
   const statement = knex(bucketName)
     .where({ type })
     .where(knex.raw(parsedOwner.queryCondition))
-    .select(knex.raw(`${_id ? '`' + _id + '`' : 'meta().id'} _id`))
     .select('display')
     .select(columns)
+  if (includeId) {
+    statement.select(knex.raw(`${_id ? '`' + _id + '`' : 'meta().id'} _id`))
+  }
   if (order) {
     statement.orderBy(order)
   }
