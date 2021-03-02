@@ -145,5 +145,10 @@
   "reports.e_invoices_not_found": "",
   "management.import.header_title": "",
   "menu.import": "",
-  "sub.management": ""
+  "sub.management": "",
+  "dropzone.file_not_accepted": "",
+  "dropzone.select_file": "",
+  "dropzone.file_invalid_type": "",
+  "dropzone.file_invalid_type2": "",
+  "dropzone.file_too_large": ""
 }

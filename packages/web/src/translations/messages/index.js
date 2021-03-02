@@ -1,6 +1,14 @@
 import { defineMessages } from 'react-intl'
 
 export const messages = defineMessages({
+  'dropzone_file-invalid-type': {
+    id: 'dropzone.file_invalid_type',
+    defaultMessage: 'File "{name}" di tipo {type} non accettato!',
+  },
+  'dropzone_file-too-large': {
+    id: 'dropzone.file_too_large',
+    defaultMessage: 'File "{name}" di {size} è troppo grande!',
+  },
   reports_e_invoices_accepted: {
     id: 'reports.e_invoices_accepted',
     defaultMessage: 'In carico',

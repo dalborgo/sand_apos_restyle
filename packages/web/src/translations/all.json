@@ -240,6 +240,22 @@
     "defaultMessage": "Inizio"
   },
   {
+    "id": "dropzone.file_invalid_type",
+    "defaultMessage": "File \"{name}\" di tipo {type} non accettato!"
+  },
+  {
+    "id": "dropzone.file_invalid_type2",
+    "defaultMessage": "{name} ({size}) di tipo {type} non accettato!"
+  },
+  {
+    "id": "dropzone.file_too_large",
+    "defaultMessage": "File \"{name}\" di {size} è troppo grande!"
+  },
+  {
+    "id": "dropzone.select_file",
+    "defaultMessage": "Scegli il file"
+  },
+  {
     "id": "error.ECONNREFUSED",
     "defaultMessage": "Connessione rifiutata!"
   },

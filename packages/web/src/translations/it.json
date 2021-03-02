@@ -145,5 +145,9 @@
   "reports.e_invoices_not_found": "File non trovato!",
   "management.import.header_title": "Import",
   "menu.import": "Import",
-  "sub.management": "Gestione"
+  "sub.management": "Gestione",
+  "dropzone.select_file": "Scegli il file",
+  "dropzone.file_invalid_type2": "{name} ({size}) di tipo {type} non accettato!",
+  "dropzone.file_invalid_type": "File \"{name}\" di tipo {type} non accettato!",
+  "dropzone.file_too_large": "File \"{name}\" di {size} è troppo grande!"
 }
