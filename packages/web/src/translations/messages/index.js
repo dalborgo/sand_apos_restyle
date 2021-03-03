@@ -179,7 +179,7 @@ export const messages = defineMessages({
   },
   common_exportTable: {
     id: 'common.exportTable',
-    defaultMessage: 'Esporta tabella',
+    defaultMessage: 'Esporta',
   },
   common_type: {
     id: 'common.type',

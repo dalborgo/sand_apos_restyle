@@ -20,7 +20,7 @@ export default memo(function FilterButton ({ isActive, onClick }) {
     >
       <Button
         color="secondary"
-        disableFocusRipple //necessario perché c'è una sovrascrittura del tema
+        disableFocusRipple// necessario perché c'è una sovrascrittura del tema
         onClick={onClick}
         size="small"
         variant="contained"

@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Box, Button, IconButton, makeStyles, TextField as TF, Tooltip } from '@material-ui/core'
+import { Box, Button, makeStyles, SvgIcon, TextField as TF } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import Page from 'src/components/Page'
@@ -29,17 +29,21 @@ import EntriesTableDialog from 'src/components/EntriesTableDialog'
 import find from 'lodash/find'
 import cloneDeep from 'lodash/cloneDeep'
 import { parentPath } from 'src/utils/urlFunctions'
-import SaveIcon from '@material-ui/icons/Save'
 import ExcelJS from 'exceljs'
 import saveAs from 'file-saver'
 import { useGeneralStore } from 'src/zustandStore'
 import { ctol, useDateTimeFormatter } from 'src/utils/formatters'
+import { DownloadCloud as DownloadCloudIcon } from 'react-feather'
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    [theme.breakpoints.up('md')]: { //mobile
+    [theme.breakpoints.up('md')]: {// mobile
       height: '100%',
     },
+  },
+  downloadButton: {
+    paddingRight: 1,
+    paddingLeft: 1,
   },
   container: {
     padding: theme.spacing(2),
@@ -264,7 +268,6 @@ const ClosedTables = () => {
   }], [allIn, endDate, owner, roomFilter, startDate, tableFilter])
   const { refetch, isIdle, ...rest } = useQuery(fetchKey, {
     onError: snackQueryError,
-    notifyOnChangeProps: ['data', 'error'],
     enabled: Boolean(startDate && endDate),
     onSettled: data => {// fa risparmiare un expensive rendere al primo caricamento rispetto a useEffect
       if (data?.ok) {
@@ -288,7 +291,7 @@ const ClosedTables = () => {
         snackQueryError(err || message || error)
       }
       queryClient.invalidateQueries('reports/closed_tables', {// cerca di refetchare in background anche quella disabled
-        predicate: ({queryKey}) => {
+        predicate: ({ queryKey }) => {
           const [, second] = queryKey
           return Boolean(second.endDateInMillis && second.startDateInMillis && queryKey !== fetchKey)
         },
@@ -381,11 +384,12 @@ const ClosedTables = () => {
           />
         </Box>
         <Box>
-          <Tooltip title={intl.formatMessage(messages['common_exportTable'])}>
-            <IconButton onClick={onSave} size="small">
-              <SaveIcon/>
-            </IconButton>
-          </Tooltip>
+          <Button onClick={onSave} size="small" variant="contained">
+            <SvgIcon fontSize="small">
+              <DownloadCloudIcon/>
+            </SvgIcon>&nbsp;&nbsp;
+            {intl.formatMessage(messages['common_exportTable'])}
+          </Button>
         </Box>
       </Box>
       <DivContentWrapper>

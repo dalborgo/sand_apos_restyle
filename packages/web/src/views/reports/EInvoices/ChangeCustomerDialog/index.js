@@ -74,7 +74,7 @@ const ChangeCustomerDialog = ({ width, onSubmit, close, docId }) => {
   const fullScreen = useMemo(() => ['sm', 'xs'].includes(width), [width])
   const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, columns: ['customer'] }], {
     notifyOnChangeProps: ['data', 'error'],
-    staleTime: Infinity, //non chiama due volte il server per richieste ravvicinate
+    staleTime: Infinity,// non chiama due volte il server per richieste ravvicinate
     onSettled: () => {
       isLoading && setLoading(false)
     },

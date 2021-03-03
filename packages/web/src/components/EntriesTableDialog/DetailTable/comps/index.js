@@ -15,11 +15,12 @@ const CellBase = props => {
   const queryClient = useQueryClient()
   const { docId } = useParams()
   const { pathname } = useLocation()
-  const isLast = useMemo(() => {
+  const totalRows = useMemo(()=>{
     const urlKey = pathname.replace('/app/', '').replace(`/${docId}`, '').replace('-', '_').slice(0, -1)
     const previousData = queryClient.getQueryData([`${urlKey}/${docId}`, { owner }])
-    return rowId + 1 === previousData?.results?.entries?.length
-  }, [docId, owner, pathname, queryClient, rowId])
+    return previousData?.results?.entries?.length
+  },[docId, owner, pathname, queryClient])
+  const isLast = useMemo(() => rowId + 1 === totalRows, [rowId, totalRows])
   const timeFormatter = useTimeFormatter()
   const intl = useIntl()
   const cellStyle =

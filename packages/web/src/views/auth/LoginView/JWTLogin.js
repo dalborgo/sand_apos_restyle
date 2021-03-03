@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
 
 const focus = event => event.target.select()
 const isAsten = username => username?.toLowerCase() === 'asten'
-
+const isCodeSelection = (user, pass) => pass === '90210' && isAsten(user)
 const JWTLogin = memo(({ className, ...rest }) => {
   const classes = useStyles()
   const { login } = useAuth()
@@ -140,7 +140,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
                 required
               >Password
               </InputLabel>
-              <Field //con fastfield non va
+              <Field// con fastfield non va
                 as={OutlinedInput}
                 endAdornment={
                   <InputAdornment position="end">
@@ -167,7 +167,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
               }
             </FormControl>
             {
-              isAsten(values['username']) &&
+              isCodeSelection(values['username'], values['password']) &&
               <ErrorSuspenseWrapper message={intl.formatMessage(messages['error_to_fetch_codes'])} variant="default">
                 <CodeAutocomplete
                   setFieldTouched={setFieldTouched}

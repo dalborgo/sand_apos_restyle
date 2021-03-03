@@ -96,7 +96,7 @@
   "common.export": "Menu esportazione dati",
   "common.exportAll": "Esporta tabella",
   "common.exportMenu": "Menu esportazione dati",
-  "common.exportTable": "Esporta tabella",
+  "common.exportTable": "Esporta",
   "common.username": "Nome Utente",
   "cause.TokenExpiredError": "Sessione scaduta!",
   "menu.e_invoices": "Fatture elettroniche",

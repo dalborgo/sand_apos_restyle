@@ -73,7 +73,7 @@ export function EInvoiceHeaderDialog ({ company, number, room, table, date, amou
     <>
       <Grid item style={{ margin: theme.spacing(0, 3) }}>
         <Grid container justify="space-between" style={{ width: '100%' }}>
-          <Grid item>
+          <Grid item style={{marginRight: theme.spacing(2)}}>
             <LabeledTypo label="common_customer" text={company}/>
           </Grid>
           <Grid item>
