@@ -9,15 +9,16 @@ import moment from 'moment'
 import log from '@adapter/common/src/winston'
 import Q from 'q'
 
-const { utils } = require(__helpers)
+const { utils, axios } = require(__helpers)
 
 const logPath = path.join(__dirname, 'files', 'migration.log')
 
 let fileLog = ''
 
+// meta_id senza "_" davanti
 async function processArchive () {
   const prechecks = [], closings = [], keys = {}, paymentClosingDates = {}
-  const path_ = path.join(__dirname, 'files', 'archivio_short.json')
+  const path_ = path.join(__dirname, 'files', 'archivio.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
@@ -29,7 +30,7 @@ async function processArchive () {
         // eslint-disable-next-line no-unused-vars
         const { _id, meta_id, type, ...rest } = doc
         for (let payment of doc.payments) {
-          if(!paymentClosingDates[payment]){
+          if (!paymentClosingDates[payment]) {
             paymentClosingDates[payment] = doc.close_date
           }
         }
@@ -55,7 +56,7 @@ async function processArchive () {
 
 async function processMerged (closings, prechecks, closingKeys, paymentClosingDates, token) {
   const docs = [], keys = {}
-  const path_ = path.join(__dirname, 'files', 'astenpos_short.json')
+  const path_ = path.join(__dirname, 'files', 'astenpos.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
@@ -73,7 +74,22 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
         red: get(closings, closingKeys[meta_id]),
         type,
       })
-    } else if(doc.type === 'PAYMENT') {
+    } else if (doc.type === 'CATEGORY') {
+      // eslint-disable-next-line no-unused-vars
+      const { products, variants, ...rest } = doc
+      docs.push(rest)
+    } else if (doc.type === 'TABLE') {
+      // eslint-disable-next-line no-unused-vars
+      const { tables, ...rest } = doc
+      docs.push(rest)
+    } else if (doc.type === 'MACRO') {
+      // eslint-disable-next-line no-unused-vars
+      const { categories, ...rest } = doc
+      docs.push(rest)
+    } else if (doc.type === 'CRON_TASKS') {
+      doc.meta_id = doc.meta_id.toLowerCase()
+      docs.push(doc)
+    } else if (doc.type === 'PAYMENT') {
       const newOrderId = `${doc.order}_${token}`
       //todo da testare
       const newIncomeId = `PAYMENT_INCOME_${doc.income}_${token}`
@@ -81,8 +97,8 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
       doc.archived = true
       docs.push({ ...doc, order: newOrderId, order_id: newOrderId, income_id: newIncomeId })
     } else {
-      const isValid = doc.type && doc.type !== 'ARCHIVE'
-      isValid && docs.push(doc) //skip if type missing or is 'ARCHIVE'
+      const isValid = doc.type && doc.type !== 'ARCHIVE' && doc.type !== 'USER_ADMIN'
+      isValid && docs.push(doc)// skip if type missing or is 'ARCHIVE'
     }
     keys[doc.meta_id] = cont++
   }
@@ -131,6 +147,9 @@ function findVal (node, keys, token, keyLog, sp = '') {
           delete node[key]
           key = 'product_custom_id'
         }
+        if (key === '_rev') {
+          delete node[key]
+        }
         if (keys[val]) {
           const input = `${val}_${token}`
           fileLog += `\n${sp}+++ Changed key: ${node[key]} with ${input}`
@@ -139,7 +158,11 @@ function findVal (node, keys, token, keyLog, sp = '') {
       } else if (checkArray(node[key])) {
         findVal(node[key], keys, token, `ARRAY: ${key}`, sp + '  ')
       } else if (checkObject(node[key])) {
-        findVal(node[key], keys, token, `OBJECT: ${key}`, sp + '  ')
+        if (key === '_revisions') {
+          delete node[key]
+        } else {
+          findVal(node[key], keys, token, `OBJECT: ${key}`, sp + '  ')
+        }
       }
     })
   }
@@ -147,7 +170,7 @@ function findVal (node, keys, token, keyLog, sp = '') {
 
 function addRouters (router) {
   router.get('/routines/migration', async function (req, res) {
-    log.verbose('Start script')
+    log.verbose('Start script merge')
     const { query } = req
     utils.controlParameters(query, ['token'])
     const token = query.token
@@ -178,9 +201,38 @@ function addRouters (router) {
     await Q.ninvoke(fs, 'writeFile', outputPath, lines)
     await Q.ninvoke(fs, 'writeFile', logPath, fileLog)
     //endregion
-    log.verbose('End script')
-    log.hint('End script')
+    log.verbose('End script merge')
+    log.hint('End script merge')
     res.send({ ok: true })
+  })
+  router.get('/routines/update', async function (req, res) {
+    log.verbose('Start script upload')
+    const { connClass } = req
+    const path_ = path.join(__dirname, 'files', 'import.json')
+    if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
+    const fileStream = fs.createReadStream(path_)
+    const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
+    const { astenposBucketName, sgPublic, sgPublicToken } = connClass
+    let docs = [], results = [], cont = 0
+    for await (const line of rl) {
+      const doc = JSON.parse(line)
+      const { meta_id: docId, ...rest } = doc
+      docs.push({ ...rest, _id: docId })
+      cont++
+      if (cont === 400) {
+        const { data } = await axios.restApiInstance(sgPublic, sgPublicToken).post(`/${astenposBucketName}/_bulk_docs`, { docs })
+        docs = []
+        cont = 0
+        results.push(data)
+      }
+    }
+    if (docs.length) {
+      const { data } = await axios.restApiInstance(sgPublic, sgPublicToken).post(`/${astenposBucketName}/_bulk_docs`, { docs })
+      results.push(data)
+    }
+    log.verbose('End script upload')
+    log.hint('End script upload')
+    res.send({ ok: true, results })
   })
 }
 

@@ -149,5 +149,6 @@
   "dropzone.select_file": "Scegli il file",
   "dropzone.file_invalid_type2": "{name} ({size}) di tipo {type} non accettato!",
   "dropzone.file_invalid_type": "File \"{name}\" di tipo {type} non accettato!",
-  "dropzone.file_too_large": "File \"{name}\" di {size} è troppo grande!"
+  "dropzone.file_too_large": "File \"{name}\" di {size} è troppo grande!",
+  "common.download": "Scarica"
 }

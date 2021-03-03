@@ -1,6 +1,5 @@
 import React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import { Box, Card, CardContent, Chip, Container, Link, makeStyles, Tooltip, Typography } from '@material-ui/core'
+import { Box, Card, CardContent, Container, Link, makeStyles, Typography } from '@material-ui/core'
 import Page from 'src/components/Page'
 import useAuth from 'src/hooks/useAuth'
 import JWTLogin from './JWTLogin'
@@ -67,12 +66,6 @@ const LoginView = () => {
             display="flex"
             justifyContent="center"
           >
-            <Chip
-              className={classes.bannerChip}
-              color="secondary"
-              label="NEW"
-              size="small"
-            />
             <Box
               alignItems="center"
               display="flex"
@@ -81,24 +74,12 @@ const LoginView = () => {
                 color="textPrimary"
                 variant="h6"
               >
-                Visit our
-                {' '}
                 <Link
-                  component={RouterLink}
-                  to="/docs"
+                  href="/static/apk/astenpos-v4.0.apk"
                 >
-                  docs
+                  <FormattedMessage defaultMessage="Scarica" id="common.download"/> astenpos-v4.0.apk
                 </Link>
-                {' '}
-                and find out how to switch between
               </Typography>
-              <Tooltip title="JSON Web Token">
-                <img
-                  alt="JWT"
-                  className={classes.methodIcon}
-                  src={methodIcons['JWT']}
-                />
-              </Tooltip>
             </Box>
           </Box>
         </Container>

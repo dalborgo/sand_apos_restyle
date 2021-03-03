@@ -71,7 +71,7 @@ const EntriesTableDialog = ({ docId, urlKey, width }) => {
   }, [history])
   const { isLoading, data } = useQuery([`${urlKey}/${docId}`, { owner }], {
     notifyOnChangeProps: ['data', 'error'],
-    staleTime: 5000, //non chiama due volte il server per richieste ravvicinate
+    staleTime: 5000,// non chiama due volte il server per richieste ravvicinate
     onSettled: () => {
       isLoading && setLoading(false)
     },

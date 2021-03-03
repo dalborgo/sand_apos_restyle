@@ -104,6 +104,10 @@
     "defaultMessage": "Separato"
   },
   {
+    "id": "common.download",
+    "defaultMessage": "Scarica"
+  },
+  {
     "id": "common.error",
     "defaultMessage": "Errore"
   },

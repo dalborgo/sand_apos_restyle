@@ -150,5 +150,6 @@
   "dropzone.select_file": "",
   "dropzone.file_invalid_type": "",
   "dropzone.file_invalid_type2": "",
-  "dropzone.file_too_large": ""
+  "dropzone.file_too_large": "",
+  "common.download": ""
 }

@@ -117,7 +117,6 @@ function ClosingTable ({ data }) {
   const elab = calculateClosingTable(closing?.[side])
   const moneyFormatter = useMoneyFormatter()
   const intlTotal = intl.formatMessage(messages['common_total'])
-  console.log('incomes:', incomes)
   return (
     <>
       <Table aria-label="closing-table" className={classes.table} size="small">
@@ -125,7 +124,6 @@ function ClosingTable ({ data }) {
           {
             operators.map(({ user }) => {
               const total = {num: elab[user].num || 0, val: elab[user].val || 0}
-              console.log('total:', total)
               if (total.num) {
                 return (
                   <React.Fragment key={user}>

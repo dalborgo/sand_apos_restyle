@@ -1,8 +1,6 @@
 import React, { Fragment, lazy, Suspense } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import DashboardLayout from 'src/layouts/DashboardLayout'
-import MainLayout from 'src/layouts/MainLayout'
-import HomeView from 'src/views/home/HomeView'
 import AuthGuard from 'src/components/AuthGuard'
 import GuestGuard from 'src/components/GuestGuard'
 import { isMenuLinkToShow } from './utils/logics'
@@ -155,12 +153,13 @@ const routes = [
   },
   {
     path: '*',
-    layout: MainLayout,
+    //layout: MainLayout,
     routes: [
       {
         exact: true,
+        guard: GuestGuard,
         path: '/',
-        component: HomeView,
+        component: lazy(() => import('src/views/auth/LoginView')),
       },
       {
         component: () => <Redirect to="/404"/>,

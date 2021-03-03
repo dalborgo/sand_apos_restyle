@@ -2,10 +2,16 @@ export const getControlRecord = columns => {
   const [firstColumn] = columns
   switch (firstColumn) {
     case 'category_id':
-      return [checkRecordCategories, ['category_id', 'display'], [{
-        type: 'MACRO',
-        params: { includeId: false },
-      }], { type: 'CATEGORY' }]
+      return [
+        checkRecordCategories, ['category_id', 'display'],
+        [
+          {
+            type: 'MACRO',
+            params: { includeId: false },
+          },
+          { type: 'CATEGORY' },
+        ],
+      ]
     default:
       return checkRecordCategories
   }
@@ -19,16 +25,16 @@ function checkDuplicate (column, value, prev, errors, line) {
   })
 }
 
-function checkMissing (column, subObj, value, presence, errors, line) {
-  !presence[subObj][value] && errors.push({
+function checkMissing (column, index, value, presence, errors, line) {
+  !presence[index][value] && errors.push({
     reason: { code: 'MISSING_VALUE', value },
     line,
     column,
   })
 }
 
-function checkPresence (column, subObj, value, id, presence, errors, line) {
-  (presence[subObj][value] && presence[subObj][value]['_id'] !== id) && errors.push({
+function checkPresence (column, index, value, id, presence, errors, line) {
+  (presence[index][value] && presence[index][value]['_id'] !== id) && errors.push({
     reason: { code: 'PRESENT_VALUE', value },
     line,
     column,
@@ -51,8 +57,8 @@ const checkRecordCategories = (record, line, previous, presence) => {
   const { display, category_id: categoryId, macro, r, g, b } = record
   checkDuplicate('display', display, previous, errors, line)
   checkDuplicate('categoryId', categoryId, previous, errors, line)
-  checkMissing('macro', 'MACRO', macro, presence, errors, line)
-  checkPresence('display', 'CATEGORY', display, categoryId, presence, errors, line)
+  checkMissing('macro', 0, macro, presence, errors, line)
+  checkPresence('display', 1, display, categoryId, presence, errors, line)
   const checkedRecord = {
     ...standardChanging(record),
     rgb: [r ? parseInt(r, 10) : 214, g ? parseInt(g, 10) : 215, b ? parseInt(b, 10) : 215],

@@ -3,6 +3,10 @@ import config from 'config'
 
 const { PORT, NAMESPACE } = config.get('express')
 const { baseURL: DEFAULT_BASE_URL } = config.get('e_invoice')
+const { connections } = config.get('couchbase')
+const { server: HOST_DEFAULT } = connections['astenposServer']
+
+const DEFAULT_REST_BASE_URL = `http://${HOST_DEFAULT}:4985`
 
 const localInstance = axios.create({
   baseURL: `http://127.0.0.1:${PORT}/${NAMESPACE}`,
@@ -54,7 +58,7 @@ const eInvoiceInstance = (baseURL = DEFAULT_BASE_URL, token, headers_ = {}) => {
     },
   })
 }
-const restApiInstance = (baseURL, token) => {
+const restApiInstance = (baseURL = DEFAULT_REST_BASE_URL, token) => {
   const headers = { 'Content-Type': 'application/json' }
   if (token) {headers.Authorization = `Basic ${token}`}
   return axios.create({

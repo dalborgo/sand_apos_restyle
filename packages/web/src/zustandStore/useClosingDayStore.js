@@ -1,10 +1,10 @@
 import create from 'zustand'
 import immerMiddleware from './immerMiddleware'
-
+import moment from 'moment'
 const initialState = {
-  startDate: null,
-  endDate: null,
   closingRows: [],
+  endDate: moment().format('YYYY-MM-DD'),
+  startDate: moment().format('YYYY-MM-01'),
 }
 
 const useClosingDayStore = create(immerMiddleware(set => ({

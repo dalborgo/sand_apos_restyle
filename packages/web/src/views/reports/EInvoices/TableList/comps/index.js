@@ -9,14 +9,14 @@ import useAuth from 'src/hooks/useAuth'
 import { useGeneralStore } from 'src/zustandStore'
 import { axiosLocalInstance, buttonQuery } from 'src/utils/reactQueryFunctions'
 import {
+  AlertTriangle as AlertTriangleIcon,
+  Check as CheckIcon,
   Download as DownloadIcon,
   Frown as FrownIcon,
   HelpCircle as HelpCircleIcon,
   Mail as MailIcon,
   Send as SendIcon,
   UploadCloud as UploadCloudIcon,
-  Check as CheckIcon,
-  AlertTriangle as AlertTriangleIcon,
 } from 'react-feather'
 import shallow from 'zustand/shallow'
 import parse from 'html-react-parser'
@@ -25,6 +25,7 @@ import { useIntl } from 'react-intl'
 import clsx from 'clsx'
 import { saveAs } from 'file-saver'
 import { useSnackbar } from 'notistack'
+import truncate from 'lodash/truncate'
 import useEInvoiceStore from 'src/zustandStore/useEInvoiceStore'
 import { sendXml } from '../../helpers'
 
@@ -40,6 +41,7 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'left',
   },
   buttonGreen: {
+    width: '100%',
     color: 'rgba(0, 0, 0, 0.87)',
     backgroundColor: colors.green[100],
     '&:hover': {
@@ -54,6 +56,10 @@ const useStyles = makeStyles(theme => ({
   },
   buttonGreenColor: {
     color: colors.green[500],
+  },
+  divButtonLabel: {
+    width: '100%',
+    textAlign: 'left',
   },
 }))
 
@@ -84,7 +90,7 @@ const CellBase = props => {
   const history = useHistory()
   const queryClient = useQueryClient()
   const docId = row._id
-  const cellStyle = { paddingLeft: theme.spacing(2) }
+  const cellStyle = { paddingLeft: theme.spacing(2), whiteSpace: 'normal' }
   const state = {
     company: row.company,
     number: row.number,
@@ -300,7 +306,7 @@ const CellBase = props => {
       </VirtualTable.Cell>
     )
   }
-  if (column.name === 'type') {
+  if (column.name === 'customer') {
     const company = row.company || ''
     const number = intl.formatMessage(messages['mode_INVOICE']) + (row.number ? ` ${row.number}` : '')
     return (
@@ -326,9 +332,11 @@ const CellBase = props => {
           size="small"
           variant="contained"
         >
-          {
-            parse(company + '<br/>' + number)
-          }
+          <div className={classes.divButtonLabel}>
+            {
+              parse(truncate(company, { length: 50, omission: '' }) + '<br/>' + number)
+            }
+          </div>
         </Button>
       </VirtualTable.Cell>
     )

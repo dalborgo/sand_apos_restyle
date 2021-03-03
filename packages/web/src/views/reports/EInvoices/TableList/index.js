@@ -35,7 +35,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle, exportZip
       { name: 'owner', title: intl.formatMessage(messages['common_building']), getCellValue: companySelect_ },
       { name: 'date', title: intl.formatMessage(messages['common_date']) },
       { name: 'table_display', title: intl.formatMessage(messages['common_table']) },
-      { name: 'type', title: intl.formatMessage(messages['common_customer']) },
+      { name: 'customer', title: intl.formatMessage(messages['common_customer']) },
       { name: 'final_price', title: intl.formatMessage(messages['common_cashed']) },
       { name: 'action' },
     ]

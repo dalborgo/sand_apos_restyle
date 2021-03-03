@@ -1,15 +1,16 @@
 import create from 'zustand'
 import immerMiddleware from './immerMiddleware'
-
+import moment from 'moment'
+// usa il format che non mette le cifre meno significative e permette di usare la cache
 const initialState = {
   closedRows: [],
-  endDate: null,
+  endDate: moment().format('YYYY-MM-DD'),
   filter: {
     table: '',
     room: '',
   },
   openFilter: false,
-  startDate: null,
+  startDate: moment().format('YYYY-MM-DD'),
 }
 
 const useClosedTablesStore = create(immerMiddleware(set => ({

@@ -8,16 +8,17 @@ import keyBy from 'lodash/keyBy'
 
 function addRouters (router) {
   router.post('/management/import', fileUpload(), async function (req, res) {
-    const { files = {} } = req, errors = [], idFieldsMap = {}, presenceFields = {}
+    const { files = {} } = req, errors = [], idFieldsMap = {}, presenceFields = [], promises = []
     const file = files.file
     if (!file) {return res.send({ ok: false, message: 'no file uploaded!' })}
     const [firstLine] = await Q.nfcall(parse, file.data, { delimiter: ';', to_line: 1 })
     const [firstColumns] = firstLine
-    const [controlRecordFunction, uniqueFields, presentFields, notPresentField] = getControlRecord(firstColumns)
-    const types = [...presentFields, notPresentField]
-    for (let { type, params } of types) {
-      const { results } = await execTypesQuery(req, type, params)
-      presenceFields[type] = keyBy(results, 'display')
+    const [controlRecordFunction, uniqueFields, toSearchFields = []] = getControlRecord(firstColumns)
+    for (let { type, params } of toSearchFields) {promises.push(execTypesQuery(req, type, params))}
+    const responses = await Promise.all(promises)
+    for (let i = 0; i < responses.length; i++) {
+      const { results } = responses[i]
+      presenceFields.push(keyBy(results, 'display'))
     }
     console.log('presenceFields:', presenceFields)
     const onRecord = (record, { lines: line }) => {
