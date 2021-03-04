@@ -40,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }), { name: 'MuiBrowserElem' })
 
+const baseUrl = '/app/reports/browser'
 const ListElem = withWidth()(({ text, value, remove, noChannel, locked, isSingleRow, width }) => {
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const history = useHistory()
-  const baseUrl = '/app/reports/browser'
   const handleSelect = useCallback(event => {
     const docId = event.currentTarget.id
     const params = testParams(`${baseUrl}/:docId`)

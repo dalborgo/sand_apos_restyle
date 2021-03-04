@@ -42,3 +42,6 @@
 - https://ws.fatturazioneelettronica.aruba.it/services/invoice/out/findByUsername?username=Asten2018&startDate=2000-01-01&endDate=2022-01-01&countrySender=IT&vatcodeSender=02829270236&size=100
   - una richiesta da 100 fatture costa una ricerca (max 12 al minuto)
   - si cerca per partita iva del cliente  
+    
+### da fare
+  - import solo se c'è un unico code selezionato

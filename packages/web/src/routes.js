@@ -74,7 +74,10 @@ const routes = [
       },
       {
         exact: true,
-        path: '/app/management/import',
+        path: [
+          '/app/management/import',
+          '/app/management/import/:statusId',
+        ],
         component: lazy(() => import('src/views/management/Import')),
       },
       {

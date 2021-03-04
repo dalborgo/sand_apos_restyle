@@ -75,9 +75,9 @@ export function useDateTimeFormatter () {
 
 export function ctol (columns) {
   const output = {}
-  let cont = 0
+  let count = 0
   for (let column of columns) {
-    const idCol = cont++
+    const idCol = count++
     output[column.key] = numberToLetter(idCol)
   }
   return output

@@ -22,6 +22,7 @@ import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import CodeAutocomplete from './CodeAutocomplete'
 import { useQueryClient } from 'react-query'
 import { Visibility, VisibilityOff } from '@material-ui/icons'
+import { isCodeSelection, isAsten } from 'src/utils/logics'
 
 const useStyles = makeStyles(theme => ({
   helperText: {
@@ -34,8 +35,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const focus = event => event.target.select()
-const isAsten = username => username?.toLowerCase() === 'asten'
-const isCodeSelection = (user, pass) => pass === '90210' && isAsten(user)
+
 const JWTLogin = memo(({ className, ...rest }) => {
   const classes = useStyles()
   const { login } = useAuth()
@@ -47,7 +47,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
     async function fetchData () {
       await queryClient.prefetchQuery('jwt/codes', { throwOnError: true })
     }
-    fetchData().then().catch(error => {setState(() => {throw error})}) //trick to send error to boundaries
+    fetchData().then().catch(error => {setState(() => {throw error})})// trick to send error to boundaries
   }, [queryClient])
   const handleClickShowPassword = useCallback(() => {setVisibility(!visibility)},[visibility])
   const isMountedRef = useIsMountedRef()

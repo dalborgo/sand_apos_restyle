@@ -52,12 +52,12 @@ async function executeMultiPart (operationId, parameters, arrayFirstIfError = []
     const parsedMessage = httpMessageParser(data)
     let { multipart } = parsedMessage
     multipart = multipart.length > 1 ? multipart : [parsedMessage]
-    let results = objectGroup ? {} : [], cont = 0
+    let results = objectGroup ? {} : [], count = 0
     for (let { headers, body } of multipart) {
       const ct = headers['Content-Type']
       if (ct.startsWith('application/json')) {
         let json = JSON.parse(body.toString())
-        const id = json[objectGroup] || cont++
+        const id = json[objectGroup] || count++
         if (arrayFirstIfError.length && json.error && json.reason && json.status) {
           json = arrayFirstIfError[0]
         }
@@ -67,7 +67,7 @@ async function executeMultiPart (operationId, parameters, arrayFirstIfError = []
           results.push(json)
         }
       } else {
-        const id = cont++
+        const id = count++
         if (objectGroup) {
           results[id] = body
         } else {

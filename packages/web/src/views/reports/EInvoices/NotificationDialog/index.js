@@ -12,7 +12,7 @@ import { getStatusLabel } from '../helpers'
 
 const useStyles = makeStyles(theme => ({
   typoError: {
-    color: theme.palette.error.main,
+    color: theme.palette.error.dark,
   },
   typoCyan: {
     color: colors.cyan[400],

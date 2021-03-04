@@ -9,104 +9,112 @@ export const messages = defineMessages({
     id: 'dropzone.file_too_large',
     defaultMessage: 'File "{name}" di {size} è troppo grande!',
   },
+  management_import_error_EMPTY_FILE: {
+    id: 'management.import.error_EMPTY_FILE',
+    defaultMessage: 'File "{name}" vuoto!',
+  },
+  management_import_error_PRESENT_VALUE: {
+    id: 'management.import.error_PRESENT_VALUE',
+    defaultMessage: 'Valore "{value}" già presente in astenpos!',
+  },
   reports_e_invoices_accepted: {
-    id: 'reports.e_invoices_accepted',
+    id: 'reports.e_invoices.accepted',
     defaultMessage: 'In carico',
   },
   reports_e_invoices_customer_vat: {
-    id: 'reports.e_invoices_customer_vat',
+    id: 'reports.e_invoices.customer_vat',
     defaultMessage: 'Partita iva',
   },
   reports_e_invoices_fiscal_code: {
-    id: 'reports.e_invoices_fiscal_code',
+    id: 'reports.e_invoices.fiscal_code',
     defaultMessage: 'Codice fiscale',
   },
   reports_e_invoices_company: {
-    id: 'reports.e_invoices_company',
+    id: 'reports.e_invoices.company',
     defaultMessage: 'Azienda',
   },
   reports_e_invoices_address: {
-    id: 'reports.e_invoices_address',
+    id: 'reports.e_invoices.address',
     defaultMessage: 'Indirizzo',
   },
   reports_e_invoices_zip: {
-    id: 'reports.e_invoices_zip',
+    id: 'reports.e_invoices.zip',
     defaultMessage: 'Cap',
   },
   reports_e_invoices_city: {
-    id: 'reports.e_invoices_city',
+    id: 'reports.e_invoices.city',
     defaultMessage: 'Città',
   },
   reports_e_invoices_district: {
-    id: 'reports.e_invoices_district',
+    id: 'reports.e_invoices.district',
     defaultMessage: 'Provincia',
   },
   reports_e_invoices_state: {
-    id: 'reports.e_invoices_state',
+    id: 'reports.e_invoices.state',
     defaultMessage: 'Stato',
   },
   reports_e_invoices_sdi: {
-    id: 'reports.e_invoices_sdi',
+    id: 'reports.e_invoices.sdi',
     defaultMessage: 'Sdi',
   },
   reports_e_invoices_split_payment: {
-    id: 'reports.e_invoices_split_payment',
+    id: 'reports.e_invoices.split_payment',
     defaultMessage: 'Scissione pagamenti',
   },
   reports_e_invoices_pec: {
-    id: 'reports.e_invoices_pec',
+    id: 'reports.e_invoices.pec',
     defaultMessage: 'Pec',
   },
   reports_e_invoices_contact: {
-    id: 'reports.e_invoices_contact',
+    id: 'reports.e_invoices.contact',
     defaultMessage: 'Contatto',
   },
   reports_e_invoices_download_xml: {
-    id: 'reports.e_invoices_download_xml',
+    id: 'reports.e_invoices.download_xml',
     defaultMessage: 'Scarica xml',
   },
   reports_e_invoices_send: {
-    id: 'reports.e_invoices_send',
+    id: 'reports.e_invoices.send',
     defaultMessage: 'Invia',
   },
   reports_e_invoices_not_delivered: {
-    id: 'reports.e_invoices_not_delivered',
+    id: 'reports.e_invoices.not_delivered',
     defaultMessage: 'Nel cassetto',
   },
   reports_e_invoices_not_delivered_long: {
-    id: 'reports.e_invoices_not_delivered_long',
+    id: 'reports.e_invoices.not_delivered_long',
     defaultMessage: 'Nel cassetto fiscale del cliente',
   },
   reports_e_invoices_delivered: {
-    id: 'reports.e_invoices_delivered',
+    id: 'reports.e_invoices.delivered',
     defaultMessage: 'Consegnata',
   },
   reports_e_invoices_refused: {
-    id: 'reports.e_invoices_refused',
+    id: 'reports.e_invoices.refused',
     defaultMessage: 'Scartata',
   },
   reports_e_invoices_new_state: {
-    id: 'reports.e_invoices_new_state',
+    id: 'reports.e_invoices.new_state',
     defaultMessage: 'Aggiornato nuovo stato!',
   },
   reports_e_invoices_same_state: {
-    id: 'reports.e_invoices_same_state',
+    id: 'reports.e_invoices.same_state',
     defaultMessage: 'Nessun aggiornamento',
   },
   reports_e_invoices_sent: {
-    id: 'reports.e_invoices_sent',
+    id: 'reports.e_invoices.sent',
     defaultMessage: 'Inviata',
   },
   reports_e_invoices_send_error: {
-    id: 'reports.e_invoices_send_error',
+    id: 'reports.e_invoices.send_error',
     defaultMessage: 'Errore di invio',
   },
   reports_e_invoices_not_found: {
-    id: 'reports.e_invoices_not_found',
+    id: 'reports.e_invoices.not_found',
     defaultMessage: 'File non trovato!',
   },
   reports_e_invoices_download_xml_zip: {
-    id: 'reports.e_invoices_download_xml_zip',
+    id: 'reports.e_invoices.download_xml_zip',
     defaultMessage: 'Scarica zip',
   },
   cause_TokenExpiredError: {

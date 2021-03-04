@@ -72,11 +72,12 @@ async function openDialog (docId, queryClient, setLoading, setIntLoading, histor
   const queryKey = ['queries/query_by_id', { id: docId, columns: ['fatt_elett'] }]
   await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
   history.push({
-    pathname: `${window.location.pathname}/notification/${docId}`,
+    pathname: `${baseUrl}/notification/${docId}`,
     state,
   })
 }
 
+const baseUrl = '/app/reports/e-invoices'
 const CellBase = props => {
   const { column, row, theme } = props
   const { startDateInMillis, endDateInMillis } = useEInvoiceStore(eInvoiceSelector, shallow)
@@ -278,7 +279,7 @@ const CellBase = props => {
             async () => {
               const queryKey = [`reports/e_invoice/${docId}`, { owner }]
               await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
-              history.push(`${window.location.pathname}/${docId}`)
+              history.push(`${baseUrl}/${docId}`)
             }
           }
           size="small"
@@ -324,7 +325,7 @@ const CellBase = props => {
               const queryKey = ['queries/query_by_id', { id: docId, columns: ['customer'] }]
               await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
               history.push({
-                pathname: `${window.location.pathname}/change-customer-data/${docId}`,
+                pathname: `${baseUrl}/change-customer-data/${docId}`,
                 state,
               })
             }

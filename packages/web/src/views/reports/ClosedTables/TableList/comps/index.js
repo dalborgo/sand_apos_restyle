@@ -91,6 +91,7 @@ export const SummaryCellBase = props => {
   }
 }
 
+const baseUrl = '/app/reports/closed-tables'
 const TypeButtonGroup = ({ payments, setIntLoading, base }) => {
   const classes = useStyles()
   const history = useHistory()
@@ -106,7 +107,7 @@ const TypeButtonGroup = ({ payments, setIntLoading, base }) => {
             const queryKey = ['types/incomes', { owner }]
             await buttonQuery(queryClient, queryKey, setLoading, setIntLoading)
             history.push({
-              pathname: `${window.location.pathname}/change-payment-method/${payments._id}`,
+              pathname: `${baseUrl}/change-payment-method/${payments._id}`,
               state: {
                 income: payments.income,
                 table: base.table_display,

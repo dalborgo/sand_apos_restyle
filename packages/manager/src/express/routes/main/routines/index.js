@@ -22,7 +22,7 @@ async function processArchive () {
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
-  let cont = 0
+  let count = 0
   for await (const line of rl) {
     const doc = JSON.parse(line)
     switch (doc.type) {
@@ -36,7 +36,7 @@ async function processArchive () {
         }
         
         closings.push(rest)
-        keys[doc.meta_id] = cont++
+        keys[doc.meta_id] = count++
         break
       }
       case 'ARCHIVE': {
@@ -60,7 +60,7 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
-  let cont = 0
+  let count = 0
   for await (const line of rl) {
     const doc = JSON.parse(line)
     if (doc.meta_id.startsWith('_sync:')) {continue}
@@ -100,7 +100,7 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
       const isValid = doc.type && doc.type !== 'ARCHIVE' && doc.type !== 'USER_ADMIN'
       isValid && docs.push(doc)// skip if type missing or is 'ARCHIVE'
     }
-    keys[doc.meta_id] = cont++
+    keys[doc.meta_id] = count++
   }
   for (let precheck of prechecks) {
     const { _id, order, ...rest } = precheck
@@ -108,7 +108,7 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
     rest.date_closing = rest.date_closing || paymentClosingDates[_id]
     rest.archived = true
     docs.push({ meta_id: _id, ...rest, order: newOrderId, order_id: newOrderId })
-    keys[_id] = cont++
+    keys[_id] = count++
   }
   return { docs, keys }
 }
@@ -123,17 +123,17 @@ function findVal (node, keys, token, keyLog, sp = '') {
   }
   if (keyLog) {fileLog += `\n${sp.replace('  ', '')}${keyLog}`}
   if (checkArray(node)) {
-    let cont = 0
+    let count = 0
     for (let arrVal of node) {
       if (checkArray(arrVal)) {
-        findVal(arrVal, keys, token, `${keyLog}[${cont++}]`, sp + '  ')
+        findVal(arrVal, keys, token, `${keyLog}[${count++}]`, sp + '  ')
       } else if (checkObject(arrVal)) {
-        findVal(arrVal, keys, token, `${keyLog}[${cont++}]`, sp + '  ')
+        findVal(arrVal, keys, token, `${keyLog}[${count++}]`, sp + '  ')
       } else if (checkString(arrVal)) {
         if (keys[arrVal]) {
           const input = `${arrVal}_${token}`
-          fileLog += `\n${sp}+++ Changed key in ${keyLog}[${cont}]: ${node[cont]} with ${input}`
-          node[cont++] = `${arrVal}_${token}`
+          fileLog += `\n${sp}+++ Changed key in ${keyLog}[${count}]: ${node[count]} with ${input}`
+          node[count++] = `${arrVal}_${token}`
         }
       }
     }
@@ -189,13 +189,13 @@ function addRouters (router) {
     //endregion
     //region modifica `meta_id` e aggiunge `token`: scrive file `merged.json`
     //const file = fs.createWriteStream(outputPath, { flags: 'a' })
-    let cont = 0, lines = ''
+    let count = 0, lines = ''
     for (let doc of docs) {
       doc['meta_id'] = `${doc['meta_id']}_${token}`
       doc.owner = token
       delete doc['_id']
-      //file.write(JSON.stringify(doc) + (++cont < docs.length ? '\n' : ''))
-      lines += JSON.stringify(doc) + (++cont < docs.length ? '\n' : '')
+      //file.write(JSON.stringify(doc) + (++count < docs.length ? '\n' : ''))
+      lines += JSON.stringify(doc) + (++count < docs.length ? '\n' : '')
     }
     //file.end()
     await Q.ninvoke(fs, 'writeFile', outputPath, lines)
@@ -213,16 +213,16 @@ function addRouters (router) {
     const fileStream = fs.createReadStream(path_)
     const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
     const { astenposBucketName, sgPublic, sgPublicToken } = connClass
-    let docs = [], results = [], cont = 0
+    let docs = [], results = [], count = 0
     for await (const line of rl) {
       const doc = JSON.parse(line)
       const { meta_id: docId, ...rest } = doc
       docs.push({ ...rest, _id: docId })
-      cont++
-      if (cont === 400) {
+      count++
+      if (count === 400) {
         const { data } = await axios.restApiInstance(sgPublic, sgPublicToken).post(`/${astenposBucketName}/_bulk_docs`, { docs })
         docs = []
-        cont = 0
+        count = 0
         results.push(data)
       }
     }

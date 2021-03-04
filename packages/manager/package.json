@@ -27,7 +27,7 @@
     "http-errors": "1.7.3",
     "jsonwebtoken": "^8.5.1",
     "jsonwebtoken-refresh": "^5.7.0",
-    "knex": "^0.21.18",
+    "knex": "0.21.19",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "node-schedule": "^2.0.0",
@@ -38,6 +38,7 @@
     "xmlbuilder": "^15.1.1"
   },
   "devDependencies": {
+    "chai": "^4.3.3",
     "nodemon": "^2.0.7"
   }
 }

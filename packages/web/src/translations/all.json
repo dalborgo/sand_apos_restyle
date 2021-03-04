@@ -328,7 +328,31 @@
     "defaultMessage": "Italiano"
   },
   {
+    "id": "management.import.error_EMPTY_FILE",
+    "defaultMessage": "File \"{name}\" vuoto!"
+  },
+  {
+    "id": "management.import.error_PRESENT_VALUE",
+    "defaultMessage": "Valore \"{value}\" già presente in astenpos!"
+  },
+  {
     "id": "management.import.header_title",
+    "defaultMessage": "Import"
+  },
+  {
+    "id": "management.import.status_header",
+    "defaultMessage": "Risultato importazione:"
+  },
+  {
+    "id": "management.import.status_ko",
+    "defaultMessage": "Errore nel file d'importazione"
+  },
+  {
+    "id": "management.import.status_ok",
+    "defaultMessage": "Risultato importazione"
+  },
+  {
+    "id": "management_import.header_title",
     "defaultMessage": "Import"
   },
   {
@@ -421,8 +445,28 @@
     "defaultMessage": "Miglior Guadagno"
   },
   {
+    "id": "reports.e_invoices.accepted",
+    "defaultMessage": "In carico"
+  },
+  {
+    "id": "reports.e_invoices.address",
+    "defaultMessage": "Indirizzo"
+  },
+  {
     "id": "reports.e_invoices.change_customer_data",
     "defaultMessage": "Modifica anagrafica cliente"
+  },
+  {
+    "id": "reports.e_invoices.city",
+    "defaultMessage": "Città"
+  },
+  {
+    "id": "reports.e_invoices.company",
+    "defaultMessage": "Azienda"
+  },
+  {
+    "id": "reports.e_invoices.contact",
+    "defaultMessage": "Contatto"
   },
   {
     "id": "reports.e_invoices.customer_data",
@@ -433,136 +477,108 @@
     "defaultMessage": "Anagrafica cliente in fattura"
   },
   {
+    "id": "reports.e_invoices.customer_vat",
+    "defaultMessage": "Partita iva"
+  },
+  {
+    "id": "reports.e_invoices.delivered",
+    "defaultMessage": "Consegnata"
+  },
+  {
+    "id": "reports.e_invoices.district",
+    "defaultMessage": "Provincia"
+  },
+  {
+    "id": "reports.e_invoices.download_xml",
+    "defaultMessage": "Scarica xml"
+  },
+  {
+    "id": "reports.e_invoices.download_xml_zip",
+    "defaultMessage": "Scarica zip"
+  },
+  {
+    "id": "reports.e_invoices.fiscal_code",
+    "defaultMessage": "Codice fiscale"
+  },
+  {
     "id": "reports.e_invoices.header_title",
     "defaultMessage": "Fatture elettroniche"
+  },
+  {
+    "id": "reports.e_invoices.new_state",
+    "defaultMessage": "Aggiornato nuovo stato!"
+  },
+  {
+    "id": "reports.e_invoices.not_delivered",
+    "defaultMessage": "Nel cassetto"
+  },
+  {
+    "id": "reports.e_invoices.not_delivered_long",
+    "defaultMessage": "Nel cassetto fiscale del cliente"
+  },
+  {
+    "id": "reports.e_invoices.not_found",
+    "defaultMessage": "File non trovato!"
   },
   {
     "id": "reports.e_invoices.notification",
     "defaultMessage": "Info fattura:"
   },
   {
-    "id": "reports.e_invoices_accepted",
-    "defaultMessage": "In carico"
-  },
-  {
-    "id": "reports.e_invoices_address",
-    "defaultMessage": "Indirizzo"
-  },
-  {
-    "id": "reports.e_invoices_city",
-    "defaultMessage": "Città"
-  },
-  {
-    "id": "reports.e_invoices_company",
-    "defaultMessage": "Azienda"
-  },
-  {
-    "id": "reports.e_invoices_contact",
-    "defaultMessage": "Contatto"
-  },
-  {
-    "id": "reports.e_invoices_customer_vat",
-    "defaultMessage": "Partita iva"
-  },
-  {
-    "id": "reports.e_invoices_delivered",
-    "defaultMessage": "Consegnata"
-  },
-  {
-    "id": "reports.e_invoices_district",
-    "defaultMessage": "Provincia"
-  },
-  {
-    "id": "reports.e_invoices_download_xml",
-    "defaultMessage": "Scarica xml"
-  },
-  {
-    "id": "reports.e_invoices_download_xml_zip",
-    "defaultMessage": "Scarica zip"
-  },
-  {
-    "id": "reports.e_invoices_fiscal_code",
-    "defaultMessage": "Codice fiscale"
-  },
-  {
-    "id": "reports.e_invoices_new_state",
-    "defaultMessage": "Aggiornato nuovo stato!"
-  },
-  {
-    "id": "reports.e_invoices_not_delivered",
-    "defaultMessage": "Nel cassetto"
-  },
-  {
-    "id": "reports.e_invoices_not_delivered_long",
-    "defaultMessage": "Nel cassetto fiscale del cliente"
-  },
-  {
-    "id": "reports.e_invoices_not_found",
-    "defaultMessage": "File non trovato!"
-  },
-  {
-    "id": "reports.e_invoices_pdf_file",
+    "id": "reports.e_invoices.pdf_file",
     "defaultMessage": "File pdf"
   },
   {
-    "id": "reports.e_invoices_pec",
+    "id": "reports.e_invoices.pec",
     "defaultMessage": "Pec"
   },
   {
-    "id": "reports.e_invoices_refused",
+    "id": "reports.e_invoices.refused",
     "defaultMessage": "Scartata"
   },
   {
-    "id": "reports.e_invoices_resend",
+    "id": "reports.e_invoices.resend",
     "defaultMessage": "RE-INVIA"
   },
   {
-    "id": "reports.e_invoices_same_state",
+    "id": "reports.e_invoices.same_state",
     "defaultMessage": "Nessun aggiornamento"
   },
   {
-    "id": "reports.e_invoices_sdi",
+    "id": "reports.e_invoices.sdi",
     "defaultMessage": "Sdi"
   },
   {
-    "id": "reports.e_invoices_send",
+    "id": "reports.e_invoices.send",
     "defaultMessage": "Invia"
   },
   {
-    "id": "reports.e_invoices_send_error",
+    "id": "reports.e_invoices.send_error",
     "defaultMessage": "Errore di invio"
   },
   {
-    "id": "reports.e_invoices_sent",
+    "id": "reports.e_invoices.sent",
     "defaultMessage": "Inviata"
   },
   {
-    "id": "reports.e_invoices_split_payment",
+    "id": "reports.e_invoices.split_payment",
     "defaultMessage": "Scissione pagamenti"
   },
   {
-    "id": "reports.e_invoices_state",
+    "id": "reports.e_invoices.state",
     "defaultMessage": "Stato"
   },
   {
-    "id": "reports.e_invoices_update",
+    "id": "reports.e_invoices.update",
     "defaultMessage": "AGGIORNA"
   },
   {
-    "id": "reports.e_invoices_xml_notification",
+    "id": "reports.e_invoices.xml_notification",
     "defaultMessage": "Notifica Xml"
   },
   {
-    "id": "reports.e_invoices_zip",
+    "id": "reports.e_invoices.zip",
     "defaultMessage": "Cap"
-  },
-  {
-    "id": "reports.header.list_documents",
-    "defaultMessage": "Lista Documenti"
-  },
-  {
-    "id": "reports.running_tables.header_title",
-    "defaultMessage": "Tavoli in corso"
   },
   {
     "id": "reports.tot_discount",

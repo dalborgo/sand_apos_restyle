@@ -116,14 +116,14 @@ async function manageRequest (params, method = 'post') {
       break
   }
   const partial = {}
-  let cont = 0
+  let count = 0
   do {
-    if (cont) {await eInvoiceAuth.setAuth()}
+    if (count) {await eInvoiceAuth.setAuth()}
     const base = axios.eInvoiceInstance(baseUrl, eInvoiceAuth.accessToken)
     const { data, status } = await base[method](...params)
     partial.data = data
     partial.status = status
-    cont++
+    count++
   } while (partial.status === 401)
   return partial
 }

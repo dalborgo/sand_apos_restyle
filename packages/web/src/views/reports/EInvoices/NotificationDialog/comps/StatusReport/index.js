@@ -161,7 +161,7 @@ const StatusReport = ({ data, onClose, docId }) => {
             size="small"
             variant="contained"
           >
-            <FormattedMessage defaultMessage="File pdf" id="reports.e_invoices_pdf_file"/>&nbsp;&nbsp;
+            <FormattedMessage defaultMessage="File pdf" id="reports.e_invoices.pdf_file"/>&nbsp;&nbsp;
             <Icon path={mdiFilePdfBoxOutline} size="1.2rem"/>
           </Button>
         }
@@ -198,7 +198,7 @@ const StatusReport = ({ data, onClose, docId }) => {
                     size="small"
                     variant="contained"
                   >
-                    <FormattedMessage defaultMessage="RE-INVIA" id="reports.e_invoices_resend"/>&nbsp;&nbsp;
+                    <FormattedMessage defaultMessage="RE-INVIA" id="reports.e_invoices.resend"/>&nbsp;&nbsp;
                     <Icon path={mdiSendOutline} size="1.2rem"/>
                   </Button>
                 )
@@ -235,7 +235,7 @@ const StatusReport = ({ data, onClose, docId }) => {
                     size="small"
                     variant="contained"
                   >
-                    <FormattedMessage defaultMessage="AGGIORNA" id="reports.e_invoices_update"/>&nbsp;&nbsp;
+                    <FormattedMessage defaultMessage="AGGIORNA" id="reports.e_invoices.update"/>&nbsp;&nbsp;
                     <Icon path={mdiReload} size="1.2rem"/>
                   </Button>
                 )
@@ -281,7 +281,7 @@ const StatusReport = ({ data, onClose, docId }) => {
                   >
                     <FormattedMessage
                       defaultMessage="Notifica Xml"
-                      id="reports.e_invoices_xml_notification"
+                      id="reports.e_invoices.xml_notification"
                     />&nbsp;&nbsp;
                     <Icon path={mdiXml} size="1.2rem"/>
                   </Button>
