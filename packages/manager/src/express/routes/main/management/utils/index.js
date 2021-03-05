@@ -25,6 +25,7 @@ function checkDuplicate (column, value, prev, errors, line) {
     reason: { code: 'DUPLICATE_VALUE', value },
     line,
     column,
+    extra: prev[value],
   })
 }
 
@@ -68,14 +69,16 @@ const checkRecordCategories = (record, line, previous, presence) => {
   const { display, category_id: categoryId, macro, owner } = record
   checkDuplicate('display', display, previous, errors, line)
   checkDuplicate('categoryId', categoryId, previous, errors, line)
-  checkMissing('macro', 0, macro, presence, errors, line)
+  checkIsEmpty('macro', macro, errors, line)
+  if (macro) {checkMissing('macro', 0, macro, presence, errors, line)}
   checkAlreadyInDatabase('display', 1, display, categoryId, presence, errors, line)
   checkIsEmpty('display', display, errors, line)
   // eslint-disable-next-line no-unused-vars
   const { category_id, r, g, b, ...rest } = record
   const checkedRecord = {
     ...standardChanging(rest),
-    candidateKey: categoryId || `CATEGORY_${normalizeKey(display)}_${owner}`,
+    _candidateKey: categoryId || `CATEGORY_${normalizeKey(display)}_${owner}`,
+    _isEdit: Boolean(categoryId),
     rgb: [r ? parseInt(r, 10) : 214, g ? parseInt(g, 10) : 215, b ? parseInt(b, 10) : 215],
     type: 'CATEGORY',
   }

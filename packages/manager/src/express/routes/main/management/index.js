@@ -30,8 +30,10 @@ function addRouters (router) {
         checkedRecord,
         errors: rowsErrors,
       } = controlRecordFunction({ ...record, owner }, line, idFieldsMap, presenceFields)
+      let countRow = 0
       for (let field of uniqueFields) {
-        record[field] && void (idFieldsMap[record[field]] = true)
+        countRow++
+        record[field] && void (idFieldsMap[record[field]] = countRow)
       }
       if (rowsErrors.length) {
         errors.push(...rowsErrors)
@@ -53,22 +55,26 @@ function addRouters (router) {
     if (errors.length) {return res.send({ ok: true, results: { stats, errors } })}
     const promises_ = []
     const keys = []
+    const { type } = rows[0]
     for (let row of rows) {
-      const { candidateKey, ...rest } = row
-      keys.push(candidateKey)
-      promises_.push(collection.upsert(`${candidateKey}`, rest, { timeout: 5000 }))
+      const { _candidateKey, _isEdit, ...rest } = row
+      keys.push({ _candidateKey, _isEdit })
+      promises_.push(collection.upsert(`${_candidateKey}`, rest, { timeout: 5000 }))
     }
     const executed = await Promise.all(promises_)
-    let count = 0
+    let count = 0, totalModifications = 0
     const notSaved = executed.reduce((errorsCount, curr) => {
       if (!curr.cas) {
-        log.error(keys[count])
+        log.error(keys[count]['_candidateKey'])
         errorsCount++
+      } else if (keys[count]['_isEdit']) {
+        totalModifications++
       }
       count++
       return errorsCount
     }, 0)
-    res.send({ ok: true, results: { stats: {...stats, notSaved } } })
+    const totalCreations = stats.records - totalModifications - notSaved
+    res.send({ ok: true, results: { stats: { ...stats, notSaved, totalCreations, totalModifications, type } } })
   })
 }
 

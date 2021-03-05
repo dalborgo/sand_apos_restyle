@@ -158,5 +158,20 @@
   "management.import.status_header": "",
   "management.import.status_ko": "",
   "management.import.status_ok": "",
-  "management.import.error_PRESENT_VALUE": ""
+  "management.import.error_PRESENT_VALUE": "",
+  "astenpos.type_CATALOG": "",
+  "astenpos.type_CATEGORY": "",
+  "astenpos.type_CUSTOMER": "",
+  "astenpos.type_PRODUCT": "",
+  "astenpos.type_TABLE": "",
+  "astenpos.type_VARIANT": "",
+  "common.file": "",
+  "management.import.total_records": "",
+  "management.import.total_creations": "",
+  "management.import.total_modifications": "",
+  "management.import.total_not_saved": "",
+  "management.import.processed_records": "",
+  "management.import.error_EMPTY_VALUE": "",
+  "management.import.error_MISSING_VALUE": "",
+  "management.import.error_DUPLICATE_VALUE": ""
 }

@@ -1,7 +1,8 @@
 import React, { memo } from 'react'
-import { DialogContent, ListItem, ListItemText, makeStyles, Typography } from '@material-ui/core'
+import { DialogContent, Grid, ListItem, ListItemText, makeStyles, Typography, useTheme } from '@material-ui/core'
 import { messages } from 'src/translations/messages'
 import { useIntl } from 'react-intl'
+import LabeledTypo from 'src/components/LabeledTypo'
 
 const useStyles = makeStyles(theme => ({
   errorIcon: {
@@ -11,16 +12,18 @@ const useStyles = makeStyles(theme => ({
     },
   },
   dialogContent: {
-    padding: theme.spacing(1, 0),
-    minWidth: 500,
+    padding: theme.spacing(1.5, 1),
   },
   content: {
     overflow: 'auto',
+    minWidth: 500,
   },
 }))
 const StatusReport = ({ data, statusId }) => {
   const { errors, stats } = data
+  const theme = useTheme()
   const intl = useIntl()
+  console.log('stats:', stats)
   const classes = useStyles()
   return (
     <>
@@ -29,7 +32,7 @@ const StatusReport = ({ data, statusId }) => {
           statusId === 'status_ko' ?
             <div className={classes.content}>
               {
-                errors.map(({ reason = {}, column = '', line = '' }, index) =>
+                errors.map(({ reason = {}, column = '', line = '', extra }, index) =>
                   (
                     <ListItem
                       classes={
@@ -42,7 +45,13 @@ const StatusReport = ({ data, statusId }) => {
                       key={index}
                     >
                       <ListItemText
-                        primary={intl.formatMessage(messages[`management_import_error_${reason.code}`], { value: reason.value })}
+                        primary={
+                          intl.formatMessage(messages[`management_import_error_${reason.code}`], {
+                            value: reason.value,
+                            column,
+                            extra,
+                          })
+                        }
                       />
                       <Typography variant="caption">
                         {
@@ -65,11 +74,55 @@ const StatusReport = ({ data, statusId }) => {
               }
             </div>
             :
-            <div>
-              <pre>
-                {JSON.stringify(stats, null, 2)}
-              </pre>
-            </div>
+            <Grid
+              container
+              direction="column"
+            >
+              <Grid item style={{ margin: theme.spacing(1, 2, 1) }}>
+                <Grid container style={{ width: '100%' }}>
+                  <Grid item style={{ width: 140 }}>
+                    <LabeledTypo
+                      label="common_file"
+                      text={intl.formatMessage(messages[`astenpos_type_${stats.type}`])}
+                    />
+                  </Grid>
+                  <Grid item style={{ width: 150 }}>
+                    <LabeledTypo
+                      label="management_import_total_records"
+                      text={stats.records}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <LabeledTypo
+                      label="management_import_processed_records"
+                      text={stats.records - stats.notSaved}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item style={{ margin: theme.spacing(1, 2, 0) }}>
+                <Grid container style={{ width: '100%' }}>
+                  <Grid item style={{ width: 140 }}>
+                    <LabeledTypo
+                      label="management_import_total_creations"
+                      text={stats.totalCreations}
+                    />
+                  </Grid>
+                  <Grid item style={{ width: 150 }}>
+                    <LabeledTypo
+                      label="management_import_total_modifications"
+                      text={stats.totalModifications}
+                    />
+                  </Grid>
+                  <Grid item>
+                    <LabeledTypo
+                      label="management_import_total_not_saved"
+                      text={stats.notSaved}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
         }
       </DialogContent>
     </>

@@ -156,5 +156,20 @@
   "management.import.status_header": "Risultato importazione:",
   "management.import.status_ko": "Errore nel file d'importazione",
   "management.import.status_ok": "Risultato importazione",
-  "management.import.error_PRESENT_VALUE": "Valore \"{value}\" già presente in astenpos!"
+  "management.import.error_PRESENT_VALUE": "Valore \"{value}\" già presente in Astenpos",
+  "astenpos.type_CATALOG": "Listini",
+  "astenpos.type_CATEGORY": "Categorie",
+  "astenpos.type_CUSTOMER": "Clienti",
+  "astenpos.type_PRODUCT": "Prodotti",
+  "astenpos.type_TABLE": "Tavoli",
+  "astenpos.type_VARIANT": "Varianti",
+  "common.file": "File",
+  "management.import.total_records": "Record totali",
+  "management.import.total_creations": "Creati",
+  "management.import.total_modifications": "Modificati",
+  "management.import.total_not_saved": "Non salvati",
+  "management.import.processed_records": "Processati",
+  "management.import.error_EMPTY_VALUE": "Colonna \"{column}\" con valore nullo",
+  "management.import.error_MISSING_VALUE": "Valore \"{name}\" non presente in Astenpos",
+  "management.import.error_DUPLICATE_VALUE": "Valore \"{value}\" duplicato alla riga {extra}"
 }

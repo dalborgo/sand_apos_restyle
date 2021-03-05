@@ -9,13 +9,45 @@ export const messages = defineMessages({
     id: 'dropzone.file_too_large',
     defaultMessage: 'File "{name}" di {size} è troppo grande!',
   },
+  management_import_processed_records: {
+    id: 'management.import.processed_records',
+    defaultMessage: 'Processati',
+  },
+  management_import_total_modifications: {
+    id: 'management.import.total_modifications',
+    defaultMessage: 'Modificati',
+  },
+  management_import_total_creations: {
+    id: 'management.import.total_creations',
+    defaultMessage: 'Creati',
+  },
+  management_import_total_not_saved: {
+    id: 'management.import.total_not_saved',
+    defaultMessage: 'Non salvati',
+  },
+  management_import_total_records: {
+    id: 'management.import.total_records',
+    defaultMessage: 'Record totali',
+  },
   management_import_error_EMPTY_FILE: {
     id: 'management.import.error_EMPTY_FILE',
     defaultMessage: 'File "{name}" vuoto!',
   },
+  management_import_error_EMPTY_VALUE: {
+    id: 'management.import.error_EMPTY_VALUE',
+    defaultMessage: 'Colonna "{column}" con valore nullo',
+  },
+  management_import_error_MISSING_VALUE: {
+    id: 'management.import.error_MISSING_VALUE',
+    defaultMessage: 'Valore "{name}" non presente in Astenpos',
+  },
   management_import_error_PRESENT_VALUE: {
     id: 'management.import.error_PRESENT_VALUE',
-    defaultMessage: 'Valore "{value}" già presente in astenpos!',
+    defaultMessage: 'Valore "{value}" già presente in Astenpos',
+  },
+  management_import_error_DUPLICATE_VALUE: {
+    id: 'management.import.error_DUPLICATE_VALUE',
+    defaultMessage: 'Valore "{value}" duplicato alla riga {extra}',
   },
   reports_e_invoices_accepted: {
     id: 'reports.e_invoices.accepted',
@@ -141,6 +173,30 @@ export const messages = defineMessages({
     id: 'mode.PRECHECK',
     defaultMessage: 'Preconto',
   },
+  astenpos_type_CATEGORY: {
+    id: 'astenpos.type_CATEGORY',
+    defaultMessage: 'Categorie',
+  },
+  astenpos_type_PRODUCT: {
+    id: 'astenpos.type_PRODUCT',
+    defaultMessage: 'Prodotti',
+  },
+  astenpos_type_CATALOG: {
+    id: 'astenpos.type_CATALOG',
+    defaultMessage: 'Listini',
+  },
+  astenpos_type_VARIANT: {
+    id: 'astenpos.type_VARIANT',
+    defaultMessage: 'Varianti',
+  },
+  astenpos_type_TABLE: {
+    id: 'astenpos.type_TABLE',
+    defaultMessage: 'Tavoli',
+  },
+  astenpos_type_CUSTOMER: {
+    id: 'astenpos.type_CUSTOMER',
+    defaultMessage: 'Clienti',
+  },
   common_tot: {
     id: 'common.tot',
     defaultMessage: 'Tot',
@@ -160,6 +216,10 @@ export const messages = defineMessages({
   common_filename: {
     id: 'common.filename',
     defaultMessage: 'Filename',
+  },
+  common_file: {
+    id: 'common.file',
+    defaultMessage: 'File',
   },
   common_customer: {
     id: 'common.customer',

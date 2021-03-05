@@ -1,5 +1,29 @@
 [
   {
+    "id": "astenpos.type_CATALOG",
+    "defaultMessage": "Listini"
+  },
+  {
+    "id": "astenpos.type_CATEGORY",
+    "defaultMessage": "Categorie"
+  },
+  {
+    "id": "astenpos.type_CUSTOMER",
+    "defaultMessage": "Clienti"
+  },
+  {
+    "id": "astenpos.type_PRODUCT",
+    "defaultMessage": "Prodotti"
+  },
+  {
+    "id": "astenpos.type_TABLE",
+    "defaultMessage": "Tavoli"
+  },
+  {
+    "id": "astenpos.type_VARIANT",
+    "defaultMessage": "Varianti"
+  },
+  {
     "id": "auth.connect",
     "defaultMessage": "Collegati alla piattaforma"
   },
@@ -126,6 +150,10 @@
   {
     "id": "common.exportTable",
     "defaultMessage": "Esporta"
+  },
+  {
+    "id": "common.file",
+    "defaultMessage": "File"
   },
   {
     "id": "common.filename",
@@ -328,16 +356,32 @@
     "defaultMessage": "Italiano"
   },
   {
+    "id": "management.import.error_DUPLICATE_VALUE",
+    "defaultMessage": "Valore \"{value}\" duplicato alla riga {extra}"
+  },
+  {
     "id": "management.import.error_EMPTY_FILE",
     "defaultMessage": "File \"{name}\" vuoto!"
   },
   {
+    "id": "management.import.error_EMPTY_VALUE",
+    "defaultMessage": "Colonna \"{column}\" con valore nullo"
+  },
+  {
+    "id": "management.import.error_MISSING_VALUE",
+    "defaultMessage": "Valore \"{name}\" non presente in Astenpos"
+  },
+  {
     "id": "management.import.error_PRESENT_VALUE",
-    "defaultMessage": "Valore \"{value}\" già presente in astenpos!"
+    "defaultMessage": "Valore \"{value}\" già presente in Astenpos"
   },
   {
     "id": "management.import.header_title",
     "defaultMessage": "Import"
+  },
+  {
+    "id": "management.import.processed_records",
+    "defaultMessage": "Processati"
   },
   {
     "id": "management.import.status_header",
@@ -350,6 +394,22 @@
   {
     "id": "management.import.status_ok",
     "defaultMessage": "Risultato importazione"
+  },
+  {
+    "id": "management.import.total_creations",
+    "defaultMessage": "Creati"
+  },
+  {
+    "id": "management.import.total_modifications",
+    "defaultMessage": "Modificati"
+  },
+  {
+    "id": "management.import.total_not_saved",
+    "defaultMessage": "Non salvati"
+  },
+  {
+    "id": "management.import.total_records",
+    "defaultMessage": "Record totali"
   },
   {
     "id": "management_import.header_title",

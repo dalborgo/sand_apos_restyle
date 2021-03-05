@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 'bold',
   },
   headerIcon: {
-    height: 35,
+    height: 25,
   },
 }))
 

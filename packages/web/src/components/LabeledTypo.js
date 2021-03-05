@@ -9,15 +9,16 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-function LabeledTypo ({label, text}) {
+function LabeledTypo ({label, text, variant = {}}) {
   const intl = useIntl()
   const classes = useStyles()
+  const { variantLabel = 'h6', variantText = 'body2' } = variant
   return (
     <>
-      <Typography display="inline" style={{ fontWeight: 'normal' }} variant="h6">
+      <Typography display="inline" style={{ fontWeight: 'normal' }} variant={variantLabel}>
         {intl.formatMessage(messages[label])}{': '}
       </Typography>
-      <Typography className={classes.boldText} display="inline" variant="body2">
+      <Typography className={classes.boldText} display="inline" variant={variantText}>
         {text}
       </Typography>
     </>
