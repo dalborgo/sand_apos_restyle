@@ -12,6 +12,10 @@
     "defaultMessage": "Clienti"
   },
   {
+    "id": "astenpos.type_CUSTOMER_ADDRESS",
+    "defaultMessage": "Clienti Asporto"
+  },
+  {
     "id": "astenpos.type_PRODUCT",
     "defaultMessage": "Prodotti"
   },
@@ -368,12 +372,24 @@
     "defaultMessage": "Colonna \"{column}\" con valore nullo"
   },
   {
+    "id": "management.import.error_MISSING_DEFAULT_CATALOG",
+    "defaultMessage": "Listino di default non presente in Astenpos"
+  },
+  {
+    "id": "management.import.error_MISSING_DEFAULT_CATALOG_PRICE",
+    "defaultMessage": "Prezzo sul listino di default non valorizzato"
+  },
+  {
     "id": "management.import.error_MISSING_VALUE",
-    "defaultMessage": "Valore \"{name}\" non presente in Astenpos"
+    "defaultMessage": "Valore \"{value}\" non presente in Astenpos"
   },
   {
     "id": "management.import.error_PRESENT_VALUE",
     "defaultMessage": "Valore \"{value}\" già presente in Astenpos"
+  },
+  {
+    "id": "management.import.error_UNKNOWN_FILE",
+    "defaultMessage": "File \"{name}\" non riconosciuto!"
   },
   {
     "id": "management.import.header_title",
@@ -381,7 +397,7 @@
   },
   {
     "id": "management.import.processed_records",
-    "defaultMessage": "Processati"
+    "defaultMessage": "Salvati"
   },
   {
     "id": "management.import.status_header",
@@ -397,15 +413,15 @@
   },
   {
     "id": "management.import.total_creations",
-    "defaultMessage": "Creati"
+    "defaultMessage": "Creazioni"
   },
   {
     "id": "management.import.total_modifications",
-    "defaultMessage": "Modificati"
+    "defaultMessage": "Modifiche"
   },
   {
     "id": "management.import.total_not_saved",
-    "defaultMessage": "Non salvati"
+    "defaultMessage": "Errori"
   },
   {
     "id": "management.import.total_records",

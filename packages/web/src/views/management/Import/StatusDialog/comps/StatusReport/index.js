@@ -11,6 +11,9 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.error.dark,
     },
   },
+  listItemText: {
+    marginRight: theme.spacing(2),
+  },
   dialogContent: {
     padding: theme.spacing(1.5, 1),
   },
@@ -23,7 +26,6 @@ const StatusReport = ({ data, statusId }) => {
   const { errors, stats } = data
   const theme = useTheme()
   const intl = useIntl()
-  console.log('stats:', stats)
   const classes = useStyles()
   return (
     <>
@@ -45,6 +47,7 @@ const StatusReport = ({ data, statusId }) => {
                       key={index}
                     >
                       <ListItemText
+                        className={classes.listItemText}
                         primary={
                           intl.formatMessage(messages[`management_import_error_${reason.code}`], {
                             value: reason.value,

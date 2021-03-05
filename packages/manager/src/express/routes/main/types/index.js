@@ -12,7 +12,7 @@ const knex = require('knex')({ client: 'mysql' })
 export function execTypesQuery (req, type, params_ = {}) {
   const { connClass, query } = req
   const { params } = query || {}
-  const { _id, order, columns = [], includeId = true } = { ...params_, ...params }
+  const { _id, order, columns = [], includeId = true, displayColumn = 'display' } = { ...params_, ...params }
   utils.controlParameters(query, ['owner'])
   const parsedOwner = utils.parseOwner(req)
   const {
@@ -22,8 +22,16 @@ export function execTypesQuery (req, type, params_ = {}) {
   const statement = knex(bucketName)
     .where({ type })
     .where(knex.raw(parsedOwner.queryCondition))
-    .select('display')
     .select(columns)
+  if(Array.isArray(displayColumn)){
+    const fields = []
+    for (let val of displayColumn) {
+      fields.push(val)
+    }
+    statement.select(knex.raw(fields.join(' || "_" || ')+' as combined_display'))
+  }else{
+    displayColumn && statement.select(displayColumn)
+  }
   if (includeId) {
     statement.select(knex.raw(`${_id ? '`' + _id + '`' : 'meta().id'} _id`))
   }

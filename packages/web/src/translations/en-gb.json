@@ -172,5 +172,9 @@
   "management.import.processed_records": "",
   "management.import.error_EMPTY_VALUE": "",
   "management.import.error_MISSING_VALUE": "",
-  "management.import.error_DUPLICATE_VALUE": ""
+  "management.import.error_DUPLICATE_VALUE": "",
+  "management.import.error_UNKNOWN_FILE": "",
+  "management.import.error_MISSING_DEFAULT_CATALOG": "",
+  "management.import.error_MISSING_DEFAULT_CATALOG_PRICE": "",
+  "astenpos.type_CUSTOMER_ADDRESS": ""
 }

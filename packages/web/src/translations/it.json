@@ -165,11 +165,15 @@
   "astenpos.type_VARIANT": "Varianti",
   "common.file": "File",
   "management.import.total_records": "Record totali",
-  "management.import.total_creations": "Creati",
-  "management.import.total_modifications": "Modificati",
-  "management.import.total_not_saved": "Non salvati",
-  "management.import.processed_records": "Processati",
+  "management.import.total_creations": "Creazioni",
+  "management.import.total_modifications": "Modifiche",
+  "management.import.total_not_saved": "Errori",
+  "management.import.processed_records": "Salvati",
   "management.import.error_EMPTY_VALUE": "Colonna \"{column}\" con valore nullo",
-  "management.import.error_MISSING_VALUE": "Valore \"{name}\" non presente in Astenpos",
-  "management.import.error_DUPLICATE_VALUE": "Valore \"{value}\" duplicato alla riga {extra}"
+  "management.import.error_MISSING_VALUE": "Valore \"{value}\" non presente in Astenpos",
+  "management.import.error_DUPLICATE_VALUE": "Valore \"{value}\" duplicato alla riga {extra}",
+  "management.import.error_UNKNOWN_FILE": "File \"{name}\" non riconosciuto!",
+  "management.import.error_MISSING_DEFAULT_CATALOG": "Listino di default non presente in Astenpos",
+  "management.import.error_MISSING_DEFAULT_CATALOG_PRICE": "Prezzo sul listino di default non valorizzato",
+  "astenpos.type_CUSTOMER_ADDRESS": "Clienti Asporto"
 }

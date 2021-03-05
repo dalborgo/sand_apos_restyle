@@ -11,19 +11,19 @@ export const messages = defineMessages({
   },
   management_import_processed_records: {
     id: 'management.import.processed_records',
-    defaultMessage: 'Processati',
+    defaultMessage: 'Salvati',
   },
   management_import_total_modifications: {
     id: 'management.import.total_modifications',
-    defaultMessage: 'Modificati',
+    defaultMessage: 'Modifiche',
   },
   management_import_total_creations: {
     id: 'management.import.total_creations',
-    defaultMessage: 'Creati',
+    defaultMessage: 'Creazioni',
   },
   management_import_total_not_saved: {
     id: 'management.import.total_not_saved',
-    defaultMessage: 'Non salvati',
+    defaultMessage: 'Errori',
   },
   management_import_total_records: {
     id: 'management.import.total_records',
@@ -33,13 +33,25 @@ export const messages = defineMessages({
     id: 'management.import.error_EMPTY_FILE',
     defaultMessage: 'File "{name}" vuoto!',
   },
+  management_import_error_UNKNOWN_FILE: {
+    id: 'management.import.error_UNKNOWN_FILE',
+    defaultMessage: 'File "{name}" non riconosciuto!',
+  },
   management_import_error_EMPTY_VALUE: {
     id: 'management.import.error_EMPTY_VALUE',
     defaultMessage: 'Colonna "{column}" con valore nullo',
   },
   management_import_error_MISSING_VALUE: {
     id: 'management.import.error_MISSING_VALUE',
-    defaultMessage: 'Valore "{name}" non presente in Astenpos',
+    defaultMessage: 'Valore "{value}" non presente in Astenpos',
+  },
+  management_import_error_MISSING_DEFAULT_CATALOG: {
+    id: 'management.import.error_MISSING_DEFAULT_CATALOG',
+    defaultMessage: 'Listino di default non presente in Astenpos',
+  },
+  management_import_error_MISSING_DEFAULT_CATALOG_PRICE: {
+    id: 'management.import.error_MISSING_DEFAULT_CATALOG_PRICE',
+    defaultMessage: 'Prezzo sul listino di default non valorizzato',
   },
   management_import_error_PRESENT_VALUE: {
     id: 'management.import.error_PRESENT_VALUE',
@@ -176,6 +188,10 @@ export const messages = defineMessages({
   astenpos_type_CATEGORY: {
     id: 'astenpos.type_CATEGORY',
     defaultMessage: 'Categorie',
+  },
+  astenpos_type_CUSTOMER_ADDRESS: {
+    id: 'astenpos.type_CUSTOMER_ADDRESS',
+    defaultMessage: 'Clienti Asporto',
   },
   astenpos_type_PRODUCT: {
     id: 'astenpos.type_PRODUCT',
