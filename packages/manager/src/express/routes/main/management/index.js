@@ -4,7 +4,7 @@ import parse from 'csv-parse'
 import { getControlRecord } from './utils'
 import log from '@adapter/common/src/winston'
 import { execTypesQuery } from '../types'
-import keyBy from 'lodash/keyBy'
+import groupBy from 'lodash/groupBy'
 
 const { utils } = require(__helpers)
 
@@ -26,14 +26,18 @@ function addRouters (router) {
         errCode: 'UNKNOWN_FILE',
       })
     }
-    for (let { type, params } of toSearchFields) {promises.push(execTypesQuery(req, type, params))}
+    const toSkipKey = []
+    for (let { type, params, skip = [] } of toSearchFields) {
+      toSkipKey.push(skip)
+      promises.push(execTypesQuery(req, type, params))
+    }
     const responses = await Promise.all(promises)
     for (let i = 0; i < responses.length; i++) {
       const { results } = responses[i]
       const [first] = results
       const keys = Object.keys(first).sort()// ordinate alfabeticamente per essere predicibili
       for (let key of keys) {
-        presenceFields.push(keyBy(results, key))
+        !toSkipKey[i].includes(key) && presenceFields.push(groupBy(results, key))
       }
     }
     const onRecord = (record, { lines: line }) => {
@@ -49,7 +53,7 @@ function addRouters (router) {
           let allVal = true
           for (let val of field) {
             keys.push(record[val])
-            if(!record[val]){allVal = false}
+            if (!record[val]) {allVal = false}
           }
           allVal && void (idFieldsMap[keys.join('_')] = countRow)
         } else {
@@ -80,15 +84,19 @@ function addRouters (router) {
     for (let row of rows) {
       const { _candidateKey, _isEdit, ...rest } = row
       keys.push({ _candidateKey, _isEdit })
-      promises_.push(collection.upsert(`${_candidateKey}`, rest, { timeout: 5000 }))
+      if (_isEdit) {
+        promises_.push(collection.upsert(`${_candidateKey}`, rest, { timeout: 5000 }))
+      } else {
+        promises_.push(collection.insert(`${_candidateKey}`, rest, { timeout: 5000 }))
+      }
     }
     const executed = await Q.allSettled(promises_)
-    let count = 0, totalModifications = 0, notSaved = 0
+    let count = 0, totalModifications = 0, notSaved = []
     for (let { state, reason } of executed) {
       if (state === 'rejected') {
-        log.error(reason.cause.code)
-        log.error(reason.context.key)
-        notSaved++
+        const importError = { code: reason.cause.code, key: reason.context.key }
+        log.error('Import error', importError)
+        notSaved.push(importError)
       } else {
         if (keys[count]['_isEdit']) {
           totalModifications++
@@ -96,7 +104,7 @@ function addRouters (router) {
       }
       count++
     }
-    const totalCreations = stats.records - totalModifications - notSaved
+    const totalCreations = stats.records - totalModifications - notSaved.length
     res.send({ ok: true, results: { stats: { ...stats, notSaved, totalCreations, totalModifications, type } } })
   })
 }

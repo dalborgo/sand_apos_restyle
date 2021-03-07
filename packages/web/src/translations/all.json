@@ -372,6 +372,10 @@
     "defaultMessage": "Colonna \"{column}\" con valore nullo"
   },
   {
+    "id": "management.import.error_MISSING_COLUMN_DEFAULT_CATALOG",
+    "defaultMessage": "Colonna listino di default \"{value}\" non presente"
+  },
+  {
     "id": "management.import.error_MISSING_DEFAULT_CATALOG",
     "defaultMessage": "Listino di default non presente in Astenpos"
   },
@@ -382,6 +386,10 @@
   {
     "id": "management.import.error_MISSING_VALUE",
     "defaultMessage": "Valore \"{value}\" non presente in Astenpos"
+  },
+  {
+    "id": "management.import.error_MULTI_DEFAULT_CATALOG",
+    "defaultMessage": "Ci sono più listini di default"
   },
   {
     "id": "management.import.error_PRESENT_VALUE",

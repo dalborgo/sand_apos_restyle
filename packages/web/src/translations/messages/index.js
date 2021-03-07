@@ -41,9 +41,17 @@ export const messages = defineMessages({
     id: 'management.import.error_EMPTY_VALUE',
     defaultMessage: 'Colonna "{column}" con valore nullo',
   },
+  management_import_error_MISSING_COLUMN_DEFAULT_CATALOG: {
+    id: 'management.import.error_MISSING_COLUMN_DEFAULT_CATALOG',
+    defaultMessage: 'Colonna listino di default "{value}" non presente',
+  },
   management_import_error_MISSING_VALUE: {
     id: 'management.import.error_MISSING_VALUE',
     defaultMessage: 'Valore "{value}" non presente in Astenpos',
+  },
+  management_import_error_MULTI_DEFAULT_CATALOG: {
+    id: 'management.import.error_MULTI_DEFAULT_CATALOG',
+    defaultMessage: 'Ci sono più listini di default',
   },
   management_import_error_MISSING_DEFAULT_CATALOG: {
     id: 'management.import.error_MISSING_DEFAULT_CATALOG',

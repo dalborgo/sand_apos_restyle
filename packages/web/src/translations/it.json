@@ -175,5 +175,7 @@
   "management.import.error_UNKNOWN_FILE": "File \"{name}\" non riconosciuto!",
   "management.import.error_MISSING_DEFAULT_CATALOG": "Listino di default non presente in Astenpos",
   "management.import.error_MISSING_DEFAULT_CATALOG_PRICE": "Prezzo sul listino di default non valorizzato",
-  "astenpos.type_CUSTOMER_ADDRESS": "Clienti Asporto"
+  "astenpos.type_CUSTOMER_ADDRESS": "Clienti Asporto",
+  "management.import.error_MULTI_DEFAULT_CATALOG": "Ci sono più listini di default",
+  "management.import.error_MISSING_COLUMN_DEFAULT_CATALOG": "Colonna listino di default \"{value}\" non presente"
 }

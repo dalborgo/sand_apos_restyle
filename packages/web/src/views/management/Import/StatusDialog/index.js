@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 function getIconName (statusId, data) {
   if (statusId === 'status_ok') {
     const { stats } = data
-    return stats.notSaved ? 'warn' : 'ok'
+    return stats.notSaved.length ? 'warn' : 'ok'
   } else {
     return 'error'
   }

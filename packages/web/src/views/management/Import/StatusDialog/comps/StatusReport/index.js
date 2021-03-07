@@ -98,7 +98,7 @@ const StatusReport = ({ data, statusId }) => {
                   <Grid item>
                     <LabeledTypo
                       label="management_import_processed_records"
-                      text={stats.records - stats.notSaved}
+                      text={stats.records - stats.notSaved.length}
                     />
                   </Grid>
                 </Grid>
@@ -120,7 +120,7 @@ const StatusReport = ({ data, statusId }) => {
                   <Grid item>
                     <LabeledTypo
                       label="management_import_total_not_saved"
-                      text={stats.notSaved}
+                      text={stats.notSaved.length}
                     />
                   </Grid>
                 </Grid>

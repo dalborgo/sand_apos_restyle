@@ -91,7 +91,7 @@ function addRouters (router) {
                   + 'FROM `' + connClass.astenposBucketName + '` `user` USE KEYS "' + userId + '"'
     const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
     if (!ok) {
-      log.error('path', path)
+      log.error('Path', path)
       throw Error(err.context ? err.context.first_error_message : message)
     }
     if (!results.length) {
@@ -112,7 +112,7 @@ function addRouters (router) {
     const query = `select RAW OBJECT_REMOVE(buc, 'type') from \`${connClass.astenposBucketName}\` buc where type = "INSTALLATION"`
     const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
     if (!ok) {
-      log.error('path', path)
+      log.error('Path', path)
       throw Error(err.context ? err.context.first_error_message : message)
     }
     res.send(results)
