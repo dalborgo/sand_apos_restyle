@@ -4,12 +4,11 @@ import Page from 'src/components/Page'
 import useAuth from 'src/hooks/useAuth'
 import JWTLogin from './JWTLogin'
 import { FormattedMessage } from 'react-intl'
+import getAppVersion from 'src/utils/appVersion'
 
-const methodIcons = {
-  JWT: '/static/images/jwt.svg',
-}
+const methodIcons = { JWT: '/static/images/cap.svg' }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     display: 'flex',
@@ -26,9 +25,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   methodIcon: {
-    height: 30,
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    height: 50,
   },
   cardContainer: {
     paddingBottom: 80,
@@ -53,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const LoginView = () => {
   const classes = useStyles()
   const { method } = useAuth()
-  
+  const appVersion = getAppVersion()
   return (
     <Page
       className={classes.root}
@@ -75,9 +72,9 @@ const LoginView = () => {
                 variant="h6"
               >
                 <Link
-                  href="/static/apk/astenpos-v4.0.apk"
+                  href={`/static/apk/${appVersion}`}
                 >
-                  <FormattedMessage defaultMessage="Scarica" id="common.download"/> astenpos-v4.0.apk
+                  <FormattedMessage defaultMessage="Scarica" id="common.download"/> {appVersion}
                 </Link>
               </Typography>
             </Box>
@@ -117,7 +114,8 @@ const LoginView = () => {
                 </div>
                 <div className={classes.currentMethodIcon}>
                   <img
-                    alt="Auth method"
+                    alt="Cap logo"
+                    className={classes.methodIcon}
                     src={methodIcons[method]}
                   />
                 </div>

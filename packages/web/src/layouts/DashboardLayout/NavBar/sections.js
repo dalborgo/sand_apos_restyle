@@ -1,11 +1,10 @@
 import {
-  BarChart as BarChartIcon,
   Clock as ClockIcon,
   DollarSign as DollarSignIcon,
   FileText as FileTextIcon,
   Inbox as InboxIcon,
   List as ListIcon,
-  PieChart as PieChartIcon,
+  Upload as UploadIcon,
 } from 'react-feather'
 
 const sections = [
@@ -43,7 +42,7 @@ const sections = [
         icon: InboxIcon,
         href: '/app/reports/e-invoices',
       },
-      {
+      /*{
         title: 'Dashboard',
         icon: PieChartIcon,
         href: '/app/reports/dashboard',
@@ -52,7 +51,7 @@ const sections = [
         title: 'Dashboard Alternative',
         icon: BarChartIcon,
         href: '/app/reports/dashboard-alternative',
-      },
+      },*/
     ],
   },
   {
@@ -61,7 +60,7 @@ const sections = [
       {
         title: 'Import',
         exact: false,
-        icon: InboxIcon,
+        icon: UploadIcon,
         href: '/app/management/import',
       },
     ],

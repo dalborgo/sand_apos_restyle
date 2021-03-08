@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 24.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+<style type="text/css">
+	.st0{clip-path:url(#SVGID_2_);}
+	.st1{clip-path:url(#SVGID_4_);fill:#0F3451;}
+</style>
+<g>
+	<g>
+		<defs>
+			<rect id="SVGID_1_" x="-5.88" y="3.16" width="61.76" height="43.67"/>
+		</defs>
+		<clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+		</clipPath>
+		<g class="st0">
+			<defs>
+				<rect id="SVGID_3_" x="-5.88" y="3.16" width="61.76" height="43.67"/>
+			</defs>
+			<clipPath id="SVGID_4_">
+				<use xlink:href="#SVGID_3_"  style="overflow:visible;"/>
+			</clipPath>
+			<path class="st1" d="M43.47,36.68c-1.81,1.46-3.65,1.81-5.33,1.81c-1.64,0-3.14-0.34-4.33-0.34c-0.06,0-0.11,0.01-0.17,0.01
+				c-2.44,0.07-5.51,4.28-5.51,4.28c-3.81-5.79-10.72-6.89-15.4-6.89c-2.84,0-4.86,0.41-4.86,0.41l2.78-5.9
+				c-9.92-5.61-6.66-16.1-1.47-18.98c1.11-0.61,2.22-0.85,3.3-0.85c4,0,7.42,3.34,7.42,3.34s2.95-6.01,9.69-6.01
+				c1.44,0,3.06,0.28,4.86,0.95c10.21,3.78,5.93,13.16,5.93,13.16C46.72,25.49,47.11,33.76,43.47,36.68"/>
+		</g>
+	</g>
+</g>
+</svg>

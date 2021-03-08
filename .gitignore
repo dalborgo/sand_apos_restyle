@@ -13,3 +13,4 @@ yarn.lock
 /packages/manager/dev-CA.pem
 /packages/manager/test-CA.pem
 /packages/web/public/static/apk/
+/packages/cert/

@@ -83,7 +83,7 @@ const routes = [
       {
         exact: true,
         path: '/app/management',
-        component: () => <Redirect to="/app/reports/dashboard"/>,
+        component: () => <Redirect to="/app/management/import"/>,
       },
       {
         exact: true,
@@ -129,7 +129,7 @@ const routes = [
         ],
         component: lazy(() => import('src/views/reports/EInvoices')),
       },
-      {
+      /*{
         exact: true,
         path: '/app/reports/dashboard',
         component: lazy(() => import('src/views/reports/DashboardView')),
@@ -138,16 +138,16 @@ const routes = [
         exact: true,
         path: '/app/reports/dashboard-alternative',
         component: lazy(() => import('src/views/reports/DashboardAlternativeView')),
-      },
+      },*/
       {
         exact: true,
         path: '/app/reports',
-        component: () => <Redirect to="/app/reports/dashboard"/>,
+        component: () => <Redirect to="/app/reports/closing-day"/>,
       },
       {
         exact: true,
         path: '/app',
-        component: () => <Redirect to="/app/reports/dashboard"/>,
+        component: () => <Redirect to="/app/reports/closing-day"/>,
       },
       {
         component: () => <Redirect to="/404"/>,

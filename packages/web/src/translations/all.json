@@ -136,6 +136,10 @@
     "defaultMessage": "Scarica"
   },
   {
+    "id": "common.download_last_app",
+    "defaultMessage": "Scarica l'app aggiornata"
+  },
+  {
     "id": "common.error",
     "defaultMessage": "Errore"
   },
@@ -174,6 +178,10 @@
   {
     "id": "common.language",
     "defaultMessage": "Lingua"
+  },
+  {
+    "id": "common.last_app",
+    "defaultMessage": "Scarica l'app aggiornata:"
   },
   {
     "id": "common.loading",

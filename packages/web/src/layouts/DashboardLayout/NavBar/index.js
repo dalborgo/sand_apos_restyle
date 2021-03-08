@@ -20,8 +20,9 @@ import useAuth from 'src/hooks/useAuth'
 import NavItem from './NavItem'
 import { isMenuLinkToShow } from 'src/utils/logics'
 import { messages } from 'src/translations/messages'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useRoleFormatter } from 'src/utils/formatters'
+import getAppVersion from 'src/utils/appVersion'
 
 function renderNavItems ({
   depth = 0,
@@ -117,6 +118,9 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 0,
     lineHeight: 2,
   },
+  footerTypo: {
+    fontWeight: theme.typography.fontWeightMedium,
+  },
 }))
 
 const NavBar = ({ setMobileNavOpen, openMobile }) => {
@@ -132,7 +136,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
-  
+  const appVersion = getAppVersion()
   const content = (
     <Box
       display="flex"
@@ -215,18 +219,19 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
               p={2}
             >
               <Typography
-                color="textPrimary"
-                variant="h6"
+                className={classes.footerTypo}
+                color="textSecondary"
+                variant="body2"
               >
-                Need Help?
+                <FormattedMessage defaultMessage="Scarica l'app aggiornata" id="common.download_last_app"/>
               </Typography>
               <Link
+                className={classes.footerTypo}
                 color="secondary"
-                component={RouterLink}
-                to="/docs"
-                variant="subtitle1"
+                href={`/static/apk/${appVersion}`}
+                variant="body2"
               >
-                Check our docs
+                {appVersion}
               </Link>
             </Box>
           </Box>

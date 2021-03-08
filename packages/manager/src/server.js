@@ -3,15 +3,12 @@ import log from '@adapter/common/src/winston'
 import app from './express'
 import config from 'config'
 import http from 'http'
+import https from 'https'
+import fs from 'fs'
+import path from 'path'
+import { cFunctions } from '@adapter/common'
 
 const { PORT } = config.get('express')
-const port = normalizePort(PORT || 9020)
-app.set('port', port)
-
-const server = http.createServer(app)
-server.listen(port)
-server.on('error', onError)
-server.on('listening', onListening)
 
 function normalizePort (val) {
   const port = parseInt(val, 10)
@@ -45,10 +42,36 @@ function onError (error) {
   }
 }
 
-async function onListening () {
-  const addr = server.address()
-  const bind = typeof addr === 'string'
-    ? `pipe ${addr}`
-    : `port ${addr.port}`
-  log.info(`Backend listening on ${bind}`)
+const port = normalizePort(PORT || 9020)
+const httpsPort = port + 50
+const server = http.createServer(app)
+server.listen(port)
+server.on('error', onError)
+server.on('listening', onListeningHttp)
+
+if(cFunctions.isProd()){
+  const keyPath = path.join(__dirname, '../../../../cert/key.key')
+  const certPath = path.join(__dirname, '../../../../cert/certificate.pem')
+  
+  const httpsConfig = {
+    key: fs.readFileSync(keyPath),
+    cert: fs.readFileSync(certPath),
+  }
+  const serverHttps = https.createServer(httpsConfig, app)
+  serverHttps.listen(httpsPort)
+  serverHttps.on('error', onError)
+  serverHttps.on('listening', onListeningHttps)
 }
+
+async function onListeningHttp () {
+  log.info(`Http Backend listening on port ${port}`)
+}
+
+async function onListeningHttps () {
+  log.info(`Https Backend listening on port ${httpsPort}`)
+}
+
+
+
+
+

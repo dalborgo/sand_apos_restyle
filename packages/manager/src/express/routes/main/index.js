@@ -1,4 +1,5 @@
 import queries from './queries'
+import crash from './crash'
 import docs from './docs'
 import eInvoices from './e-invoices'
 import hotel from './hotel'
@@ -17,6 +18,7 @@ const router = express.Router()
 require('express-async-errors')
 
 queries.addRouters(router)
+crash.addRouters(router)
 docs.addRouters(router)
 eInvoices.addRouters(router)
 hotel.addRouters(router)
