@@ -108,7 +108,7 @@ function checkAlreadyInDatabase (column, index, value, id, presence, errors, lin
   })
 }
 
-function generalError (column, errors, line, code, value) {
+export function generalError (column, errors, line, code, value) {
   errors.push({
     reason: { code, value },
     line,
@@ -172,35 +172,30 @@ const checkRecordProducts = (record, line, previous, presence, catalogs = []) =>
   const prices = []
   
   const defaultCatalog = presence[4][true]// array
-  if (!defaultCatalog) {
-    generalError('', errors, line, 'MISSING_DEFAULT_CATALOG')
-  } else {
+  if (defaultCatalog) {
     const defaultCatalogCount = defaultCatalog.length
-    if(defaultCatalogCount > 1){
-      generalError('', errors, line, 'MULTI_DEFAULT_CATALOG')
-    }else{
-      !catalogs.includes(defaultCatalog[0]['display']) && generalError(defaultCatalog[0]['display'], errors, line, 'MISSING_COLUMN_DEFAULT_CATALOG', defaultCatalog[0]['display'])
-    }
-    for (let catalog of catalogs) {
-      if (catalog) {checkMissing(catalog, 5, catalog, presence, errors, line)}
-      const catalogId = get(presence[5], `[${catalog}][0][_id]`)
-      const price = parseInt(record[catalog], 10)
-      if (defaultCatalog[0]._id === catalogId) {
-        isNaN(price) && generalError(catalog, errors, line, 'MISSING_DEFAULT_CATALOG_PRICE')
+    if (defaultCatalogCount === 1) {
+      for (let catalog of catalogs) {
+        if (catalog) {checkMissing(catalog, 5, catalog, presence, errors, line)}
+        const catalogId = get(presence[5], `[${catalog}][0][_id]`)
+        const price = parseInt(record[catalog], 10)
+        if (defaultCatalog[0]._id === catalogId) {
+          isNaN(price) && generalError(catalog, errors, line, 'MISSING_DEFAULT_CATALOG_PRICE')
+        }
+        if (catalogId && !isNaN(price)) {
+          prices.push({
+            catalog: catalogId,
+            price,
+          })
+        }
+        delete record[catalog]
       }
-      if (catalogId && !isNaN(price)) {
-        prices.push({
-          catalog: catalogId,
-          price,
-        })
-      }
-      delete record[catalog]
     }
   }
   const categoryId = get(presence[1], `[${category}][0][_id]`)
   const productCategoryId = `PRODUCT_${normalizeKey(display)}::${normalizeKey(category)}_${owner}`
   
-  const displayExistArray = get(presence[3], `[${display}]`)
+  const displayExistArray = get(presence[3], `[${display}]`, [])
   let foundProduct = false
   if (displayExistArray.length) {
     for (let displayExist of displayExistArray) {
@@ -265,44 +260,38 @@ const checkRecordVariants = (record, line, previous, presence, catalogs = []) =>
   variantId && checkMissing('variant_id', 2, variantId, presence, errors, line)
   const prices = []
   const defaultCatalog = presence[4][true]
-  if (!defaultCatalog) {
-    generalError('', errors, line, 'MISSING_DEFAULT_CATALOG')
-  } else {
+  if (defaultCatalog) {
     const defaultCatalogCount = defaultCatalog.length
-    if(defaultCatalogCount > 1){
-      generalError('', errors, line, 'MULTI_DEFAULT_CATALOG')
-    }else{
-      !catalogs.includes(`${defaultCatalog[0]['display']}_WITH`) && generalError(defaultCatalog[0]['display'], errors, line, 'MISSING_COLUMN_DEFAULT_CATALOG', `${defaultCatalog[0]['display']}_WITH`)
-      !catalogs.includes(`${defaultCatalog[0]['display']}_WITHOUT`) && generalError(defaultCatalog[0]['display'], errors, line, 'MISSING_COLUMN_DEFAULT_CATALOG', `${defaultCatalog[0]['display']}_WITHOUT`)
-    }
-    for (let catalog of catalogs) {
-      const cleanCatalog = catalog.replace('_WITHOUT', '').replace('_WITH', '')
-      if (cleanCatalog) {checkMissing(catalog, 5, cleanCatalog, presence, errors, line)}
-      const catalogId = get(presence[5], `[${cleanCatalog}][0][_id]`)
-      const price = parseInt(record[catalog], 10)
-      if (defaultCatalog[0]._id === catalogId) {
-        isNaN(price) && generalError(catalog, errors, line, 'MISSING_DEFAULT_CATALOG_PRICE')
-      }
-      if (catalogId && !isNaN(price)) {
-        const isWith = catalog.endsWith('WITH')
-        const found = find(prices, { catalog: catalogId })
-        if (found) {
-          if (isWith) {found.price_with = price} else {found.price_without = price}
-        } else {
-          if (isWith) {
-            prices.push({ catalog: catalogId, price_with: price, price_without: 0 })// di default a zero
+    if (defaultCatalogCount === 1) {
+      for (let catalog of catalogs) {
+        const cleanCatalog = catalog.replace('_WITHOUT', '').replace('_WITH', '')
+        if (cleanCatalog) {checkMissing(catalog, 5, cleanCatalog, presence, errors, line)}
+        const catalogId = get(presence[5], `[${cleanCatalog}][0][_id]`)
+        const price = parseInt(record[catalog], 10)
+        if (defaultCatalog[0]._id === catalogId) {
+          isNaN(price) && generalError(catalog, errors, line, 'MISSING_DEFAULT_CATALOG_PRICE')
+        }
+        if (catalogId && !isNaN(price)) {
+          const isWith = catalog.endsWith('WITH')
+          const found = find(prices, { catalog: catalogId })
+          if (found) {
+            if (isWith) {found.price_with = price} else {found.price_without = price}
           } else {
-            prices.push({ catalog: catalogId, price_without: price, price_with: 0 })
+            if (isWith) {
+              prices.push({ catalog: catalogId, price_with: price, price_without: 0 })// di default a zero
+            } else {
+              prices.push({ catalog: catalogId, price_without: price, price_with: 0 })
+            }
           }
         }
+        delete record[catalog]
       }
-      delete record[catalog]
     }
   }
   const categoryId = get(presence[1], `[${category}][0][_id]`)
   const variantCategoryId = `VARIANT_${normalizeKey(display)}::${normalizeKey(category)}_${owner}`
   
-  const displayExistArray = get(presence[3], `[${display}]`)
+  const displayExistArray = get(presence[3], `[${display}]`, [])
   let foundVariant = false
   if (displayExistArray.length) {
     for (let displayExist of displayExistArray) {

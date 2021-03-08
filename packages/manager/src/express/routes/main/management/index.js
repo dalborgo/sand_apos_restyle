@@ -1,7 +1,7 @@
 import fileUpload from 'express-fileupload'
 import Q from 'q'
 import parse from 'csv-parse'
-import { getControlRecord } from './utils'
+import { generalError, getControlRecord } from './utils'
 import log from '@adapter/common/src/winston'
 import { execTypesQuery } from '../types'
 import groupBy from 'lodash/groupBy'
@@ -20,11 +20,7 @@ function addRouters (router) {
     const [firstColumns] = firstLine
     const [controlRecordFunction, uniqueFields, toSearchFields = [], extra] = getControlRecord(firstColumns)
     if (!controlRecordFunction) {
-      return res.send({
-        ok: false,
-        message: 'file not recognized!',
-        errCode: 'UNKNOWN_FILE',
-      })
+      return res.send({ ok: false, message: 'file not recognized!', errCode: 'UNKNOWN_FILE' })
     }
     const toSkipKey = []
     for (let { type, params, skip = [] } of toSearchFields) {
@@ -77,10 +73,28 @@ function addRouters (router) {
     log.debug('stats', stats)
     console.log('errors:', errors)
     if (!rows.length) {return res.send({ ok: false, message: 'empty file!', errCode: 'EMPTY_FILE' })}
+    const { type } = rows[0]
+    if (['PRODUCT', 'VARIANT'].includes(type)) {
+      const defaultCatalog = presenceFields[4][true]
+      if (!defaultCatalog) {
+        generalError('', errors, '', 'MISSING_DEFAULT_CATALOG')
+      } else {
+        const defaultCatalogCount = defaultCatalog.length
+        if (defaultCatalogCount > 1) {
+          generalError('', errors, '', 'MULTI_DEFAULT_CATALOG')
+        }
+      }
+      if (type === 'PRODUCT') {
+        !extra.includes(defaultCatalog[0]['display']) && generalError('', errors, '', 'MISSING_COLUMN_DEFAULT_CATALOG', defaultCatalog[0]['display'])
+      } else {
+        !extra.includes(`${defaultCatalog[0]['display']}_WITH`) && generalError('', errors, '', 'MISSING_COLUMN_DEFAULT_CATALOG', `${defaultCatalog[0]['display']}_WITH`)
+        !extra.includes(`${defaultCatalog[0]['display']}_WITHOUT`) && generalError('', errors, '', 'MISSING_COLUMN_DEFAULT_CATALOG', `${defaultCatalog[0]['display']}_WITHOUT`)
+      }
+    }
     if (errors.length) {return res.send({ ok: true, results: { stats, errors } })}
     const promises_ = []
     const keys = []
-    const { type } = rows[0]
+    
     for (let row of rows) {
       const { _candidateKey, _isEdit, ...rest } = row
       keys.push({ _candidateKey, _isEdit })

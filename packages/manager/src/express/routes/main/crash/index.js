@@ -2,9 +2,7 @@ import rateLimit from 'express-rate-limit'
 import { reqAuthPost } from '../../basicAuth'
 const apiLimiter = rateLimit({
   skip: ({ body }) => {
-    const {
-      CUSTOM_DATA: customData,
-    } = body
+    const { CUSTOM_DATA: customData } = body
     const { REQUEST_SUPPORT: requestSupport } = customData || {}
     return Boolean(requestSupport)
   },
