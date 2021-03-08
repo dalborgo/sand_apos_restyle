@@ -12,7 +12,7 @@
   "devDependencies": {
     "chai": "^4.3.0",
     "lerna": "^4.0.0",
-    "mocha": "^8.3.0",
+    "mocha": "^8.3.1",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
     "plop": "^2.7.4"
@@ -20,7 +20,7 @@
   "dependencies": {
     "bluebird": "^3.7.2",
     "module-alias": "^2.2.2",
-    "config": "^3.3.3",
+    "config": "^3.3.6",
     "debug": "^4.2.0",
     "esm": "^3.2.25",
     "q": "^1.5.1"
