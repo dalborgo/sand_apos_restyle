@@ -1,6 +1,17 @@
+import rateLimit from 'express-rate-limit'
+import { reqAuthPost } from '../../basicAuth'
+const apiLimiter = rateLimit({
+  skip: ({ body }) => {
+    const {
+      CUSTOM_DATA: customData,
+    } = body
+    const { REQUEST_SUPPORT: requestSupport } = customData || {}
+    return Boolean(requestSupport)
+  },
+})
+
 function addRouters (router) {
-  // /(asten.epele.com.afame.[a-zA-Z0-9.(:)]*\))/
-  router.post('/crash/send', async function (req, res) {
+  router.post('/crash/send', apiLimiter, reqAuthPost, async function (req, res) {
     const { connClass, body } = req
     const { astenposBucketCollection: collection } = connClass
     const {
@@ -9,10 +20,15 @@ function addRouters (router) {
       REPORT_ID: reportId,
       CUSTOM_DATA: customData,
     } = body
-    const { owner = 'XXXXXX', REQUEST_SUPPORT: requestSupport } = customData || {}
+    const { owner = 'XXXXXX' } = customData || {}
     let results
-    if (stackTrace && logCat) {
-      results = await collection.upsert(`CRASH|${reportId}`, { ...body, type: 'CRASH', owner })
+    if (stackTrace || logCat) {
+      let expressiveLog
+      if (stackTrace.includes('asten.epele.com.afame')) {
+        const [expressiveLog_] = stackTrace.match(/(asten.epele.com.afame.[a-zA-Z0-9.(:)]*\))/)
+        expressiveLog = expressiveLog_
+      }
+      results = await collection.upsert(`CRASH|${reportId}`, { ...body, type: 'CRASH', owner, expressiveLog })
     }
     res.send({ ok: true, results })
   })
