@@ -46,7 +46,7 @@ export const getControlRecord = columns => {
             _keys: new Array(2),// [4]default, [5]display
           },
           {
-            type: 'VAT_DEPARTMENT', params: { displayColumn: '' },// non serve il display [6]_id
+            type: 'VAT_DEPARTMENT', params: { columns: ['index'], displayColumn: '' }, skip: ['_id'],// non serve il display [6]_id
             _keys: new Array(1),
           },
         ],
@@ -193,7 +193,7 @@ const checkRecordProducts = (record, line, previous, presence, catalogs = []) =>
     const defaultCatalogCount = defaultCatalog.length
     if (defaultCatalogCount === 1) {
       for (let catalog of catalogs) {
-        if (catalog) {checkMissing(catalog, 5, catalog, presence, errors, line)}
+        catalog && checkMissing(catalog, 5, catalog, presence, errors, line)
         const catalogId = get(presence[5], `[${catalog}][0][_id]`)
         const price = parseInt(record[catalog], 10)
         if (defaultCatalog[0]._id === catalogId) {
@@ -243,8 +243,9 @@ const checkRecordProducts = (record, line, previous, presence, catalogs = []) =>
     ...rest
   } = record
   /* eslint-enable no-unused-vars */
-  const vatKey = `VAT_DEPARTMENT_${department}_${owner}`
-  checkMissing('department', 6, vatKey, presence, errors, line)
+  checkIsEmpty('department', department, errors, line)
+  department && checkMissing('department', 6, department, presence, errors, line)
+  const vatKey = get(presence, `[6][${department}][0]._id`)
   const checkedRecord = {
     ...rest,
     _candidateKey: productId || productCategoryId,
@@ -282,7 +283,7 @@ const checkRecordVariants = (record, line, previous, presence, catalogs = []) =>
     if (defaultCatalogCount === 1) {
       for (let catalog of catalogs) {
         const cleanCatalog = catalog.replace('_WITHOUT', '').replace('_WITH', '')
-        if (cleanCatalog) {checkMissing(catalog, 5, cleanCatalog, presence, errors, line)}
+        cleanCatalog && checkMissing(catalog, 5, cleanCatalog, presence, errors, line)
         const catalogId = get(presence[5], `[${cleanCatalog}][0][_id]`)
         const price = parseInt(record[catalog], 10)
         if (defaultCatalog[0]._id === catalogId) {
