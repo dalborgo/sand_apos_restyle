@@ -22,16 +22,17 @@ function addRouters (router) {
     if (!controlRecordFunction) {
       return res.send({ ok: false, message: 'file not recognized!', errCode: 'UNKNOWN_FILE' })
     }
-    const toSkipKey = []
-    for (let { type, params, skip = [] } of toSearchFields) {
+    const toSkipKey = [], defaultKeys = []
+    for (let { type, params, skip = [], _keys } of toSearchFields) {
       toSkipKey.push(skip)
+      defaultKeys.push(_keys)
       promises.push(execTypesQuery(req, type, params))
     }
     const responses = await Promise.all(promises)
     for (let i = 0; i < responses.length; i++) {
       const { results } = responses[i]
       const [first] = results
-      const keys = Object.keys(first).sort()// ordinate alfabeticamente per essere predicibili
+      const  keys = first ? Object.keys(first).sort() : defaultKeys[i]// ordinate alfabeticamente per essere predicibili
       for (let key of keys) {
         !toSkipKey[i].includes(key) && presenceFields.push(groupBy(results, key))
       }

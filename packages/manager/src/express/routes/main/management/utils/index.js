@@ -18,10 +18,13 @@ export const getControlRecord = columns => {
         ['category_id', 'display'],// unici all'interno del file
         [
           {
-            type: 'MACRO',
-            params: { includeId: false },
+            type: 'MACRO', params: { includeId: false },
+            _keys: new Array(1),
           },
-          { type: 'CATEGORY' },
+          {
+            type: 'CATEGORY',
+            _keys: new Array(2),
+          },
         ],
       ]
     case 'product_id': {
@@ -31,16 +34,20 @@ export const getControlRecord = columns => {
         ['product_id', ['display', 'category']],// unici all'interno del file
         [
           {
-            type: 'CATEGORY',// [0]_id, [1]display
-          },
-          { type: 'PRODUCT', params: { columns: ['category'] }, skip: ['category'] },// [2]_id, [3]display
-          {
-            type: 'CATALOG',
-            params: { columns: ['default'] }, skip: ['_id'],// [4]default, [5]display
+            type: 'CATEGORY',
+            _keys: new Array(2),// [0]_id, [1]display
           },
           {
-            type: 'VAT_DEPARTMENT',
-            params: { displayColumn: '' },// non serve il display [6]_id
+            type: 'PRODUCT', params: { columns: ['category'] }, skip: ['category'],
+            _keys: new Array(2),// [2]_id, [3]display
+          },
+          {
+            type: 'CATALOG', params: { columns: ['default'] }, skip: ['_id'],
+            _keys: new Array(2),// [4]default, [5]display
+          },
+          {
+            type: 'VAT_DEPARTMENT', params: { displayColumn: '' },// non serve il display [6]_id
+            _keys: new Array(1),
           },
         ],
         extra,
@@ -54,11 +61,16 @@ export const getControlRecord = columns => {
         [
           {
             type: 'CATEGORY',
+            _keys: new Array(2),
           },
-          { type: 'VARIANT', params: { columns: ['category'] }, skip: ['category'] },
+          {
+            type: 'VARIANT', params: { columns: ['category'] }, skip: ['category'],
+            _keys: new Array(2),
+          },
           {
             type: 'CATALOG',
             params: { columns: ['default'] }, skip: ['_id'],
+            _keys: new Array(2),
           },
         ],
         extra,
@@ -93,7 +105,8 @@ function checkIsEmpty (column, value, errors, line) {
 }
 
 function checkMissing (column, index, value, presence, errors, line) {
-  !presence[index][value] && errors.push({
+  const presenceToCheck = get(presence, `[${index}][${value}]`)
+  !presenceToCheck && errors.push({
     reason: { code: 'MISSING_VALUE', value },
     line,
     column,
@@ -101,11 +114,15 @@ function checkMissing (column, index, value, presence, errors, line) {
 }
 
 function checkAlreadyInDatabase (column, index, value, id, presence, errors, line) {
-  (presence[index][value] && presence[index][value][0]['_id'] !== id) && errors.push({
-    reason: { code: 'PRESENT_VALUE', value },
-    line,
-    column,
-  })
+  const presenceToCheck = get(presence, `[${index}][${value}]`)
+  const presenceToCheckId = get(presence, `[${index}][${value}][0]._id`)
+  if (presenceToCheck && presenceToCheckId !== id) {
+    errors.push({
+      reason: { code: 'PRESENT_VALUE', value },
+      line,
+      column,
+    })
+  }
 }
 
 export function generalError (column, errors, line, code, value) {

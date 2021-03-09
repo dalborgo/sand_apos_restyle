@@ -3,6 +3,7 @@ import path from 'path'
 import readline from 'readline'
 import get from 'lodash/get'
 import isString from 'lodash/isString'
+import find from 'lodash/find'
 import isPlainObject from 'lodash/isPlainObject'
 import isArray from 'lodash/isArray'
 import moment from 'moment'
@@ -55,7 +56,7 @@ async function processArchive () {
 }
 
 async function processMerged (closings, prechecks, closingKeys, paymentClosingDates, token) {
-  const docs = [], keys = {}
+  const docs = [], keys = {}, extra = {}
   const path_ = path.join(__dirname, 'files', 'astenpos.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
@@ -69,15 +70,12 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
       docs.push({
         blue: { close_date, date, ...rest },
         close_date,
-        date,
+        // eslint-disable-next-line camelcase
+        date: date || close_date,
         meta_id,
         red: get(closings, closingKeys[meta_id]),
         type,
       })
-    } else if (doc.type === 'CATEGORY') {
-      // eslint-disable-next-line no-unused-vars
-      const { products, variants, ...rest } = doc
-      docs.push(rest)
     } else if (doc.type === 'TABLE') {
       // eslint-disable-next-line no-unused-vars
       const { tables, ...rest } = doc
@@ -86,19 +84,19 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
       // eslint-disable-next-line no-unused-vars
       const { categories, ...rest } = doc
       docs.push(rest)
-    } else if (doc.type === 'CRON_TASKS') {
-      doc.meta_id = doc.meta_id.toLowerCase()
-      docs.push(doc)
     } else if (doc.type === 'PAYMENT') {
       const newOrderId = `${doc.order}_${token}`
-      //todo da testare
       const newIncomeId = `PAYMENT_INCOME_${doc.income}_${token}`
       doc.date_closing = doc.date_closing || paymentClosingDates[doc.meta_id]
       doc.archived = true
       docs.push({ ...doc, order: newOrderId, order_id: newOrderId, income_id: newIncomeId })
     } else {
-      const isValid = doc.type && doc.type !== 'ARCHIVE' && doc.type !== 'USER_ADMIN'
-      isValid && docs.push(doc)// skip if type missing or is 'ARCHIVE'
+      const typeToInclude = ['CATALOG', 'CLOSING_DAY', 'CUSTOMER', 'CUSTOMER_ADDRESS', 'DEPARTMENT', 'EXIT', 'MACRO', 'ORDER', 'PAYMENT', 'ROOM', 'TABLE', 'USER', 'USER_ROLE']
+      if(doc.type === 'GENERAL_CONFIGURATION'){
+        extra.coverPrice = doc.cover_price || 0
+      }
+      const isValid = doc.type && typeToInclude.includes(doc.type)
+      isValid && docs.push(doc)
     }
     keys[doc.meta_id] = count++
   }
@@ -110,7 +108,7 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
     docs.push({ meta_id: _id, ...rest, order: newOrderId, order_id: newOrderId })
     keys[_id] = count++
   }
-  return { docs, keys }
+  return { docs, keys, extra }
 }
 
 const checkString = (val, key) => val && isString(val) && key !== 'meta_id'
@@ -180,10 +178,12 @@ function addRouters (router) {
     if (fs.existsSync(logPath)) {await Q.ninvoke(fs, 'unlink', logPath)}
     fileLog += `${moment().format('DD-MM-YYYY HH:mm:ss')} - token: ${token}`
     const { closings, prechecks, keys: closingKeys, paymentClosingDates } = await processArchive()
-    const { docs, keys } = await processMerged(closings, prechecks, closingKeys, paymentClosingDates, token)
-    
+    const { docs, keys, extra } = await processMerged(closings, prechecks, closingKeys, paymentClosingDates, token)
     //region ricerca chiavi negli oggetti e aggiunge `token`
     for (let doc of docs) {
+      if (doc.type === 'CATALOG') {
+        doc.cover_price = extra.coverPrice || 0
+      }
       findVal(doc, keys, token)
     }
     //endregion

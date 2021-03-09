@@ -110,6 +110,10 @@ function addRouters (router) {
     const toSaveUserManager = {
       codes: [code],
       locales: [],
+      morse: [
+        2,
+        2,
+      ],
       password: profile.password,
       type: 'USER_MANAGER',
       user: code,
