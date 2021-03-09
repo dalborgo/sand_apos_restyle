@@ -5,6 +5,8 @@ import { generalError, getControlRecord } from './utils'
 import log from '@adapter/common/src/winston'
 import { execTypesQuery } from '../types'
 import groupBy from 'lodash/groupBy'
+import isNil from 'lodash/isNil'
+import isEmpty from 'lodash/isEmpty'
 
 const { utils } = require(__helpers)
 
@@ -32,7 +34,7 @@ function addRouters (router) {
     for (let i = 0; i < responses.length; i++) {
       const { results } = responses[i]
       const [first] = results
-      const  keys = first ? Object.keys(first).sort() : defaultKeys[i]// ordinate alfabeticamente per essere predicibili
+      const keys = first ? Object.keys(first).sort() : defaultKeys[i]// ordinate alfabeticamente per essere predicibili
       for (let key of keys) {
         !toSkipKey[i].includes(key) && presenceFields.push(groupBy(results, key))
       }
@@ -93,23 +95,49 @@ function addRouters (router) {
       }
     }
     if (errors.length) {return res.send({ ok: true, results: { stats, errors } })}
-    const promises_ = []
-    const keys = []
-    
+    const promises_ = [], keys = [], warnings = []
+    const warehouse = {}
     for (let row of rows) {
-      const { _candidateKey, _isEdit, ...rest } = row
+      let _candidateKey, _isEdit, _rest
+      if (row.type === 'PRODUCT') {
+        const { _candidateKey: candidateKey, _isEdit: isEdit, min, instock, ...rest } = row
+        if (!isNil(min) && !isNil(instock)) {warehouse[candidateKey] = { instock, min }}
+        _candidateKey = candidateKey
+        _isEdit = isEdit
+        _rest = rest
+      } else {
+        const { _candidateKey: candidateKey, _isEdit: isEdit, ...rest } = row
+        _candidateKey = candidateKey
+        _isEdit = isEdit
+        _rest = rest
+      }
       keys.push({ _candidateKey, _isEdit })
       if (_isEdit) {
-        promises_.push(collection.upsert(`${_candidateKey}`, rest, { timeout: 5000 }))
+        promises_.push(collection.upsert(`${_candidateKey}`, _rest, { timeout: 5000 }))
       } else {
-        promises_.push(collection.insert(`${_candidateKey}`, rest, { timeout: 5000 }))
+        promises_.push(collection.insert(`${_candidateKey}`, _rest, { timeout: 5000 }))
+      }
+    }
+    if (!isEmpty(warehouse)) {
+      try {
+        const { content } = await collection.get(`products_warehouse_${owner}`)
+        const input = Object.assign(content, warehouse)
+        await collection.upsert(`products_warehouse_${owner}`, input, { timeout: 5000 })
+      } catch (err) {
+        const warn = {
+          code: err.cause.code,
+          key: err.context.key,
+          message: err.message,
+        }
+        log.warn('Import warn', warn)
+        warnings.push(warn)
       }
     }
     const executed = await Q.allSettled(promises_)
     let count = 0, totalModifications = 0, notSaved = []
     for (let { state, reason } of executed) {
       if (state === 'rejected') {
-        const importError = { code: reason.cause.code, key: reason.context.key }
+        const importError = { code: reason.cause.code, key: reason.context.key, message: reason.context.message }
         log.error('Import error', importError)
         notSaved.push(importError)
       } else {
@@ -120,7 +148,10 @@ function addRouters (router) {
       count++
     }
     const totalCreations = stats.records - totalModifications - notSaved.length
-    res.send({ ok: true, results: { stats: { ...stats, notSaved, totalCreations, totalModifications, type } } })
+    res.send({
+      ok: true,
+      results: { stats: { ...stats, notSaved, totalCreations, totalModifications, type, warnings } },
+    })
   })
 }
 
