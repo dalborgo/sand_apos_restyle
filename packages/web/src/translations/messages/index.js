@@ -253,6 +253,10 @@ export const messages = defineMessages({
     id: 'common.table',
     defaultMessage: 'Tavolo',
   },
+  common_select: {
+    id: 'common.select',
+    defaultMessage: 'Segli',
+  },
   common_other: {
     id: 'common.other',
     defaultMessage: 'Altro',

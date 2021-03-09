@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import Page from 'src/components/Page'
-import { Card, CardContent, makeStyles } from '@material-ui/core'
+import { Card, CardContent, Grid, makeStyles } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import StandardHeader from 'src/components/StandardHeader'
@@ -14,7 +14,8 @@ import shallow from 'zustand/shallow'
 import { useHistory } from 'react-router-dom'
 import { useParams } from 'react-router'
 import StatusDialog from './StatusDialog'
-import { parentPath } from '../../../utils/urlFunctions'
+import { parentPath } from 'src/utils/urlFunctions'
+import ExportForm from './ExportForm'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -75,11 +76,18 @@ const Import = () => {
         </StandardHeader>
       </div>
       <DivContentWrapper>
-        <Card>
-          <CardContent>
-            <FilesDropzone handleUpload={handleUpload}/>
-          </CardContent>
-        </Card>
+        <Grid container spacing={4}>
+          <Grid item sm={6}>
+            <Card>
+              <CardContent>
+                <FilesDropzone handleUpload={handleUpload}/>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item sm={6}>
+            <ExportForm/>
+          </Grid>
+        </Grid>
       </DivContentWrapper>
       {statusId && <StatusDialog close={closeDialog} statusId={statusId}/>}
     </Page>

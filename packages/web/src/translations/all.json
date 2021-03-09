@@ -220,6 +220,10 @@
     "defaultMessage": "Cerca…"
   },
   {
+    "id": "common.select",
+    "defaultMessage": "Segli"
+  },
+  {
     "id": "common.settings",
     "defaultMessage": "Impostazioni"
   },

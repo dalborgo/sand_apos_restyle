@@ -180,5 +180,6 @@
   "management.import.error_MULTI_DEFAULT_CATALOG": "",
   "management.import.error_MISSING_COLUMN_DEFAULT_CATALOG": "",
   "common.last_app": "",
-  "common.download_last_app": ""
+  "common.download_last_app": "",
+  "common.select": ""
 }

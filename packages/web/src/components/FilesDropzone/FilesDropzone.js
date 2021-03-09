@@ -32,9 +32,6 @@ const useStyles = makeStyles(theme => ({
   info: {
     marginTop: theme.spacing(1),
   },
-  list: {
-    maxHeight: 320,
-  },
   actions: {
     marginTop: theme.spacing(2),
     display: 'flex',

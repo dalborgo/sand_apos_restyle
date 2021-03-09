@@ -153,6 +153,15 @@ function addRouters (router) {
       results: { stats: { ...stats, notSaved, totalCreations, totalModifications, type, warnings } },
     })
   })
+  router.post('/management/export/:type', async function (req, res) {
+    const { params, query } = req
+    const allParams = Object.assign(params, query)
+    utils.controlParameters(allParams, ['type', 'owner'])
+    const { ownerArray } = utils.parseOwner(req)
+    if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
+    const { type, owner } = allParams
+    res.send({ ok: true })
+  })
 }
 
 export default {
