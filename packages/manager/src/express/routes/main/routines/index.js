@@ -3,7 +3,6 @@ import path from 'path'
 import readline from 'readline'
 import get from 'lodash/get'
 import isString from 'lodash/isString'
-import find from 'lodash/find'
 import isPlainObject from 'lodash/isPlainObject'
 import isArray from 'lodash/isArray'
 import moment from 'moment'
@@ -56,7 +55,7 @@ async function processArchive () {
 }
 
 async function processMerged (closings, prechecks, closingKeys, paymentClosingDates, token) {
-  const docs = [], keys = {}, extra = {}
+  const docs = [], keys = {}, extra = { tables: {} }
   const path_ = path.join(__dirname, 'files', 'astenpos.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
@@ -76,10 +75,16 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
         red: get(closings, closingKeys[meta_id]),
         type,
       })
-    } else if (doc.type === 'TABLE') {
+    } else if (doc.type === 'ROOM') {
       // eslint-disable-next-line no-unused-vars
       const { tables, ...rest } = doc
       docs.push(rest)
+    } else if (doc.type === 'TABLE') {
+      extra.tables[doc.meta_id] = { exits: doc.exits }
+      docs.push(doc)
+    } else if (doc.type === 'ORDER') {
+      doc.order_id = doc.meta_id
+      docs.push(doc)
     } else if (doc.type === 'MACRO') {
       // eslint-disable-next-line no-unused-vars
       const { categories, ...rest } = doc
@@ -92,7 +97,7 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
       docs.push({ ...doc, order: newOrderId, order_id: newOrderId, income_id: newIncomeId })
     } else {
       const typeToInclude = ['CATALOG', 'CLOSING_DAY', 'CUSTOMER', 'CUSTOMER_ADDRESS', 'DEPARTMENT', 'EXIT', 'MACRO', 'ORDER', 'PAYMENT', 'ROOM', 'TABLE', 'USER', 'USER_ROLE']
-      if(doc.type === 'GENERAL_CONFIGURATION'){
+      if (doc.type === 'GENERAL_CONFIGURATION') {
         extra.coverPrice = doc.cover_price || 0
       }
       const isValid = doc.type && typeToInclude.includes(doc.type)
@@ -183,6 +188,12 @@ function addRouters (router) {
     for (let doc of docs) {
       if (doc.type === 'CATALOG') {
         doc.cover_price = extra.coverPrice || 0
+      }
+      if (doc.type === 'ORDER') {
+        const table = extra.tables[doc.table]
+        if (table) {
+          doc.exits = table.exits
+        }
       }
       findVal(doc, keys, token)
     }
