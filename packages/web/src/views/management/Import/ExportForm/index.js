@@ -3,11 +3,11 @@ import { Grid, makeStyles, TextField } from '@material-ui/core'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import Button from '@material-ui/core/Button'
-import { axiosLocalInstance, useSnackQueryError } from 'src/utils/reactQueryFunctions'
-import { saveAs } from 'file-saver'
+import { manageFile, useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import { useSnackbar } from 'notistack'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
+
 const OPTIONS = ['CATEGORY', 'PRODUCT']
 
 const useStyles = makeStyles(theme => ({
@@ -16,6 +16,9 @@ const useStyles = makeStyles(theme => ({
   },
   formControl: {
     backgroundColor: theme.palette.background.default,
+    '&:focus': {
+      backgroundColor: theme.palette.background.default,
+    },
   },
 }))
 const loadingSel = state => ({ setLoading: state.setLoading })
@@ -38,19 +41,13 @@ const ExportForm = () => {
   const handleExport = useCallback(async () => {
     try {
       setLoading(true)
-      const {
-        data: {
-          ok,
-          results,
-          message,
-        },
-      } = await axiosLocalInstance(`management/export/${state.select}`, {
-        method: 'post',
-      })
+      const { ok, message } = await manageFile(
+        `management/export/${state.select}`,
+        'prova.csv',
+        'text/csv'
+      )
       setLoading(false)
       if (!ok) {return enqueueSnackbar(message)}
-      const { base64, filename } = results
-      saveAs(`data:application/pdf;base64,${base64}`, filename)
     } catch (err) {
       setLoading(false)
       snackQueryError(err)
@@ -61,7 +58,6 @@ const ExportForm = () => {
       <Grid alignItems="center" container spacing={2}>
         <Grid item>
           <TextField
-            className={classes.formControl}
             label={intl.formatMessage(messages['common_select'])}
             name="select"
             onChange={handleChange}
@@ -70,6 +66,9 @@ const ExportForm = () => {
             SelectProps={
               {
                 native: true,
+                classes: {
+                  select: classes.formControl,
+                },
               }
             }
             style={

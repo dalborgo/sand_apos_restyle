@@ -18,7 +18,7 @@ export const getControlRecord = columns => {
         ['category_id', 'display'],// unici all'interno del file
         [
           {
-            type: 'MACRO', params: { includeId: false },
+            type: 'MACRO',  skip: ['_id'],
             _keys: new Array(1),
           },
           {
@@ -163,11 +163,13 @@ const checkRecordCategories = (record, line, previous, presence) => {
   display && checkAlreadyInDatabase('display', 2, display, categoryId, presence, errors, line)
   // eslint-disable-next-line no-unused-vars
   const { category_id, r, g, b, index, short_display: shortDisplay, ...rest } = record
+  const macroId = get(presence[0], `[${macro}][0][_id]`)
   const checkedRecord = {
     ...rest,
     _candidateKey: categoryId || `CATEGORY_${normalizeKey(display)}_${owner}`,
     _isEdit: Boolean(categoryId),
     index: index ? parseInt(index, 10) : 1000,// se non impostato metto numero alto
+    macro: macroId,
     rgb: getRgb(r, g, b, [214, 215, 215]),
     short_display: shortDisplay || display,
     type: 'CATEGORY',

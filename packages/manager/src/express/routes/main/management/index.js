@@ -1,12 +1,18 @@
 import fileUpload from 'express-fileupload'
 import Q from 'q'
 import parse from 'csv-parse'
+import { writeToBuffer } from '@fast-csv/format'
 import { generalError, getControlRecord } from './utils'
 import log from '@adapter/common/src/winston'
 import { execTypesQuery } from '../types'
 import groupBy from 'lodash/groupBy'
 import isNil from 'lodash/isNil'
 import isEmpty from 'lodash/isEmpty'
+import keyBy from 'lodash/keyBy'
+import get from 'lodash/get'
+import { couchQueries } from '@adapter/io'
+
+const knex = require('knex')({ client: 'mysql' })
 
 const { utils } = require(__helpers)
 
@@ -124,11 +130,7 @@ function addRouters (router) {
         const input = Object.assign(content, warehouse)
         await collection.upsert(`products_warehouse_${owner}`, input, { timeout: 5000 })
       } catch (err) {
-        const warn = {
-          code: err.cause.code,
-          key: err.context.key,
-          message: err.message,
-        }
+        const warn = { code: err.cause.code, key: err.context.key, message: err.message }
         log.warn('Import warn', warn)
         warnings.push(warn)
       }
@@ -154,13 +156,79 @@ function addRouters (router) {
     })
   })
   router.post('/management/export/:type', async function (req, res) {
-    const { params, query } = req
+    const { params, query, connClass } = req
+    const { astenposBucketName: bucketName, astenposBucketCollection: collection } = connClass
     const allParams = Object.assign(params, query)
     utils.controlParameters(allParams, ['type', 'owner'])
-    const { ownerArray } = utils.parseOwner(req)
+    const { ownerArray, queryCondition } = utils.parseOwner(req, 'buc')
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
     const { type, owner } = allParams
-    res.send({ ok: true })
+    let rows = [], headers, transform = null, warehouse = {}
+    switch (type) {
+      case 'CATEGORY': {
+        const statement = knex({ buc: bucketName })
+          .select(knex.raw('meta(buc).id category_id, buc.display, buc.short_display, macro.display macro, buc.`index`, buc.rgb[0] r, buc.rgb[1] g, buc.rgb[2] b'))
+          .joinRaw(`LEFT JOIN \`${bucketName}\` macro ON KEYS buc.macro`)
+          .where({ 'buc.type': type })
+          .where(knex.raw(queryCondition))
+          .orderBy('buc.index')
+          .toQuery()
+        const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+        if (!ok) {return res.status(412).send({ ok, message, err })}
+        headers = ['category_id', 'display', 'short_display', 'macro', 'r', 'g', 'b', 'index']
+        rows = results
+        break
+      }
+      case 'PRODUCT': {
+        const statement = knex({ buc: bucketName })
+          .select(knex.raw('meta(buc).id product_id, buc.display, buc.short_display, cat.display category, dep.`index` department, buc.`index`, buc.rgb[0] r, buc.rgb[1] g, buc.rgb[2] b, buc.disabled, buc.hidden, buc.preferred, buc.sku, buc.prices'))
+          .joinRaw(`LEFT JOIN \`${bucketName}\` cat ON KEYS buc.category LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department_id`)
+          .where({ 'buc.type': type })
+          .where(knex.raw(queryCondition))
+          .orderBy('buc.index')
+          .toQuery()
+        {
+          const { ok, results, message, err } = await execTypesQuery(req, 'CATALOG', { order: ['index'] })
+          if (!ok) {return res.status(412).send({ ok, message, err })}
+          const catalogHeader = results.map(({ display }) => display)
+          headers = ['product_id', 'display', 'short_display', 'category', 'r', 'g', 'b', 'department', 'index', 'disabled', 'hidden', 'preferred', 'instock', 'min', 'sku', ...catalogHeader]
+          try {
+            const { content } = await collection.get(`products_warehouse_${owner}`)
+            warehouse = content
+          } catch (err) {
+            const warn = { code: err.cause.code, key: err.context.key, message: err.message }
+            log.warn('Import warn', warn)
+          }
+          transform = row => {
+            const { prices, ...rest } = row
+            const pricesByKey = keyBy(prices, 'catalog')
+            return {
+              ...rest,
+              instock: get(warehouse, `[${row.product_id}].instock`),
+              min: get(warehouse, `[${row.product_id}].min`),
+              ...results.reduce((prev, catalog) => {
+                const { _id, display } = catalog
+                prev[display] = get(pricesByKey, `[${_id}].price`)
+                return prev
+              }, {}),
+            }
+          }
+        }
+        const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+        if (!ok) {return res.status(412).send({ ok, message, err })}
+        rows = results
+        break
+      }
+      default:
+        return res.status(412).send({ ok: false, message: 'file not recognized!', errCode: 'UNKNOWN_FILE' })
+    }
+    const buffer = await writeToBuffer(rows, {
+      delimiter: ';',
+      headers,
+      transform,
+      writeHeaders: true,
+    })
+    res.send(buffer)
   })
 }
 
