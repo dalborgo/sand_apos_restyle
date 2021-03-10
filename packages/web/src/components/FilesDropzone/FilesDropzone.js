@@ -93,7 +93,7 @@ const FilesDropzone = props => {
           gutterBottom
           variant="h3"
         >
-          <FormattedMessage defaultMessage="Scegli il file" id="dropzone.select_file"/>
+          <FormattedMessage defaultMessage="Importa il file" id="dropzone.select_file"/>
         </Typography>
         <Typography
           className={classes.info}

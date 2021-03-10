@@ -112,9 +112,9 @@
   "common.filename": "Filename",
   "common.undefined": "Indefinito",
   "common.common_undefined": "Indefinito",
-  "menu.import": "Import",
+  "menu.import": "Import/export",
   "sub.management": "Gestione",
-  "dropzone.select_file": "Scegli il file",
+  "dropzone.select_file": "Importa il file",
   "dropzone.file_invalid_type2": "{name} ({size}) di tipo {type} non accettato!",
   "dropzone.file_invalid_type": "File \"{name}\" di tipo {type} non accettato!",
   "dropzone.file_too_large": "File \"{name}\" di {size} è troppo grande!",
@@ -144,12 +144,12 @@
   "reports.e_invoices.split_payment": "Scissione pagamenti",
   "reports.e_invoices.state": "Stato",
   "reports.e_invoices.zip": "Cap",
-  "management.import.header_title": "Import",
+  "management.import.header_title": "Import/export",
   "reports.e_invoices.pdf_file": "File pdf",
   "reports.e_invoices.resend": "RE-INVIA",
   "reports.e_invoices.update": "AGGIORNA",
   "reports.e_invoices.xml_notification": "Notifica Xml",
-  "management_import.header_title": "Import",
+  "management_import.header_title": "Import/export",
   "reports.e_invoices.contact": "Contatto",
   "reports.e_invoices.customer_data": "Anagrafica cliente",
   "reports.e_invoices.customer_data_in_invoice": "Anagrafica cliente in fattura",
@@ -180,5 +180,5 @@
   "management.import.error_MISSING_COLUMN_DEFAULT_CATALOG": "Colonna listino di default \"{value}\" non presente",
   "common.last_app": "Scarica l'app aggiornata:",
   "common.download_last_app": "Scarica l'app aggiornata",
-  "common.select": "Segli"
+  "common.select": "Segli cosa esportare"
 }

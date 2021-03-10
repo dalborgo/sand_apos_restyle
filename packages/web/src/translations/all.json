@@ -221,7 +221,7 @@
   },
   {
     "id": "common.select",
-    "defaultMessage": "Segli"
+    "defaultMessage": "Segli cosa esportare"
   },
   {
     "id": "common.settings",
@@ -301,7 +301,7 @@
   },
   {
     "id": "dropzone.select_file",
-    "defaultMessage": "Scegli il file"
+    "defaultMessage": "Importa il file"
   },
   {
     "id": "error.ECONNREFUSED",
@@ -413,7 +413,7 @@
   },
   {
     "id": "management.import.header_title",
-    "defaultMessage": "Import"
+    "defaultMessage": "Import/export"
   },
   {
     "id": "management.import.processed_records",
@@ -449,7 +449,7 @@
   },
   {
     "id": "management_import.header_title",
-    "defaultMessage": "Import"
+    "defaultMessage": "Import/export"
   },
   {
     "id": "menu.closed_tables",
@@ -465,7 +465,7 @@
   },
   {
     "id": "menu.import",
-    "defaultMessage": "Import"
+    "defaultMessage": "Import/export"
   },
   {
     "id": "menu.running_tables",

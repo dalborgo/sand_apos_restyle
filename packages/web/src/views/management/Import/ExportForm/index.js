@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 
-const OPTIONS = ['CATEGORY', 'PRODUCT']
+const OPTIONS = ['CATEGORY', 'PRODUCT', 'VARIANT']
 
 const useStyles = makeStyles(theme => ({
   container: {

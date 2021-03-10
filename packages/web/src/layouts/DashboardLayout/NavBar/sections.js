@@ -58,7 +58,7 @@ const sections = [
     subheader: 'management',
     items: [
       {
-        title: 'Import',
+        title: 'Import/export',
         exact: false,
         icon: UploadIcon,
         href: '/app/management/import',

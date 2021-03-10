@@ -3,9 +3,9 @@ import get from 'lodash/get'
 
 const { axios, utils } = require(__helpers)
 
-export async function getHotelOptions (connClass, owner) {
+export async function getHotelOptions (req, owner) {
   const { ok, message, results: gc, ...extra } = await queryById({
-    connClass,
+    ...req,
     body: {
       columns: ['customize_stelle_options'],
       id: `general_configuration_${owner}`,
@@ -21,7 +21,7 @@ export async function getHotelOptions (connClass, owner) {
     protocol = 'http',
     token: clientToken,
     ...rest
-  } = get(gc, 'customize_stelle_options', {})
+  } = gc
   
   return {
     ok: true,
@@ -38,7 +38,7 @@ export async function getHotelOptions (connClass, owner) {
   }
 }
 
-export async function saveHotelMenu (connClass, owner, toUpdate = [], toDelete = []) {
+export async function saveHotelMenu (req, owner, toUpdate = [], toDelete = []) {
   const products = [...toUpdate]
   for (let item of toDelete) {
     if (item.ext_code !== 'pos_default_product') {
@@ -60,7 +60,7 @@ export async function saveHotelMenu (connClass, owner, toUpdate = [], toDelete =
       products.push(rest)
     }
   }
-  const hotelOptionsResponse = await getHotelOptions(connClass, owner)
+  const hotelOptionsResponse = await getHotelOptions(req, owner)
   if (!hotelOptionsResponse.ok) {return hotelOptionsResponse}
   const { results: options } = hotelOptionsResponse
   const {
@@ -74,8 +74,8 @@ export async function saveHotelMenu (connClass, owner, toUpdate = [], toDelete =
   return { ok: true, results }
 }
 
-export async function getHotelMetadata (connClass, owner, filterOnlyAssociated = false) {
-  const hotelOptionsResponse = await getHotelOptions(connClass, owner)
+export async function getHotelMetadata (req, owner, filterOnlyAssociated = false) {
+  const hotelOptionsResponse = await getHotelOptions(req, owner)
   if (!hotelOptionsResponse.ok) {return hotelOptionsResponse}
   const { results: options } = hotelOptionsResponse
   const {

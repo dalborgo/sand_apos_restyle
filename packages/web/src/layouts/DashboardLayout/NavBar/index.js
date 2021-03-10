@@ -150,7 +150,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
               display="flex"
               justifyContent="center"
             >
-              <RouterLink to="/app/account">
+              <RouterLink to="/">
                 <Avatar
                   alt="User"
                   className={classes.avatar}
@@ -166,7 +166,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
               <Link
                 color="textPrimary"
                 component={RouterLink}
-                to="/app/account"
+                to="/"
                 underline="none"
                 variant="h5"
               >

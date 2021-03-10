@@ -14,11 +14,11 @@ const { utils } = require(__helpers)
 
 function addRouters (router) {
   router.get('/hotel/movements', reqAuthGet, async function (req, res) {
-    const { connClass, query } = req
+    const { query } = req
     utils.controlParameters(query, ['date_from', 'date_to', 'owner'])
     const { date_from: dateFrom, date_to: dateTo, active_checkins_only: activeOnly_, owner } = query
     const activeOnly = activeOnly_ && activeOnly_ !== 'false'
-    const hotelOptionsResponse = await getHotelOptions(connClass, owner)
+    const hotelOptionsResponse = await getHotelOptions(req, owner)
     if (!hotelOptionsResponse.ok) {return res.send(hotelOptionsResponse)}
     const {
       castInArray,
@@ -80,13 +80,13 @@ function addRouters (router) {
   })
   
   router.post('/hotel/charge', reqAuthPost, async function (req, res) {
-    const { connClass, body, query } = req
+    const { body, query } = req
     const allParams = Object.assign(body, query)
     utils.controlParameters(allParams, ['item', 'owner'])
     const { item: printDoc, owner } = allParams
     const COVERS_LABEL = 'Coperti', FALLBACK_LABEL = 'stelle_fallback', charges = []
     const { ok, message, results: gc, ...extra } = await queryById({
-      connClass,
+      ...req,
       body: {
         columns: ['customize_stelle_options'],
         id: `general_configuration_${owner}`,
@@ -241,7 +241,7 @@ function addRouters (router) {
     }
   })
   router.post('/hotel/save_menu', reqAuthPost, async function (req, res) {
-    const { connClass, body, query } = req
+    const { body, query } = req
     const allParams = Object.assign(body, query)
     utils.controlParameters(allParams, ['data', 'conf', 'owner'])
     const { data: items, conf: saveConf, owner } = allParams
@@ -266,14 +266,14 @@ function addRouters (router) {
         }
       }
     }
-    const { data: results } = await saveHotelMenu(connClass, owner, toUpdate, toDelete)
+    const { data: results } = await saveHotelMenu(req, owner, toUpdate, toDelete)
     res.send({ ok: true, results })
   })
   router.get('/hotel/metadata', reqAuthGet, async function (req, res) {
-    const { connClass, query } = req
+    const { query } = req
     utils.controlParameters(query, ['owner'])
     const { owner } = query
-    const response = await getHotelMetadata(connClass, owner)
+    const response = await getHotelMetadata(req, owner)
     res.send(response)
   })
 }

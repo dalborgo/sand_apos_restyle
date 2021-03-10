@@ -255,7 +255,7 @@ export const messages = defineMessages({
   },
   common_select: {
     id: 'common.select',
-    defaultMessage: 'Segli',
+    defaultMessage: 'Segli cosa esportare',
   },
   common_other: {
     id: 'common.other',
@@ -351,7 +351,7 @@ export const messages = defineMessages({
   },
   menu_import: {
     id: 'menu.import',
-    defaultMessage: 'Import',
+    defaultMessage: 'Import/export',
   },
   menu_e_invoices: {
     id: 'menu.e_invoices',

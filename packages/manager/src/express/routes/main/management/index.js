@@ -180,43 +180,79 @@ function addRouters (router) {
         break
       }
       case 'PRODUCT': {
-        const statement = knex({ buc: bucketName })
-          .select(knex.raw('meta(buc).id product_id, buc.display, buc.short_display, cat.display category, dep.`index` department, buc.`index`, buc.rgb[0] r, buc.rgb[1] g, buc.rgb[2] b, buc.disabled, buc.hidden, buc.preferred, buc.sku, buc.prices'))
-          .joinRaw(`LEFT JOIN \`${bucketName}\` cat ON KEYS buc.category LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department_id`)
-          .where({ 'buc.type': type })
-          .where(knex.raw(queryCondition))
-          .orderBy('buc.index')
-          .toQuery()
-        {
-          const { ok, results, message, err } = await execTypesQuery(req, 'CATALOG', { order: ['index'] })
-          if (!ok) {return res.status(412).send({ ok, message, err })}
-          const catalogHeader = results.map(({ display }) => display)
-          headers = ['product_id', 'display', 'short_display', 'category', 'r', 'g', 'b', 'department', 'index', 'disabled', 'hidden', 'preferred', 'instock', 'min', 'sku', ...catalogHeader]
-          try {
-            const { content } = await collection.get(`products_warehouse_${owner}`)
-            warehouse = content
-          } catch (err) {
-            const warn = { code: err.cause.code, key: err.context.key, message: err.message }
-            log.warn('Import warn', warn)
-          }
-          transform = row => {
-            const { prices, ...rest } = row
-            const pricesByKey = keyBy(prices, 'catalog')
-            return {
-              ...rest,
-              instock: get(warehouse, `[${row.product_id}].instock`),
-              min: get(warehouse, `[${row.product_id}].min`),
-              ...results.reduce((prev, catalog) => {
-                const { _id, display } = catalog
-                prev[display] = get(pricesByKey, `[${_id}].price`)
-                return prev
-              }, {}),
-            }
+        const { ok, results, message, err } = await execTypesQuery(req, 'CATALOG', { order: ['index'] })
+        if (!ok) {return res.status(412).send({ ok, message, err })}
+        const catalogHeader = results.map(({ display }) => display)
+        headers = ['product_id', 'display', 'short_display', 'category', 'r', 'g', 'b', 'department', 'index', 'disabled', 'hidden', 'preferred', 'instock', 'min', 'sku', ...catalogHeader]
+        try {
+          const { content } = await collection.get(`products_warehouse_${owner}`, { timeout: 3000 })
+          warehouse = content
+        } catch (err) {
+          const warn = { code: err.cause.code, key: err.context.key, message: err.message }
+          log.warn('Import warn', warn)
+        }
+        transform = row => {
+          const { prices, ...rest } = row
+          const pricesByKey = keyBy(prices, 'catalog')
+          return {
+            ...rest,
+            instock: get(warehouse, `[${row.product_id}].instock`),
+            min: get(warehouse, `[${row.product_id}].min`),
+            ...results.reduce((prev, catalog) => {
+              const { _id, display } = catalog
+              prev[display] = get(pricesByKey, `[${_id}].price`)
+              return prev
+            }, {}),
           }
         }
-        const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+        {
+          const statement = knex({ buc: bucketName })
+            .select(knex.raw('meta(buc).id product_id, buc.display, buc.short_display, cat.display category, dep.`index` department, buc.`index`, buc.rgb[0] r, buc.rgb[1] g, buc.rgb[2] b, buc.disabled, buc.hidden, buc.preferred, buc.sku, buc.prices'))
+            .joinRaw(`LEFT JOIN \`${bucketName}\` cat ON KEYS buc.category LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department_id`)
+            .where({ 'buc.type': type })
+            .where(knex.raw(queryCondition))
+            .orderBy('buc.index')
+            .toQuery()
+          const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+          if (!ok) {return res.status(412).send({ ok, message, err })}
+          rows = results
+        }
+        break
+      }
+      case 'VARIANT': {
+        const { ok, results, message, err } = await execTypesQuery(req, 'CATALOG', { order: ['index'] })
         if (!ok) {return res.status(412).send({ ok, message, err })}
-        rows = results
+        const catalogHeader = results.reduce((prev, { display }) => {
+          prev.push(`${display}_WITH`)
+          prev.push(`${display}_WITHOUT`)
+          return prev
+        }, [])
+        headers = ['variant_id', 'display', 'short_display', 'category', 'r', 'g', 'b', 'index', 'option', ...catalogHeader]
+        transform = row => {
+          const { prices, ...rest } = row
+          const pricesByKey = keyBy(prices, 'catalog')
+          return {
+            ...rest,
+            ...results.reduce((prev, catalog) => {
+              const { _id, display } = catalog
+              prev[`${display}_WITH`] = get(pricesByKey, `[${_id}].price_with`)
+              prev[`${display}_WITHOUT`] = get(pricesByKey, `[${_id}].price_without`)
+              return prev
+            }, {}),
+          }
+        }
+        {
+          const statement = knex({ buc: bucketName })
+            .select(knex.raw('meta(buc).id variant_id, buc.display, buc.short_display, cat.display category, buc.`index`, buc.`option`, buc.rgb[0] r, buc.rgb[1] g, buc.rgb[2] b, buc.prices'))
+            .joinRaw(`LEFT JOIN \`${bucketName}\` cat ON KEYS buc.category`)
+            .where({ 'buc.type': type })
+            .where(knex.raw(queryCondition))
+            .orderBy('buc.index')
+            .toQuery()
+          const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+          if (!ok) {return res.status(412).send({ ok, message, err })}
+          rows = results
+        }
         break
       }
       default:
