@@ -180,5 +180,12 @@
   "management.import.error_MISSING_COLUMN_DEFAULT_CATALOG": "Colonna listino di default \"{value}\" non presente",
   "common.last_app": "Scarica l'app aggiornata:",
   "common.download_last_app": "Scarica l'app aggiornata",
-  "common.select": "Segli cosa esportare"
+  "common.select": "Segli tipo",
+  "common.cancel": "annulla",
+  "common.confirm": "conferma",
+  "common.confirm_operation": "Conferma operazione",
+  "common.delete": "Elimina",
+  "management.export.confirm_delete_message": "Stai eliminando {count} {type}!",
+  "management.export.delete_success": "Eliminati {count} documenti!",
+  "management.import.error_HEADER_MISSING": "File \"{name}\" senza intestazione!"
 }

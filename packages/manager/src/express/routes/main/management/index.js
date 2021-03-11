@@ -26,10 +26,9 @@ function addRouters (router) {
     if (!file) {return res.send({ ok: false, message: 'no file uploaded!' })}
     const [firstLine] = await Q.nfcall(parse, file.data, { delimiter: ';', to_line: 1 })
     const [firstColumns] = firstLine
+    if (!firstColumns) {return res.send({ ok: false, message: 'header missing!', errCode: 'HEADER_MISSING' })}
     const [controlRecordFunction, uniqueFields, toSearchFields = [], extra] = getControlRecord(firstColumns)
-    if (!controlRecordFunction) {
-      return res.send({ ok: false, message: 'file not recognized!', errCode: 'UNKNOWN_FILE' })
-    }
+    if (!controlRecordFunction) {return res.send({ ok: false, message: 'file not recognized!', errCode: 'UNKNOWN_FILE' })}
     const toSkipKey = [], defaultKeys = []
     for (let { type, params, skip = [], _keys } of toSearchFields) {
       toSkipKey.push(skip)
@@ -296,12 +295,44 @@ function addRouters (router) {
         return res.status(412).send({ ok: false, message: 'file not recognized!', errCode: 'UNKNOWN_FILE' })
     }
     const buffer = await writeToBuffer(rows, {
+      alwaysWriteHeaders: true,
       delimiter: ';',
       headers,
       transform,
       writeHeaders: true,
     })
     res.send(buffer)
+  })
+  router.post('/management/count/:type', async function (req, res) {
+    const { params, query, connClass } = req
+    const { astenposBucketName: bucketName } = connClass
+    const allParams = Object.assign(params, query)
+    utils.controlParameters(allParams, ['type', 'owner'])
+    const { ownerArray, queryCondition } = utils.parseOwner(req, 'buc')
+    if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
+    const { type } = allParams
+    const statement = knex({ buc: bucketName })
+      .select(knex.raw('raw count(*)'))
+      .where({ 'buc.type': type })
+      .where(knex.raw(queryCondition))
+      .toQuery()
+    const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+    if (!ok) {return res.send({ ok, message, err })}
+    const [count] = results
+    res.send({ ok, results: count })
+  })
+  router.post('/management/delete_all/:type', async function (req, res) {
+    const { params, query, connClass } = req
+    const { astenposBucketName: bucketName } = connClass
+    const allParams = Object.assign(params, query)
+    utils.controlParameters(allParams, ['type', 'owner'])
+    const { ownerArray } = utils.parseOwner(req, 'buc')
+    if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
+    const { type, owner } = allParams
+    const statement = `delete from \`${bucketName}\` where type = "${type}" and owner ="${owner}" RETURNING meta().id`
+    const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+    if (!ok) {return res.send({ ok, message, err })}
+    res.send({ ok, results: results.length })
   })
 }
 

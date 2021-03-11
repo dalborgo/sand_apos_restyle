@@ -181,5 +181,12 @@
   "management.import.error_MISSING_COLUMN_DEFAULT_CATALOG": "",
   "common.last_app": "",
   "common.download_last_app": "",
-  "common.select": ""
+  "common.select": "",
+  "common.cancel": "",
+  "common.confirm": "",
+  "common.confirm_operation": "",
+  "common.delete": "",
+  "management.export.confirm_delete_message": "",
+  "management.export.delete_success": "",
+  "management.import.error_HEADER_MISSING": ""
 }

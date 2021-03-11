@@ -33,6 +33,7 @@ const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched }) => {
   })
   return (
     <FastField
+      autoHighlight
       classes={
         {
           listbox: classes.listBox,

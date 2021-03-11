@@ -13,6 +13,14 @@ export const messages = defineMessages({
     id: 'management.import.processed_records',
     defaultMessage: 'Salvati',
   },
+  management_export_delete_success: {
+    id: 'management.export.delete_success',
+    defaultMessage: 'Eliminati {count} documenti!',
+  },
+  management_export_confirm_delete_message: {
+    id: 'management.export.confirm_delete_message',
+    defaultMessage: 'Stai eliminando {count} {type}!',
+  },
   management_import_total_modifications: {
     id: 'management.import.total_modifications',
     defaultMessage: 'Modifiche',
@@ -36,6 +44,10 @@ export const messages = defineMessages({
   management_import_error_UNKNOWN_FILE: {
     id: 'management.import.error_UNKNOWN_FILE',
     defaultMessage: 'File "{name}" non riconosciuto!',
+  },
+  management_import_error_HEADER_MISSING: {
+    id: 'management.import.error_HEADER_MISSING',
+    defaultMessage: 'File "{name}" senza intestazione!',
   },
   management_import_error_EMPTY_VALUE: {
     id: 'management.import.error_EMPTY_VALUE',
@@ -221,6 +233,18 @@ export const messages = defineMessages({
     id: 'astenpos.type_CUSTOMER',
     defaultMessage: 'Clienti',
   },
+  common_cancel: {
+    id: 'common.cancel',
+    defaultMessage: 'annulla',
+  },
+  common_confirm: {
+    id: 'common.confirm',
+    defaultMessage: 'conferma',
+  },
+  common_confirm_operation: {
+    id: 'common.confirm_operation',
+    defaultMessage: 'Conferma operazione',
+  },
   common_tot: {
     id: 'common.tot',
     defaultMessage: 'Tot',
@@ -255,7 +279,7 @@ export const messages = defineMessages({
   },
   common_select: {
     id: 'common.select',
-    defaultMessage: 'Segli cosa esportare',
+    defaultMessage: 'Segli tipo',
   },
   common_other: {
     id: 'common.other',
@@ -276,6 +300,10 @@ export const messages = defineMessages({
   common_exportTable: {
     id: 'common.exportTable',
     defaultMessage: 'Esporta',
+  },
+  common_delete: {
+    id: 'common.delete',
+    defaultMessage: 'Elimina',
   },
   common_type: {
     id: 'common.type',

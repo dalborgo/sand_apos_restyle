@@ -96,6 +96,10 @@
     "defaultMessage": "Struttura"
   },
   {
+    "id": "common.cancel",
+    "defaultMessage": "annulla"
+  },
+  {
     "id": "common.charge",
     "defaultMessage": "Addebito"
   },
@@ -112,6 +116,14 @@
     "defaultMessage": "Indefinito"
   },
   {
+    "id": "common.confirm",
+    "defaultMessage": "conferma"
+  },
+  {
+    "id": "common.confirm_operation",
+    "defaultMessage": "Conferma operazione"
+  },
+  {
     "id": "common.covers",
     "defaultMessage": "Coperti"
   },
@@ -122,6 +134,10 @@
   {
     "id": "common.date",
     "defaultMessage": "Data"
+  },
+  {
+    "id": "common.delete",
+    "defaultMessage": "Elimina"
   },
   {
     "id": "common.discounts",
@@ -221,7 +237,7 @@
   },
   {
     "id": "common.select",
-    "defaultMessage": "Segli cosa esportare"
+    "defaultMessage": "Segli tipo"
   },
   {
     "id": "common.settings",
@@ -372,6 +388,14 @@
     "defaultMessage": "Italiano"
   },
   {
+    "id": "management.export.confirm_delete_message",
+    "defaultMessage": "Stai eliminando {count} {type}!"
+  },
+  {
+    "id": "management.export.delete_success",
+    "defaultMessage": "Eliminati {count} documenti!"
+  },
+  {
     "id": "management.import.error_DUPLICATE_VALUE",
     "defaultMessage": "Valore \"{value}\" duplicato alla riga {extra}"
   },
@@ -382,6 +406,10 @@
   {
     "id": "management.import.error_EMPTY_VALUE",
     "defaultMessage": "Colonna \"{column}\" con valore nullo"
+  },
+  {
+    "id": "management.import.error_HEADER_MISSING",
+    "defaultMessage": "File \"{name}\" senza intestazione!"
   },
   {
     "id": "management.import.error_MISSING_COLUMN_DEFAULT_CATALOG",

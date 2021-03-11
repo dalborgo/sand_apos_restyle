@@ -77,14 +77,14 @@ const Import = () => {
       </div>
       <DivContentWrapper>
         <Grid container spacing={4}>
-          <Grid item sm={6}>
+          <Grid item sm={7}>
             <Card>
               <CardContent>
                 <FilesDropzone handleUpload={handleUpload}/>
               </CardContent>
             </Card>
           </Grid>
-          <Grid item sm={6}>
+          <Grid item sm={5}>
             <ExportForm/>
           </Grid>
         </Grid>

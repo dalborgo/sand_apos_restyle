@@ -2,9 +2,8 @@ import React, { memo, useMemo } from 'react'
 import { Dialog, DialogTitle, Grid, IconButton, makeStyles, Typography, withWidth } from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { FormattedMessage } from 'react-intl'
-
 import { StatusReport } from './comps'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   typoError: {
@@ -95,9 +94,8 @@ const StatusDialog = ({ width, close, statusId }) => {
       </Dialog>
     )
   } else {
-    return null
+    return <Redirect to="/app/management"/>
   }
-  
 }
 
 export default memo(withWidth()(StatusDialog))

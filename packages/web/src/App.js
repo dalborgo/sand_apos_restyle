@@ -3,13 +3,13 @@ import { Router } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import { create } from 'jss'
 import rtl from 'jss-rtl'
-import { jssPreset, StylesProvider, ThemeProvider } from '@material-ui/core'
+import { jssPreset, StylesProvider, ThemeProvider, Typography } from '@material-ui/core'
 import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import GlobalStyles from 'src/components/GlobalStyles'
 import ScrollReset from 'src/components/ScrollReset'
 import { defaultQueryFn } from 'src/utils/reactQueryFunctions'
 import { QueryClient, QueryClientProvider, useQueryErrorResetBoundary } from 'react-query'
-import { IntlProvider } from 'react-intl'
+import { IntlProvider, useIntl } from 'react-intl'
 import { ErrorBoundary } from 'react-error-boundary'
 import { AuthProvider } from 'src/contexts/JWTAuthContext'
 import useSettings from 'src/hooks/useSettings'
@@ -20,10 +20,12 @@ import { REACT_QUERY_DEV_TOOLS } from 'src/constants'
 import SnackMyProvider from 'src/components/Snack/SnackComponents'
 import Error500 from 'src/views/errors/Error500'
 import log from '@adapter/common/src/log'
+import { ConfirmProvider } from 'material-ui-confirm'
 import useAuth from './hooks/useAuth'
 import moment from 'moment'
 import { LocalizationProvider } from '@material-ui/pickers'
 import translations from 'src/translations'
+import { messages } from './translations/messages'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -48,6 +50,38 @@ const RouteList = () => {
   return useMemo(() => {
     return renderRoutes(routes, user?.priority)
   }, [user])
+}
+
+const ConfirmIntlProvider = ({ children }) => {
+  const intl = useIntl()
+  return (
+    <ConfirmProvider
+      defaultOptions={
+        {
+          cancellationText: intl.formatMessage(messages['common_cancel']),
+          confirmationText: intl.formatMessage(messages['common_confirm']),
+          title: <Typography component="span" variant="h5">{intl.formatMessage(messages['common_confirm_operation'])}</Typography>,
+          dialogProps: {
+            transitionDuration: 0,
+            id: 'confirmDialog',
+          },
+          confirmationButtonProps: {
+            size: 'small',
+            color: 'secondary',
+            style: { marginRight: 15, marginBottom: 10 },
+            variant: 'outlined',
+          },
+          cancellationButtonProps: {
+            size: 'small',
+            style: { marginRight: 5, marginBottom: 10 },
+            variant: 'outlined',
+          },
+        }
+      }
+    >
+      {children}
+    </ConfirmProvider>
+  )
 }
 
 const App = () => {
@@ -75,14 +109,16 @@ const App = () => {
                 <GlobalStyles/>
                 <ErrorBoundary FallbackComponent={Error500} onError={myErrorHandler} onReset={reset}>
                   <SnackMyProvider>
-                    <Router history={history}>
-                      <ScrollReset/>
-                      <RouteList/>
-                      {
-                        REACT_QUERY_DEV_TOOLS &&
-                        <ReactQueryDevtools initialIsOpen={Boolean(true)} panelProps={{ style: { height: 400 } }}/>
-                      }
-                    </Router>
+                    <ConfirmIntlProvider>
+                      <Router history={history}>
+                        <ScrollReset/>
+                        <RouteList/>
+                        {
+                          REACT_QUERY_DEV_TOOLS &&
+                          <ReactQueryDevtools initialIsOpen={Boolean(true)} panelProps={{ style: { height: 400 } }}/>
+                        }
+                      </Router>
+                    </ConfirmIntlProvider>
                   </SnackMyProvider>
                 </ErrorBoundary>
               </LocalizationProvider>
