@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 
-const OPTIONS = ['CATEGORY', 'PRODUCT', 'VARIANT']
+const OPTIONS = ['CATEGORY', 'CUSTOMER', 'CUSTOMER_ADDRESS', 'PRODUCT', 'TABLE', 'VARIANT']
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -43,7 +43,7 @@ const ExportForm = () => {
       setLoading(true)
       const { ok, message } = await manageFile(
         `management/export/${state.select}`,
-        'prova.csv',
+        `${state.select.toLowerCase()}.csv`,
         'text/csv'
       )
       setLoading(false)

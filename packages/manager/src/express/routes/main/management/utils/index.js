@@ -1,6 +1,7 @@
 import deburr from 'lodash/deburr'
 import get from 'lodash/get'
 import isNaN from 'lodash/isNaN'
+import padStart from 'lodash/padStart'
 import find from 'lodash/find'
 import { cFunctions } from '@adapter/common'
 
@@ -23,6 +24,21 @@ export const getControlRecord = columns => {
           },
           {
             type: 'CATEGORY',
+            _keys: new Array(2),
+          },
+        ],
+      ]
+    case 'table_id':
+      return [
+        checkRecordTables,
+        ['table_id', 'display'],// unici all'interno del file
+        [
+          {
+            type: 'ROOM',  skip: ['_id'],
+            _keys: new Array(1),
+          },
+          {
+            type: 'TABLE',
             _keys: new Array(2),
           },
         ],
@@ -76,10 +92,28 @@ export const getControlRecord = columns => {
         extra,
       ]
     }
+    case 'customer_id': {
+      return [
+        checkRecordCustomer,
+        ['customer_id'],// unici all'interno del file
+        [
+          {
+            type: 'CUSTOMER', params: { displayColumn: ''},
+            _keys: new Array(1),
+          },
+        ],
+      ]
+    }
     case 'customer_address_id': {
       return [
         checkRecordCustomerAddress,
         ['customer_address_id'],// unici all'interno del file
+        [
+          {
+            type: 'CUSTOMER_ADDRESS', params: { displayColumn: ''},
+            _keys: new Array(1),
+          },
+        ],
       ]
     }
     default:
@@ -135,11 +169,12 @@ export function generalError (column, errors, line, code, value) {
 
 /* eslint-disable id-length */
 const getUUID = cFunctions.getUUID()
-const checkRecordCustomerAddress = (record, line, previous) => {
+const checkRecordCustomerAddress = (record, line, previous, presence) => {
   const errors = []
   const { customer_address_id: customerAddressId, surname, owner } = record
   checkDuplicate('customer_address_id', customerAddressId, previous, errors, line)
   checkIsEmpty('surname', surname, errors, line)
+  customerAddressId && checkMissing('customer_address_id', 0, customerAddressId, presence, errors, line)
   // eslint-disable-next-line no-unused-vars
   const { customer_address_id, ...rest } = record
   const checkedRecord = {
@@ -150,7 +185,51 @@ const checkRecordCustomerAddress = (record, line, previous) => {
   }
   return { checkedRecord, errors }
 }
+const checkRecordCustomer = (record, line, previous, presence) => {
+  const errors = []
+  const { customer_id: customerId, company, iva, cf, owner } = record
+  checkDuplicate('customer_id', customerId, previous, errors, line)
+  checkIsEmpty('company', company, iva, errors, line)
+  checkIsEmpty('iva', iva, errors, line)
+  customerId && checkMissing('customer_id', 0, customerId, presence, errors, line)
+  // eslint-disable-next-line no-unused-vars
+  const { customer_id, ...rest } = record
+  const checkedRecord = {
+    ...rest,
+    _candidateKey: customerId || `CUSTOMER_${getUUID()}_${owner}`,
+    _isEdit: Boolean(customerId),
+    cf: (!cf || cf === iva) ? padStart(cf, 11, '0') : cf,
+    iva: padStart(iva, 11, '0'),
+    type: 'CUSTOMER',
+  }
+  return { checkedRecord, errors }
+}
 
+const checkRecordTables = (record, line, previous, presence) => {
+  const errors = []
+  const { display, table_id: tableId, room, owner } = record
+  checkDuplicate('display', display, previous, errors, line)
+  checkDuplicate('table_id', tableId, previous, errors, line)
+  checkIsEmpty('room', room, errors, line)
+  checkIsEmpty('display', display, errors, line)
+  room && checkMissing('room', 0, room, presence, errors, line)
+  tableId && checkMissing('table_id', 1, tableId, presence, errors, line)
+  display && checkAlreadyInDatabase('display', 2, display, tableId, presence, errors, line)
+  // eslint-disable-next-line no-unused-vars
+  const { table_id, r, g, b, index, short_display: shortDisplay, ...rest } = record
+  const roomId = get(presence[0], `[${room}][0][_id]`)
+  const checkedRecord = {
+    ...rest,
+    _candidateKey: tableId || `TABLE_${normalizeKey(display)}_${owner}`,
+    _isEdit: Boolean(tableId),
+    index: index ? parseInt(index, 10) : 0,
+    rgb: getRgb(r, g, b),
+    room: roomId,
+    short_display: shortDisplay || display,
+    type: 'TABLE',
+  }
+  return { checkedRecord, errors }
+}
 const checkRecordCategories = (record, line, previous, presence) => {
   const errors = []
   const { display, category_id: categoryId, macro, owner } = record

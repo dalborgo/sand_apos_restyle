@@ -21,6 +21,9 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto',
     minWidth: 500,
   },
+  typoCaption: {
+    whiteSpace: 'nowrap', 
+  },
 }))
 const StatusReport = ({ data, statusId }) => {
   const { errors, stats } = data
@@ -56,7 +59,7 @@ const StatusReport = ({ data, statusId }) => {
                           })
                         }
                       />
-                      <Typography variant="caption">
+                      <Typography className={classes.typoCaption} variant="caption">
                         {
                           (() => {
                             if (line && column) {

@@ -80,7 +80,6 @@ function addRouters (router) {
       trim: true,
     })
     log.debug('stats', stats)
-    console.log('errors:', errors)
     if (!rows.length) {return res.send({ ok: false, message: 'empty file!', errCode: 'EMPTY_FILE' })}
     const { type } = rows[0]
     if (['PRODUCT', 'VARIANT'].includes(type)) {
@@ -165,6 +164,20 @@ function addRouters (router) {
     const { type, owner } = allParams
     let rows = [], headers, transform = null, warehouse = {}
     switch (type) {
+      case 'TABLE': {
+        const statement = knex({ buc: bucketName })
+          .select(knex.raw('meta(buc).id table_id, buc.display, buc.short_display, room.display room, buc.`index`, buc.rgb[0] r, buc.rgb[1] g, buc.rgb[2] b'))
+          .joinRaw(`LEFT JOIN \`${bucketName}\` room ON KEYS buc.room`)
+          .where({ 'buc.type': type })
+          .where(knex.raw(queryCondition))
+          .orderBy('buc.index')
+          .toQuery()
+        const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+        if (!ok) {return res.status(412).send({ ok, message, err })}
+        headers = ['table_id', 'display', 'short_display', 'room', 'r', 'g', 'b', 'index']
+        rows = results
+        break
+      }
       case 'CATEGORY': {
         const statement = knex({ buc: bucketName })
           .select(knex.raw('meta(buc).id category_id, buc.display, buc.short_display, macro.display macro, buc.`index`, buc.rgb[0] r, buc.rgb[1] g, buc.rgb[2] b'))
@@ -176,6 +189,30 @@ function addRouters (router) {
         const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
         if (!ok) {return res.status(412).send({ ok, message, err })}
         headers = ['category_id', 'display', 'short_display', 'macro', 'r', 'g', 'b', 'index']
+        rows = results
+        break
+      }
+      case 'CUSTOMER': {
+        const statement = knex({ buc: bucketName })
+          .select(knex.raw('meta().id customer_id, company,  address, city, prov, zip_code, state, iva, cf'))
+          .where({ type })
+          .where(knex.raw(queryCondition))
+          .toQuery()
+        const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+        if (!ok) {return res.status(412).send({ ok, message, err })}
+        headers = ['customer_id', 'company', 'address', 'city', 'prov', 'zip_code', 'state', 'iva', 'cf']
+        rows = results
+        break
+      }
+      case 'CUSTOMER_ADDRESS': {
+        const statement = knex({ buc: bucketName })
+          .select(knex.raw('meta().id customer_address_id, surname, name, phone, mail, address, city, zip, code, intern'))
+          .where({ type })
+          .where(knex.raw(queryCondition))
+          .toQuery()
+        const { ok, results, message, err } = await couchQueries.exec(statement, connClass.cluster)
+        if (!ok) {return res.status(412).send({ ok, message, err })}
+        headers = ['customer_address_id', 'surname', 'name', 'phone', 'mail', 'address', 'city', 'zip', 'code', 'intern']
         rows = results
         break
       }
