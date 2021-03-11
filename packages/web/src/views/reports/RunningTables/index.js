@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   container: {
     padding: theme.spacing(2),
     [theme.breakpoints.down('sm')]: { //mobile
-      padding: theme.spacing(0,2),
+      padding: theme.spacing(0, 2),
     },
   },
 }))
@@ -86,6 +86,7 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
                         handleChange(event)
                       }
                     }
+                    onFocus={() => null}
                     select
                     SelectProps={{ native: true }}
                     size="small"

@@ -106,6 +106,7 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
                         handleChange(event)
                       }
                     }
+                    onFocus={() => null}
                     select
                     SelectProps={{ native: true }}
                     size="small"

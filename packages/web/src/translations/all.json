@@ -709,6 +709,10 @@
     "defaultMessage": "Cap"
   },
   {
+    "id": "reports.running_tables.header_title",
+    "defaultMessage": "Tavoli in corso"
+  },
+  {
     "id": "reports.tot_discount",
     "defaultMessage": "Totale Sconti"
   },
