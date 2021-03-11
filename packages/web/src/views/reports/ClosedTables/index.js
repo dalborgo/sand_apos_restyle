@@ -37,9 +37,7 @@ import { DownloadCloud as DownloadCloudIcon } from 'react-feather'
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    [theme.breakpoints.up('md')]: {// mobile
-      height: '100%',
-    },
+    height: '100%',
   },
   downloadButton: {
     paddingRight: 1,

@@ -37,7 +37,7 @@ const DatePickerField = ({
     <DateRangePicker
       disableAutoMonthSwitching
       disableFuture
-      endText={intl.formatMessage(messages.date_range_end)}
+      endText={intl.formatMessage(messages['date_range_end'])}
       mask={getMaskMap(locale)}
       onAccept={
         date => {
@@ -132,7 +132,7 @@ const DatePickerField = ({
           </>
         )
       }
-      startText={intl.formatMessage(messages.date_range_start)}
+      startText={intl.formatMessage(messages['date_range_start'])}
       TransitionComponent={Collapse}
       value={value}
       {...other}

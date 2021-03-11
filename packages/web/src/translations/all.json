@@ -300,6 +300,10 @@
     "defaultMessage": "Fine"
   },
   {
+    "id": "date_range.select_title",
+    "defaultMessage": "Scegli date"
+  },
+  {
     "id": "date_range.start_date",
     "defaultMessage": "Inizio"
   },

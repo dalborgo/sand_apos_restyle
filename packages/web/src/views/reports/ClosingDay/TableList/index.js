@@ -17,6 +17,7 @@ const tableColumnExtensions = [
 
 const totalSummaryItems = [
   { columnName: 'income', type: 'incomeSum' },
+  { columnName: 'pu_totale_nc', type: 'sum' },
 ]
 const { companySelect, hasSingleCompany } = useGeneralStore.getState()
 const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
@@ -33,7 +34,9 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
     if (hasSingleCompany()) {columns_.shift()}
     return columns_
   })
-  
+  const [messagesSummary] = useState(() => ({
+    sum: intl.formatMessage(messages['common_total']),
+  }))
   const noDataCellComponent = useCallback(({ colSpan }) =>
     <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])
   
@@ -55,7 +58,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle }) {
         noDataCellComponent={noDataCellComponent}
       />
       <TableHeaderRow cellComponent={CellHeader}/>
-      <TableSummaryRow totalCellComponent={CellSummary}/>
+      <TableSummaryRow messages={messagesSummary} totalCellComponent={CellSummary}/>
     </Grid>
   )
 })

@@ -397,6 +397,10 @@ export const messages = defineMessages({
     id: 'date_range.start_date',
     defaultMessage: 'Inizio',
   },
+  date_range_select_title: {
+    id: 'date_range.select_title',
+    defaultMessage: 'Scegli date',
+  },
   date_range_end: {
     id: 'date_range.end_date',
     defaultMessage: 'Fine',
