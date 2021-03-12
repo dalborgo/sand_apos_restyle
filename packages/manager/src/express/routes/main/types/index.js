@@ -12,7 +12,7 @@ const knex = require('knex')({ client: 'mysql' })
 export function execTypesQuery (req, type, params_ = {}) {
   const { connClass, query } = req
   const { params } = query || {}
-  const { _id, order, columns = [], includeId = true, displayColumn = 'display' } = { ...params_, ...params }
+  const { _id, order, columns = [], includeId = true, displayColumn = 'display', idLabel = '_id' } = { ...params_, ...params }
   utils.checkParameters(query, ['owner'])
   const parsedOwner = utils.parseOwner(req)
   const {
@@ -33,7 +33,7 @@ export function execTypesQuery (req, type, params_ = {}) {
     displayColumn && statement.select(displayColumn)
   }
   if (includeId) {
-    statement.select(knex.raw(`${_id ? '`' + _id + '`' : 'meta().id'} _id`))
+    statement.select(knex.raw(`${_id ? '`' + _id + '`' : 'meta().id'} ${idLabel}`))
   }
   if (order) {
     statement.orderBy(order)

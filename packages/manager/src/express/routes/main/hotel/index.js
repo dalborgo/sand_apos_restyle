@@ -7,8 +7,11 @@ import keyBy from 'lodash/keyBy'
 import template from 'lodash/template'
 import reduce from 'lodash/reduce'
 import moment from 'moment'
-import { getHotelMetadata, getHotelOptions, saveHotelMenu } from './utils'
+import { alignHotelProducts, getHotelMetadata, getHotelOptions, saveHotelMenu } from './utils'
+import { execTypesQuery } from '../types'
+import { couchQueries } from '@adapter/io'
 
+const knex = require('knex')({ client: 'mysql' })
 const { utils } = require(__helpers)
 
 function addRouters (router) {
@@ -263,8 +266,8 @@ function addRouters (router) {
         }
       }
     }
-    const { data: results } = await saveHotelMenu(req, owner, toUpdate, toDelete)
-    res.send({ ok: true, results })
+    const data = await saveHotelMenu(req, owner, toUpdate, toDelete)
+    res.send(data)
   })
   router.get('/hotel/metadata', reqAuthGet, async function (req, res) {
     const { query } = req
@@ -273,6 +276,79 @@ function addRouters (router) {
     const { owner } = query
     const response = await getHotelMetadata(req, owner)
     res.send(response)
+  })
+  router.get('/hotel/align_preview', reqAuthGet, async function (req, res) {
+    const { query, connClass } = req
+    req.headers.internalcall = 1// skip jwt check
+    utils.checkParameters(query, ['owner'])
+    const { startOwner: owner, ownerArray, queryCondition } = utils.parseOwner(req, 'buc')
+    if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
+    const partial = {}
+    
+    const bucketName = connClass.astenposBucketName
+    const generalConfigQuery = knex.from(knex.raw(`\`${bucketName}\` buc USE KEYS 'general_configuration_${owner}'`))
+      .select(knex.raw('buc.charge_product_name, buc.customize_stelle_options.*'))
+      .toQuery()
+    const productsQuery = knex({ buc: bucketName })
+      .select(knex.raw('meta(buc).id id, buc.display, dep.iva, buc.prices[0].price/1000 net_price'))
+      .joinRaw(`LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department_id`)
+      .where({ 'buc.type': 'PRODUCT' })
+      .where(knex.raw(queryCondition))
+      .toQuery()
+    const departmentsQuery = knex({ buc: bucketName })
+      .select(knex.raw('meta(buc).id id, buc.product_display, dep.iva'))
+      .joinRaw(`LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department`)
+      .where({ 'buc.type': 'DEPARTMENT' })
+      .where(knex.raw(queryCondition))
+      .toQuery()
+    const coverPriceQuery = knex({ buc: bucketName })
+      .select(knex.raw('cover_price, meta(buc).id'))
+      .where({ 'buc.type': 'CATALOG' })
+      .where(knex.raw('`default` = true'))
+      .where(knex.raw(queryCondition))
+      .toQuery()
+    
+    const promises = [
+      await getHotelMetadata(req, owner),
+      await execTypesQuery(req, 'ROOM', { idLabel: 'id' }),
+      await execTypesQuery(req, 'MACRO', { idLabel: 'id' }),
+      await couchQueries.exec(departmentsQuery, connClass.cluster),
+      await couchQueries.exec(productsQuery, connClass.cluster),
+      await couchQueries.exec(generalConfigQuery, connClass.cluster),
+      await couchQueries.exec(coverPriceQuery, connClass.cluster),
+    ]
+    const [metaDataResp, roomResp, macrosResp, departmentResp, productsResponse, hotelOptionsResponse, coverPriceResponse] = await Promise.all(promises)
+    //if (!ok) {return res.status(412).send({ ok, message, err })}
+    {
+      if (!metaDataResp.ok) {return res.send(metaDataResp)}
+      const { categories, departments, products } = metaDataResp.results
+      partial.hotelMetaData = {
+        categories: keyBy(categories, 'id'),
+        departments: keyBy(departments, 'id'),
+        products: keyBy(products, 'id'),
+      }
+      if (!roomResp.ok) {return res.send(roomResp)}
+      partial.rooms = roomResp.results
+      
+      if (!macrosResp.ok) {return res.send(macrosResp)}
+      partial.macros = macrosResp.results
+      
+      if (!departmentResp.ok) {return res.send(departmentResp)}
+      partial.departments = departmentResp.results
+      
+      if (!productsResponse.ok) {return res.send(productsResponse)}
+      partial.products = productsResponse.results
+      
+      if (!hotelOptionsResponse.ok) {return res.send(hotelOptionsResponse)}
+      partial.hotelOptions = hotelOptionsResponse.results
+      
+      if (!coverPriceResponse.ok) {return res.send(coverPriceResponse)}
+      const [{ cover_price: coverPrice, id }] = coverPriceResponse.results
+      partial.coverPrice = coverPrice ? (parseInt(coverPrice, 10) / 1000) : 0
+      partial.defaultCatalog = id
+    }
+    await alignHotelProducts(partial)
+    res.send({ ok: true })
   })
 }
 

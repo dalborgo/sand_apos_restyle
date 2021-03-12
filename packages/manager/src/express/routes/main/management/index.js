@@ -28,7 +28,13 @@ function addRouters (router) {
     const [firstColumns] = firstLine
     if (!firstColumns) {return res.send({ ok: false, message: 'header missing!', errCode: 'HEADER_MISSING' })}
     const [controlRecordFunction, uniqueFields, toSearchFields = [], extra] = getControlRecord(firstColumns)
-    if (!controlRecordFunction) {return res.send({ ok: false, message: 'file not recognized!', errCode: 'UNKNOWN_FILE' })}
+    if (!controlRecordFunction) {
+      return res.send({
+        ok: false,
+        message: 'file not recognized!',
+        errCode: 'UNKNOWN_FILE',
+      })
+    }
     const toSkipKey = [], defaultKeys = []
     for (let { type, params, skip = [], _keys } of toSearchFields) {
       toSkipKey.push(skip)
@@ -44,14 +50,14 @@ function addRouters (router) {
         !toSkipKey[i].includes(key) && presenceFields.push(groupBy(results, key))
       }
     }
+    const countArr = uniqueFields.map(() => 2)
     const onRecord = (record, { lines: line }) => {
       const {
         checkedRecord,
         errors: rowsErrors,
       } = controlRecordFunction({ ...record, owner }, line, idFieldsMap, presenceFields, extra)
-      let countRow = 0
-      for (let field of uniqueFields) {
-        countRow++
+      for (let i = 0; i < uniqueFields.length; i++) {
+        const field = uniqueFields[i]
         if (Array.isArray(field)) {
           const keys = []
           let allVal = true
@@ -59,9 +65,9 @@ function addRouters (router) {
             keys.push(record[val])
             if (!record[val]) {allVal = false}
           }
-          allVal && void (idFieldsMap[keys.join('_')] = countRow)
+          allVal && void (idFieldsMap[keys.join('_')] = countArr[i]++)
         } else {
-          record[field] && void (idFieldsMap[record[field]] = countRow)
+          record[field] && void (idFieldsMap[record[field]] = countArr[i]++)
         }
       }
       if (rowsErrors.length) {
