@@ -21,7 +21,7 @@ export async function queryByType (req) {
     where,
     options,
   } = Object.assign({}, body, query)
-  utils.controlParameters({ type }, ['type'])
+  utils.checkParameters({ type }, ['type'])
   const knex_ = knex({ buc: bucketName }).where({ type }).select(columns || 'buc.*')
   if (where) {knex_.where(where)}
   if (parsedOwner.queryCondition) {knex_.where(knex.raw(parsedOwner.queryCondition))}
@@ -42,7 +42,7 @@ export async function queryById (req, extra) {
     bucketName = connClass.astenposBucketName,
     options,
   } = Object.assign({}, body, query, extra)
-  utils.controlParameters({ id }, ['id'])
+  utils.checkParameters({ id }, ['id'])
   const conditions = parsedOwner.queryCondition ? ` WHERE ${parsedOwner.queryCondition}` : ''// impedisce di accedere ad altri docs da portale
   const knex_ = knex({ buc: bucketName }).select(columns || 'buc.*')
   if (withMeta) {knex_.select(knex.raw('meta().id _id, meta().xattrs._sync.rev _rev'))}
@@ -93,7 +93,7 @@ function createUnsetStatement (val) {
 
 export async function updateById (req, completeResponse = false) {
   const { connClass, body } = req
-  utils.controlParameters(body, ['owner', 'id'])
+  utils.checkParameters(body, ['owner', 'id'])
   if (!isObject(body.set) && !body.unset) {
     throw new BadRequest('INVALID_DOC_UPDATE')
   }

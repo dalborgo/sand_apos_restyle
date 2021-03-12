@@ -156,7 +156,7 @@ async function search (invoiceFile, pdf = false, xml = false) {
 async function createXml (req) {
   const { connClass, body, params } = req
   const params_ = { ...body, ...params }
-  utils.controlParameters(params_, ['paymentId'])
+  utils.checkParameters(params_, ['paymentId'])
   const { paymentId } = params_
   return createEInvoiceXML(connClass, paymentId)
 }
@@ -201,7 +201,7 @@ function addRouters (router) {
   router.post('/e-invoices/xml_notification/:invoiceFile', async function (req, res) {
     utils.checkSecurity(req)
     const { params } = req
-    utils.controlParameters(params, ['invoiceFile'])
+    utils.checkParameters(params, ['invoiceFile'])
     const { invoiceFile } = params
     const { ok, message, results } = await notification(invoiceFile, false)
     if (!ok) {return res.send({ ok, message })}
@@ -211,7 +211,7 @@ function addRouters (router) {
   router.post('/e-invoices/search/:invoiceFile', async function (req, res) {
     utils.checkSecurity(req)
     const { params, query } = req
-    utils.controlParameters(params, ['invoiceFile'])
+    utils.checkParameters(params, ['invoiceFile'])
     const { invoiceFile } = params
     const { allData = false, pdf = true, xml = false } = query
     const { ok, message, results } = await search(invoiceFile, pdf, xml)
@@ -221,7 +221,7 @@ function addRouters (router) {
   router.put('/e-invoices/update_state/:paymentId', async function (req, res) {
     utils.checkSecurity(req)
     const { params, connClass } = req
-    utils.controlParameters(params, ['paymentId'])
+    utils.checkParameters(params, ['paymentId'])
     const { paymentId } = params
     const collection = connClass.astenposBucketCollection
     const { content } = await collection.get(paymentId)
@@ -276,7 +276,7 @@ function addRouters (router) {
   })
   router.post('/e-invoices/create_zip', async function (req, res) {
     const { connClass, body } = req
-    utils.controlParameters(body, ['startDateInMillis', 'endDateInMillis', 'owner'])
+    utils.checkParameters(body, ['startDateInMillis', 'endDateInMillis', 'owner'])
     const parsedOwner = utils.parseOwner(req, 'buc')
     const {
       bucketName = connClass.astenposBucketName,

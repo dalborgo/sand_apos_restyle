@@ -1,4 +1,3 @@
-import { queryById } from '../queries'
 import axios from 'axios'
 import get from 'lodash/get'
 import log from '@adapter/common/src/winston'
@@ -15,7 +14,8 @@ const { utils } = require(__helpers)
 function addRouters (router) {
   router.get('/hotel/movements', reqAuthGet, async function (req, res) {
     const { query } = req
-    utils.controlParameters(query, ['date_from', 'date_to', 'owner'])
+    req.headers.internalcall = 1// skip jwt check
+    utils.checkParameters(query, ['date_from', 'date_to', 'owner'])
     const { date_from: dateFrom, date_to: dateTo, active_checkins_only: activeOnly_, owner } = query
     const activeOnly = activeOnly_ && activeOnly_ !== 'false'
     const hotelOptionsResponse = await getHotelOptions(req, owner)
@@ -81,33 +81,29 @@ function addRouters (router) {
   
   router.post('/hotel/charge', reqAuthPost, async function (req, res) {
     const { body, query } = req
+    req.headers.internalcall = 1// skip jwt check
     const allParams = Object.assign(body, query)
-    utils.controlParameters(allParams, ['item', 'owner'])
+    utils.checkParameters(allParams, ['item', 'owner'])
     const { item: printDoc, owner } = allParams
     const COVERS_LABEL = 'Coperti', FALLBACK_LABEL = 'stelle_fallback', charges = []
-    const { ok, message, results: gc, ...extra } = await queryById({
-      ...req,
-      body: {
-        columns: ['customize_stelle_options'],
-        id: `general_configuration_${owner}`,
-      },
-    })
-    if (!ok) {return res.send({ ok, message, ...extra })}
+    const hotelOptionsResponse = await getHotelOptions(req, owner)
+    if (!hotelOptionsResponse.ok) {return res.send(hotelOptionsResponse)}
     const {
+      clientToken,
       generic_product: genericProduct,
-      headers = { 'Content-Type': 'application/json' },
-      hotel_code: hotelCode,
-      hotel_server: hotelServer,
+      headers,
+      hotelCode,
+      hotelServer,
       macro_display_covers: macroDisplayCovers_,
       path_charges: path,
-      port = '',
-      print_stelle_price_0: printStellePriceZero_,
-      protocol = 'http',
+      port,
+      print_stelle_price_0,
+      protocol,
       split_total_per_cover,
-      token: clientToken,
-    } = get(gc, 'customize_stelle_options', {})
+    } = hotelOptionsResponse.results
+    
     const splitTotalPerCover = Boolean(split_total_per_cover)
-    const printStellePriceZero = Boolean(printStellePriceZero_)
+    const printStellePriceZero = Boolean(print_stelle_price_0)
     const macroDisplayCovers = macroDisplayCovers_ || COVERS_LABEL
     const fallbackTemplate = get(genericProduct, 'fallback', '')
     const groupByMacro = get(genericProduct, 'group_by_macro', false)
@@ -129,7 +125,7 @@ function addRouters (router) {
       saleItems.push({
         quantity: printDoc.covers,
         product_description: 'Coperti',
-        product_code: 'cover', // hardcoded
+        product_code: 'cover',// hardcoded
         unit_price: parseFloat((printDoc.cover_price / 1000).toString()),
       })
       groupItems[macroDisplayCovers] = {
@@ -242,8 +238,9 @@ function addRouters (router) {
   })
   router.post('/hotel/save_menu', reqAuthPost, async function (req, res) {
     const { body, query } = req
+    req.headers.internalcall = 1// skip jwt check
     const allParams = Object.assign(body, query)
-    utils.controlParameters(allParams, ['data', 'conf', 'owner'])
+    utils.checkParameters(allParams, ['data', 'conf', 'owner'])
     const { data: items, conf: saveConf, owner } = allParams
     if (!Array.isArray(items) || !items.length) {return res.send({ ok: true, results: [] })}
     const toUpdate = [], toDelete = []
@@ -271,7 +268,8 @@ function addRouters (router) {
   })
   router.get('/hotel/metadata', reqAuthGet, async function (req, res) {
     const { query } = req
-    utils.controlParameters(query, ['owner'])
+    req.headers.internalcall = 1// skip jwt check
+    utils.checkParameters(query, ['owner'])
     const { owner } = query
     const response = await getHotelMetadata(req, owner)
     res.send(response)

@@ -10,7 +10,7 @@ const { axios, utils } = require(__helpers)
 function addRouters (router) {
   router.post('/installations/login', reqAuthPost, async function (req, res) {
     const { body } = req
-    utils.controlParameters(body, ['code', 'password'])
+    utils.checkParameters(body, ['code', 'password'])
     const partial = {}
     {
       const { data } = await axios.localInstance.post('/queries/query_by_id', {
@@ -41,7 +41,7 @@ function addRouters (router) {
   })
   router.post('/installations/sendInstallationCode', reqAuthPost, async function (req, res) {
     const { body } = req
-    utils.controlParameters(body, ['code'])
+    utils.checkParameters(body, ['code'])
     const partial = {}
     {
       const { data } = await axios.localInstance.post('/queries/query_by_id', {
@@ -61,7 +61,7 @@ function addRouters (router) {
   })
   router.post('/installations/signup', reqAuthPost, async function (req, res) {
     const { body } = req
-    utils.controlParameters(body, ['iva', 'password', 'ragSoc', 'email'])
+    utils.checkParameters(body, ['iva', 'password', 'ragSoc', 'email'])
     const { data } = await axios.localInstance.post('/queries/query_by_type', {
       type: 'INSTALLATION',
       columns: ['profile.iva', 'name', 'code'],

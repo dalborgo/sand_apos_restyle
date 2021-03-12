@@ -6,7 +6,7 @@ const knex = require('knex')({ client: 'mysql' })
 function addRouters (router) {
   router.get('/stats/best_earning', async function (req, res) {
     const { connClass, query } = req
-    utils.controlParameters(query, ['owner'])
+    utils.checkParameters(query, ['owner'])
     const parsedOwner = utils.parseOwner(req)
     const {
       allIn,

@@ -13,7 +13,7 @@ export function execTypesQuery (req, type, params_ = {}) {
   const { connClass, query } = req
   const { params } = query || {}
   const { _id, order, columns = [], includeId = true, displayColumn = 'display' } = { ...params_, ...params }
-  utils.controlParameters(query, ['owner'])
+  utils.checkParameters(query, ['owner'])
   const parsedOwner = utils.parseOwner(req)
   const {
     bucketName = connClass.astenposBucketName,

@@ -8,7 +8,7 @@ const CHECK_VAT_SERVICE_URL = 'http://ec.europa.eu/taxation_customs/vies/checkVa
 function addRouters (router) {
   router.get('/utils/fetch_vat', async function (req, res) {
     const { query } = req
-    utils.controlParameters(query, ['state', 'vat'])
+    utils.checkParameters(query, ['state', 'vat'])
     const { state: countryCode = 'IT', vat: vatNumber } = query
     const client = await Q.nfcall(soap.createClient, CHECK_VAT_SERVICE_URL)
     const response = await Q.nfcall(client.checkVat, { countryCode, vatNumber })

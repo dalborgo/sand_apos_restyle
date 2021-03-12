@@ -19,7 +19,7 @@ const { utils } = require(__helpers)
 function addRouters (router) {
   router.post('/management/import', fileUpload(), async function (req, res) {
     const { files = {}, connClass, query } = req, errors = [], idFieldsMap = {}, presenceFields = [], promises = []
-    utils.controlParameters(query, ['owner'])
+    utils.checkParameters(query, ['owner'])
     const { startOwner: owner, ownerArray } = utils.parseOwner(req)
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
     const file = files.file
@@ -157,7 +157,7 @@ function addRouters (router) {
     const { params, query, connClass } = req
     const { astenposBucketName: bucketName, astenposBucketCollection: collection } = connClass
     const allParams = Object.assign(params, query)
-    utils.controlParameters(allParams, ['type', 'owner'])
+    utils.checkParameters(allParams, ['type', 'owner'])
     const { ownerArray, queryCondition } = utils.parseOwner(req, 'buc')
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
     const { type, owner } = allParams
@@ -307,7 +307,7 @@ function addRouters (router) {
     const { params, query, connClass } = req
     const { astenposBucketName: bucketName } = connClass
     const allParams = Object.assign(params, query)
-    utils.controlParameters(allParams, ['type', 'owner'])
+    utils.checkParameters(allParams, ['type', 'owner'])
     const { ownerArray, queryCondition } = utils.parseOwner(req, 'buc')
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
     const { type } = allParams
@@ -325,7 +325,7 @@ function addRouters (router) {
     const { params, query, connClass } = req
     const { astenposBucketName: bucketName } = connClass
     const allParams = Object.assign(params, query)
-    utils.controlParameters(allParams, ['type', 'owner'])
+    utils.checkParameters(allParams, ['type', 'owner'])
     const { ownerArray } = utils.parseOwner(req, 'buc')
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
     const { type, owner } = allParams

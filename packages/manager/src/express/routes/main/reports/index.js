@@ -35,7 +35,7 @@ const getCombinedEntries = data => {
 function addRouters (router) {
   router.get('/reports/closing_days', async function (req, res) {
     const { connClass, query } = req
-    utils.controlParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
+    utils.checkParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
     const parsedOwner = utils.parseOwner(req)
     const {
       allIn,
@@ -62,7 +62,7 @@ function addRouters (router) {
   
   router.get('/reports/e_invoices', async function (req, res) {
     const { connClass, query } = req
-    utils.controlParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
+    utils.checkParameters(query, ['startDateInMillis', 'endDateInMillis', 'owner'])
     const parsedOwner = utils.parseOwner(req, 'buc')
     const {
       bucketName = connClass.astenposBucketName,
@@ -93,7 +93,7 @@ function addRouters (router) {
    */
   router.get('/reports/closed_tables', async function (req, res) {
     const { connClass, query } = req
-    utils.controlParameters(query, ['owner', 'startDateInMillis', 'endDateInMillis'])
+    utils.checkParameters(query, ['owner', 'startDateInMillis', 'endDateInMillis'])
     const parsedOwner = utils.parseOwner(req, 'buc')
     const {
       allIn,
@@ -138,7 +138,7 @@ function addRouters (router) {
   })
   router.get('/reports/running_tables', async function (req, res) {
     const { connClass, query } = req
-    utils.controlParameters(query, ['owner'])
+    utils.checkParameters(query, ['owner'])
     const parsedOwner = utils.parseOwner(req, 'buc')
     const {
       bucketName = connClass.astenposBucketName,
@@ -178,8 +178,8 @@ function addRouters (router) {
   
   router.get('/reports/running_table/:orderId', async function (req, res) {
     const { connClass, query, params } = req
-    utils.controlParameters(query, ['owner'])
-    utils.controlParameters(params, ['orderId'])
+    utils.checkParameters(query, ['owner'])
+    utils.checkParameters(params, ['orderId'])
     const { orderId } = params
     const parsedOwner = utils.parseOwner(req, 'buc')
     const {
@@ -208,8 +208,8 @@ function addRouters (router) {
   })
   router.get('/reports/closed_table/:orderId', async function (req, res) {
     const { connClass, query, params } = req
-    utils.controlParameters(query, ['owner'])
-    utils.controlParameters(params, ['orderId'])
+    utils.checkParameters(query, ['owner'])
+    utils.checkParameters(params, ['orderId'])
     const { orderId } = params
     const parsedOwner = utils.parseOwner(req, 'buc')
     const {
@@ -238,8 +238,8 @@ function addRouters (router) {
   })
   router.get('/reports/e_invoice/:paymentId', async function (req, res) {
     const { connClass, query, params } = req
-    utils.controlParameters(query, ['owner'])
-    utils.controlParameters(params, ['paymentId'])
+    utils.checkParameters(query, ['owner'])
+    utils.checkParameters(params, ['paymentId'])
     const { paymentId } = params
     const parsedOwner = utils.parseOwner(req, 'buc')
     const {

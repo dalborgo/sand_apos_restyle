@@ -29,7 +29,7 @@ function checkSecurity({ query, body, headers }) {
 
 const checkSide = allIn => Boolean(allIn === 'true' || allIn === true)
 
-function controlParameters (query, requiredKeys) {
+function checkParameters (query, requiredKeys) {
   const out = []
   let errors
   for (let requiredKey of requiredKeys) {
@@ -61,6 +61,6 @@ export default {
   allSettled,
   checkSecurity,
   checkSide,
-  controlParameters,
+  checkParameters,
   parseOwner,
 }

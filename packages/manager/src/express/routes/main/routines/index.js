@@ -175,7 +175,7 @@ function addRouters (router) {
   router.get('/routines/migration', async function (req, res) {
     log.verbose('Start script merge')
     const { query } = req
-    utils.controlParameters(query, ['token'])
+    utils.checkParameters(query, ['token'])
     const token = query.token
     log.hint('Running...')
     const outputPath = path.join(__dirname, 'files', 'merged.json')
