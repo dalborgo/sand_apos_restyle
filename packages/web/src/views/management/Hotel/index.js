@@ -44,7 +44,6 @@ const Import = () => {
     setIsRefetch(false)
   }, [refetch])
   const effectiveFetching = getEffectiveFetchingWithPrev(rest, isRefetch)
-  console.log('data:', data)
   if (owner === NO_SELECTED_CODE) {// attivo solo per singola struttura selezionata
     return <Redirect to="/app"/>
   } else {

@@ -55,7 +55,7 @@ const IntegratedFilteringSel = memo(function IntegratedFilteringSel () {
 const SelectiveTable = memo(function SelectiveTable ({ isIdle, isFetching, width }) {
   const noDataCellComponent = useCallback(({ colSpan }) =>
     <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])
-  const [isSmall] = useState(() => ['xs', 'sm'].includes(width)) //lo faccio statico
+  const [isSmall] = useState(() => ['xs', 'sm'].includes(width))// lo faccio statico
   if (isSmall) {
     return (
       <Table

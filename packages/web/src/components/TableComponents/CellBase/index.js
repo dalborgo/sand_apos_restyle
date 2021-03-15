@@ -24,13 +24,13 @@ export const SummaryCellBase = props => {
 export const CellSummary = withStyles(styleCell, { withTheme: true })(
   SummaryCellBase
 )
-//c'era un warning sul campo children mancante
+// c'era un warning sul campo children mancante
 export const CellHeader = withStyles(styleCell, { withTheme: true })(
   ({ theme, children, ...rest }) => (
     <TableHeaderRow.Cell
       {...rest}
       children={children}
-      style={{ paddingLeft: theme.spacing(2) }} //la prima cella prendeva un valore più forte
+      style={{ paddingLeft: theme.spacing(2) }}// la prima cella prendeva un valore più forte
     />
   )
 )
