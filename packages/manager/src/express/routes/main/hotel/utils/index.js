@@ -2,6 +2,9 @@ import { queryById } from '../../queries'
 import get from 'lodash/get'
 import find from 'lodash/find'
 import template from 'lodash/template'
+import remove from 'lodash/remove'
+import includes from 'lodash/includes'
+import reduce from 'lodash/reduce'
 
 const { axios, utils } = require(__helpers)
 
@@ -93,7 +96,7 @@ export async function getHotelMetadata (req, owner, filterOnlyAssociated = false
   paths.forEach(path => {
     promises.push(hotelInstance.post(path, { clientToken, hotelCode }))
   })
-  const [categoriesResponse, departmentsResponse, productsResponse] = await utils.allSettled(promises)
+  const [categoriesResponse, departmentsResponse, productsResponse] = await utils.allSettled(promises, true, 'response.data')
   const categories = get(categoriesResponse, 'data.categories', [])
   const departments = get(departmentsResponse, 'data.departments', [])
   const products_ = get(productsResponse, 'data.products', [])
@@ -107,9 +110,22 @@ const findStelleVatDepartment = (hotelDepartments, vatValue = '10') => {
   return get(found, 'id', -1)
 }
 
-export async function alignHotelProducts ({hotelOptions, products, rooms = [], departments = [], macros = [], hotelMetaData, coverPrice, defaultCatalog}) {
+const findStelleProduct = (hotelProducts, code, description_) => find(hotelProducts, ({
+  ext_code: extCode,
+  description,
+}) => extCode === code || description === description_)
+
+export async function alignHotelProducts ({
+  hotelOptions,
+  products,
+  rooms = [],
+  departments = [],
+  macros = [],
+  hotelMetaData,
+  coverPrice,
+}) {
   const vatCandidate10 = findStelleVatDepartment(hotelMetaData.departments)
-  const toUpdate = [], toDelete = [], idsToDealWith = []
+  const toUpdate = [], idsToDealWith = []
   toUpdate.push({
     description: 'Extra',
     net_price: 0,
@@ -153,7 +169,7 @@ export async function alignHotelProducts ({hotelOptions, products, rooms = [], d
     })
     const coverMacroDisplay = get(hotelOptions, 'generic_product.macro_display_covers', '')
     if (coverMacroDisplay) {
-      if (!idsToDealWith.includes(coverMacroDisplay)) {
+      if (!includes(idsToDealWith, coverMacroDisplay)) {
         toUpdate.push({
           description: coverMacroDisplay,
           net_price: coverPrice,
@@ -208,5 +224,29 @@ export async function alignHotelProducts ({hotelOptions, products, rooms = [], d
       idsToDealWith.push(product.id)
     })
   }
-  return { ok: true }
+  let foundStelleDefault = false
+  toUpdate.forEach(item => {
+    const hotelProduct = findStelleProduct(hotelMetaData.products, item.code, 'pos_default_product' === item.code ? undefined : item.description)
+    if ('pos_default_product' === item.code && hotelProduct) {
+      foundStelleDefault = true
+    } else {
+      if (hotelProduct) {
+        item.status = 'update'
+        item.id = hotelProduct.id
+      } else {
+        item.status = 'new'
+        item.department_id = item.vat_candidate
+      }
+      delete item.vat_candidate
+    }
+  })
+  foundStelleDefault && remove(toUpdate, { code: 'pos_default_product' })
+  const toDelete = reduce(hotelMetaData.products, (prev, curr) => {
+    if (curr.ext_code && curr.ext_code !== 'pos_default_product') {
+      prev.push(curr)
+    }
+    return prev
+  }, [])
+  remove(toDelete, ({ ext_code: extCode }) => includes(idsToDealWith, extCode))
+  return { toDelete, toUpdate }
 }

@@ -400,6 +400,10 @@
     "defaultMessage": "Eliminati {count} documenti!"
   },
   {
+    "id": "management.hotel.header_title",
+    "defaultMessage": "Hotel"
+  },
+  {
     "id": "management.import.error_DUPLICATE_VALUE",
     "defaultMessage": "Valore \"{value}\" duplicato alla riga {extra}"
   },
@@ -494,6 +498,10 @@
   {
     "id": "menu.e_invoices",
     "defaultMessage": "Fatture elettroniche"
+  },
+  {
+    "id": "menu.hotel",
+    "defaultMessage": "Hotel"
   },
   {
     "id": "menu.import",

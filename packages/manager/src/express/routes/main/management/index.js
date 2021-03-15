@@ -238,6 +238,8 @@ function addRouters (router) {
           const pricesByKey = keyBy(prices, 'catalog')
           return {
             ...rest,
+            disabled: rest.disabled ? 'ok' : '',
+            hidden: rest.hidden ? 'ok' : '',
             instock: get(warehouse, `[${row.product_id}].instock`),
             min: get(warehouse, `[${row.product_id}].min`),
             ...results.reduce((prev, catalog) => {
@@ -245,6 +247,7 @@ function addRouters (router) {
               prev[display] = get(pricesByKey, `[${_id}].price`)
               return prev
             }, {}),
+            preferred: rest.preferred ? 'ok' : '',
           }
         }
         {

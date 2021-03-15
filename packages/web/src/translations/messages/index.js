@@ -381,6 +381,10 @@ export const messages = defineMessages({
     id: 'menu.import',
     defaultMessage: 'Import/export',
   },
+  menu_hotel: {
+    id: 'menu.hotel',
+    defaultMessage: 'Hotel',
+  },
   menu_e_invoices: {
     id: 'menu.e_invoices',
     defaultMessage: 'Fatture elettroniche',

@@ -277,9 +277,8 @@ function addRouters (router) {
     const response = await getHotelMetadata(req, owner)
     res.send(response)
   })
-  router.get('/hotel/align_preview', reqAuthGet, async function (req, res) {
+  router.get('/hotel/align_preview', async function (req, res) {
     const { query, connClass } = req
-    req.headers.internalcall = 1// skip jwt check
     utils.checkParameters(query, ['owner'])
     const { startOwner: owner, ownerArray, queryCondition } = utils.parseOwner(req, 'buc')
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
@@ -289,9 +288,10 @@ function addRouters (router) {
     const generalConfigQuery = knex.from(knex.raw(`\`${bucketName}\` buc USE KEYS 'general_configuration_${owner}'`))
       .select(knex.raw('buc.charge_product_name, buc.customize_stelle_options.*'))
       .toQuery()
-    const productsQuery = knex({ buc: bucketName })
-      .select(knex.raw('meta(buc).id id, buc.display, dep.iva, buc.prices[0].price/1000 net_price'))
+    const productsQuery = knex.from(knex.raw(`\`${bucketName}\` buc UNNEST buc.prices pr`))
+      .select(knex.raw('meta(buc).id id, buc.display, dep.iva, pr.price/1000 net_price'))
       .joinRaw(`LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department_id`)
+      .joinRaw(`LEFT JOIN \`${bucketName}\` cat ON KEYS buc.catalog`)
       .where({ 'buc.type': 'PRODUCT' })
       .where(knex.raw(queryCondition))
       .toQuery()
@@ -302,7 +302,7 @@ function addRouters (router) {
       .where(knex.raw(queryCondition))
       .toQuery()
     const coverPriceQuery = knex({ buc: bucketName })
-      .select(knex.raw('cover_price, meta(buc).id'))
+      .select(knex.raw('cover_price'))
       .where({ 'buc.type': 'CATALOG' })
       .where(knex.raw('`default` = true'))
       .where(knex.raw(queryCondition))
@@ -343,12 +343,11 @@ function addRouters (router) {
       partial.hotelOptions = hotelOptionsResponse.results
       
       if (!coverPriceResponse.ok) {return res.send(coverPriceResponse)}
-      const [{ cover_price: coverPrice, id }] = coverPriceResponse.results
+      const [{ cover_price: coverPrice }] = coverPriceResponse.results
       partial.coverPrice = coverPrice ? (parseInt(coverPrice, 10) / 1000) : 0
-      partial.defaultCatalog = id
     }
-    await alignHotelProducts(partial)
-    res.send({ ok: true })
+    const {toDelete, toUpdate} = await alignHotelProducts(partial)
+    res.send({ ok: true, results: [...toUpdate, ...toDelete] })
   })
 }
 

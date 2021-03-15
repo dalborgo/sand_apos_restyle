@@ -189,5 +189,7 @@
   "management.export.confirm_delete_message": "",
   "management.export.delete_success": "",
   "management.import.error_HEADER_MISSING": "",
-  "date_range.select_title": ""
+  "date_range.select_title": "",
+  "menu.hotel": "",
+  "management.hotel.header_title": ""
 }

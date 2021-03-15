@@ -1,5 +1,5 @@
 import Q from 'q'
-
+import get from 'lodash/get'
 const { BadRequest } = require(__errors)
 import { security } from '../'
 
@@ -43,7 +43,7 @@ function checkParameters (query, requiredKeys) {
   }
 }
 
-async function allSettled (promises) {
+async function allSettled (promises, throwOnError = false, errPath) {
   const output = []
   const results = await Q.allSettled(promises)
   results.forEach(result => {
@@ -51,6 +51,10 @@ async function allSettled (promises) {
     if (state === 'fulfilled') {
       output.push(value)
     } else {
+      if(throwOnError){
+        const message = errPath ? get(result.reason, errPath, result.reason.message) : result.reason.message
+        throw Error(message)
+      }
       output.push(null)
     }
   })
@@ -59,8 +63,8 @@ async function allSettled (promises) {
 
 export default {
   allSettled,
+  checkParameters,
   checkSecurity,
   checkSide,
-  checkParameters,
   parseOwner,
 }

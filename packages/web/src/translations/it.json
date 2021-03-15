@@ -188,5 +188,7 @@
   "management.export.confirm_delete_message": "Stai eliminando {count} {type}!",
   "management.export.delete_success": "Eliminati {count} documenti!",
   "management.import.error_HEADER_MISSING": "File \"{name}\" senza intestazione!",
-  "date_range.select_title": "Scegli date"
+  "date_range.select_title": "Scegli date",
+  "menu.hotel": "Hotel",
+  "management.hotel.header_title": "Hotel"
 }

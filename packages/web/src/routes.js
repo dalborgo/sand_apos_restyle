@@ -75,6 +75,13 @@ const routes = [
       {
         exact: true,
         path: [
+          '/app/management/hotel',
+        ],
+        component: lazy(() => import('src/views/management/Hotel')),
+      },
+      {
+        exact: true,
+        path: [
           '/app/management/import',
           '/app/management/import/:statusId',
         ],

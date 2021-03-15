@@ -190,7 +190,7 @@ const RunningTables = () => {
         <StandardHeader
           breadcrumb={
             <StandardBreadcrumb
-              crumbs={[{ to: '/app', name: 'DashBoard' }, { name: 'Report' }]}
+              crumbs={[{ to: '/app', name: 'Home' }, { name: 'Report' }]}
             />
           }
           rightComponent={
