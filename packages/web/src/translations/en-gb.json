@@ -201,5 +201,6 @@
   "management.hotel.status_delete_text": "",
   "management.hotel.status_new_text": "",
   "management.hotel.status_update_text": "",
-  "management.hotel.id": ""
+  "management.hotel.id": "",
+  "management.align_button": ""
 }

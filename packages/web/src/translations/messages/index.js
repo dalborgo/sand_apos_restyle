@@ -25,6 +25,10 @@ export const messages = defineMessages({
     id: 'management.import.total_modifications',
     defaultMessage: 'Modifiche',
   },
+  management_hotel_align_button: {
+    id: 'management.align_button',
+    defaultMessage: 'Allinea',
+  },
   management_hotel_status: {
     id: 'management.hotel.status',
     defaultMessage: 'Stato',

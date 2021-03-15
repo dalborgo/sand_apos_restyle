@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import Page from 'src/components/Page'
-import { Box, makeStyles, Paper } from '@material-ui/core'
+import { Box, Button, makeStyles, Paper } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import StandardHeader from 'src/components/StandardHeader'
@@ -43,6 +43,9 @@ const Import = () => {
     await refetch()
     setIsRefetch(false)
   }, [refetch])
+  const alignHotel = useCallback(async () => {
+  
+  }, [])
   const effectiveFetching = getEffectiveFetchingWithPrev(rest, isRefetch)
   if (owner === NO_SELECTED_CODE) {// attivo solo per singola struttura selezionata
     return <Redirect to="/app"/>
@@ -60,11 +63,21 @@ const Import = () => {
             }
             rightComponent={
               <Box alignItems="center" display="flex">
-                <Box>
+                <Box mr={2}>
                   <IconButtonLoader
                     isFetching={effectiveFetching}
                     onClick={refetchOnClick}
                   />
+                </Box>
+                <Box>
+                  <Button
+                    color="secondary"
+                    onClick={alignHotel}
+                    size="small"
+                    variant="contained"
+                  >
+                    {intl.formatMessage(messages['management_hotel_align_button'])}
+                  </Button>
                 </Box>
               </Box>
             }

@@ -396,6 +396,10 @@
     "defaultMessage": "Italiano"
   },
   {
+    "id": "management.align_button",
+    "defaultMessage": "Allinea"
+  },
+  {
     "id": "management.export.confirm_delete_message",
     "defaultMessage": "Stai eliminando {count} {type}!"
   },

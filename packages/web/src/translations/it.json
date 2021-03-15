@@ -200,5 +200,6 @@
   "management.hotel.status_delete_text": "Da disaccoppiare in 5Stelle",
   "management.hotel.status_new_text": "Da aggiungere in 5Stelle",
   "management.hotel.status_update_text": "Da modificare in 5Stelle",
-  "management.hotel.id": "Id"
+  "management.hotel.id": "Id",
+  "management.align_button": "Allinea"
 }
