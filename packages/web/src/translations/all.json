@@ -717,6 +717,10 @@
     "defaultMessage": "Cap"
   },
   {
+    "id": "reports.header.list_documents",
+    "defaultMessage": "Lista Documenti"
+  },
+  {
     "id": "reports.running_tables.header_title",
     "defaultMessage": "Tavoli in corso"
   },

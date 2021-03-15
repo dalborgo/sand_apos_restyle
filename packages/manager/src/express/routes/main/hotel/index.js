@@ -14,6 +14,74 @@ import { couchQueries } from '@adapter/io'
 const knex = require('knex')({ client: 'mysql' })
 const { utils } = require(__helpers)
 
+async function getDataToAlign (connClass, owner, queryCondition, req) {
+  const partial = {}
+  
+  const bucketName = connClass.astenposBucketName
+  const generalConfigQuery = knex.from(knex.raw(`\`${bucketName}\` buc USE KEYS 'general_configuration_${owner}'`))
+    .select(knex.raw('buc.charge_product_name, buc.customize_stelle_options.*'))
+    .toQuery()
+  const productsQuery = knex.from(knex.raw(`\`${bucketName}\` buc UNNEST buc.prices pr`))
+    .select(knex.raw('meta(buc).id id, buc.display, dep.iva, pr.price/1000 net_price'))
+    .joinRaw(`LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department_id`)
+    .joinRaw(`LEFT JOIN \`${bucketName}\` cat ON KEYS buc.catalog`)
+    .where({ 'buc.type': 'PRODUCT' })
+    .where(knex.raw(queryCondition))
+    .toQuery()
+  const departmentsQuery = knex({ buc: bucketName })
+    .select(knex.raw('meta(buc).id id, buc.product_display, dep.iva'))
+    .joinRaw(`LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department`)
+    .where({ 'buc.type': 'DEPARTMENT' })
+    .where(knex.raw(queryCondition))
+    .toQuery()
+  const coverPriceQuery = knex({ buc: bucketName })
+    .select(knex.raw('cover_price'))
+    .where({ 'buc.type': 'CATALOG' })
+    .where(knex.raw('`default` = true'))
+    .where(knex.raw(queryCondition))
+    .toQuery()
+  
+  const promises = [
+    await getHotelMetadata(req, owner),
+    await execTypesQuery(req, 'ROOM', { idLabel: 'id' }),
+    await execTypesQuery(req, 'MACRO', { idLabel: 'id' }),
+    await couchQueries.exec(departmentsQuery, connClass.cluster),
+    await couchQueries.exec(productsQuery, connClass.cluster),
+    await couchQueries.exec(generalConfigQuery, connClass.cluster),
+    await couchQueries.exec(coverPriceQuery, connClass.cluster),
+  ]
+  const [metaDataResp, roomResp, macrosResp, departmentResp, productsResponse, hotelOptionsResponse, coverPriceResponse] = await Promise.all(promises)
+  //if (!ok) {return res.status(412).send({ ok, message, err })}
+  {
+    if (!metaDataResp.ok) {throw Error(metaDataResp)}
+    const { categories, departments, products } = metaDataResp.results
+    partial.hotelMetaData = {
+      categories: keyBy(categories, 'id'),
+      departments: keyBy(departments, 'id'),
+      products: keyBy(products, 'id'),
+    }
+    if (!roomResp.ok) {throw Error(roomResp.message)}
+    partial.rooms = roomResp.results
+    
+    if (!macrosResp.ok) {throw Error(macrosResp.message)}
+    partial.macros = macrosResp.results
+    
+    if (!departmentResp.ok) {throw Error(departmentResp.message)}
+    partial.departments = departmentResp.results
+    
+    if (!productsResponse.ok) {throw Error(productsResponse.message)}
+    partial.products = productsResponse.results
+    
+    if (!hotelOptionsResponse.ok) {throw Error(hotelOptionsResponse.message)}
+    partial.hotelOptions = hotelOptionsResponse.results
+    
+    if (!coverPriceResponse.ok) {throw Error(coverPriceResponse.message)}
+    const [{ cover_price: coverPrice }] = coverPriceResponse.results
+    partial.coverPrice = coverPrice ? (parseInt(coverPrice, 10) / 1000) : 0
+  }
+  return partial
+}
+
 function addRouters (router) {
   router.get('/hotel/movements', reqAuthGet, async function (req, res) {
     const { query } = req
@@ -282,71 +350,8 @@ function addRouters (router) {
     utils.checkParameters(query, ['owner'])
     const { startOwner: owner, ownerArray, queryCondition } = utils.parseOwner(req, 'buc')
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
-    const partial = {}
-    
-    const bucketName = connClass.astenposBucketName
-    const generalConfigQuery = knex.from(knex.raw(`\`${bucketName}\` buc USE KEYS 'general_configuration_${owner}'`))
-      .select(knex.raw('buc.charge_product_name, buc.customize_stelle_options.*'))
-      .toQuery()
-    const productsQuery = knex.from(knex.raw(`\`${bucketName}\` buc UNNEST buc.prices pr`))
-      .select(knex.raw('meta(buc).id id, buc.display, dep.iva, pr.price/1000 net_price'))
-      .joinRaw(`LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department_id`)
-      .joinRaw(`LEFT JOIN \`${bucketName}\` cat ON KEYS buc.catalog`)
-      .where({ 'buc.type': 'PRODUCT' })
-      .where(knex.raw(queryCondition))
-      .toQuery()
-    const departmentsQuery = knex({ buc: bucketName })
-      .select(knex.raw('meta(buc).id id, buc.product_display, dep.iva'))
-      .joinRaw(`LEFT JOIN \`${bucketName}\` dep ON KEYS buc.vat_department`)
-      .where({ 'buc.type': 'DEPARTMENT' })
-      .where(knex.raw(queryCondition))
-      .toQuery()
-    const coverPriceQuery = knex({ buc: bucketName })
-      .select(knex.raw('cover_price'))
-      .where({ 'buc.type': 'CATALOG' })
-      .where(knex.raw('`default` = true'))
-      .where(knex.raw(queryCondition))
-      .toQuery()
-    
-    const promises = [
-      await getHotelMetadata(req, owner),
-      await execTypesQuery(req, 'ROOM', { idLabel: 'id' }),
-      await execTypesQuery(req, 'MACRO', { idLabel: 'id' }),
-      await couchQueries.exec(departmentsQuery, connClass.cluster),
-      await couchQueries.exec(productsQuery, connClass.cluster),
-      await couchQueries.exec(generalConfigQuery, connClass.cluster),
-      await couchQueries.exec(coverPriceQuery, connClass.cluster),
-    ]
-    const [metaDataResp, roomResp, macrosResp, departmentResp, productsResponse, hotelOptionsResponse, coverPriceResponse] = await Promise.all(promises)
-    //if (!ok) {return res.status(412).send({ ok, message, err })}
-    {
-      if (!metaDataResp.ok) {return res.send(metaDataResp)}
-      const { categories, departments, products } = metaDataResp.results
-      partial.hotelMetaData = {
-        categories: keyBy(categories, 'id'),
-        departments: keyBy(departments, 'id'),
-        products: keyBy(products, 'id'),
-      }
-      if (!roomResp.ok) {return res.send(roomResp)}
-      partial.rooms = roomResp.results
-      
-      if (!macrosResp.ok) {return res.send(macrosResp)}
-      partial.macros = macrosResp.results
-      
-      if (!departmentResp.ok) {return res.send(departmentResp)}
-      partial.departments = departmentResp.results
-      
-      if (!productsResponse.ok) {return res.send(productsResponse)}
-      partial.products = productsResponse.results
-      
-      if (!hotelOptionsResponse.ok) {return res.send(hotelOptionsResponse)}
-      partial.hotelOptions = hotelOptionsResponse.results
-      
-      if (!coverPriceResponse.ok) {return res.send(coverPriceResponse)}
-      const [{ cover_price: coverPrice }] = coverPriceResponse.results
-      partial.coverPrice = coverPrice ? (parseInt(coverPrice, 10) / 1000) : 0
-    }
-    const {toDelete, toUpdate} = await alignHotelProducts(partial)
+    const dataToAlign = await getDataToAlign(connClass, owner, queryCondition, req)
+    const {toDelete, toUpdate} = await alignHotelProducts(dataToAlign)
     res.send({ ok: true, results: [...toUpdate, ...toDelete] })
   })
 }
