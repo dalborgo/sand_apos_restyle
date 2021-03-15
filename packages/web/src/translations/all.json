@@ -421,27 +421,15 @@
   },
   {
     "id": "management.hotel.status_delete_text",
-    "defaultMessage": "da eliminare in Astenpos"
-  },
-  {
-    "id": "management.hotel.status_delete_tooltip",
-    "defaultMessage": "Eliminazione"
+    "defaultMessage": "Da disaccoppiare in 5Stelle"
   },
   {
     "id": "management.hotel.status_new_text",
-    "defaultMessage": "da creare in Astenpos"
-  },
-  {
-    "id": "management.hotel.status_new_tooltip",
-    "defaultMessage": "Creazione"
+    "defaultMessage": "Da aggiungere in 5Stelle"
   },
   {
     "id": "management.hotel.status_update_text",
-    "defaultMessage": "da aggiornare in Astenpos"
-  },
-  {
-    "id": "management.hotel.status_update_tooltip",
-    "defaultMessage": "Aggiornamento"
+    "defaultMessage": "Da modificare in 5Stelle"
   },
   {
     "id": "management.import.error_DUPLICATE_VALUE",

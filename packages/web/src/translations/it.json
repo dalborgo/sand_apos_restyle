@@ -197,8 +197,8 @@
   "management.hotel.status_delete_tooltip": "Eliminazione",
   "management.hotel.status_new_tooltip": "Creazione",
   "management.hotel.status_update_tooltip": "Aggiornamento",
-  "management.hotel.status_delete_text": "da eliminare in Astenpos",
-  "management.hotel.status_new_text": "da creare in Astenpos",
-  "management.hotel.status_update_text": "da aggiornare in Astenpos",
+  "management.hotel.status_delete_text": "Da disaccoppiare in 5Stelle",
+  "management.hotel.status_new_text": "Da aggiungere in 5Stelle",
+  "management.hotel.status_update_text": "Da modificare in 5Stelle",
   "management.hotel.id": "Id"
 }

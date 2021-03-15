@@ -35,15 +35,15 @@ export const messages = defineMessages({
   },
   management_hotel_status_update_text: {
     id: 'management.hotel.status_update_text',
-    defaultMessage: 'da aggiornare in Astenpos',
+    defaultMessage: 'Da modificare in 5Stelle',
   },
   management_hotel_status_new_text: {
     id: 'management.hotel.status_new_text',
-    defaultMessage: 'da creare in Astenpos',
+    defaultMessage: 'Da aggiungere in 5Stelle',
   },
   management_hotel_status_delete_text: {
     id: 'management.hotel.status_delete_text',
-    defaultMessage: 'da eliminare in Astenpos',
+    defaultMessage: 'Da disaccoppiare in 5Stelle',
   },
   management_hotel_net_price: {
     id: 'management.hotel.net_price',
