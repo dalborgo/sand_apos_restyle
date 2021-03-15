@@ -190,5 +190,15 @@
   "management.import.error_HEADER_MISSING": "File \"{name}\" senza intestazione!",
   "date_range.select_title": "Scegli date",
   "menu.hotel": "Hotel",
-  "management.hotel.header_title": "Hotel"
+  "management.hotel.header_title": "Hotel",
+  "common.description": "Descrizione",
+  "management.hotel.status": "Stato",
+  "management.hotel.net_price": "Prezzo",
+  "management.hotel.status_delete_tooltip": "Eliminazione",
+  "management.hotel.status_new_tooltip": "Creazione",
+  "management.hotel.status_update_tooltip": "Aggiornamento",
+  "management.hotel.status_delete_text": "da eliminare in Astenpos",
+  "management.hotel.status_new_text": "da creare in Astenpos",
+  "management.hotel.status_update_text": "da aggiornare in Astenpos",
+  "management.hotel.id": "Id"
 }

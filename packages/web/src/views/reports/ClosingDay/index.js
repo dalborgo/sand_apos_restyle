@@ -26,8 +26,8 @@ const useStyles = makeStyles(theme => ({
   },
   container: {
     padding: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: { //mobile
-      padding: theme.spacing(0, 2),
+    [theme.breakpoints.down('sm')]: {// mobile
+      padding: theme.spacing(0, 2, 2),
     },
   },
 }))
@@ -39,7 +39,6 @@ const closingSelector = state => ({
   setDateRange: state.setDateRange,
   startDate: state.startDate,
 })
-
 
 const selAllIn = state => state.allIn
 const ClosingDay = () => {
@@ -92,7 +91,7 @@ const ClosingDay = () => {
           <FormattedMessage defaultMessage="Chiusure di giornata" id="reports.closing_day.header_title"/>
         </StandardHeader>
       </div>
-      <Box alignItems="center" display="flex" p={2} pt={1}>
+      <Box alignItems="center" display="flex" p={2} pb={1} pt={1}>
         <DateRangeFormikWrapper
           endDate={endDate}
           setDateRange={setDateRange}

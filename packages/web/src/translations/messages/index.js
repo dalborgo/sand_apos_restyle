@@ -25,6 +25,30 @@ export const messages = defineMessages({
     id: 'management.import.total_modifications',
     defaultMessage: 'Modifiche',
   },
+  management_hotel_status: {
+    id: 'management.hotel.status',
+    defaultMessage: 'Stato',
+  },
+  management_hotel_id: {
+    id: 'management.hotel.id',
+    defaultMessage: 'Id',
+  },
+  management_hotel_status_update_text: {
+    id: 'management.hotel.status_update_text',
+    defaultMessage: 'da aggiornare in Astenpos',
+  },
+  management_hotel_status_new_text: {
+    id: 'management.hotel.status_new_text',
+    defaultMessage: 'da creare in Astenpos',
+  },
+  management_hotel_status_delete_text: {
+    id: 'management.hotel.status_delete_text',
+    defaultMessage: 'da eliminare in Astenpos',
+  },
+  management_hotel_net_price: {
+    id: 'management.hotel.net_price',
+    defaultMessage: 'Prezzo',
+  },
   management_import_total_creations: {
     id: 'management.import.total_creations',
     defaultMessage: 'Creazioni',
@@ -236,6 +260,10 @@ export const messages = defineMessages({
   common_cancel: {
     id: 'common.cancel',
     defaultMessage: 'annulla',
+  },
+  common_description: {
+    id: 'common.description',
+    defaultMessage: 'Descrizione',
   },
   common_confirm: {
     id: 'common.confirm',

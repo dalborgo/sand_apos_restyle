@@ -10,8 +10,8 @@ import numberToLetter from 'number-to-letter'
 export function useMoneyFormatter () {
   const intl = useIntl()
   const [moneyFormatter] = useState(() => {
-    return (value, currency) =>
-      intl.formatNumber(value / 1000 || 0, {
+    return (value, millisDivision = true, currency) =>
+      intl.formatNumber(millisDivision ? value / 1000 || 0 : value || 0, {
         style: 'currency',
         currency: currency ? currency : translations.getLocaleCurrency(intl.locale) || 'EUR',
       })

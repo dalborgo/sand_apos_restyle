@@ -12,7 +12,7 @@ const styleToolbar = theme => ({
     padding: theme.spacing(0, 2),
     minHeight: theme.spacing(6),
     borderBottom: 0,
-    [theme.breakpoints.down('sm')]: { //mobile
+    [theme.breakpoints.down('sm')]: {// mobile
       display: 'none',
     },
   },

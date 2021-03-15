@@ -140,6 +140,10 @@
     "defaultMessage": "Elimina"
   },
   {
+    "id": "common.description",
+    "defaultMessage": "Descrizione"
+  },
+  {
     "id": "common.discounts",
     "defaultMessage": "Sconti"
   },
@@ -402,6 +406,42 @@
   {
     "id": "management.hotel.header_title",
     "defaultMessage": "Hotel"
+  },
+  {
+    "id": "management.hotel.id",
+    "defaultMessage": "Id"
+  },
+  {
+    "id": "management.hotel.net_price",
+    "defaultMessage": "Prezzo"
+  },
+  {
+    "id": "management.hotel.status",
+    "defaultMessage": "Stato"
+  },
+  {
+    "id": "management.hotel.status_delete_text",
+    "defaultMessage": "da eliminare in Astenpos"
+  },
+  {
+    "id": "management.hotel.status_delete_tooltip",
+    "defaultMessage": "Eliminazione"
+  },
+  {
+    "id": "management.hotel.status_new_text",
+    "defaultMessage": "da creare in Astenpos"
+  },
+  {
+    "id": "management.hotel.status_new_tooltip",
+    "defaultMessage": "Creazione"
+  },
+  {
+    "id": "management.hotel.status_update_text",
+    "defaultMessage": "da aggiornare in Astenpos"
+  },
+  {
+    "id": "management.hotel.status_update_tooltip",
+    "defaultMessage": "Aggiornamento"
   },
   {
     "id": "management.import.error_DUPLICATE_VALUE",

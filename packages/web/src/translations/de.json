@@ -192,5 +192,15 @@
   "management.import.error_HEADER_MISSING": "",
   "date_range.select_title": "",
   "menu.hotel": "",
-  "management.hotel.header_title": ""
+  "management.hotel.header_title": "",
+  "common.description": "",
+  "management.hotel.status": "",
+  "management.hotel.net_price": "",
+  "management.hotel.status_delete_tooltip": "",
+  "management.hotel.status_new_tooltip": "",
+  "management.hotel.status_update_tooltip": "",
+  "management.hotel.status_delete_text": "",
+  "management.hotel.status_new_text": "",
+  "management.hotel.status_update_text": "",
+  "management.hotel.id": ""
 }

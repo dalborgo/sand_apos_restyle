@@ -17,7 +17,7 @@ const DateRangeFormikWrapper = memo(withWidth()(function DateRangeFormikWrapper 
     <Box alignItems="center" display="flex">
       <Box mr={2}>
         {
-          width !== 'xs' ?
+          width !== 'md' ?
             <Formik
               initialValues={{ dateRange: [startDate, endDate] }}
               onSubmit={
