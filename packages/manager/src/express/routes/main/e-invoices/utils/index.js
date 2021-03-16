@@ -276,9 +276,9 @@ export async function createEInvoiceXML (connClass, paymentObj) {
     })
   }
   fatturaElettronicaBody['DatiPagamento'] = {
-    CondizioniPagamento: 'TP02',//hardcoded x ora, means Pagamento Completo
+    CondizioniPagamento: 'TP02',// hardcoded x ora, means Pagamento Completo
     DettaglioPagamento: {
-      ModalitaPagamento: payment.payment_mode ? payment.payment_mode : 'MP01',//da payment.income, dentro income
+      ModalitaPagamento: payment.payment_mode ? payment.payment_mode : 'MP01',// da payment.income, dentro income
       ImportoPagamento: numeric.printDecimal(newFinal / 1000 - vat_),
     },
   }
