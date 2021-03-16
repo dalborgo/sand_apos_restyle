@@ -33,6 +33,62 @@ export const messages = defineMessages({
     id: 'management.hotel.status',
     defaultMessage: 'Stato',
   },
+  management_hotel_status_1: {
+    id: 'management.hotel.status_1',
+    defaultMessage: 'Ok',
+  },
+  management_hotel_status_2: {
+    id: 'management.hotel.status_2',
+    defaultMessage: 'Operazione fallita',
+  },
+  management_hotel_status_3: {
+    id: 'management.hotel.status_3',
+    defaultMessage: 'Impossibile cancellare un prodotto movimentato',
+  },
+  management_hotel_status_10: {
+    id: 'management.hotel.status_10',
+    defaultMessage: 'Reparto Fiscale Invalido',
+  },
+  management_hotel_status_11: {
+    id: 'management.hotel.status_11',
+    defaultMessage: 'Categoria invalida',
+  },
+  management_hotel_status_20: {
+    id: 'management.hotel.status_20',
+    defaultMessage: 'ID vietato',
+  },
+  management_hotel_status_21: {
+    id: 'management.hotel.status_21',
+    defaultMessage: 'Descrizione mancante',
+  },
+  management_hotel_status_22: {
+    id: 'management.hotel.status_22',
+    defaultMessage: 'Prezzo mancante',
+  },
+  management_hotel_status_23: {
+    id: 'management.hotel.status_23',
+    defaultMessage: 'Codice duplicato',
+  },
+  management_hotel_status_24: {
+    id: 'management.hotel.status_24',
+    defaultMessage: 'Prodotto duplicato',
+  },
+  management_hotel_status_30: {
+    id: 'management.hotel.status_30',
+    defaultMessage: 'Cancellazione prodotto non trovato',
+  },
+  management_hotel_status_31: {
+    id: 'management.hotel.status_31',
+    defaultMessage: 'Cancellazione prodotto non identificabile',
+  },
+  management_hotel_status_40: {
+    id: 'management.hotel.status_40',
+    defaultMessage: 'Richiesta JSON non corretta',
+  },
+  management_hotel_status_50: {
+    id: 'management.hotel.status_50',
+    defaultMessage: 'Stato sconosciuto',
+  },
   management_hotel_id: {
     id: 'management.hotel.id',
     defaultMessage: 'Id',
@@ -48,6 +104,18 @@ export const messages = defineMessages({
   management_hotel_status_delete_text: {
     id: 'management.hotel.status_delete_text',
     defaultMessage: 'Da disaccoppiare in 5Stelle',
+  },
+  management_hotel_status_update: {
+    id: 'management.hotel.status_update',
+    defaultMessage: 'modificato',
+  },
+  management_hotel_status_new: {
+    id: 'management.hotel.status_new',
+    defaultMessage: 'inserito',
+  },
+  management_hotel_status_delete: {
+    id: 'management.hotel.status_delete',
+    defaultMessage: 'disaccoppiato',
   },
   management_hotel_net_price: {
     id: 'management.hotel.net_price',

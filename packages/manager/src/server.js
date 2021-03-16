@@ -42,7 +42,7 @@ function onError (error) {
   }
 }
 
-const port = normalizePort(PORT || 9020)
+const port = normalizePort(PORT)
 const httpsPort = port + 50
 const server = http.createServer(app)
 server.listen(port)

@@ -7,13 +7,18 @@ import StandardHeader from 'src/components/StandardHeader'
 import { StandardBreadcrumb } from 'src/components/StandardBreadcrumb'
 import DivContentWrapper from 'src/components/DivContentWrapper'
 import { useQuery } from 'react-query'
-import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
+import { axiosLocalInstance, useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import { getEffectiveFetchingWithPrev } from 'src/utils/logics'
 import IconButtonLoader from 'src/components/IconButtonLoader'
 import useAuth from 'src/hooks/useAuth'
 import TableList from './TableList'
 import { NO_SELECTED_CODE } from 'src/contexts/JWTAuthContext'
-import { Redirect } from 'react-router'
+import { Redirect, useParams } from 'react-router'
+import { useGeneralStore } from 'src/zustandStore'
+import shallow from 'zustand/shallow'
+import { useSnackbar } from 'notistack'
+import { useHistory } from 'react-router-dom'
+import StatusDialog from './StatusDialog'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -26,12 +31,17 @@ const useStyles = makeStyles(theme => ({
     },
   },
 }))
-
+const baseUrl = '/app/management/hotel'
+const loadingSel = state => ({ setLoading: state.setLoading })
 const Import = () => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const snackQueryError = useSnackQueryError()
   const [isRefetch, setIsRefetch] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
+  const history = useHistory()
+  const { statusId } = useParams()
+  const { setLoading } = useGeneralStore(loadingSel, shallow)
   const intl = useIntl()
   const { data, refetch, ...rest } = useQuery(['hotel/align_preview', { owner }], {
     keepPreviousData: true,
@@ -44,8 +54,24 @@ const Import = () => {
     setIsRefetch(false)
   }, [refetch])
   const alignHotel = useCallback(async () => {
-  
-  }, [])
+    try {
+      setLoading(true)
+      const { data } = await axiosLocalInstance('hotel/align', {
+        method: 'post',
+      })
+      setLoading(false)
+      if (!data.ok) {return enqueueSnackbar(data.message)}
+      history.push({
+        pathname: `${baseUrl}/status_ok`,
+        state: {
+          data: data.results,
+        },
+      })
+    } catch (err) {
+      setLoading(false)
+      snackQueryError(err)
+    }
+  }, [enqueueSnackbar, history, setLoading, snackQueryError])
   const effectiveFetching = getEffectiveFetchingWithPrev(rest, isRefetch)
   if (owner === NO_SELECTED_CODE) {// attivo solo per singola struttura selezionata
     return <Redirect to="/app"/>
@@ -94,6 +120,7 @@ const Import = () => {
             />
           </Paper>
         </DivContentWrapper>
+        {statusId && <StatusDialog refetchOnClick={refetchOnClick} statusId={statusId}/>}
       </Page>
     )
   }

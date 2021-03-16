@@ -25,19 +25,19 @@ import { useRoleFormatter } from 'src/utils/formatters'
 import getAppVersion from 'src/utils/appVersion'
 
 function renderNavItems ({
+  code,
   depth = 0,
   intl,
   items,
   pathname,
   priority,
 }) {
-  
   return (
     <List disablePadding>
       {
         items.reduce(
           (acc, item) => {
-            if (isMenuLinkToShow(item, { priority })) {
+            if (isMenuLinkToShow(item, { priority, code })) {
               return reduceChildRoutes({ acc, item, pathname, depth, intl })
             }
             return acc
@@ -126,7 +126,7 @@ const useStyles = makeStyles(theme => ({
 const NavBar = ({ setMobileNavOpen, openMobile }) => {
   const classes = useStyles()
   const location = useLocation()
-  const { user } = useAuth()
+  const { user, selectedCode } = useAuth()
   const PerfectScrollbarRef = useRef(null)
   const roleFormatter = useRoleFormatter()
   const intl = useIntl()
@@ -183,31 +183,38 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
           <Divider/>
           <Box p={2} pt={1}>
             {
-              sections.map(section => (
-                <List
-                  key={section.subheader}
-                  subheader={
-                    (
-                      <ListSubheader
-                        className={classes.subheader}
-                        disableGutters
-                        disableSticky
-                      >
-                        {messages[`sub_${section.subheader}`] ? intl.formatMessage(messages[`sub_${section.subheader}`]) : section.subheader}
-                      </ListSubheader>
-                    )
-                  }
-                >
-                  {
-                    renderNavItems({
-                      intl,
-                      items: section.items,
-                      pathname: location.pathname,
-                      priority: user?.priority,
-                    })
-                  }
-                </List>
-              ))
+              sections.reduce((prev, section) => {
+                const code = selectedCode?.code
+                const priority = user?.priority
+                isMenuLinkToShow(section, { priority, code }) &&
+                prev.push(
+                  <List
+                    key={section.subheader}
+                    subheader={
+                      (
+                        <ListSubheader
+                          className={classes.subheader}
+                          disableGutters
+                          disableSticky
+                        >
+                          {messages[`sub_${section.subheader}`] ? intl.formatMessage(messages[`sub_${section.subheader}`]) : section.subheader}
+                        </ListSubheader>
+                      )
+                    }
+                  >
+                    {
+                      renderNavItems({
+                        code,
+                        intl,
+                        items: section.items,
+                        pathname: location.pathname,
+                        priority,
+                      })
+                    }
+                  </List>
+                )
+                return prev
+              }, [])
             }
           </Box>
           <Box flexGrow={1}/>

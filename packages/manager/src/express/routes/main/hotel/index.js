@@ -351,8 +351,31 @@ function addRouters (router) {
     const { startOwner: owner, ownerArray, queryCondition } = utils.parseOwner(req, 'buc')
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
     const dataToAlign = await getDataToAlign(connClass, owner, queryCondition, req)
-    const {toDelete, toUpdate} = await alignHotelProducts(dataToAlign)
-    res.send({ ok: true, results: [...toUpdate, ...toDelete] })
+    const { toDelete, toUpdate } = await alignHotelProducts(dataToAlign)
+    res.send({ ok: true, results: [...toUpdate] })
+  })
+  router.post('/hotel/align', async function (req, res) {
+    const { query, connClass } = req
+    utils.checkParameters(query, ['owner'])
+    const { startOwner: owner, ownerArray, queryCondition } = utils.parseOwner(req, 'buc')
+    if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
+    const dataToAlign = await getDataToAlign(connClass, owner, queryCondition, req)
+    const { toDelete, toUpdate } = await alignHotelProducts(dataToAlign)
+    const { ok, message, results: saveResults } = await saveHotelMenu(req, owner, toUpdate, [])
+    if (!ok) {return res.send({ ok, message })}
+    const results = []
+    for (let i = 0; i < toUpdate.length; i++) {
+      const resultItem = get(saveResults, `updated_products[${i}]`)
+      if (resultItem) {
+        const [itemCode] = Object.keys(resultItem) || []
+        results[i] = {
+          description: toUpdate[i]['description'],
+          status: toUpdate[i]['status'],
+          updateResult: resultItem[itemCode],
+        }
+      }
+    }
+    res.send({ ok: true, results })
   })
 }
 

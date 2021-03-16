@@ -12,10 +12,12 @@ import { useSnackbar } from 'notistack'
 import { useGeneralStore } from 'src/zustandStore'
 import shallow from 'zustand/shallow'
 import { useHistory } from 'react-router-dom'
-import { useParams } from 'react-router'
+import { Redirect, useParams } from 'react-router'
 import StatusDialog from './StatusDialog'
 import { parentPath } from 'src/utils/urlFunctions'
 import ExportForm from './ExportForm'
+import { NO_SELECTED_CODE } from '../../../contexts/JWTAuthContext'
+import useAuth from '../../../hooks/useAuth'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -29,6 +31,7 @@ const baseUrl = '/app/management/import'
 const loadingSel = state => ({ setLoading: state.setLoading })
 const Import = () => {
   const classes = useStyles()
+  const { selectedCode: { code: owner } } = useAuth()
   const intl = useIntl()
   const { statusId } = useParams()
   const history = useHistory()
@@ -60,38 +63,42 @@ const Import = () => {
       snackQueryError(err)
     }
   }, [enqueueSnackbar, history, intl, setLoading, snackQueryError])
-  return (
-    <Page
-      title={intl.formatMessage(messages['menu_import'])}
-    >
-      <div className={classes.container}>
-        <StandardHeader
-          breadcrumb={
-            <StandardBreadcrumb
-              crumbs={[{ to: '/app', name: 'Home' }, { name: intl.formatMessage(messages['sub_management']) }]}
-            />
-          }
-        >
-          <FormattedMessage defaultMessage="Import/export" id="management.import.header_title"/>
-        </StandardHeader>
-      </div>
-      <DivContentWrapper>
-        <Grid container spacing={4}>
-          <Grid item sm={7}>
-            <Card>
-              <CardContent>
-                <FilesDropzone handleUpload={handleUpload}/>
-              </CardContent>
-            </Card>
+  if (owner === NO_SELECTED_CODE) {// attivo solo per singola struttura selezionata
+    return <Redirect to="/app"/>
+  } else {
+    return (
+      <Page
+        title={intl.formatMessage(messages['menu_import'])}
+      >
+        <div className={classes.container}>
+          <StandardHeader
+            breadcrumb={
+              <StandardBreadcrumb
+                crumbs={[{ to: '/app', name: 'Home' }, { name: intl.formatMessage(messages['sub_management']) }]}
+              />
+            }
+          >
+            <FormattedMessage defaultMessage="Import/export" id="management.import.header_title"/>
+          </StandardHeader>
+        </div>
+        <DivContentWrapper>
+          <Grid container spacing={4}>
+            <Grid item sm={7}>
+              <Card>
+                <CardContent>
+                  <FilesDropzone handleUpload={handleUpload}/>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item sm={5}>
+              <ExportForm/>
+            </Grid>
           </Grid>
-          <Grid item sm={5}>
-            <ExportForm/>
-          </Grid>
-        </Grid>
-      </DivContentWrapper>
-      {statusId && <StatusDialog close={closeDialog} statusId={statusId}/>}
-    </Page>
-  )
+        </DivContentWrapper>
+        {statusId && <StatusDialog close={closeDialog} statusId={statusId}/>}
+      </Page>
+    )
+  }
 }
 
 export default Import

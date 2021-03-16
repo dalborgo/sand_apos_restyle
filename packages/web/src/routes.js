@@ -6,7 +6,7 @@ import GuestGuard from 'src/components/GuestGuard'
 import { isMenuLinkToShow } from './utils/logics'
 import LoadingFacebookStyleBoxed from './components/LoadingFacebookStyleBoxed'
 
-export const renderRoutes = (routes = [], priority) => {
+export const renderRoutes = (routes = [], priority, code) => {
   return (
     <Suspense fallback={<LoadingFacebookStyleBoxed/>}>
       <Switch>
@@ -15,7 +15,7 @@ export const renderRoutes = (routes = [], priority) => {
             const Guard = route.guard || Fragment
             const Layout = route.layout || Fragment
             const Component = route.component
-            if (isMenuLinkToShow(route, { priority })) {
+            if (isMenuLinkToShow(route, { priority, code })) {
               acc.push(
                 <Route
                   exact={route.exact}
@@ -27,7 +27,7 @@ export const renderRoutes = (routes = [], priority) => {
                         <Layout>
                           {
                             route.routes
-                              ? renderRoutes(route.routes, priority)
+                              ? renderRoutes(route.routes, priority, code)
                               : <Component {...props} />
                           }
                         </Layout>
@@ -76,6 +76,7 @@ const routes = [
         exact: true,
         path: [
           '/app/management/hotel',
+          '/app/management/hotel/:statusId',
         ],
         component: lazy(() => import('src/views/management/Hotel')),
       },

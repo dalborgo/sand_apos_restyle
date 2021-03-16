@@ -194,6 +194,7 @@ const TopBar = ({
                   changeCode(value)
                 }
               }
+              onFocus={() => null}
               select
               SelectProps={
                 {

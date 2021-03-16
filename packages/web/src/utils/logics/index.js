@@ -1,11 +1,11 @@
 import reactCryptGsm from 'react-crypt-gsm'
 
 export const isMenuLinkToShow = (item, payload = {}) => {
-  const { priority } = payload
-  let { private: private_ } = item
+  const { priority, code } = payload
+  let { private: private_, excludedCode } = item
   const isPrivate = Boolean(private_)
   private_ = private_ && Array.isArray(private_) ? private_ : [private_]
-  return !isPrivate || private_.includes(priority)
+  return (excludedCode !== code) && (!isPrivate || private_.includes(priority))
 }
 
 export const getEffectiveFetching = ({

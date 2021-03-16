@@ -4,7 +4,7 @@
   "author": "MDB",
   "main": "src/index.js",
   "scripts": {
-    "start dev": "set DEBUG=couchnode&&set Q_DEBUG=1&&nodemon --watch . --watch ../common --watch ../io --ignore ./src/express/routes/main/routines/files/ -r esm src",
+    "start": "set DEBUG=couchnode&&set Q_DEBUG=1&&nodemon --watch . --watch ../common --watch ../io --ignore ./src/express/routes/main/routines/files/ -r esm src",
     "start prod": "set NODE_ENV=production&&node -r esm src",
     "plop": "plop -- --project manager",
     "start dev (lcb)": "set DEBUG=couchnode:lcb:error&&set Q_DEBUG=1&&nodemon -r esm src"

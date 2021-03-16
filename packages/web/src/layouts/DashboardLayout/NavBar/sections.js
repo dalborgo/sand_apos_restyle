@@ -7,6 +7,7 @@ import {
   List as ListIcon,
   Upload as UploadIcon,
 } from 'react-feather'
+import { NO_SELECTED_CODE } from 'src/contexts/JWTAuthContext'
 
 const sections = [
   {
@@ -57,18 +58,21 @@ const sections = [
   },
   {
     subheader: 'management',
+    excludedCode: NO_SELECTED_CODE,
     items: [
       {
         title: 'Import/export',
         exact: false,
         icon: UploadIcon,
         href: '/app/management/import',
+        excludedCode: NO_SELECTED_CODE,
       },
       {
         title: 'Hotel',
         exact: false,
         icon: KeyIcon,
         href: '/app/management/hotel',
+        excludedCode: NO_SELECTED_CODE,
       },
     ],
   },

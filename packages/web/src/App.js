@@ -46,10 +46,10 @@ const queryClient = new QueryClient({
 })
 
 const RouteList = () => {
-  const { user } = useAuth()
+  const { user, selectedCode } = useAuth()
   return useMemo(() => {
-    return renderRoutes(routes, user?.priority)
-  }, [user])
+    return renderRoutes(routes, user?.priority, selectedCode.code)
+  }, [selectedCode.code, user.priority])
 }
 
 const ConfirmIntlProvider = ({ children }) => {
@@ -60,7 +60,12 @@ const ConfirmIntlProvider = ({ children }) => {
         {
           cancellationText: intl.formatMessage(messages['common_cancel']),
           confirmationText: intl.formatMessage(messages['common_confirm']),
-          title: <Typography component="span" variant="h5">{intl.formatMessage(messages['common_confirm_operation'])}</Typography>,
+          title: 
+            <Typography component="span" variant="h5">
+              {
+                intl.formatMessage(messages['common_confirm_operation'])
+              }
+            </Typography>,
           dialogProps: {
             transitionDuration: 0,
             id: 'confirmDialog',

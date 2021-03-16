@@ -57,7 +57,7 @@ const ChangeCustomerForm = memo(function ChangeCustomerForm ({ onSubmit, data, i
         >
           {
             ({ dirty, values, handleChange }) => (
-              <Form style={{ height: '100%' }}>
+              <Form >
                 <Grid
                   alignItems="stretch"
                   className={classes.container}
