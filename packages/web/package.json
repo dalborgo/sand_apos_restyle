@@ -67,7 +67,7 @@
     "react-error-boundary": "^3.1.1",
     "react-feather": "^2.0.9",
     "react-helmet": "^6.1.0",
-    "react-intl": "^5.13.3",
+    "react-intl": "^5.13.4",
     "react-perfect-scrollbar": "^1.5.8",
     "react-query": "^3.12.2",
     "react-redux": "^7.2.1",
