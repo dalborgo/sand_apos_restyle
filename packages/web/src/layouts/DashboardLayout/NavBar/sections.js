@@ -70,6 +70,7 @@ const sections = [
       {
         title: 'Hotel',
         exact: false,
+        hotelEnabled: true,
         icon: KeyIcon,
         href: '/app/management/hotel',
         excludedCode: NO_SELECTED_CODE,

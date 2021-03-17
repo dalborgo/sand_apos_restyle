@@ -220,5 +220,6 @@
   "management.hotel.status_50": "",
   "management.hotel.status_delete": "",
   "management.hotel.status_new": "",
-  "management.hotel.status_update": ""
+  "management.hotel.status_update": "",
+  "management.export.confirm_align_message": ""
 }

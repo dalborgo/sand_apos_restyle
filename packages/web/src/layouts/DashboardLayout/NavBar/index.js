@@ -27,6 +27,7 @@ import getAppVersion from 'src/utils/appVersion'
 function renderNavItems ({
   code,
   depth = 0,
+  extra,
   intl,
   items,
   pathname,
@@ -37,7 +38,7 @@ function renderNavItems ({
       {
         items.reduce(
           (acc, item) => {
-            if (isMenuLinkToShow(item, { priority, code })) {
+            if (isMenuLinkToShow(item, { priority, code, extra })) {
               return reduceChildRoutes({ acc, item, pathname, depth, intl })
             }
             return acc
@@ -126,7 +127,7 @@ const useStyles = makeStyles(theme => ({
 const NavBar = ({ setMobileNavOpen, openMobile }) => {
   const classes = useStyles()
   const location = useLocation()
-  const { user, selectedCode } = useAuth()
+  const { user, selectedCode, gc } = useAuth()
   const PerfectScrollbarRef = useRef(null)
   const roleFormatter = useRoleFormatter()
   const intl = useIntl()
@@ -186,7 +187,8 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
               sections.reduce((prev, section) => {
                 const code = selectedCode?.code
                 const priority = user?.priority
-                isMenuLinkToShow(section, { priority, code }) &&
+                const extra = { ...gc?.[code] }
+                isMenuLinkToShow(section, { priority, code, extra }) &&
                 prev.push(
                   <List
                     key={section.subheader}
@@ -205,6 +207,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
                     {
                       renderNavItems({
                         code,
+                        extra,
                         intl,
                         items: section.items,
                         pathname: location.pathname,

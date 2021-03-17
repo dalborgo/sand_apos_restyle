@@ -37,7 +37,7 @@ void (async () => {
     log.debug('connStr', connStr)
     const astenpos_ = new couchbase.Cluster(connStr, optionsAstenpos)
     const astenpos = astenpos_.bucket(connection._bucket)
-    __buckets[key] = new Couchbase(astenpos_, astenpos, extraOptions) //first parameter for cluster
+    __buckets[key] = new Couchbase(astenpos_, astenpos, extraOptions)// first parameter for cluster
     const conn = __buckets[key]
     connInstance = conn.archiveBucketCollection
   } catch (err) {

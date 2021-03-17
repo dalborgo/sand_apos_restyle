@@ -6,7 +6,7 @@ import GuestGuard from 'src/components/GuestGuard'
 import { isMenuLinkToShow } from './utils/logics'
 import LoadingFacebookStyleBoxed from './components/LoadingFacebookStyleBoxed'
 
-export const renderRoutes = (routes = [], priority, code) => {
+export const renderRoutes = (routes = [], priority, code, extra) => {
   return (
     <Suspense fallback={<LoadingFacebookStyleBoxed/>}>
       <Switch>
@@ -15,7 +15,7 @@ export const renderRoutes = (routes = [], priority, code) => {
             const Guard = route.guard || Fragment
             const Layout = route.layout || Fragment
             const Component = route.component
-            if (isMenuLinkToShow(route, { priority, code })) {
+            if (isMenuLinkToShow(route, { priority, code, extra })) {
               acc.push(
                 <Route
                   exact={route.exact}
@@ -27,7 +27,7 @@ export const renderRoutes = (routes = [], priority, code) => {
                         <Layout>
                           {
                             route.routes
-                              ? renderRoutes(route.routes, priority, code)
+                              ? renderRoutes(route.routes, priority, code, extra)
                               : <Component {...props} />
                           }
                         </Layout>

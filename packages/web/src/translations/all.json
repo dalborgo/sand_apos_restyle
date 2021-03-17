@@ -400,6 +400,10 @@
     "defaultMessage": "Allinea"
   },
   {
+    "id": "management.export.confirm_align_message",
+    "defaultMessage": "Verranno allineati i prodotti con il server 5Stelle."
+  },
+  {
     "id": "management.export.confirm_delete_message",
     "defaultMessage": "Stai eliminando {count} {type}!"
   },

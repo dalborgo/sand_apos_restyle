@@ -54,7 +54,9 @@ const eInvoiceInstance = (baseURL = DEFAULT_BASE_URL, token, headers_ = {}) => {
     },
     transformResponse: function (data) {
       const results = isJsonParsable(data) || data
-      return !results || results.error ? { ok: false, results, errCode: results.error || 'invalid_token' } : { ok: true, results }
+      return !results || results.error
+        ? { ok: false, results, errCode: results.error || 'invalid_token' }
+        : { ok: true, results }
     },
   })
 }
@@ -68,7 +70,9 @@ const restApiInstance = (baseURL = DEFAULT_REST_BASE_URL, token) => {
       return (status >= 200 && status < 300)
     },
     transformResponse: function (data) {
-      return { ok: true, results: isJsonParsable(data) || data }
+      const results = isJsonParsable(data) || data
+      const ok = !results['error'] && !results['reason']
+      return { ok, results }
     },
   })
 }

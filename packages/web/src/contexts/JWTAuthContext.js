@@ -53,10 +53,11 @@ const setSession = ({ codes, accessToken, selectedCode }) => {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'INITIALISE': {
-      const { isAuthenticated, user, codes, selectedCode } = action.payload
+      const { isAuthenticated, user, codes, selectedCode, gc } = action.payload
       return {
         ...state,
         codes,
+        gc,
         isAuthenticated,
         isInitialised: true,
         selectedCode,
@@ -64,10 +65,11 @@ const reducer = (state, action) => {
       }
     }
     case 'LOGIN': {
-      const { user, codes, selectedCode } = action.payload
+      const { user, codes, selectedCode, gc } = action.payload
       return {
         ...state,
         codes,
+        gc,
         isAuthenticated: true,
         selectedCode,
         user,
@@ -115,7 +117,7 @@ export const AuthProvider = ({ children }) => {
   const { saveSettings, settings } = useSettings()
   const login = async (username, password, code) => {
     const response = await axiosLocalInstance.post('jwt/login', { username, password, code })
-    const { accessToken, user, codes, locales } = response.data
+    const { accessToken, user, codes, locales, gc } = response.data
     if (locales.length) {
       const [locale] = locales
       if (!settings.locale || !locales.includes(settings.locale)) {
@@ -129,6 +131,7 @@ export const AuthProvider = ({ children }) => {
       type: 'LOGIN',
       payload: {
         codes,
+        gc,
         selectedCode,
         user,
       },
@@ -160,11 +163,11 @@ export const AuthProvider = ({ children }) => {
         if (accessToken && isValidToken(accessToken)) {
           setSession({ accessToken })
           const response = await axiosLocalInstance.get('jwt/me')
-          let { user, codes, locales } = response.data
+          let { user, codes, locales, gc } = response.data
           let selectedCode = window.localStorage.getItem('selectedCode')
           if (selectedCode) {selectedCode = JSON.parse(selectedCode)}
           codes = codes ? codes : [selectedCode]
-          if (!find(codes, { code: selectedCode?.code })) { //refresh with all code
+          if (!find(codes, { code: selectedCode?.code })) {// refresh with all code
             selectedCode = codes?.length === 1 ? codes[0] : { code: NO_SELECTED_CODE }
             setSession({ codes, selectedCode })
           }
@@ -173,6 +176,7 @@ export const AuthProvider = ({ children }) => {
             type: 'INITIALISE',
             payload: {
               codes,
+              gc,
               isAuthenticated: true,
               selectedCode,
               user,
@@ -183,6 +187,7 @@ export const AuthProvider = ({ children }) => {
             type: 'INITIALISE',
             payload: {
               codes: [],
+              gs: null,
               isAuthenticated: false,
               selectedCode: null,
               user: null,
@@ -194,6 +199,7 @@ export const AuthProvider = ({ children }) => {
         dispatch({
           type: 'INITIALISE',
           payload: {
+            gs: null,
             initialData: [],
             isAuthenticated: false,
             selectedCode: null,

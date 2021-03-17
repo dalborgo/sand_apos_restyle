@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken-refresh'
 import { couchQueries } from '@adapter/io'
 import config from 'config'
-import get from 'lodash/get'
 import log from '@adapter/common/src/winston'
+import get from 'lodash/get'
 
 const { utils } = require(__helpers)
 
@@ -27,24 +27,42 @@ function selectUserFields (identity) {
   }
 }
 
-function getQueryUserField () {
-  return '`user`.`user`, `user`.`role`, `user`.`type`, `user`.`morse`, `user`.`locales` '
+function getQueryUserFields () {
+  return '`user`.`user`, `user`.`role`, `user`.`type`, `user`.`morse`, `user`.`locales` '// lascia ultimo spazio
 }
 
-async function getInitialData (connClass, owner) {
-  const collection = connClass.astenposBucketCollection
-  const { content } = await collection.get(`general_configuration_${owner}`)
-  return {
-    companyName: get(content, 'company_data.name'),
+function getQueryGcFields () {
+  return 'customize_stelle_options.update_from_app hotelEnabled '// lascia ultimo spazio
+}
+
+function getGcs (codes, gsResponse) {
+  let count = 0
+  return codes.reduce((prev, curr) => {
+    prev[curr.code] = get(gsResponse, `[${count++}].results[0]`)
+    return prev
+  }, {})
+}
+
+function getGcsPromises (query, connClass, codes, init = []) {
+  const promises = init
+  if (codes && codes.length) {
+    for (let code of codes) {
+      const query = 'SELECT '
+                    + getQueryGcFields()
+                    + 'FROM `' + connClass.astenposBucketName + '` USE KEYS "general_configuration_' + code.code + '"'
+      promises.push(couchQueries.exec(query, connClass.cluster))
+    }
   }
+  return promises
 }
 
 function addRouters (router) {
   router.post('/jwt/login', async function (req, res) {
     const { connClass, route: { path } } = req
     const { username, password, code } = req.body
-    const query = 'SELECT ARRAY object_remove(setup, "type") FOR setup IN setups END AS codes, '
-                  + getQueryUserField() + ', meta(`user`).id _id '
+    const query = 'SELECT ARRAY object_remove(setup, "type", "profile", "p2pPassword", "p2pUser", "sgPassword", "sgUser") '
+                  + 'FOR setup IN setups END AS codes, '
+                  + getQueryUserFields() + ', meta(`user`).id _id '
                   + 'FROM `' + connClass.astenposBucketName + '` `user` '
                   + 'LEFT NEST `' + connClass.astenposBucketName + '` setups '
                   + 'ON KEYS ARRAY "INSTALLATION|" || TO_STRING(code) FOR code IN `user`.codes END '
@@ -67,6 +85,8 @@ function addRouters (router) {
     }
     const [identity] = results
     const codes = code ? [code] : identity.codes
+    const promises = getGcsPromises(query, connClass, codes)
+    const gsResponse = await Promise.all(promises)
     const accessToken = jwt.sign(
       { userId: identity._id, codes },
       JWT_SECRET,
@@ -75,6 +95,7 @@ function addRouters (router) {
     res.send({
       accessToken,
       codes,
+      gc: getGcs(codes, gsResponse),
       locales: identity.locales || [],
       user: {
         ...selectUserFields(identity),
@@ -87,20 +108,25 @@ function addRouters (router) {
     const accessToken = authorization.split(' ')[1]
     const { userId, codes } = jwt.verify(accessToken, JWT_SECRET)
     const query = 'SELECT '
-                  + getQueryUserField()
+                  + getQueryUserFields()
                   + 'FROM `' + connClass.astenposBucketName + '` `user` USE KEYS "' + userId + '"'
-    const { ok, results, message, err } = await couchQueries.exec(query, connClass.cluster)
-    if (!ok) {
-      log.error('Path', path)
-      throw Error(err.context ? err.context.first_error_message : message)
+    const promises = getGcsPromises(query, connClass, codes, [couchQueries.exec(query, connClass.cluster)])
+    const [userResponse, ...gsResponse] = await Promise.all(promises)
+    {
+      const { ok, results, message, err } = userResponse
+      if (!ok) {
+        log.error('Path', path)
+        throw Error(err.context ? err.context.first_error_message : message)
+      }
+      if (!results.length) {
+        return res.status(400).send({ message: 'Wrong authentication code!' })
+      }
     }
-    if (!results.length) {
-      return res.status(400).send({ message: 'Wrong authentication code!' })
-    }
-    const [identity] = results
+    const [identity] = userResponse.results
     res.send({
       accessToken,
       codes,
+      gc: getGcs(codes, gsResponse),
       locales: identity.locales || [],
       user: {
         ...selectUserFields(identity),

@@ -19,6 +19,7 @@ import shallow from 'zustand/shallow'
 import { useSnackbar } from 'notistack'
 import { useHistory } from 'react-router-dom'
 import StatusDialog from './StatusDialog'
+import { useConfirm } from 'material-ui-confirm'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -34,8 +35,10 @@ const useStyles = makeStyles(theme => ({
 const baseUrl = '/app/management/hotel'
 const loadingSel = state => ({ setLoading: state.setLoading })
 const Import = () => {
-  const { selectedCode: { code: owner } } = useAuth()
+  const { selectedCode: { code: owner }, gc } = useAuth()
+  const hotelEnabled = Boolean(gc?.[owner]?.hotelEnabled)
   const classes = useStyles()
+  const confirm = useConfirm()
   const snackQueryError = useSnackQueryError()
   const [isRefetch, setIsRefetch] = useState(false)
   const { enqueueSnackbar } = useSnackbar()
@@ -56,6 +59,9 @@ const Import = () => {
   const alignHotel = useCallback(async () => {
     try {
       setLoading(true)
+      await confirm({
+        description: intl.formatMessage(messages['management_hotel_confirm_align_message']),
+      })
       const { data } = await axiosLocalInstance('hotel/align', {
         method: 'post',
       })
@@ -69,11 +75,11 @@ const Import = () => {
       })
     } catch (err) {
       setLoading(false)
-      snackQueryError(err)
+      err && snackQueryError(err)
     }
-  }, [enqueueSnackbar, history, setLoading, snackQueryError])
+  }, [confirm, enqueueSnackbar, history, intl, setLoading, snackQueryError])
   const effectiveFetching = getEffectiveFetchingWithPrev(rest, isRefetch)
-  if (owner === NO_SELECTED_CODE) {// attivo solo per singola struttura selezionata
+  if (owner === NO_SELECTED_CODE || !hotelEnabled) {// attivo solo per singola struttura selezionata
     return <Redirect to="/app"/>
   } else {
     return (

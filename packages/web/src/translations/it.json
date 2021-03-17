@@ -219,5 +219,6 @@
   "management.hotel.status_50": "Stato sconosciuto",
   "management.hotel.status_delete": "disaccoppiato",
   "management.hotel.status_new": "inserito",
-  "management.hotel.status_update": "modificato"
+  "management.hotel.status_update": "modificato",
+  "management.export.confirm_align_message": "Verranno allineati i prodotti con il server 5Stelle."
 }

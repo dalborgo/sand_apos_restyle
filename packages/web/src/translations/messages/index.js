@@ -21,6 +21,10 @@ export const messages = defineMessages({
     id: 'management.export.confirm_delete_message',
     defaultMessage: 'Stai eliminando {count} {type}!',
   },
+  management_hotel_confirm_align_message: {
+    id: 'management.export.confirm_align_message',
+    defaultMessage: 'Verranno allineati i prodotti con il server 5Stelle.',
+  },
   management_import_total_modifications: {
     id: 'management.import.total_modifications',
     defaultMessage: 'Modifiche',
