@@ -26,6 +26,7 @@ import moment from 'moment'
 import { LocalizationProvider } from '@material-ui/pickers'
 import translations from 'src/translations'
 import { messages } from './translations/messages'
+import { useGeneralStore } from './zustandStore'
 
 const jss = create({ plugins: [...jssPreset().plugins, rtl()] })
 const history = createBrowserHistory()
@@ -44,12 +45,12 @@ const queryClient = new QueryClient({
     },
   },
 })
-
+const { gcSelect } = useGeneralStore.getState()
 const RouteList = () => {
-  const { user, selectedCode, gc } = useAuth()
+  const { user, selectedCode } = useAuth()
   const priority = user?.priority
   const code = selectedCode?.code
-  const hotelEnabled = gc?.[code]?.hotelEnabled
+  const hotelEnabled = (gcSelect(code))?.hotelEnabled
   return useMemo(() => {
     return renderRoutes(routes, priority, code, { hotelEnabled })
   }, [code, hotelEnabled, priority])

@@ -23,6 +23,7 @@ import { messages } from 'src/translations/messages'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { useRoleFormatter } from 'src/utils/formatters'
 import getAppVersion from 'src/utils/appVersion'
+import { useGeneralStore } from 'src/zustandStore'
 
 function renderNavItems ({
   code,
@@ -123,11 +124,11 @@ const useStyles = makeStyles(theme => ({
     fontWeight: theme.typography.fontWeightMedium,
   },
 }))
-
+const { gcSelect } = useGeneralStore.getState()
 const NavBar = ({ setMobileNavOpen, openMobile }) => {
   const classes = useStyles()
   const location = useLocation()
-  const { user, selectedCode, gc } = useAuth()
+  const { user, selectedCode } = useAuth()
   const PerfectScrollbarRef = useRef(null)
   const roleFormatter = useRoleFormatter()
   const intl = useIntl()
@@ -187,7 +188,7 @@ const NavBar = ({ setMobileNavOpen, openMobile }) => {
               sections.reduce((prev, section) => {
                 const code = selectedCode?.code
                 const priority = user?.priority
-                const extra = { ...gc?.[code] }
+                const extra = { ...gcSelect(code)}
                 isMenuLinkToShow(section, { priority, code, extra }) &&
                 prev.push(
                   <List

@@ -98,6 +98,7 @@ app.use((err, req, res, next) => {
   if (err.isAxiosError) {
     log.error('Is an axios error!')
     if (err.response) {
+      log.error('Response data', err.response.data)
       responseAxiosError = {
         data: err.response.data,
         status: err.response.status,

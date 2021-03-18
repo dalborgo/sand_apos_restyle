@@ -34,9 +34,10 @@ const useStyles = makeStyles(theme => ({
 }))
 const baseUrl = '/app/management/hotel'
 const loadingSel = state => ({ setLoading: state.setLoading })
+const { gcSelect } = useGeneralStore.getState()
 const Import = () => {
-  const { selectedCode: { code: owner }, gc } = useAuth()
-  const hotelEnabled = Boolean(gc?.[owner]?.hotelEnabled)
+  const { selectedCode: { code: owner } } = useAuth()
+  const hotelEnabled = Boolean((gcSelect(owner))?.hotelEnabled)
   const classes = useStyles()
   const confirm = useConfirm()
   const snackQueryError = useSnackQueryError()

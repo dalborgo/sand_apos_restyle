@@ -14,9 +14,6 @@ import {
 import { Menu as MenuIcon } from 'react-feather'
 import { THEMES } from 'src/constants'
 import Account from './Account'
-/*import Contacts from './Contacts'
-import Notifications from './Notifications'
-import Search from './Search'*/
 import startCase from 'lodash/startCase'
 import Settings from './Settings'
 import useAuth from 'src/hooks/useAuth'
@@ -24,6 +21,7 @@ import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import { NO_SELECTED_CODE } from 'src/contexts/JWTAuthContext'
 import useGeneralStore from 'src/zustandStore/useGeneralStore'
+import shallow from 'zustand/shallow'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -123,9 +121,10 @@ function calculateMorse (morseState, user, switchAllIn, allin) {
   }
 }
 
-const selAllIn = state => state.allIn
-const selSwitchAllIn = state => state.switchAllIn
-
+const generalSel = state => ({
+  allIn_: state.allIn,
+  switchAllIn: state.switchAllIn,
+})
 const TopBar = ({
   setMobileNavOpen,
 }) => {
@@ -138,8 +137,7 @@ const TopBar = ({
     }
   }, [theme.name, theme.palette.secondary.main, theme.typography.h5])
   const classes = useStyles()
-  const allIn_ = useGeneralStore(selAllIn)
-  const switchAllIn = useGeneralStore(selSwitchAllIn)
+  const { switchAllIn, allIn_ } = useGeneralStore(generalSel, shallow)
   const intl = useIntl()
   const divRef = useRef(null)
   const morseState = useRef({ count: 0, time: 0, serie: 0 })

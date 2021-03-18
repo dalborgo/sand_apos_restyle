@@ -352,7 +352,7 @@ function addRouters (router) {
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
     const dataToAlign = await getDataToAlign(connClass, owner, queryCondition, req)
     const { toDelete, toUpdate } = await alignHotelProducts(dataToAlign)
-    res.send({ ok: true, results: [...toUpdate] })
+    res.send({ ok: true, results: [...toUpdate, ...toDelete] })
   })
   router.post('/hotel/align', async function (req, res) {
     const { query, connClass } = req
@@ -361,7 +361,7 @@ function addRouters (router) {
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
     const dataToAlign = await getDataToAlign(connClass, owner, queryCondition, req)
     const { toDelete, toUpdate } = await alignHotelProducts(dataToAlign)
-    const { ok, message, results: saveResults } = await saveHotelMenu(req, owner, toUpdate, [])
+    const { ok, message, results: saveResults } = await saveHotelMenu(req, owner, toUpdate, toDelete)
     if (!ok) {return res.send({ ok, message })}
     const results = []
     for (let i = 0; i < toUpdate.length; i++) {

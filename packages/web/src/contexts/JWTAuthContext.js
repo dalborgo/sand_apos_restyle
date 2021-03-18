@@ -53,11 +53,10 @@ const setSession = ({ codes, accessToken, selectedCode }) => {
 const reducer = (state, action) => {
   switch (action.type) {
     case 'INITIALISE': {
-      const { isAuthenticated, user, codes, selectedCode, gc } = action.payload
+      const { isAuthenticated, user, codes, selectedCode } = action.payload
       return {
         ...state,
         codes,
-        gc,
         isAuthenticated,
         isInitialised: true,
         selectedCode,
@@ -65,11 +64,10 @@ const reducer = (state, action) => {
       }
     }
     case 'LOGIN': {
-      const { user, codes, selectedCode, gc } = action.payload
+      const { user, codes, selectedCode } = action.payload
       return {
         ...state,
         codes,
-        gc,
         isAuthenticated: true,
         selectedCode,
         user,
@@ -126,12 +124,11 @@ export const AuthProvider = ({ children }) => {
     }
     const selectedCode = codes?.length === 1 ? codes[0] : { code: NO_SELECTED_CODE }
     setSession({ codes, accessToken, selectedCode })
-    useGeneralStore.setState({ priority: user.priority, companyData: keyBy(codes, 'code'), locales })
+    useGeneralStore.setState({ priority: user.priority, companyData: keyBy(codes, 'code'), locales, gcData: gc })
     dispatch({
       type: 'LOGIN',
       payload: {
         codes,
-        gc,
         selectedCode,
         user,
       },
@@ -171,12 +168,11 @@ export const AuthProvider = ({ children }) => {
             selectedCode = codes?.length === 1 ? codes[0] : { code: NO_SELECTED_CODE }
             setSession({ codes, selectedCode })
           }
-          useGeneralStore.setState({ priority: user.priority, companyData: keyBy(codes, 'code'), locales })
+          useGeneralStore.setState({ priority: user.priority, companyData: keyBy(codes, 'code'), locales, gcData: gc })
           dispatch({
             type: 'INITIALISE',
             payload: {
               codes,
-              gc,
               isAuthenticated: true,
               selectedCode,
               user,

@@ -16,8 +16,8 @@ import { Redirect, useParams } from 'react-router'
 import StatusDialog from './StatusDialog'
 import { parentPath } from 'src/utils/urlFunctions'
 import ExportForm from './ExportForm'
-import { NO_SELECTED_CODE } from '../../../contexts/JWTAuthContext'
-import useAuth from '../../../hooks/useAuth'
+import { NO_SELECTED_CODE } from 'src/contexts/JWTAuthContext'
+import useAuth from 'src/hooks/useAuth'
 
 const useStyles = makeStyles(theme => ({
   container: {
