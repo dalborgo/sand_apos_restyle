@@ -3,10 +3,10 @@ import immerMiddleware from './immerMiddleware'
 import moment from 'moment'
 
 const initialState = {
-  startDate: null,
-  endDate: null,
-  startDateInMillis: null,
-  endDateInMillis: null,
+  endDate: moment().format('YYYY-MM-DD'),
+  endDateInMillis: moment().format('YYYYMMDDHHmmssSSS'),
+  startDate: moment().format('YYYY-MM-01'),
+  startDateInMillis: moment().format('YYYYMM01HHmmssSSS'),
 }
 
 const useClosingDayStore = create(immerMiddleware(set => ({

@@ -1,4 +1,6 @@
 import { couchQueries } from '@adapter/io'
+import { reqAuthGet } from '../../basicAuth'
+import { getSoldStats } from './utils'
 
 const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
@@ -22,6 +24,13 @@ function addRouters (router) {
     const { ok, results: data, message, err } = await couchQueries.exec(statement, connClass.cluster, options)
     if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results: data.length ? data[0] : null })
+  })
+  router.get('/stats/sold', reqAuthGet, async function (req, res) {
+    const { query } = req
+    req.headers.internalcall = 1// skip jwt check
+    utils.checkParameters(query, ['owner', 'start', 'end'])
+    const data = await getSoldStats(req)
+    res.send(data)
   })
 }
 

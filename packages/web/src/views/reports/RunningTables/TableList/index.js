@@ -33,7 +33,7 @@ const TableList = memo(function TableList ({ rows, isFetching }) {
       { name: 'last_saved_date', title: intl.formatMessage(messages['common_date']) },
       { name: 'table_display', title: intl.formatMessage(messages['common_table']) },
       { name: 'covers', title: intl.formatMessage(messages['common_covers']) },
-      { name: 'income', title: intl.formatMessage(messages['common_cashed']) },
+      { name: 'income', title: intl.formatMessage(messages['common_total']) },
     ]
     if (hasSingleCompany()) {columns_.shift()}
     return columns_

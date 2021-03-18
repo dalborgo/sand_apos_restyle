@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { Box, Button, makeStyles, SvgIcon, TextField as TF } from '@material-ui/core'
+import { Box, Button, makeStyles, SvgIcon, TextField as TF, withWidth } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import Page from 'src/components/Page'
@@ -234,7 +234,7 @@ function createExcel (intl, dateTimeFormatter, closedRows, owner) {
 }
 
 const selAllIn = state => state.allIn
-const ClosedTables = () => {
+const ClosedTables = ({width}) => {
   const { selectedCode: { code: owner } } = useAuth()
   const classes = useStyles()
   const allIn = useGeneralStore(selAllIn)
@@ -386,8 +386,7 @@ const ClosedTables = () => {
           <Button onClick={onSave} size="small" variant="contained">
             <SvgIcon fontSize="small">
               <DownloadCloudIcon/>
-            </SvgIcon>&nbsp;&nbsp;
-            {intl.formatMessage(messages['common_exportTable'])}
+            </SvgIcon>{width !== 'xs' && <>&nbsp;&nbsp;{intl.formatMessage(messages['common_exportTable'])}</>}
           </Button>
         </Box>
       </Box>
@@ -402,4 +401,4 @@ const ClosedTables = () => {
   )
 }
 
-export default ClosedTables
+export default withWidth()(ClosedTables)

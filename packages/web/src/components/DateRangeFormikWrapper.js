@@ -1,8 +1,7 @@
 import React, { memo, useRef, useState } from 'react'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button, withWidth } from '@material-ui/core'
 import { Field, Form, Formik } from 'formik'
 import { DesktopDatePickerField, MobileDatePickerField } from './DateRange'
-import { withWidth } from '@material-ui/core'
 
 const DateRangeFormikWrapper = memo(withWidth()(function DateRangeFormikWrapper ({
   startDate,
@@ -17,7 +16,7 @@ const DateRangeFormikWrapper = memo(withWidth()(function DateRangeFormikWrapper 
     <Box alignItems="center" display="flex">
       <Box mr={2}>
         {
-          width !== 'md' ?
+          ['lg', 'xl'].includes(width) ?
             <Formik
               initialValues={{ dateRange: [startDate, endDate] }}
               onSubmit={

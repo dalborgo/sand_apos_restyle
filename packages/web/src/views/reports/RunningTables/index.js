@@ -51,7 +51,7 @@ const FilterForm = memo(function FilterForm ({ tableFilter, roomFilter, onSubmit
   const intl = useIntl()
   const { isLoading, data } = useQuery(['types/rooms', { owner }], {
     notifyOnChangeProps: ['data', 'error'],
-    staleTime: Infinity, // non aggiorna la cache delle stanze ogni volta che si apre la drawer (richiesto refresh)
+    staleTime: Infinity,// non aggiorna la cache delle stanze ogni volta che si apre la drawer (richiesto refresh)
   })
   return (
     <Formik

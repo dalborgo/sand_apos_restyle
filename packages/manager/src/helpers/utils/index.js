@@ -17,7 +17,7 @@ function parseOwner ({ query, body, headers }, bucketLabel) {
   return {
     endOwner,
     ownerArray,
-    queryCondition: `${bucketLabel ? `${bucketLabel}.` : ''}owner IN ${JSON.stringify(ownerArray)}`,
+    queryCondition: `${bucketLabel ? `${bucketLabel}.` : ''}owner in ${JSON.stringify(ownerArray)}`,
     startOwner,
   }
 }

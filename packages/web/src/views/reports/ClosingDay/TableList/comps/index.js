@@ -60,7 +60,7 @@ export const SummaryCellBase = props => {
       </VirtualTable.Cell>
     )
   } else {
-    return <VirtualTable.Cell {...props}/>
+    return <VirtualTable.Cell {...props} style={{verticalAlign: 'top'}}/>
   }
 }
 

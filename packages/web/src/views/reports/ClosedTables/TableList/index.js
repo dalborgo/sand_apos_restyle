@@ -1,7 +1,6 @@
 import React, { memo, useCallback, useState } from 'react'
 import {
   Grid,
-  Table,
   TableHeaderRow,
   TableRowDetail,
   TableSummaryRow,
@@ -24,7 +23,6 @@ import { CellHeader, RootToolbar } from 'src/components/TableComponents/CellBase
 import { useMoneyFormatter } from 'src/utils/formatters'
 import TableDetailToggleCell from './comps/TableDetailToggleCellBase'
 import SearchPanelIntl from 'src/components/TableComponents/SearchPanelIntl'
-import { withWidth } from '@material-ui/core'
 
 const getRowId = row => row._id
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }}/>
@@ -52,35 +50,12 @@ const IntegratedFilteringSel = memo(function IntegratedFilteringSel () {
   )
 })
 
-const SelectiveTable = memo(function SelectiveTable ({ isIdle, isFetching, width }) {
-  const noDataCellComponent = useCallback(({ colSpan }) =>
-    <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])
-  const [isSmall] = useState(() => ['xs', 'sm'].includes(width))// lo faccio statico
-  if (isSmall) {
-    return (
-      <Table
-        cellComponent={Cell}
-        columnExtensions={tableColumnExtensions}
-        noDataCellComponent={noDataCellComponent}
-      />
-    )
-  } else {
-    return (
-      <VirtualTable
-        cellComponent={Cell}
-        columnExtensions={tableColumnExtensions}
-        height="auto"
-        noDataCellComponent={noDataCellComponent}
-      />
-    )
-  }
-})
 const tableSelect = ({ table_display: Td, room_display: Rd, payments }) => {
   const { closed_by: closedBy } = Array.isArray(payments) ? payments[0] : payments
   return `${Td}${Rd}${closedBy}`
 }
 const { companySelect, hasSingleCompany } = useGeneralStore.getState()
-const TableList = ({ rows, isFetching, isIdle, width }) => {
+const TableList = ({ rows, isFetching, isIdle }) => {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const moneyFormatter = useMoneyFormatter()
   const intl = useIntl()
@@ -109,6 +84,8 @@ const TableList = ({ rows, isFetching, isIdle, width }) => {
     sum: intl.formatMessage(messages['common_total']),
     count: intl.formatMessage(messages['common_total']),
   }))
+  const noDataCellComponent = useCallback(({ colSpan }) =>
+    <LoadingComponent colSpan={colSpan} idle={isIdle} isFetching={isFetching}/>, [isFetching, isIdle])
   return (
     <Grid
       columns={columns}
@@ -123,10 +100,11 @@ const TableList = ({ rows, isFetching, isIdle, width }) => {
       <RowDetailState/>
       <IntegratedFilteringSel/>
       <IntegratedSummary calculator={summaryCalculator}/>
-      <SelectiveTable
-        isFetching={isFetching}
-        isIdle={isIdle}
-        width={width}
+      <VirtualTable
+        cellComponent={Cell}
+        columnExtensions={tableColumnExtensions}
+        height="auto"
+        noDataCellComponent={noDataCellComponent}
       />
       <TableHeaderRow cellComponent={CellHeader}/>
       <TableSummaryRow messages={messagesSummary} totalCellComponent={CellSummary}/>
@@ -134,7 +112,7 @@ const TableList = ({ rows, isFetching, isIdle, width }) => {
         cellComponent={DetailCell}
         contentComponent={GridDetailContainerBase}
         toggleCellComponent={TableDetailToggleCell}
-        toggleColumnWidth={0}
+        toggleColumnWidth={0.1}// con zero dà problemi con chrome
       />
       <Toolbar
         rootComponent={RootToolbar}
@@ -144,4 +122,4 @@ const TableList = ({ rows, isFetching, isIdle, width }) => {
   )
 }
 
-export default memo(withWidth()(TableList))
+export default memo(TableList)

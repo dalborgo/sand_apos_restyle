@@ -18,10 +18,6 @@
     display: flex;
     flex-direction: row !important;
 }
-/* su chrome dà problemi sulle tabelle che sono larghe*/
-.MuiTable-root{
-    width: auto !important;
-}
 
 .MuiButtonGroup-contained .MuiButton-contained.Mui-focusVisible {
     box-shadow: none !important;
