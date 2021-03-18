@@ -89,7 +89,7 @@ const Header = ({ className, ...rest }) => {
           ref={actionRef}
           startIcon={
             <SvgIcon fontSize="small">
-              <CalendarIcon />
+              <CalendarIcon/>
             </SvgIcon>
           }
         >

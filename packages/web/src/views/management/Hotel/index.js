@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import Page from 'src/components/Page'
-import { Box, Button, makeStyles, Paper } from '@material-ui/core'
+import { Box, Button, makeStyles, Paper, SvgIcon } from '@material-ui/core'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
 import StandardHeader from 'src/components/StandardHeader'
@@ -20,6 +20,7 @@ import { useSnackbar } from 'notistack'
 import { useHistory } from 'react-router-dom'
 import StatusDialog from './StatusDialog'
 import { useConfirm } from 'material-ui-confirm'
+import { Upload as UploadIcon } from 'react-feather'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -109,6 +110,9 @@ const Import = () => {
                     size="small"
                     variant="contained"
                   >
+                    <SvgIcon fontSize="small">
+                      <UploadIcon/>
+                    </SvgIcon>&nbsp;&nbsp;
                     {intl.formatMessage(messages['management_hotel_align_button'])}
                   </Button>
                 </Box>

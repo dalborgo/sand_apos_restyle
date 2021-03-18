@@ -255,7 +255,7 @@ const CellBase = props => {
                   >
                     {intl.formatMessage(messages['common_undefined'])}&nbsp;&nbsp;
                     <SvgIcon fontSize="small">
-                      {<HelpCircleIcon/>}
+                      <HelpCircleIcon/>
                     </SvgIcon>
                   </Button>
                 )
