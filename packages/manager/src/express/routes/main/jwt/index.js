@@ -37,22 +37,20 @@ function getQueryGcFields () {
 
 function getGcs (codes, gsResponse) {
   let count = 0
+  const response = get(gsResponse, 'results', [])
   return codes.reduce((prev, curr) => {
-    prev[curr.code] = get(gsResponse, `[${count++}].results[0]`)
+    prev[curr.code] = response[count++]
     return prev
   }, {})
 }
 
-function getGcsPromises (query, connClass, codes, init = []) {
+function getGcsPromises (connClass, codes, init = []) {
   const promises = init
-  if (codes && codes.length) {
-    for (let code of codes) {
-      const query = 'SELECT '
-                    + getQueryGcFields()
-                    + 'FROM `' + connClass.astenposBucketName + '` USE KEYS "general_configuration_' + code.code + '"'
-      promises.push(couchQueries.exec(query, connClass.cluster))
-    }
-  }
+  const ids = codes.map(code => `general_configuration_${code.code}`)
+  const query = 'SELECT '
+                + getQueryGcFields()
+                + 'FROM `' + connClass.astenposBucketName + '` USE KEYS ' + JSON.stringify(ids) + ' '
+  promises.push(couchQueries.exec(query, connClass.cluster))
   return promises
 }
 
@@ -85,8 +83,8 @@ function addRouters (router) {
     }
     const [identity] = results
     const codes = code ? [code] : identity.codes
-    const promises = getGcsPromises(query, connClass, codes)
-    const gsResponse = await Promise.all(promises)
+    const promises = getGcsPromises(connClass, codes)
+    const [gsResponse] = await Promise.all(promises)
     const accessToken = jwt.sign(
       { userId: identity._id, codes },
       JWT_SECRET,
@@ -110,8 +108,8 @@ function addRouters (router) {
     const query = 'SELECT '
                   + getQueryUserFields()
                   + 'FROM `' + connClass.astenposBucketName + '` `user` USE KEYS "' + userId + '"'
-    const promises = getGcsPromises(query, connClass, codes, [couchQueries.exec(query, connClass.cluster)])
-    const [userResponse, ...gsResponse] = await Promise.all(promises)
+    const promises = getGcsPromises(connClass, codes, [couchQueries.exec(query, connClass.cluster)])
+    const [userResponse, gsResponse] = await Promise.all(promises)
     {
       const { ok, results, message, err } = userResponse
       if (!ok) {
