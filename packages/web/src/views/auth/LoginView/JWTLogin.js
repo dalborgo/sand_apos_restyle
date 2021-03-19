@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
     bottom: -20,
   },
   field: {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1.2),
   },
 }))
 
@@ -175,7 +175,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
                 />
               </ErrorSuspenseWrapper>
             }
-            <Box mt={3}>
+            <Box mt={2.5}>
               <Button
                 color="secondary"
                 disabled={isSubmitting || !isValid || !dirty}

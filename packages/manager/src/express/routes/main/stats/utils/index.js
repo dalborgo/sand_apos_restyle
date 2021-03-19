@@ -29,7 +29,7 @@ export async function getSoldStats (req) {
     .where({ 'buc.archived': true })
     .whereBetween('ent.date', [start, end])
     .where(knex.raw(
-      parsedOwner.queryCondition + ''
+      parsedOwner.queryCondition
       + getFilters(bb, startTime, endTime, 'ent'))
     )
     .groupBy(['ent.product_category_display', 'ent.product_display'])
@@ -39,13 +39,13 @@ export async function getSoldStats (req) {
   promises.push(couchQueries.exec(statement, connClass.cluster))
   {
     const statement = knex({ buc: bucketName })
-      .select(knex.raw('sum(buc.covers) productQta, sum(buc.cover_price) price'))
+      .select(knex.raw('sum(buc.covers) productQta, sum(buc.covers * buc.cover_price) price'))
       .where({ 'buc.type': 'PAYMENT' })
       .where({ 'buc.archived': true })
-      .whereBetween('buc.date', [start, end])
       .where(knex.raw(
-        parsedOwner.queryCondition + ''
-        + getFilters(bb, startTime, endTime))
+        parsedOwner.queryCondition + ' '
+        + 'and buc.entries[0].date between "' + start + '" and "' + end + '"'
+        + getFilters(bb, startTime, endTime, 'buc.entries[0]'))
       )
       .toQuery()
     promises.push(couchQueries.exec(statement, connClass.cluster))

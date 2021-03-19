@@ -16,17 +16,18 @@ const logPath = path.join(__dirname, 'files', 'migration.log')
 let fileLog = ''
 
 // meta_id senza "_" davanti
-async function processArchive () {
+async function processArchive (method) {
   const prechecks = [], closings = [], keys = {}, paymentClosingDates = {}
   const path_ = path.join(__dirname, 'files', 'archivio.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
   const fileStream = fs.createReadStream(path_)
   const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity })
+  const closingPedix = method === 'express' ? '2' : ''
   let count = 0
   for await (const line of rl) {
     const doc = JSON.parse(line)
     switch (doc.type) {
-      case 'CLOSING_DAY': {
+      case `CLOSING_DAY${closingPedix}`: {
         // eslint-disable-next-line no-unused-vars
         const { _id, meta_id, type, ...rest } = doc
         for (let payment of doc.payments) {
@@ -34,7 +35,6 @@ async function processArchive () {
             paymentClosingDates[payment] = doc.close_date
           }
         }
-        
         closings.push(rest)
         keys[doc.meta_id] = count++
         break
@@ -175,14 +175,14 @@ function addRouters (router) {
   router.get('/routines/migration', async function (req, res) {
     log.verbose('Start script merge')
     const { query } = req
-    utils.checkParameters(query, ['token'])
-    const token = query.token
+    utils.checkParameters(query, ['token', 'method'])
+    const { token, method } = query
     log.hint('Running...')
     const outputPath = path.join(__dirname, 'files', 'merged.json')
     if (fs.existsSync(outputPath)) {await Q.ninvoke(fs, 'unlink', outputPath)}
     if (fs.existsSync(logPath)) {await Q.ninvoke(fs, 'unlink', logPath)}
     fileLog += `${moment().format('DD-MM-YYYY HH:mm:ss')} - token: ${token}`
-    const { closings, prechecks, keys: closingKeys, paymentClosingDates } = await processArchive()
+    const { closings, prechecks, keys: closingKeys, paymentClosingDates } = await processArchive(method)
     const { docs, keys, extra } = await processMerged(closings, prechecks, closingKeys, paymentClosingDates, token)
     //region ricerca chiavi negli oggetti e aggiunge `token`
     for (let doc of docs) {
@@ -216,6 +216,9 @@ function addRouters (router) {
     log.hint('End script merge')
     res.send({ ok: true })
   })
+  /**
+   * method = 'express' per migrare l'express (è un parametro obbligatorio)
+   */
   router.get('/routines/update', async function (req, res) {
     log.verbose('Start script upload')
     const { connClass } = req

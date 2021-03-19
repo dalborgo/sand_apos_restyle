@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     bottom: -20,
   },
   field: {
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(1.2),
   },
 }))
 

@@ -122,7 +122,7 @@ const LoginView = () => {
               </Box>
               <Box
                 flexGrow={1}
-                mt={3}
+                mt={2}
               >
                 {method === 'JWT' && <JWTLogin/>}
               </Box>
