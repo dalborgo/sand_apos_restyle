@@ -67,7 +67,7 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
     if (doc.type === 'CLOSING_DAY') {
       const { meta_id, close_date, date, type, ...rest } = doc
       // eslint-disable-next-line camelcase
-      const normMetaId = method === 'express' ? 'CLOSING_DAY2_' + meta_id.replace('CLOSING_DAY', '') : meta_id
+      const normMetaId = method === 'express' ? 'CLOSING_DAY2' + meta_id.replace('CLOSING_DAY', '') : meta_id
       docs.push({
         blue: { close_date, date, ...rest },
         close_date,
