@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  IconButton,
+  IconButton, isWidthDown,
   makeStyles,
   Typography,
   withWidth,
@@ -18,6 +18,7 @@ import { FormattedMessage } from 'react-intl'
 import { ChangeCustomerForm } from './comps'
 import { useLocation } from 'react-router-dom'
 import { isCompanyDataEditable } from '../helpers'
+
 const useStyles = makeStyles(theme => ({
   dialogContent: {
     padding: 0,
@@ -62,7 +63,7 @@ const ChangeCustomerHeader = memo(function DialogHeader ({ onClose }) {
           &nbsp;
         </Typography>
       </Grid>
-      <Grid item style={{marginLeft: 15}}>
+      <Grid item style={{ marginLeft: 15 }}>
         <IconButton onClick={onClose}><CloseIcon/></IconButton>
       </Grid>
     </Grid>
@@ -72,7 +73,7 @@ const loadingSel = state => ({ setLoading: state.setLoading })
 const ChangeCustomerDialog = ({ width, onSubmit, close, docId }) => {
   const classes = useStyles()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
-  const fullScreen = useMemo(() => ['sm', 'xs'].includes(width), [width])
+  const fullScreen = useMemo(() => isWidthDown('sm', width), [width])
   const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, columns: ['customer'] }], {
     notifyOnChangeProps: ['data', 'error'],
     staleTime: Infinity,// non chiama due volte il server per richieste ravvicinate

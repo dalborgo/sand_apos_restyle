@@ -1,5 +1,15 @@
 import React, { memo, useEffect, useMemo } from 'react'
-import { colors, Dialog, DialogTitle, Grid, IconButton, makeStyles, Typography, withWidth } from '@material-ui/core'
+import {
+  colors,
+  Dialog,
+  DialogTitle,
+  Grid,
+  IconButton,
+  isWidthDown,
+  makeStyles,
+  Typography,
+  withWidth,
+} from '@material-ui/core'
 import { Redirect } from 'react-router'
 import { useQuery } from 'react-query'
 import CloseIcon from '@material-ui/icons/Close'
@@ -85,7 +95,7 @@ const loadingSel = state => ({ setLoading: state.setLoading })
 const NotificationDialog = ({ width, close, docId }) => {
   const classes = useStyles()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
-  const fullScreen = useMemo(() => ['sm', 'xs'].includes(width), [width])
+  const fullScreen = useMemo(() => isWidthDown('sm', width), [width])
   const { isLoading, data } = useQuery(['queries/query_by_id', { id: docId, columns: ['fatt_elett'] }], {
     notifyOnChangeProps: ['data', 'error'],
     staleTime: Infinity,// non chiama due volte il server per richieste ravvicinate

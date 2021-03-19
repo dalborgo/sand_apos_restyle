@@ -5,6 +5,7 @@ import {
   DialogTitle,
   Grid,
   IconButton,
+  isWidthDown,
   makeStyles,
   Typography,
   withWidth,
@@ -61,7 +62,7 @@ const ChangePaymentDialog = ({ width, onSubmit, close }) => {
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
-  const fullScreen = useMemo(() => ['sm', 'xs'].includes(width), [width])
+  const fullScreen = useMemo(() => isWidthDown('sm', width), [width])
   const { isLoading, data } = useQuery(['types/incomes', { owner }], {
     notifyOnChangeProps: ['data', 'error'],
     staleTime: Infinity, //non chiama due volte il server per richieste ravvicinate

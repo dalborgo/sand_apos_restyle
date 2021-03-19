@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogTitle,
   Grid,
-  IconButton,
+  IconButton, isWidthDown,
   makeStyles,
   Typography,
   withWidth,
@@ -52,7 +52,7 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
         </Typography>
         &nbsp;
         <Typography className={classes.boldText} display="inline" variant="body2">
-          {dateTimeFormatter(header.close_date, { year: undefined, month: '2-digit' }, {second: undefined})}
+          {dateTimeFormatter(header.close_date, { year: undefined, month: '2-digit' }, { second: undefined })}
         </Typography>
         <br/>
         <Typography display="inline" variant="body2">
@@ -63,7 +63,7 @@ const DialogHeader = memo(function DialogHeader ({ data, onClose }) {
         </Typography>
         &nbsp;
         <Typography className={classes.boldText} display="inline" variant="body2">
-          {dateTimeFormatter(header.date, { year: undefined, month: '2-digit' }, {second: undefined})}
+          {dateTimeFormatter(header.date, { year: undefined, month: '2-digit' }, { second: undefined })}
         </Typography>
       </Grid>
       <Grid item>
@@ -78,7 +78,7 @@ const ClosingDayDialog = ({ width, docId }) => {
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
-  const fullScreen = useMemo(()=>['sm', 'xs'].includes(width),[width])
+  const fullScreen = useMemo(() => isWidthDown('sm', width), [width])
   const history = useHistory()
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))

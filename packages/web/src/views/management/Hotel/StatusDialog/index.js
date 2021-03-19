@@ -1,5 +1,14 @@
 import React, { memo, useCallback, useMemo } from 'react'
-import { Dialog, DialogTitle, Grid, IconButton, makeStyles, Typography, withWidth } from '@material-ui/core'
+import {
+  Dialog,
+  DialogTitle,
+  Grid,
+  IconButton,
+  isWidthDown,
+  makeStyles,
+  Typography,
+  withWidth,
+} from '@material-ui/core'
 import CloseIcon from '@material-ui/icons/Close'
 import { FormattedMessage } from 'react-intl'
 import { StatusReport } from './comps'
@@ -51,7 +60,7 @@ const NotificationHeader = memo(function DialogHeader ({ onClose }) {
 
 const StatusDialog = ({ width, refetchOnClick }) => {
   const classes = useStyles()
-  const fullScreen = useMemo(() => ['sm', 'xs'].includes(width), [width])
+  const fullScreen = useMemo(() => isWidthDown('sm', width), [width])
   const history = useHistory()
   const close = useCallback(() => {
     refetchOnClick().then()

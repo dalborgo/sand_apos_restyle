@@ -29,9 +29,9 @@ void (async () => {
       sgPublicToken: connection.sg_public_token,
     }
     const queryString = cFunctions.objToQueryString({
-      certpath: connection._certpath,
+      //certpath: connection._certpath,
       config_total_timeout: CONFIG_TOTAL_TIMEOUT,
-      //ssl: 'no_verify',
+      ssl: 'no_verify',
     }, true)
     const prefix = connection.server_protocol === 'https' ? 'couchbases' : 'couchbase'
     const connStr = `${prefix}://${connection.server}${queryString}`

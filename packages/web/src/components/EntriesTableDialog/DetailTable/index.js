@@ -6,7 +6,7 @@ import { Cell } from './comps'
 import { MoneyTypeProvider } from 'src/utils/tableFormatters'
 import { IntegratedSummary, SummaryState } from '@devexpress/dx-react-grid'
 import { CellHeader, CellSummary } from 'src/components/TableComponents/CellBase'
-import { withWidth } from '@material-ui/core'
+import { isWidthDown, withWidth } from '@material-ui/core'
 const tableColumnExtensions = [
   { columnName: 'pro_qta', align: 'right' },
   { columnName: 'amount', align: 'right' },
@@ -20,7 +20,7 @@ const totalSummaryItems = [
 const getUnitPrice = ({ amount, pro_qta: proQta }) => amount / proQta
 const moneyColumns = ['amount', 'unit_price']
 const SelectiveTable = memo(function SelectiveTable ({ width }) {
-  const [isSmall] = useState(() => ['xs','sm'].includes(width)) //lo faccio statico
+  const [isSmall] = useState(() => isWidthDown('sm', width))// lo faccio statico
   if (isSmall) {
     return (
       <Table

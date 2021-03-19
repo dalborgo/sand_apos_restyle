@@ -1,5 +1,15 @@
 import React, { memo, useEffect, useMemo } from 'react'
-import { Dialog, DialogContent, DialogTitle, Grid, IconButton, makeStyles, Typography, withWidth } from '@material-ui/core'
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  IconButton,
+  isWidthDown,
+  makeStyles,
+  Typography,
+  withWidth,
+} from '@material-ui/core'
 import { Redirect, useHistory } from 'react-router'
 import { useQuery } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
@@ -64,7 +74,7 @@ const EntriesTableDialog = ({ docId, urlKey, width }) => {
   const classes = useStyles()
   const { selectedCode: { code: owner } } = useAuth()
   const { setLoading } = useGeneralStore(loadingSel, shallow)
-  const fullScreen = useMemo(()=>['sm', 'xs'].includes(width),[width])
+  const fullScreen = useMemo(() => isWidthDown('sm', width), [width])
   const history = useHistory()
   const onClose = useMemo(() => {
     return () => history.push(parentPath(history.location.pathname))
