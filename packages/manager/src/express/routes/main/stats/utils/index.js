@@ -1,7 +1,17 @@
 import { couchQueries } from '@adapter/io'
 import log from '@adapter/common/src/winston'
+import get from 'lodash/get'
+
 const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
+
+function getFilters (bb, startTime, endTime, bucketLabel = 'buc') {
+  let filters = (!bb || bb === 'false') ? ' and buc.mode != "PRECHECK"' : ''
+  if (startTime && endTime) {
+    filters += startTime > endTime ? ` and substr(${bucketLabel}.date, 8) not between "${endTime}00000" and "${startTime}00000"` : ` and substr(${bucketLabel}.date, 8) between "${startTime}00000" and "${endTime}00000"`
+  }
+  return filters
+}
 
 export async function getSoldStats (req) {
   const { connClass, query } = req
@@ -9,10 +19,7 @@ export async function getSoldStats (req) {
   const parsedOwner = utils.parseOwner(req, 'buc')
   const { start, end, startTime, endTime, bb } = query
   log.debug('query:', query)
-  let filters = (!bb || bb === 'false') ? ' and buc.mode != "PRECHECK"' : ''
-  if (startTime && endTime) {
-    filters += startTime > endTime ? ` and substr(buc.date, 8) not between "${endTime}00000" and "${startTime}00000"` : ` and substr(buc.date, 8) between "${startTime}00000" and "${endTime}00000"`
-  }
+  const promises = []
   const statement = knex.from(knex.raw(`\`${bucketName}\` buc unnest buc.entries ent`))
     .select(knex.raw('ent.product_display product, '
                      + 'sum(ent.product_qta) productQta, '
@@ -23,11 +30,30 @@ export async function getSoldStats (req) {
     .whereBetween('ent.date', [start, end])
     .where(knex.raw(
       parsedOwner.queryCondition + ''
-      + filters)
+      + getFilters(bb, startTime, endTime, 'ent'))
     )
     .groupBy(['ent.product_category_display', 'ent.product_display'])
     .havingRaw('sum(ent.product_qta) > 0')
     .orderBy(['category', 'product'])
     .toQuery()
-  return couchQueries.exec(statement, connClass.cluster)
+  promises.push(couchQueries.exec(statement, connClass.cluster))
+  {
+    const statement = knex({ buc: bucketName })
+      .select(knex.raw('sum(buc.covers) productQta, sum(buc.cover_price) price'))
+      .where({ 'buc.type': 'PAYMENT' })
+      .where({ 'buc.archived': true })
+      .whereBetween('buc.date', [start, end])
+      .where(knex.raw(
+        parsedOwner.queryCondition + ''
+        + getFilters(bb, startTime, endTime))
+      )
+      .toQuery()
+    promises.push(couchQueries.exec(statement, connClass.cluster))
+  }
+  const [soldResponse, coversResponse] = await Promise.all(promises)
+  const covers = get(coversResponse, 'results[0]')
+  return {
+    ok: true,
+    results: [{ ...covers, category: '', product: 'COPERTI' }, ...soldResponse.results],
+  }
 }
