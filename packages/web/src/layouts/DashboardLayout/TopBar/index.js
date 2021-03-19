@@ -26,13 +26,13 @@ import shallow from 'zustand/shallow'
 const useStyles = makeStyles(theme => ({
   root: {
     zIndex: theme.zIndex.drawer + 100,
-    ...theme.name === THEMES.LIGHT ?
+    ...theme.name === THEMES.light ?
       {
         boxShadow: 'none',
         backgroundColor: theme.palette.primary.main,
       }
       : {},
-    ...theme.name === THEMES.ONE_DARK ?
+    ...theme.name === THEMES.one_dark ?
       {
         backgroundColor: theme.palette.background.default,
       }
@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   },
   select: {
     '&:focus': {
-      backgroundColor: theme.name === THEMES.LIGHT ? theme.palette.primary.main : theme.palette.background.default,
+      backgroundColor: theme.name === THEMES.light ? theme.palette.primary.main : theme.palette.background.default,
     },
     paddingLeft: 0,
   },
@@ -133,7 +133,7 @@ const TopBar = ({
   const optionBg = useMemo(() => {
     return {
       ...theme.typography.h5,
-      ...theme.name === THEMES.LIGHT ? { backgroundColor: theme.palette.secondary.main } : {},
+      ...theme.name === THEMES.light ? { backgroundColor: theme.palette.secondary.main } : {},
     }
   }, [theme.name, theme.palette.secondary.main, theme.typography.h5])
   const classes = useStyles()

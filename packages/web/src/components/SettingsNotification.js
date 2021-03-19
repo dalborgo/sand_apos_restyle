@@ -23,7 +23,7 @@ const SettingsNotification = () => {
   const { saveSettings } = useSettings();
 
   const handleSwitch = () => {
-    saveSettings({ theme: THEMES.LIGHT });
+    saveSettings({ theme: THEMES.light });
     Cookies.set('settingsUpdated', 'true');
     setOpen(false);
   };

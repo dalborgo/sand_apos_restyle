@@ -5,7 +5,7 @@ import log from '@adapter/common/src/log'
 const defaultSettings = {
   direction: 'ltr',
   responsiveFontSizes: true,
-  theme: THEMES.LIGHT,
+  theme: THEMES.light,
 }
 
 export const restoreSettings = () => {

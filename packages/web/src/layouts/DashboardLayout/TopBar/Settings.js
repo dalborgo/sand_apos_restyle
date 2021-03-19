@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
   },
   tooltip: {
-    marginTop:0,
+    marginTop: 0,
   },
 }))
 
@@ -49,6 +49,13 @@ const menuProps = {
   getContentAnchorEl: null,
 }
 
+const getDefaultOption = settings => ({
+  locale: settings.locale,
+  direction: settings.direction,
+  responsiveFontSizes: settings.responsiveFontSizes,
+  theme: settings.theme,
+})
+
 const Settings = () => {
   const classes = useStyles()
   const intl = useIntl()
@@ -56,18 +63,14 @@ const Settings = () => {
   const locales = useGeneralStore.getState().locales
   const { settings, saveSettings } = useSettings()
   const [isOpen, setOpen] = useState(false)
-  const [values, setValues] = useState({
-    locale: settings.locale,
-    direction: settings.direction,
-    responsiveFontSizes: settings.responsiveFontSizes,
-    theme: settings.theme,
-  })
+  const [values, setValues] = useState(() => getDefaultOption(settings))
   
   const handleOpen = () => {
     setOpen(true)
   }
   
   const handleClose = () => {
+    setValues(getDefaultOption(settings))
     setOpen(false)
   }
   
@@ -118,25 +121,8 @@ const Settings = () => {
           {intl.formatMessage(messages['common_settings'])}
         </Typography>
         <Box
-          mt={1}
-          px={1}
-        >
-          <FormControlLabel
-            control={
-              (
-                <Switch
-                  checked={values.direction === 'rtl'}
-                  edge="start"
-                  name="direction"
-                  onChange={(event) => handleChange('direction', event.target.checked ? 'rtl' : 'ltr')}
-                />
-              )
-            }
-            label="RTL"
-          />
-        </Box>
-        <Box
-          mt={0}
+          ml={1}
+          mt={2}
           px={1}
         >
           <FormControlLabel
@@ -147,6 +133,7 @@ const Settings = () => {
                   edge="start"
                   name="direction"
                   onChange={(event) => handleChange('responsiveFontSizes', event.target.checked)}
+                  size="small"
                 />
               )
             }
@@ -156,7 +143,7 @@ const Settings = () => {
         {
           locales.length > 1 &&
           <Box mt={2}>
-            <FormControl fullWidth variant="outlined">
+            <FormControl fullWidth size="small" variant="outlined">
               <InputLabel id="language_select">{intl.formatMessage(messages['common_language'])}</InputLabel>
               <Select
                 label={intl.formatMessage(messages['common_language'])}
@@ -168,6 +155,7 @@ const Settings = () => {
                 {
                   locales.map(val => (
                     <MenuItem
+                      dense
                       key={val}
                       value={val}
                     >
@@ -187,7 +175,7 @@ const Settings = () => {
           </Box>
         }
         <Box mt={2}>
-          <FormControl fullWidth variant="outlined">
+          <FormControl fullWidth size="small" variant="outlined">
             <InputLabel id="theme_select">{intl.formatMessage(messages['common_theme'])}</InputLabel>
             <Select
               label={intl.formatMessage(messages['common_theme'])}
@@ -199,6 +187,7 @@ const Settings = () => {
               {
                 Object.keys(THEMES).map(theme => (
                   <MenuItem
+                    dense
                     key={theme}
                     value={theme}
                   >
@@ -214,6 +203,7 @@ const Settings = () => {
             color="secondary"
             fullWidth
             onClick={handleSave}
+            size="small"
             variant="contained"
           >
             <FormattedMessage defaultMessage="Salva Impostazioni" id="toolbar.settings.save"/>

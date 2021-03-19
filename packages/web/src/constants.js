@@ -4,6 +4,6 @@ export const ENABLE_REDUX_DEV_TOOLS = false
 export const REACT_QUERY_DEV_TOOLS = false
 
 export const THEMES = {
-  LIGHT: 'LIGHT',
-  ONE_DARK: 'ONE_DARK',
+  light: 'light',
+  one_dark: 'one_dark',
 }

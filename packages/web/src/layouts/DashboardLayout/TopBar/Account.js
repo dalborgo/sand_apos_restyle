@@ -75,22 +75,7 @@ const Account = () => {
         PaperProps={{ className: classes.popover }}
         transitionDuration={0}
       >
-        {
-          /*
-          <MenuItem
-          component={RouterLink}
-          to="/app/social/profile"
-        >
-          Profile
-        </MenuItem>
-        <MenuItem
-          component={RouterLink}
-          to="/app/account"
-        >
-          Account
-        </MenuItem>*/
-        }
-        <MenuItem onClick={handleLogout}>
+        <MenuItem dense onClick={handleLogout}>
           Logout
         </MenuItem>
       </Menu>

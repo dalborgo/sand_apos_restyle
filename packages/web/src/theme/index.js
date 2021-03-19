@@ -84,7 +84,7 @@ const baseOptions = {
 
 const themesOptions = [
   {
-    name: THEMES.LIGHT,
+    name: THEMES.light,
     overrides: {
       MuiInputBase: {
         input: {
@@ -127,7 +127,7 @@ const themesOptions = [
     shadows: softShadows,
   },
   {
-    name: THEMES.ONE_DARK,
+    name: THEMES.one_dark,
     palette: {
       type: 'dark',
       action: {
