@@ -54,7 +54,7 @@ async function processArchive (method) {
   return { closings, prechecks, keys, paymentClosingDates }
 }
 
-async function processMerged (closings, prechecks, closingKeys, paymentClosingDates, token) {
+async function processMerged (closings, prechecks, closingKeys, paymentClosingDates, token, method) {
   const docs = [], keys = {}, extra = { tables: {} }
   const path_ = path.join(__dirname, 'files', 'astenpos.json')
   if (!fs.existsSync(path_)) {throw Error(path_ + ' not found!')}
@@ -66,13 +66,15 @@ async function processMerged (closings, prechecks, closingKeys, paymentClosingDa
     if (doc.meta_id.startsWith('_sync:')) {continue}
     if (doc.type === 'CLOSING_DAY') {
       const { meta_id, close_date, date, type, ...rest } = doc
+      // eslint-disable-next-line camelcase
+      const normMetaId = method === 'express' ? 'CLOSING_DAY2_' + meta_id.replace('CLOSING_DAY', '') : meta_id
       docs.push({
         blue: { close_date, date, ...rest },
         close_date,
         // eslint-disable-next-line camelcase
         date: date || close_date,
         meta_id,
-        red: get(closings, closingKeys[meta_id]),
+        red: get(closings, closingKeys[normMetaId]),
         type,
       })
     } else if (doc.type === 'ROOM') {
@@ -183,7 +185,7 @@ function addRouters (router) {
     if (fs.existsSync(logPath)) {await Q.ninvoke(fs, 'unlink', logPath)}
     fileLog += `${moment().format('DD-MM-YYYY HH:mm:ss')} - token: ${token}`
     const { closings, prechecks, keys: closingKeys, paymentClosingDates } = await processArchive(method)
-    const { docs, keys, extra } = await processMerged(closings, prechecks, closingKeys, paymentClosingDates, token)
+    const { docs, keys, extra } = await processMerged(closings, prechecks, closingKeys, paymentClosingDates, token, method)
     //region ricerca chiavi negli oggetti e aggiunge `token`
     for (let doc of docs) {
       if (doc.type === 'CATALOG') {
