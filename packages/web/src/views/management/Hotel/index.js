@@ -60,10 +60,10 @@ const Import = () => {
   }, [refetch])
   const alignHotel = useCallback(async () => {
     try {
-      setLoading(true)
       await confirm({
         description: intl.formatMessage(messages['management_hotel_confirm_align_message']),
       })
+      setLoading(true)
       const { data } = await axiosLocalInstance('hotel/align', {
         method: 'post',
       })

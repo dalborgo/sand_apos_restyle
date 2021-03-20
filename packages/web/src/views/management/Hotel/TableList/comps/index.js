@@ -1,16 +1,19 @@
-import { colors, makeStyles, Typography, withStyles } from '@material-ui/core'
+import { Chip, colors, makeStyles, withStyles } from '@material-ui/core'
 import React from 'react'
 import { VirtualTable } from '@devexpress/dx-react-grid-material-ui'
 import { useMoneyFormatter } from 'src/utils/formatters'
 import { messages } from 'src/translations/messages'
 import { useIntl } from 'react-intl'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   iconGreen: {
-    color: colors.green[700],
+    backgroundColor: colors.green[200],
+  },
+  iconBlue: {
+    backgroundColor: colors.blue[200],
   },
   iconRed: {
-    color: theme.palette.error.main,
+    backgroundColor: colors.orange[200],
   },
 }))
 
@@ -28,21 +31,27 @@ const CellBase = props => {
             switch (status) {
               case 'new':
                 return (
-                  <Typography className={classes.iconGreen} variant="body2">
-                    {intl.formatMessage(messages['management_hotel_status_new_text'])}
-                  </Typography>
+                  <Chip
+                    className={classes.iconGreen}
+                    label={intl.formatMessage(messages['management_hotel_status_new_text'])}
+                    size="small"
+                  />
                 )
               case 'update':
                 return (
-                  <Typography color="secondary" variant="body2">
-                    {intl.formatMessage(messages['management_hotel_status_update_text'])}
-                  </Typography>
+                  <Chip
+                    className={classes.iconBlue}
+                    label={intl.formatMessage(messages['management_hotel_status_update_text'])}
+                    size="small"
+                  />
                 )
               default:
                 return (
-                  <Typography className={classes.iconRed} variant="body2">
-                    {intl.formatMessage(messages['management_hotel_status_delete_text'])}
-                  </Typography>
+                  <Chip
+                    className={classes.iconRed}
+                    label={intl.formatMessage(messages['management_hotel_status_delete_text'])}
+                    size="small"
+                  />
                 )
             }
           })(row.status)

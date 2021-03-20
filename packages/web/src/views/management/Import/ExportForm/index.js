@@ -68,6 +68,7 @@ const ExportForm = () => {
       const { data } = await axiosLocalInstance(`management/count/${state.select}`, {
         method: 'post',
       })
+      setLoading(false)
       if (!data.ok) {return enqueueSnackbar(data.message)}
       await confirm({
         description: intl.formatMessage(messages['management_export_confirm_delete_message'], {
@@ -75,6 +76,7 @@ const ExportForm = () => {
           type: intl.formatMessage(messages[`astenpos_type_${state.select}`]).toLowerCase(),
         }),
       })
+      setLoading(true)
       const { data: dataDel } = await axiosLocalInstance(`management/delete_all/${state.select}`, {
         method: 'post',
       })
