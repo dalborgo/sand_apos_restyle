@@ -7,13 +7,13 @@ import { useIntl } from 'react-intl'
 
 const useStyles = makeStyles(() => ({
   iconGreen: {
-    backgroundColor: colors.green[200],
+    backgroundColor: colors.green[100],
   },
   iconBlue: {
-    backgroundColor: colors.blue[200],
+    backgroundColor: colors.blue[100],
   },
   iconRed: {
-    backgroundColor: colors.orange[200],
+    backgroundColor: colors.orange[100],
   },
 }))
 
