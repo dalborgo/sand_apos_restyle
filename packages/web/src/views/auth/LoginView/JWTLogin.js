@@ -46,7 +46,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
   const intl = useIntl()
   const [, setState] = useState()
   const location = useLocation()
-  const defaultUsername = useMemo(() => qs.parse(location.search, { ignoreQueryPrefix: true })['user'], [location.search])
+  const defaultUsername = useMemo(() => qs.parse(location.search, { ignoreQueryPrefix: true })?.user ?? '', [location.search])
   const [visibility, setVisibility] = useState(false)
   useEffect(() => {
     async function fetchData () {
