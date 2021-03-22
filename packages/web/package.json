@@ -46,7 +46,7 @@
     "formik-material-ui-lab": "^0.0.8",
     "history": "^4.10.1",
     "html-react-parser": "^1.2.4",
-    "immer": "^8.0.4",
+    "immer": "^9.0.1",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
     "jss": "^10.6.0",

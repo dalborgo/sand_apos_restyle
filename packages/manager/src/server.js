@@ -9,6 +9,8 @@ import path from 'path'
 import { cFunctions } from '@adapter/common'
 
 const { PORT } = config.get('express')
+const { connections } = config.get('couchbase')
+const { _certpath: CERT_PATH } = connections['astenposServer']
 
 function normalizePort (val) {
   const port = parseInt(val, 10)
@@ -50,8 +52,9 @@ server.on('error', onError)
 server.on('listening', onListeningHttp)
 
 if(cFunctions.isProd()){
-  const keyPath = path.join(__dirname, '../../../../cert/key.key')
-  const certPath = path.join(__dirname, '../../../../cert/certificate.pem')
+  const certLabel = CERT_PATH === 'prod-CA.pem' ? '_prod' : ''
+  const keyPath = path.join(__dirname, `../../../../cert/key${certLabel}.key`)
+  const certPath = path.join(__dirname, `../../../../cert/certificate${certLabel}.pem`)
   
   const httpsConfig = {
     key: fs.readFileSync(keyPath),

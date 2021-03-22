@@ -1,13 +1,14 @@
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import clsx from 'clsx'
 import * as Yup from 'yup'
 import ErrorSuspenseWrapper from 'src/components/ErrorSuspenseWrapper'
-import { FastField, Formik, Field } from 'formik'
+import { FastField, Field, Formik } from 'formik'
 import {
   Box,
   Button,
   FormControl,
-  FormHelperText, IconButton,
+  FormHelperText,
+  IconButton,
   InputAdornment,
   InputLabel,
   makeStyles,
@@ -22,7 +23,9 @@ import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import CodeAutocomplete from './CodeAutocomplete'
 import { useQueryClient } from 'react-query'
 import { Visibility, VisibilityOff } from '@material-ui/icons'
-import { isCodeSelection, isAsten } from 'src/utils/logics'
+import { isAsten, isCodeSelection } from 'src/utils/logics'
+import { useLocation } from 'react-router'
+import qs from 'qs'
 
 const useStyles = makeStyles(theme => ({
   helperText: {
@@ -42,14 +45,17 @@ const JWTLogin = memo(({ className, ...rest }) => {
   const queryClient = useQueryClient()
   const intl = useIntl()
   const [, setState] = useState()
+  const location = useLocation()
+  const defaultUsername = useMemo(() => qs.parse(location.search, { ignoreQueryPrefix: true })['user'], [location.search])
   const [visibility, setVisibility] = useState(false)
   useEffect(() => {
     async function fetchData () {
       await queryClient.prefetchQuery('jwt/codes', { throwOnError: true })
     }
+    
     fetchData().then().catch(error => {setState(() => {throw error})})// trick to send error to boundaries
   }, [queryClient])
-  const handleClickShowPassword = useCallback(() => {setVisibility(!visibility)},[visibility])
+  const handleClickShowPassword = useCallback(() => {setVisibility(!visibility)}, [visibility])
   const isMountedRef = useIsMountedRef()
   const snackQueryError = useSnackQueryError()
   return (
@@ -59,7 +65,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
           code: null,
           password: '',
           submit: null,
-          username: '',
+          username: defaultUsername,
         }
       }
       onSubmit={
