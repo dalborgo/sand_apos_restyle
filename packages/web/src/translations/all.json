@@ -592,6 +592,10 @@
     "defaultMessage": "Record totali"
   },
   {
+    "id": "management.sold_items.header_title",
+    "defaultMessage": "Venduto"
+  },
+  {
     "id": "management_import.header_title",
     "defaultMessage": "Import/export"
   },
@@ -618,6 +622,10 @@
   {
     "id": "menu.running_tables",
     "defaultMessage": "Tavoli in corso"
+  },
+  {
+    "id": "menu.sold_items",
+    "defaultMessage": "Venduto"
   },
   {
     "id": "mode.5STELLE",

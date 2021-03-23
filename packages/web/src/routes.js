@@ -137,6 +137,13 @@ const routes = [
         ],
         component: lazy(() => import('src/views/reports/EInvoices')),
       },
+      {
+        exact: true,
+        path: [
+          '/app/reports/sold-items',
+        ],
+        component: lazy(() => import('src/views/reports/SoldItems')),
+      },
       /*{
         exact: true,
         path: '/app/reports/dashboard',

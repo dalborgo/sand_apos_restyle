@@ -24,7 +24,7 @@ const totalSummaryItems = [
   { columnName: 'final_price', type: 'sum' },
 ]
 const moneyColumns = ['final_price']
-const { companySelect, hasSingleCompany } = useGeneralStore.getState()
+const { companySelect, hasSingleCompany, hasEInvoiceSendEnabled } = useGeneralStore.getState()
 const TableList = memo(function TableList ({ rows, isFetching, isIdle, exportZip }) {
   console.log('%c***EXPENSIVE_RENDER_TABLE', 'color: yellow')
   const intl = useIntl()
@@ -40,6 +40,7 @@ const TableList = memo(function TableList ({ rows, isFetching, isIdle, exportZip
       { name: 'action' },
     ]
     if (hasSingleCompany()) {columns_.splice(1, 1)}
+    if (!hasEInvoiceSendEnabled()) {columns_.pop()}// mostra la colonna
     return columns_
   })
   const [messagesSummary] = useState(() => ({

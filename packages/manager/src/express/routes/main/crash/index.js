@@ -26,7 +26,7 @@ function addRouters (router) {
         const [expressiveLog_] = stackTrace.match(/(asten.epele.com.afame.[a-zA-Z0-9.(:)]*\))/)
         expressiveLog = expressiveLog_
       }
-      results = await collection.upsert(`CRASH|${reportId}`, { ...body, type: 'CRASH', owner, expressiveLog })
+      results = await collection.upsert(`CRASH_${reportId}`, { ...body, type: 'CRASH', owner, expressiveLog })
     }
     res.send({ ok: true, results })
   })

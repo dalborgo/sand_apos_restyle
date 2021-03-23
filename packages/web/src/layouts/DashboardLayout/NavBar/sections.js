@@ -4,6 +4,7 @@ import {
   FileText as FileTextIcon,
   Key as KeyIcon,
   Inbox as InboxIcon,
+  ShoppingCart as ShoppingCartIcon,
   List as ListIcon,
   Upload as UploadIcon,
 } from 'react-feather'
@@ -43,6 +44,12 @@ const sections = [
         exact: false,
         icon: InboxIcon,
         href: '/app/reports/e-invoices',
+      },
+      {
+        title: 'sold_items',
+        exact: false,
+        icon: ShoppingCartIcon,
+        href: '/app/reports/sold-items',
       },
       /*{
         title: 'Dashboard',

@@ -32,7 +32,7 @@ function getQueryUserFields () {
 }
 
 function getQueryGcFields () {
-  return 'customize_stelle_options.update_from_app hotelEnabled '// lascia ultimo spazio
+  return 'customize_stelle_options.update_from_app hotelEnabled, enable_fattura_elettronica_send eInvoiceSendEnabled '// lascia ultimo spazio
 }
 
 function getGcs (codes, gsResponse) {

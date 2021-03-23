@@ -220,5 +220,7 @@
   "management.hotel.status_delete": "disaccoppiato",
   "management.hotel.status_new": "inserito",
   "management.hotel.status_update": "modificato",
-  "management.export.confirm_align_message": "Verranno allineati i prodotti con il server 5Stelle."
+  "management.export.confirm_align_message": "Verranno allineati i prodotti con il server 5Stelle.",
+  "menu.sold_items": "Venduto",
+  "management.sold_items.header_title": "Venduto"
 }

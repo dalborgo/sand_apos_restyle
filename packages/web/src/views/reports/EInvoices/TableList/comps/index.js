@@ -77,6 +77,7 @@ async function openDialog (docId, queryClient, setLoading, setIntLoading, histor
   })
 }
 
+const { gcSelect } = useGeneralStore.getState()
 const baseUrl = '/app/reports/e-invoices'
 const CellBase = props => {
   const { column, row, theme } = props
@@ -211,32 +212,37 @@ const CellBase = props => {
                   </Button>
                 )
               case undefined:// invia
-                return (
-                  <Button
-                    color="secondary"
-                    onClick={
-                      async () => {
-                        try {
-                          setLoading(true)
-                          const {
-                            ok,
-                            message,
-                          } = await sendXml(owner, docId, endDateInMillis, startDateInMillis, queryClient)
-                          enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
-                          setLoading(false)
-                        } catch ({ message }) {
-                          setLoading(false)
-                          enqueueSnackbar(message)
+                const eInvoiceSendEnabled = Boolean((gcSelect(owner))?.['eInvoiceSendEnabled'])
+                if (eInvoiceSendEnabled) {
+                  return (
+                    <Button
+                      color="secondary"
+                      onClick={
+                        async () => {
+                          try {
+                            setLoading(true)
+                            const {
+                              ok,
+                              message,
+                            } = await sendXml(owner, docId, endDateInMillis, startDateInMillis, queryClient)
+                            enqueueSnackbar(message, { variant: ok ? 'success' : 'error' })
+                            setLoading(false)
+                          } catch ({ message }) {
+                            setLoading(false)
+                            enqueueSnackbar(message)
+                          }
                         }
                       }
-                    }
-                  >
-                    {intl.formatMessage(messages['reports_e_invoices_send'])}&nbsp;&nbsp;
-                    <SvgIcon fontSize="small">
-                      <SendIcon/>
-                    </SvgIcon>
-                  </Button>
-                )
+                    >
+                      {intl.formatMessage(messages['reports_e_invoices_send'])}&nbsp;&nbsp;
+                      <SvgIcon fontSize="small">
+                        <SendIcon/>
+                      </SvgIcon>
+                    </Button>
+                  )
+                } else {
+                  return null
+                }
               default:
                 return (
                   <Button

@@ -222,5 +222,7 @@
   "management.hotel.status_delete": "",
   "management.hotel.status_new": "",
   "management.hotel.status_update": "",
-  "management.export.confirm_align_message": ""
+  "management.export.confirm_align_message": "",
+  "menu.sold_items": "",
+  "management.sold_items.header_title": ""
 }

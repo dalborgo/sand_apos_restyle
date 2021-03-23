@@ -4,6 +4,7 @@ import groupBy from 'lodash/groupBy'
 import concat from 'lodash/concat'
 import find from 'lodash/find'
 import sortBy from 'lodash/sortBy'
+import { getSoldStats } from '../stats/utils'
 const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
 
@@ -263,6 +264,12 @@ function addRouters (router) {
     }
     if (!ok) {return res.send({ ok, message, err })}
     res.send({ ok, results: row })
+  })
+  router.get('/reports/sold_items', async function (req, res) {
+    const { query } = req
+    utils.checkParameters(query, ['owner', 'start', 'end'])
+    const data = await getSoldStats(req)
+    res.send(data)
   })
 }
 

@@ -1,6 +1,7 @@
 import { couchQueries } from '@adapter/io'
 import log from '@adapter/common/src/winston'
 import get from 'lodash/get'
+import isNil from 'lodash/isNil'
 
 const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
@@ -52,8 +53,9 @@ export async function getSoldStats (req) {
   }
   const [soldResponse, coversResponse] = await Promise.all(promises)
   const covers = get(coversResponse, 'results[0]')
+  const results = !isNil(covers['productQta']) ? [{ ...covers, category: '', product: 'COPERTI' }, ...soldResponse.results] : soldResponse.results
   return {
     ok: true,
-    results: [{ ...covers, category: '', product: 'COPERTI' }, ...soldResponse.results],
+    results,
   }
 }

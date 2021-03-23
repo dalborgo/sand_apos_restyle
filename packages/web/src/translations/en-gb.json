@@ -221,5 +221,7 @@
   "table.select_date": "",
   "toolbar.settings.responsive_fonts": "",
   "toolbar.settings.save": "",
-  "views.login.installation": ""
+  "views.login.installation": "",
+  "menu.sold_items": "",
+  "management.sold_items.header_title": ""
 }

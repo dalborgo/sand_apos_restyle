@@ -501,6 +501,10 @@ export const messages = defineMessages({
     id: 'menu.closed_tables',
     defaultMessage: 'Tavoli chiusi',
   },
+  menu_sold_items: {
+    id: 'menu.sold_items',
+    defaultMessage: 'Venduto',
+  },
   date_range_start: {
     id: 'date_range.start_date',
     defaultMessage: 'Inizio',
