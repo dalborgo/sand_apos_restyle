@@ -14,3 +14,4 @@ yarn.lock
 /packages/manager/test-CA.pem
 /packages/web/public/static/apk/
 /packages/cert/
+/packages/manager/src/express/routes/main/routines/files/
