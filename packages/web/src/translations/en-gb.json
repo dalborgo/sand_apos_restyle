@@ -223,5 +223,6 @@
   "toolbar.settings.save": "",
   "views.login.installation": "",
   "menu.sold_items": "",
-  "management.sold_items.header_title": ""
+  "management.sold_items.header_title": "",
+  "common.category": ""
 }

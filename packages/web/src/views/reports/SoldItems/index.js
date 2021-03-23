@@ -14,6 +14,7 @@ import { useQuery } from 'react-query'
 import { useSnackQueryError } from 'src/utils/reactQueryFunctions'
 import { getEffectiveFetchingWithPrev } from 'src/utils/logics'
 import IconButtonLoader from 'src/components/IconButtonLoader'
+import TableList from './TableList'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -95,7 +96,11 @@ const SoldItems = () => {
       </Box>
       <DivContentWrapper>
         <Paper className={classes.paper}>
-          Prova
+          <TableList
+            isFetching={effectiveFetching && !data?.results?.length}
+            isIdle={rest.isIdle}
+            rows={data?.results || []}
+          />
         </Paper>
       </DivContentWrapper>
     </Page>

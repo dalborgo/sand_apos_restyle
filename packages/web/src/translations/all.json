@@ -100,6 +100,10 @@
     "defaultMessage": "annulla"
   },
   {
+    "id": "common.category",
+    "defaultMessage": "Categoria"
+  },
+  {
     "id": "common.charge",
     "defaultMessage": "Addebito"
   },

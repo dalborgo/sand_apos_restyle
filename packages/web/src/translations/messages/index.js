@@ -341,6 +341,14 @@ export const messages = defineMessages({
     id: 'common.description',
     defaultMessage: 'Descrizione',
   },
+  common_category: {
+    id: 'common.category',
+    defaultMessage: 'Categoria',
+  },
+  common_product: {
+    id: 'common.product',
+    defaultMessage: 'Prodotto',
+  },
   common_confirm: {
     id: 'common.confirm',
     defaultMessage: 'conferma',
@@ -452,10 +460,6 @@ export const messages = defineMessages({
   common_price: {
     id: 'common.price',
     defaultMessage: 'Prezzo',
-  },
-  common_product: {
-    id: 'common.product',
-    defaultMessage: 'Prodotto',
   },
   common_room: {
     id: 'common.room',
