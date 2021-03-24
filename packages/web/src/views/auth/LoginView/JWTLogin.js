@@ -26,6 +26,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons'
 import { isAsten, isCodeSelection } from 'src/utils/logics'
 import { useLocation } from 'react-router'
 import qs from 'qs'
+import find from 'lodash/find'
 
 const useStyles = makeStyles(theme => ({
   helperText: {
@@ -46,7 +47,10 @@ const JWTLogin = memo(({ className, ...rest }) => {
   const intl = useIntl()
   const [, setState] = useState()
   const location = useLocation()
-  const defaultUsername = useMemo(() => qs.parse(location.search, { ignoreQueryPrefix: true })?.user ?? '', [location.search])
+  const { defaultUsername, defaultFacility } = useMemo(() => {
+    const params = qs.parse(location.search, { ignoreQueryPrefix: true })
+    return { defaultUsername: params?.user ?? '', defaultFacility: params?.code ? { code: params.code } : null }
+  }, [location.search])
   const [visibility, setVisibility] = useState(false)
   useEffect(() => {
     async function fetchData () {
@@ -62,7 +66,7 @@ const JWTLogin = memo(({ className, ...rest }) => {
     <Formik
       initialValues={
         {
-          code: null,
+          code: defaultFacility,
           password: '',
           submit: null,
           username: defaultUsername,
@@ -74,7 +78,12 @@ const JWTLogin = memo(({ className, ...rest }) => {
           setSubmitting,
         }) => {
           try {
-            await login(values.username, values.password, values?.code)
+            let code = values?.code
+            if (code && !code.name) {// code from url parameter
+              const codes = queryClient.getQueryData('jwt/codes')
+              code = find(codes, { code: code.code })
+            }
+            await login(values.username, values.password, code)
             if (isMountedRef.current) {
               setStatus({ success: true })
               setSubmitting(false)
@@ -168,7 +177,12 @@ const JWTLogin = memo(({ className, ...rest }) => {
               />
               {
                 errors.password && touched.password
-                  ? <FormHelperText className={classes.helperText} error id="username-helper-text">{errors.password}</FormHelperText>
+                  ? <FormHelperText
+                    className={classes.helperText}
+                    error
+                    id="username-helper-text"
+                  >{errors.password}
+                  </FormHelperText>
                   : null
               }
             </FormControl>

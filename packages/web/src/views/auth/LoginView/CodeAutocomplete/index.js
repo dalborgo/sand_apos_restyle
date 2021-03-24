@@ -8,6 +8,7 @@ import match from 'src/utils/matcher'
 import { useQuery } from 'react-query'
 import { useIntl } from 'react-intl'
 import { messages } from 'src/translations/messages'
+import find from 'lodash/find'
 
 const useStyles = makeStyles(theme => ({
   listBox: { overflowX: 'hidden' },
@@ -23,6 +24,14 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1.2),
   },
 }))
+
+const getCodesName = ({ name, code }, codes) => {
+  if (name) {
+    return name
+  } else{
+    return (find(codes, {code}))?.name
+  }
+}
 
 const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched }) => {
   const classes = useStyles()
@@ -40,7 +49,7 @@ const CodeAutocomplete = memo(({ setFieldValue, setFieldTouched }) => {
         }
       }
       component={Autocomplete}
-      getOptionLabel={(option) => `${option.name} ${option.code ? `(${option.code})` : ''}`.trim()}
+      getOptionLabel={option => `${getCodesName(option, codes)} ${option.code ? `(${option.code})` : ''}`.trim()}
       getOptionSelected={(option, value) => option.code === value.code}
       name="code"
       noOptionsText="Nessuna opzione"
