@@ -25,6 +25,7 @@
     "express-rate-limit": "^5.2.6",
     "express-session": "^1.17.0",
     "http-errors": "1.7.3",
+    "iconv": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "jsonwebtoken-refresh": "^5.7.0",
     "knex": "^0.95.2",

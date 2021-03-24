@@ -5,7 +5,7 @@ import padStart from 'lodash/padStart'
 import find from 'lodash/find'
 import { cFunctions } from '@adapter/common'
 
-const normalizeKey = input => deburr(input.toLowerCase().trim().replace(/[/+\s.]/ig, '-').replace('€', '').replace('%', ''))
+const normalizeKey = input => deburr(input.toLowerCase().trim().replace(/[/+\s.]/ig, '-').replace('%', ''))
 const manageNumber = (instock, default_) => isNaN(parseInt(instock, 10)) ? default_ : parseInt(instock, 10)
 // eslint-disable-next-line id-length
 const getRgb = (r, g, b, default_ = [255, 255, 255]) => [r ? parseInt(r, 10) : default_[0], g ? parseInt(g, 10) : default_[1], b ? parseInt(b, 10) : default_[2]]
@@ -189,7 +189,7 @@ const checkRecordCustomer = (record, line, previous, presence) => {
   const errors = []
   const { customer_id: customerId, company, iva, cf, owner } = record
   checkDuplicate('customer_id', customerId, previous, errors, line)
-  checkIsEmpty('company', company, iva, errors, line)
+  checkIsEmpty('company', company, errors, line)
   checkIsEmpty('iva', iva, errors, line)
   customerId && checkMissing('customer_id', 0, customerId, presence, errors, line)
   // eslint-disable-next-line no-unused-vars

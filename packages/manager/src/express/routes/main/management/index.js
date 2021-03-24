@@ -11,6 +11,7 @@ import isEmpty from 'lodash/isEmpty'
 import keyBy from 'lodash/keyBy'
 import get from 'lodash/get'
 import { couchQueries } from '@adapter/io'
+import { Iconv } from 'iconv'
 
 const knex = require('knex')({ client: 'mysql' })
 
@@ -23,8 +24,10 @@ function addRouters (router) {
     const { startOwner: owner, ownerArray } = utils.parseOwner(req)
     if (ownerArray.length > 1) {return res.send({ ok: false, message: 'import with multi-code is not supported!' })}
     const file = files.file
+    
+    const fileDecoded = Iconv('WINDOWS-1252', 'utf8').convert(file.data)
     if (!file) {return res.send({ ok: false, message: 'no file uploaded!' })}
-    const [firstLine] = await Q.nfcall(parse, file.data, { delimiter: ';', to_line: 1 })
+    const [firstLine] = await Q.nfcall(parse, fileDecoded, { delimiter: ';', to_line: 1 })
     const [firstColumns] = firstLine
     if (!firstColumns) {return res.send({ ok: false, message: 'header missing!', errCode: 'HEADER_MISSING' })}
     const [controlRecordFunction, uniqueFields, toSearchFields = [], extra] = getControlRecord(firstColumns)
@@ -76,7 +79,7 @@ function addRouters (router) {
       return checkedRecord
     }
     const { astenposBucketCollection: collection } = connClass
-    const [rows, stats] = await Q.nfcall(parse, file.data, {
+    const [rows, stats] = await Q.nfcall(parse, fileDecoded, {
       columns: true,
       delimiter: ';',
       on_record: onRecord,
@@ -310,7 +313,8 @@ function addRouters (router) {
       transform,
       writeHeaders: true,
     })
-    res.send(buffer)
+    const fileDecoded = Iconv('utf8', 'WINDOWS-1252').convert(buffer)
+    res.send(fileDecoded)
   })
   router.post('/management/count/:type', async function (req, res) {
     const { params, query, connClass } = req
