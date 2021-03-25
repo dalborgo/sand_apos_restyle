@@ -161,7 +161,7 @@ function addRouters (router) {
       message,
       info,
     } = await couchQueries.exec(statement.toQuery(), connClass.cluster, options)
-    const grouped = groupBy(data, 'order_id')
+    const grouped = groupBy(data, '_id')
     const rows = []
     for (let key in grouped) {
       const entries = getMergedEntries(grouped[key])
