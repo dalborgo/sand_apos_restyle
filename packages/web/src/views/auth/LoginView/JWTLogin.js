@@ -176,12 +176,13 @@ const JWTLogin = memo(({ className, ...rest }) => {
                 type={visibility ? 'text' : 'password'}
               />
               {
-                errors.password && touched.password
-                  ? <FormHelperText
+                errors.password && touched.password ?
+                  <FormHelperText
                     className={classes.helperText}
                     error
                     id="username-helper-text"
-                  >{errors.password}
+                  >
+                    {errors.password}
                   </FormHelperText>
                   : null
               }

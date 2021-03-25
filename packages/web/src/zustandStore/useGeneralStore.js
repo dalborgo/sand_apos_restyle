@@ -1,6 +1,8 @@
 import create from 'zustand'
 import immerMiddleware from './immerMiddleware'
 import some from 'lodash/some'
+import maxBy from 'lodash/maxBy'
+
 const initialState = {
   allIn: false,
   companyData: {},
@@ -18,6 +20,11 @@ const useGeneralStore = create(immerMiddleware((set, get) => ({
   hasEInvoiceSendEnabled: () =>{
     const gcs = get().gcData || []
     return some(gcs, gs => gs['eInvoiceSendEnabled'])
+  },
+  maxDayTrimHour: () =>{
+    const gcs = get().gcData || []
+    const foundMax = maxBy(gcs, 'dayTrimHour')
+    return foundMax['dayTrimHour']
   },
   switchAllIn: () => set(state => {
     state.allIn = !state.allIn

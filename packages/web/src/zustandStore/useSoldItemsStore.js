@@ -7,6 +7,11 @@ const initialState = {
   endDateInMillis: moment().format('YYYYMMDDHHmmssSSS'),
   startDate: moment().format('YYYY-MM-01'),
   startDateInMillis: moment().format('YYYYMM01HHmmssSSS'),
+  filter: {
+    room: '',
+    startTime: null,
+  },
+  openFilter: false,
 }
 
 const useClosingDayStore = create(immerMiddleware(set => ({
@@ -20,6 +25,14 @@ const useClosingDayStore = create(immerMiddleware(set => ({
       state.startDateInMillis = startDate ? moment(startDate).format('YYYYMMDDHHmmssSSS') : undefined
       state.endDateInMillis = endDate ? moment(endDate).format('YYYYMMDDHHmmssSSS') : undefined
     }
+  }),
+  submitFilter: ({ room, startTime }) => set(state => {
+    state.filter.room = room
+    state.filter.startTime = startTime
+    state.openFilter = !state.openFilter
+  }),
+  switchOpenFilter: () => set(state => {
+    state.openFilter = !state.openFilter
   }),
 })))
 

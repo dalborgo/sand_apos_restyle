@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
-import TextField from '@material-ui/core/TextField'
-import { Collapse, makeStyles } from '@material-ui/core'
+import { Collapse, makeStyles, TextField } from '@material-ui/core'
 import { DateRangeDelimiter, DateRangePicker } from '@material-ui/pickers'
 import { FormattedMessage, useIntl } from 'react-intl'
 import moment from 'moment'
@@ -28,7 +27,7 @@ const DatePickerField = ({
   ...other
 }) => {
   const [startDate, endDate] = value
-  const disabledEnd = !startDate && (!open || (open && !startDate)) //disabilitare endDate con la popup aperta fa crashare se valorizzato
+  const disabledEnd = !startDate && (!open || (open && !startDate))// disabilitare endDate con la popup aperta fa crashare se valorizzato
   const classes = useStyles()
   const { settings: { locale } } = useSettings()
   const intl = useIntl()

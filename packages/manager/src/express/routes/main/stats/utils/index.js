@@ -6,10 +6,13 @@ import isNil from 'lodash/isNil'
 const { utils } = require(__helpers)
 const knex = require('knex')({ client: 'mysql' })
 
-function getFilters (bb, startTime, endTime, bucketLabel = 'buc') {
+function getFilters (bb, startTime, endTime, roomFilter, bucketLabel = 'buc') {
   let filters = (!bb || bb === 'false') ? ' and buc.mode != "PRECHECK"' : ''
   if (startTime && endTime) {
     filters += startTime > endTime ? ` and substr(${bucketLabel}.date, 8) not between "${endTime}00000" and "${startTime}00000"` : ` and substr(${bucketLabel}.date, 8) between "${startTime}00000" and "${endTime}00000"`
+  }
+  if (roomFilter) {
+    filters += ` and buc.room_display = "${roomFilter}"`
   }
   return filters
 }
@@ -18,7 +21,7 @@ export async function getSoldStats (req) {
   const { connClass, query } = req
   const bucketName = connClass.astenposBucketName
   const parsedOwner = utils.parseOwner(req, 'buc')
-  const { start, end, startTime, endTime, bb } = query
+  const { start, end, startTime, endTime, bb, roomFilter } = query
   log.debug('query:', query)
   const promises = []
   const statement = knex.from(knex.raw(`\`${bucketName}\` buc unnest buc.entries ent`))
@@ -31,7 +34,7 @@ export async function getSoldStats (req) {
     .whereBetween('ent.date', [start, end])
     .where(knex.raw(
       parsedOwner.queryCondition
-      + getFilters(bb, startTime, endTime, 'ent'))
+      + getFilters(bb, startTime, endTime, roomFilter, 'ent'))
     )
     .groupBy(['ent.product_category_display', 'ent.product_display'])
     .havingRaw('sum(ent.product_qta) > 0')
@@ -46,7 +49,7 @@ export async function getSoldStats (req) {
       .where(knex.raw(
         parsedOwner.queryCondition + ' '
         + 'and buc.entries[0].date between "' + start + '" and "' + end + '"'
-        + getFilters(bb, startTime, endTime, 'buc.entries[0]'))
+        + getFilters(bb, startTime, endTime, roomFilter, 'buc.entries[0]'))
       )
       .toQuery()
     promises.push(couchQueries.exec(statement, connClass.cluster))

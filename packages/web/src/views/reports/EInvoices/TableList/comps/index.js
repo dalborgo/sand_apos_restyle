@@ -6,7 +6,6 @@ import { useDateTimeFormatter } from 'src/utils/formatters'
 import { useHistory } from 'react-router'
 import { useQueryClient } from 'react-query'
 import useAuth from 'src/hooks/useAuth'
-import { useGeneralStore } from 'src/zustandStore'
 import { axiosLocalInstance, buttonQuery } from 'src/utils/reactQueryFunctions'
 import {
   AlertTriangle as AlertTriangleIcon,
@@ -26,7 +25,7 @@ import clsx from 'clsx'
 import { saveAs } from 'file-saver'
 import { useSnackbar } from 'notistack'
 import truncate from 'lodash/truncate'
-import useEInvoiceStore from 'src/zustandStore/useEInvoiceStore'
+import { useGeneralStore, useEInvoiceStore } from 'src/zustandStore'
 import { sendXml } from '../../helpers'
 
 const loadingSel = state => ({
